@@ -1865,11 +1865,6 @@
               <FilePath>.\src\pwm_adjust.cpp</FilePath>
             </File>
             <File>
-              <FileName>state.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\state.cpp</FilePath>
-            </File>
-            <File>
               <FileName>storage.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\storage.cpp</FilePath>
