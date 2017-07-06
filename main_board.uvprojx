@@ -389,6 +389,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\modes.cpp</FilePath>
             </File>
+            <File>
+              <FileName>mode_default.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\mode_default.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2173,6 +2178,11 @@
               <FileName>modes.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\modes.h</FilePath>
+            </File>
+            <File>
+              <FileName>utils.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\utils.h</FilePath>
             </File>
           </Files>
         </Group>
