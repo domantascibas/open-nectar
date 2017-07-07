@@ -13,16 +13,16 @@
       <pCCUsed>5060422::V5.06 update 4 (build 422)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F030R8</Device>
+          <Device>STM32F091RC</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32F0xx_DFP.1.5.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>CPUTYPE("Cortex-M0") </Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0stm32f0xx_64 -FS008000000 -FL010000 -FP0($$Device:STM32F030R8$Flash/STM32F0xx_64.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0stm32f0xx_256 -FS008000000 -FL040000 -FP0($$Device:STM32F091RC$Flash/STM32F0xx_256.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32F030R8$Device/Include/stm32f0xx.h</RegisterFile>
+          <RegisterFile>$$Device:STM32F091RC$Device/Include/stm32f0xx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -32,7 +32,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F030R8$SVD/STM32F0x0.svd</SFDFile>
+          <SFDFile>$$Device:STM32F091RC$SVD/STM32F0x1.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -132,12 +132,12 @@
             <UseExternalTool>0</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
-            <Capability>1</Capability>
-            <DriverSelection>4096</DriverSelection>
+            <Capability>0</Capability>
+            <DriverSelection>-1</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -332,10 +332,10 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls>-DDEVICE_RTC=1 -DDEVICE_SLEEP=1 -DTOOLCHAIN_object -DTOOLCHAIN_ARM_STD --preinclude=mbed_config.h --split_sections -D__ASSERT_MSG -DTARGET_STM32F0 --no_rtti -DCMSIS_VECTAB_VIRTUAL_HEADER_FILE="cmsis_nvic.h" -DDEVICE_PORTINOUT=1 -DTARGET_FF_MORPHO -DDEVICE_I2C_ASYNCH=1 -DTARGET_FF_ARDUINO -c -DCMSIS_VECTAB_VIRTUAL -DDEVICE_SPISLAVE=1 -DDEVICE_PORTOUT=1 -DDEVICE_STDIO_MESSAGES=1 -DTARGET_RELEASE -DDEVICE_SERIAL_FC=1 -DTARGET_LIKE_CORTEX_M0 -DARM_MATH_CM0 -DDEVICE_ANALOGIN=1 -DMBED_BUILD_TIMESTAMP=1499352314.33 -DTARGET_CORTEX_M --cpu=Cortex-M0 -D__CORTEX_M0 -DDEVICE_I2C=1 -DDEVICE_PORTIN=1 -DTARGET_STM -DTOOLCHAIN_ARM -DDEVICE_INTERRUPTIN=1 --no_depend_system_headers -DTARGET_UVISOR_UNSUPPORTED --md -DDEVICE_PWMOUT=1 -DTARGET_LIKE_MBED --gnu --apcs=interwork -DDEVICE_SPI=1 -D__MBED__=1 -DTARGET_STM32F030R8 -DDEVICE_SERIAL=1 -DTARGET_M0 -DDEVICE_I2CSLAVE=1 -D__CMSIS_RTOS -DDEVICE_SPI_ASYNCH=1 -DTRANSACTION_QUEUE_SIZE_SPI=2 -D__MBED_CMSIS_RTOS_CM -DTARGET_NUCLEO_F030R8</MiscControls>
+              <MiscControls>-DDEVICE_RTC=1 -DDEVICE_SLEEP=1 -DTOOLCHAIN_object -DTOOLCHAIN_ARM_STD -DMBED_BUILD_TIMESTAMP=1499349070.8 --split_sections -D__ASSERT_MSG -DTARGET_RELEASE -DTARGET_STM32F0 --no_rtti -DCMSIS_VECTAB_VIRTUAL_HEADER_FILE="cmsis_nvic.h" -DDEVICE_PORTINOUT=1 -DTARGET_FF_MORPHO -DDEVICE_I2C_ASYNCH=1 -DTARGET_FF_ARDUINO -c -DCMSIS_VECTAB_VIRTUAL -DDEVICE_CAN=1 -DDEVICE_PORTOUT=1 -DDEVICE_STDIO_MESSAGES=1 -DDEVICE_ANALOGOUT=1 -DTARGET_LIKE_MBED -DDEVICE_SERIAL_FC=1 -DTARGET_LIKE_CORTEX_M0 -DARM_MATH_CM0 -DDEVICE_ANALOGIN=1 -DDEVICE_PORTIN=1 -DTARGET_CORTEX_M --cpu=Cortex-M0 -DTARGET_NUCLEO_F091RC -D__CORTEX_M0 -DDEVICE_I2C=1 --preinclude=mbed_config.h -DDEVICE_LOWPOWERTIMER=1 -DTARGET_STM -DTOOLCHAIN_ARM -DDEVICE_INTERRUPTIN=1 --no_depend_system_headers -DTARGET_UVISOR_UNSUPPORTED --md -DDEVICE_PWMOUT=1 -DDEVICE_SERIAL_ASYNCH=1 --gnu --apcs=interwork -DDEVICE_SPI=1 -D__MBED__=1 -DDEVICE_SPISLAVE=1 -DDEVICE_SERIAL=1 -DTARGET_M0 -DDEVICE_I2CSLAVE=1 -D__CMSIS_RTOS -DDEVICE_SPI_ASYNCH=1 -DTRANSACTION_QUEUE_SIZE_SPI=2 -D__MBED_CMSIS_RTOS_CM -DTARGET_STM32F091RC</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.;src/;inc/;mbed-rtos;mbed-rtos/rtos;mbed-rtos/rtx;mbed-rtos/rtx/TARGET_CORTEX_M;mbed-rtos/rtx/TARGET_CORTEX_M/TARGET_M0;mbed-rtos/rtx/TARGET_CORTEX_M/TARGET_M0/TOOLCHAIN_ARM;mbed/.;mbed/TARGET_NUCLEO_F030R8;mbed/TARGET_NUCLEO_F030R8/TARGET_STM;mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0;mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8;mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/device;mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device;mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD;mbed/drivers;mbed/hal;mbed/platform</IncludePath>
+              <IncludePath>.;src/;inc/;mbed-rtos;mbed-rtos/rtos;mbed-rtos/rtx;mbed-rtos/rtx/TARGET_CORTEX_M;mbed-rtos/rtx/TARGET_CORTEX_M/TARGET_M0;mbed-rtos/rtx/TARGET_CORTEX_M/TARGET_M0/TOOLCHAIN_ARM;mbed/.;mbed/TARGET_NUCLEO_F091RC;mbed/TARGET_NUCLEO_F091RC/TARGET_STM;mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0;mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC;mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/device;mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device;mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD;mbed/drivers;mbed/hal;mbed/platform</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -366,7 +366,7 @@
             <TextAddressRange>0</TextAddressRange>
             <DataAddressRange>0</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx.sct</ScatterFile>
+            <ScatterFile>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f091rc.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>
@@ -383,16 +383,6 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>modes.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\modes.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>mode_default.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\mode_default.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -412,7 +402,7 @@
             <File>
               <FileName>analogin_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/analogin_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/analogin_api.o</FilePath>
             </File>
             <File>
               <FileName>AnalogOut.h</FileName>
@@ -427,12 +417,12 @@
             <File>
               <FileName>analogout_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/analogout_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/analogout_api.o</FilePath>
             </File>
             <File>
               <FileName>arm_math.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/arm_math.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/arm_math.h</FilePath>
             </File>
             <File>
               <FileName>ATCmdParser.h</FileName>
@@ -482,12 +472,12 @@
             <File>
               <FileName>can_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/can_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/can_api.o</FilePath>
             </File>
             <File>
               <FileName>can_device.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/can_device.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/can_device.h</FilePath>
             </File>
             <File>
               <FileName>can_helper.h</FileName>
@@ -502,107 +492,107 @@
             <File>
               <FileName>cmsis.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/device/cmsis.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/device/cmsis.h</FilePath>
             </File>
             <File>
               <FileName>cmsis_armcc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/cmsis_armcc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/cmsis_armcc.h</FilePath>
             </File>
             <File>
               <FileName>cmsis_armclang.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/cmsis_armclang.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/cmsis_armclang.h</FilePath>
             </File>
             <File>
               <FileName>cmsis_compiler.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/cmsis_compiler.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/cmsis_compiler.h</FilePath>
             </File>
             <File>
               <FileName>cmsis_gcc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/cmsis_gcc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/cmsis_gcc.h</FilePath>
             </File>
             <File>
               <FileName>cmsis_nvic.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/device/cmsis_nvic.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/device/cmsis_nvic.h</FilePath>
             </File>
             <File>
               <FileName>cmsis_nvic.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/cmsis_nvic.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/cmsis_nvic.o</FilePath>
             </File>
             <File>
               <FileName>common_objects.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/common_objects.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/common_objects.h</FilePath>
             </File>
             <File>
               <FileName>core_armv8mbl.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_armv8mbl.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_armv8mbl.h</FilePath>
             </File>
             <File>
               <FileName>core_armv8mml.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_armv8mml.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_armv8mml.h</FilePath>
             </File>
             <File>
               <FileName>core_ca.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_ca.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_ca.h</FilePath>
             </File>
             <File>
               <FileName>core_cm0.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_cm0.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_cm0.h</FilePath>
             </File>
             <File>
               <FileName>core_cm0plus.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_cm0plus.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_cm0plus.h</FilePath>
             </File>
             <File>
               <FileName>core_cm23.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_cm23.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_cm23.h</FilePath>
             </File>
             <File>
               <FileName>core_cm3.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_cm3.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_cm3.h</FilePath>
             </File>
             <File>
               <FileName>core_cm33.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_cm33.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_cm33.h</FilePath>
             </File>
             <File>
               <FileName>core_cm4.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_cm4.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_cm4.h</FilePath>
             </File>
             <File>
               <FileName>core_cm7.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_cm7.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_cm7.h</FilePath>
             </File>
             <File>
               <FileName>core_cmSecureAccess.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_cmSecureAccess.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_cmSecureAccess.h</FilePath>
             </File>
             <File>
               <FileName>core_sc000.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_sc000.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_sc000.h</FilePath>
             </File>
             <File>
               <FileName>core_sc300.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/core_sc300.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/core_sc300.h</FilePath>
             </File>
             <File>
               <FileName>critical.h</FileName>
@@ -617,7 +607,7 @@
             <File>
               <FileName>device.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device.h</FilePath>
             </File>
             <File>
               <FileName>DigitalIn.h</FileName>
@@ -727,7 +717,7 @@
             <File>
               <FileName>gpio_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/gpio_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/gpio_api.o</FilePath>
             </File>
             <File>
               <FileName>gpio_irq_api.h</FileName>
@@ -737,37 +727,37 @@
             <File>
               <FileName>gpio_irq_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/gpio_irq_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/gpio_irq_api.o</FilePath>
             </File>
             <File>
               <FileName>gpio_irq_device.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/gpio_irq_device.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/gpio_irq_device.h</FilePath>
             </File>
             <File>
               <FileName>gpio_irq_device.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/gpio_irq_device.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/gpio_irq_device.o</FilePath>
             </File>
             <File>
               <FileName>gpio_object.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/gpio_object.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/gpio_object.h</FilePath>
             </File>
             <File>
               <FileName>hal_tick.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/device/hal_tick.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/device/hal_tick.h</FilePath>
             </File>
             <File>
               <FileName>hal_tick_16b.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/hal_tick_16b.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/hal_tick_16b.o</FilePath>
             </File>
             <File>
               <FileName>hal_tick_32b.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/hal_tick_32b.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/hal_tick_32b.o</FilePath>
             </File>
             <File>
               <FileName>I2C.h</FileName>
@@ -782,12 +772,12 @@
             <File>
               <FileName>i2c_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/i2c_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/i2c_api.o</FilePath>
             </File>
             <File>
               <FileName>i2c_device.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/i2c_device.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/i2c_device.h</FilePath>
             </File>
             <File>
               <FileName>I2CSlave.h</FileName>
@@ -827,7 +817,7 @@
             <File>
               <FileName>lp_ticker.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/lp_ticker.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/lp_ticker.o</FilePath>
             </File>
             <File>
               <FileName>lp_ticker_api.h</FileName>
@@ -837,7 +827,7 @@
             <File>
               <FileName>mbed.ar</FileName>
               <FileType>4</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/mbed.ar</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/mbed.ar</FilePath>
             </File>
             <File>
               <FileName>mbed.h</FileName>
@@ -857,7 +847,7 @@
             <File>
               <FileName>mbed_board.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/mbed_board.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/mbed_board.o</FilePath>
             </File>
             <File>
               <FileName>mbed_critical.h</FileName>
@@ -892,7 +882,7 @@
             <File>
               <FileName>mbed_overrides.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/mbed_overrides.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/mbed_overrides.o</FilePath>
             </File>
             <File>
               <FileName>mbed_poll.h</FileName>
@@ -912,7 +902,7 @@
             <File>
               <FileName>mbed_retarget.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/mbed_retarget.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/mbed_retarget.o</FilePath>
             </File>
             <File>
               <FileName>mbed_rtc_time.h</FileName>
@@ -922,12 +912,12 @@
             <File>
               <FileName>mbed_rtx.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/mbed_rtx.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/mbed_rtx.h</FilePath>
             </File>
             <File>
               <FileName>mbed_sdk_boot.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/mbed_sdk_boot.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/mbed_sdk_boot.o</FilePath>
             </File>
             <File>
               <FileName>mbed_semihost_api.h</FileName>
@@ -957,27 +947,27 @@
             <File>
               <FileName>objects.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/objects.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/objects.h</FilePath>
             </File>
             <File>
               <FileName>PeripheralNames.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/PeripheralNames.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/PeripheralNames.h</FilePath>
             </File>
             <File>
               <FileName>PeripheralPins.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/PeripheralPins.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/PeripheralPins.h</FilePath>
             </File>
             <File>
               <FileName>PeripheralPins.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/PeripheralPins.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/PeripheralPins.o</FilePath>
             </File>
             <File>
               <FileName>pin_device.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/pin_device.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/pin_device.h</FilePath>
             </File>
             <File>
               <FileName>pinmap.h</FileName>
@@ -987,17 +977,17 @@
             <File>
               <FileName>pinmap.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/pinmap.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/pinmap.o</FilePath>
             </File>
             <File>
               <FileName>PinNames.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/PinNames.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/PinNames.h</FilePath>
             </File>
             <File>
               <FileName>PinNamesTypes.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/PinNamesTypes.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/PinNamesTypes.h</FilePath>
             </File>
             <File>
               <FileName>platform.h</FileName>
@@ -1017,7 +1007,7 @@
             <File>
               <FileName>port_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/port_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/port_api.o</FilePath>
             </File>
             <File>
               <FileName>PortIn.h</FileName>
@@ -1032,7 +1022,7 @@
             <File>
               <FileName>PortNames.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/PortNames.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/PortNames.h</FilePath>
             </File>
             <File>
               <FileName>PortOut.h</FileName>
@@ -1052,17 +1042,17 @@
             <File>
               <FileName>pwmout_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/pwmout_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/pwmout_api.o</FilePath>
             </File>
             <File>
               <FileName>pwmout_device.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/pwmout_device.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/pwmout_device.h</FilePath>
             </File>
             <File>
               <FileName>pwmout_device.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/pwmout_device.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/pwmout_device.o</FilePath>
             </File>
             <File>
               <FileName>RawSerial.h</FileName>
@@ -1077,12 +1067,12 @@
             <File>
               <FileName>rtc_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/rtc_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/rtc_api.o</FilePath>
             </File>
             <File>
               <FileName>rtc_api_hal.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/rtc_api_hal.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/rtc_api_hal.h</FilePath>
             </File>
             <File>
               <FileName>rtc_time.h</FileName>
@@ -1107,17 +1097,17 @@
             <File>
               <FileName>serial_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/serial_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/serial_api.o</FilePath>
             </File>
             <File>
               <FileName>serial_api_hal.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/serial_api_hal.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/serial_api_hal.h</FilePath>
             </File>
             <File>
               <FileName>serial_device.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/serial_device.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/serial_device.o</FilePath>
             </File>
             <File>
               <FileName>SerialBase.h</FileName>
@@ -1137,7 +1127,7 @@
             <File>
               <FileName>sleep.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/sleep.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/sleep.o</FilePath>
             </File>
             <File>
               <FileName>sleep_api.h</FileName>
@@ -1157,7 +1147,7 @@
             <File>
               <FileName>spi_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/spi_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/spi_api.o</FilePath>
             </File>
             <File>
               <FileName>SPISlave.h</FileName>
@@ -1165,649 +1155,649 @@
               <FilePath>mbed/drivers/SPISlave.h</FilePath>
             </File>
             <File>
-              <FileName>startup_stm32f030x8.o</FileName>
+              <FileName>startup_stm32f091rc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/startup_stm32f030x8.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/startup_stm32f091rc.o</FilePath>
             </File>
             <File>
               <FileName>stm32_assert.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/stm32_assert.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/stm32_assert.h</FilePath>
             </File>
             <File>
               <FileName>stm32_hal_legacy.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32_hal_legacy.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32_hal_legacy.h</FilePath>
             </File>
             <File>
-              <FileName>stm32f030x8.h</FileName>
+              <FileName>stm32f091xc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/device/stm32f030x8.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/device/stm32f091xc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/device/stm32f0xx.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/device/stm32f0xx.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_adc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_adc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_adc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_adc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_adc.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_adc.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_adc_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_adc_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_adc_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_adc_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_adc_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_adc_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_can.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_can.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_can.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_can.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_can.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_can.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_cec.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_cec.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_cec.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_cec.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_cec.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_cec.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_comp.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_comp.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_comp.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_comp.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_comp.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_comp.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_conf.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_conf.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_conf.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_cortex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_cortex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_cortex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_cortex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_cortex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_cortex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_crc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_crc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_crc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_crc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_crc.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_crc.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_crc_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_crc_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_crc_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_crc_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_crc_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_crc_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_dac.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_dac.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_dac.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_dac.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_dac.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_dac.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_dac_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_dac_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_dac_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_dac_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_dac_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_dac_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_def.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_def.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_def.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_dma.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_dma.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_dma.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_dma.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_dma.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_dma.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_dma_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_dma_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_dma_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_flash.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_flash.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_flash.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_flash.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_flash.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_flash.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_flash_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_flash_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_flash_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_flash_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_flash_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_flash_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_gpio.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_gpio.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_gpio.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_gpio.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_gpio.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_gpio.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_gpio_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_gpio_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_gpio_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_i2c.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_i2c.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_i2c.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_i2c.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_i2c.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_i2c.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_i2c_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_i2c_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_i2c_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_i2c_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_i2c_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_i2c_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_i2s.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_i2s.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_i2s.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_i2s.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_i2s.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_i2s.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_irda.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_irda.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_irda.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_irda.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_irda.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_irda.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_irda_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_irda_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_irda_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_iwdg.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_iwdg.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_iwdg.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_iwdg.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_iwdg.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_iwdg.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_pcd.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_pcd.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_pcd.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_pcd.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_pcd.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_pcd.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_pcd_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_pcd_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_pcd_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_pcd_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_pcd_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_pcd_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_pwr.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_pwr.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_pwr.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_pwr.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_pwr.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_pwr.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_pwr_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_pwr_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_pwr_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_pwr_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_pwr_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_pwr_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_rcc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_rcc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_rcc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_rcc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_rcc.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_rcc.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_rcc_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_rcc_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_rcc_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_rcc_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_rcc_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_rcc_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_rtc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_rtc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_rtc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_rtc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_rtc.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_rtc.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_rtc_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_rtc_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_rtc_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_rtc_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_rtc_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_rtc_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_smartcard.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_smartcard.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_smartcard.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_smartcard.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_smartcard.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_smartcard.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_smartcard_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_smartcard_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_smartcard_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_smartcard_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_smartcard_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_smartcard_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_smbus.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_smbus.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_smbus.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_smbus.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_smbus.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_smbus.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_spi.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_spi.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_spi.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_spi.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_spi.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_spi.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_spi_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_spi_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_spi_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_spi_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_spi_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_spi_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_tim.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_tim.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_tim.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_tim.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_tim.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_tim.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_tim_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_tim_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_tim_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_tim_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_tim_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_tim_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_tsc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_tsc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_tsc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_tsc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_tsc.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_tsc.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_uart.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_uart.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_uart.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_uart.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_uart.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_uart.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_uart_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_uart_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_uart_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_uart_ex.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_uart_ex.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_uart_ex.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_usart.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_usart.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_usart.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_usart.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_usart.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_usart.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_usart_ex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_usart_ex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_usart_ex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_wwdg.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_wwdg.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_hal_wwdg.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_wwdg.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_hal_wwdg.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_hal_wwdg.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_adc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_adc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_adc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_adc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_adc.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_adc.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_bus.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_bus.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_bus.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_comp.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_comp.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_comp.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_comp.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_comp.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_comp.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_cortex.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_cortex.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_cortex.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_crc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_crc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_crc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_crc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_crc.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_crc.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_crs.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_crs.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_crs.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_crs.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_crs.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_crs.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_dac.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_dac.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_dac.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_dac.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_dac.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_dac.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_dma.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_dma.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_dma.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_dma.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_dma.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_dma.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_exti.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_exti.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_exti.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_exti.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_exti.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_exti.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_gpio.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_gpio.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_gpio.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_gpio.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_gpio.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_gpio.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_i2c.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_i2c.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_i2c.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_i2c.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_i2c.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_i2c.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_iwdg.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_iwdg.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_iwdg.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_pwr.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_pwr.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_pwr.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_pwr.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_pwr.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_pwr.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_rcc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_rcc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_rcc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_rcc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_rcc.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_rcc.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_rtc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_rtc.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_rtc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_rtc.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_rtc.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_rtc.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_spi.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_spi.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_spi.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_spi.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_spi.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_spi.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_system.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_system.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_system.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_tim.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_tim.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_tim.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_tim.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_tim.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_tim.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_usart.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_usart.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_usart.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_usart.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_usart.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_usart.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_utils.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_utils.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_utils.h</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_utils.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm32f0xx_ll_utils.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f0xx_ll_utils.o</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_ll_wwdg.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_wwdg.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/device/stm32f0xx_ll_wwdg.h</FilePath>
             </File>
             <File>
               <FileName>stm_spi_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/stm_spi_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm_spi_api.o</FilePath>
             </File>
             <File>
               <FileName>Stream.h</FileName>
@@ -1817,17 +1807,17 @@
             <File>
               <FileName>sys.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/sys.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/sys.o</FilePath>
             </File>
             <File>
               <FileName>system_stm32f0xx.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F030R8/device/system_stm32f0xx.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TARGET_STM/TARGET_STM32F0/TARGET_NUCLEO_F091RC/device/system_stm32f0xx.h</FilePath>
             </File>
             <File>
               <FileName>system_stm32f0xx.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/system_stm32f0xx.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/system_stm32f0xx.o</FilePath>
             </File>
             <File>
               <FileName>Ticker.h</FileName>
@@ -1872,12 +1862,12 @@
             <File>
               <FileName>trng_api.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/trng_api.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/trng_api.o</FilePath>
             </File>
             <File>
               <FileName>tz_context.h</FileName>
               <FileType>5</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/tz_context.h</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/tz_context.h</FilePath>
             </File>
             <File>
               <FileName>UARTSerial.h</FileName>
@@ -1887,12 +1877,12 @@
             <File>
               <FileName>us_ticker_16b.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/us_ticker_16b.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/us_ticker_16b.o</FilePath>
             </File>
             <File>
               <FileName>us_ticker_32b.o</FileName>
               <FileType>3</FileType>
-              <FilePath>mbed/TARGET_NUCLEO_F030R8/TOOLCHAIN_ARM_STD/us_ticker_32b.o</FilePath>
+              <FilePath>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/us_ticker_32b.o</FilePath>
             </File>
             <File>
               <FileName>us_ticker_api.h</FileName>
@@ -2168,21 +2158,6 @@
               <FileName>mbed_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\mbed_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>mode_default.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\mode_default.h</FilePath>
-            </File>
-            <File>
-              <FileName>modes.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\modes.h</FilePath>
-            </File>
-            <File>
-              <FileName>utils.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\utils.h</FilePath>
             </File>
           </Files>
         </Group>
