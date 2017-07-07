@@ -14,8 +14,8 @@ Thread device_update;
 void fifteen_second_function(void);
 
 void fifteen_second_function(void const*) {
-	device::run(MODE_DEFAULT);
-	Thread::wait(15000);
+    device::run(MODE_DEFAULT);
+    Thread::wait(15000);
 }
 
 /*
@@ -28,20 +28,20 @@ void print_thread(void const *argument) {
 */
 
 int main() {
-	device_update.start(fifteen_second_function);
+    device_update.start(fifteen_second_function);
 
-	/*
-	printf("\n\n\r*** RTOS basic example ***\n\r");
+    /*
+    printf("\n\n\r*** RTOS basic example ***\n\r");
     Thread thread(print_thread, NULL, osPriorityNormal, DEFAULT_STACK_SIZE);
     while (true) {
         led1 = !led1;
         Thread::wait(500);
     }
-	*/
-	//the main loop
-	while(1) {
-		__WFI();
-	}
+    */
+    //the main loop
+    while(1) {
+        __WFI();
+    }
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
