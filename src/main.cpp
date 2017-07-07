@@ -3,43 +3,59 @@
 #include "modes.h"
 #include "utils.h"
 
+DigitalOut led1(LED1);
+Thread device_update;
+Thread blinky;
+
+void print_thread(void);
+
+void default_mode_test(void) {
+    device_tests::set_temperature_max(80.0);
+    
+    device_tests::set_pv_available(false);
+    device_tests::set_temperature_current(81.0);
+    device_tests::set_temperature_scheduled(50.0);
+    device::run(MODE_DEFAULT);
+    
+    device_tests::set_pv_available(false);
+    device_tests::set_temperature_current(52.0);
+    device_tests::set_temperature_scheduled(50.0);
+    device::run(MODE_DEFAULT);
+    
+    device_tests::set_pv_available(false);
+    device_tests::set_temperature_current(35.0);
+    device_tests::set_temperature_scheduled(50.0);
+    device::run(MODE_DEFAULT);
+    
+    device_tests::set_pv_available(true);
+    device_tests::set_temperature_current(52.0);
+    device_tests::set_temperature_scheduled(50.0);
+    device::run(MODE_DEFAULT);
+    
+    device_tests::set_pv_available(true);
+    device_tests::set_temperature_current(81.0);
+    device_tests::set_temperature_scheduled(50.0);
+    device::run(MODE_DEFAULT);
+}
+
 void print_char(char c = '*') {
     printf("%c", c);
     fflush(stdout);
 }
 
-DigitalOut led1(LED1);
-Thread device_update;
-Thread blinky;
-
-void fifteen_second_function(void);
-void print_thread(void);
-
-void fifteen_second_function(void) {
-    device::run(MODE_DEFAULT);
-    Thread::wait(15000);
-}
-
 void print_thread(void) {
     while (true) {
-        Thread::wait(1000);
+        Thread::wait(500);
         print_char();
+        led1 = !led1;
     }
 }
 
 int main() {
-    device_update.start(&fifteen_second_function);
-    blinky.start(&print_thread);
+    printf("\n\n\r[ STARTING ]\n\r");
+    //blinky.start(&print_thread);
+    default_mode_test();
 
-    /*
-    printf("\n\n\r*** RTOS basic example ***\n\r");
-    Thread thread(print_thread, NULL, osPriorityNormal, DEFAULT_STACK_SIZE);
-    while (true) {
-        led1 = !led1;
-        Thread::wait(500);
-    }
-    */
-    //the main loop
     while(1) {
         __WFI();
     }
