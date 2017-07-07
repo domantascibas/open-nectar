@@ -7,6 +7,9 @@ DigitalOut led1(LED1);
 Thread device_update;
 Thread blinky;
 
+extern DigitalOut relay_sun_on;
+extern DigitalOut relay_grid_on;
+
 void print_thread(void);
 
 void default_mode_test(void) {
@@ -52,6 +55,9 @@ void print_thread(void) {
 }
 
 int main() {
+    relay_sun_on = false;
+    relay_grid_on = false;
+    
     printf("\n\n\r[ STARTING ]\n\r");
     //blinky.start(&print_thread);
     default_mode_test();
