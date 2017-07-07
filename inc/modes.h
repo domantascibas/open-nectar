@@ -12,6 +12,7 @@ namespace device {
 namespace device_tests {
     void    set_temperature_max(double);
     void    set_temperature_current(double);
+    void    set_temperature_scheduled(double);
     void    set_pv_available(bool);
 }
 

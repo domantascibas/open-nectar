@@ -5,9 +5,10 @@
 
 //currently defaults. Must initialize them from ESP
 uint8_t mode_current = MODE_DEFAULT;
-double temperature_max = 80.0;
-double temperature_current = 55.0;
-bool pv_available = true;
+double temperature_max;
+double temperature_set;
+double temperature_current;
+bool pv_available = false;
 
 void device::set_mode(uint8_t mode_new) {
     mode_current = mode_new;
@@ -22,8 +23,8 @@ void device::run(uint8_t mode) {
         default:  //mode is any other value than the ones below
         case MODE_DEFAULT:
             printf("[ MODE ] DEFAULT\n\r");
-            printf("T_max = %5.2fC T_curr = %5.2fC PV = %d\n\r", temperature_max, temperature_current, pv_available);
-            mode_default::run(temperature_max, temperature_current, pv_available);
+            printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d\n\r", temperature_max, temperature_current, temperature_set, pv_available);
+            mode_default::run(temperature_max, temperature_current, temperature_set, pv_available);
         break;
         
         case MODE_BOOST:
@@ -42,11 +43,15 @@ void device::run(uint8_t mode) {
 
 //test fucntions. Delete for release
 void device_tests::set_temperature_max(double temperature) {
-    temperature_current = temperature;
+    temperature_max = temperature;
 }
 
 void device_tests::set_temperature_current(double temperature) {
-    temperature_max = temperature;
+    temperature_current = temperature;
+}
+
+void device_tests::set_temperature_scheduled(double temperature) {
+    temperature_set = temperature;
 }
 
 void device_tests::set_pv_available(bool available) {
