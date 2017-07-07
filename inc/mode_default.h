@@ -8,7 +8,7 @@ enum mode_power_source {
 };
 
 namespace mode_default {
-    uint8_t run(double, double, bool);
+    uint8_t run(double, double, double, bool);
 }
 
 #endif
