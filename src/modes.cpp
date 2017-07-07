@@ -4,24 +4,25 @@
 #include "utils.h"
 
 //currently defaults. Must initialize them from ESP
-int mode_current = MODE_DEFAULT;
+uint8_t mode_current = MODE_DEFAULT;
 double temperature_max = 80.0;
 double temperature_current = 55.0;
 bool pv_available = true;
 
-void device::set_mode(int mode_new) {
+void device::set_mode(uint8_t mode_new) {
     mode_current = mode_new;
 }
 
-int device::get_mode() {
+uint8_t device::get_mode() {
     return mode_current;
 }
 
-void device::run(int mode) {
+void device::run(uint8_t mode) {
     switch(mode) {
         default:  //mode is any other value than the ones below
         case MODE_DEFAULT:
             printf("[ MODE ] DEFAULT\n\r");
+            printf("T_max = %5.2fC T_curr = %5.2fC PV = %d\n\r", temperature_max, temperature_current, pv_available);
             mode_default::run(temperature_max, temperature_current, pv_available);
         break;
         

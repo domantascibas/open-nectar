@@ -2,23 +2,27 @@
 #include "mode_default.h"
 #include "utils.h"
 
-int mode_default::run(double temp_max, double temp_current, bool pv_available) {
+uint8_t mode_default::run(double temp_max, double temp_current, bool pv_available) {
     if(pv_available) {
         //check if Tcurrent < Tmax ? use PV : do nothing
         if(temp_current < temp_max) {
             //turn on PV
+            printf("PV ON\n\r");
             return TURN_ON_PV;
         } else {
             //do nothing
+            printf("ALL OFF\n\r");
             return TURN_OFF_ALL;
         }
     } else {
         //check if Tcurrent < Tmax ? use GRID : do nothing
         if(temp_current < temp_max) {
             //turn on grid power
+            printf("GRID ON\n\r");
             return TURN_ON_GRID;
         } else {
             //do nothing
+            printf("ALL OFF\n\r");
             return TURN_OFF_ALL;
         }
     }
