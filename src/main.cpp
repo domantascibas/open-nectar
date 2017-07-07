@@ -10,25 +10,26 @@ void print_char(char c = '*') {
 
 DigitalOut led1(LED1);
 Thread device_update;
+Thread blinky;
 
 void fifteen_second_function(void);
+void print_thread(void);
 
-void fifteen_second_function(void const*) {
+void fifteen_second_function(void) {
     device::run(MODE_DEFAULT);
     Thread::wait(15000);
 }
 
-/*
-void print_thread(void const *argument) {
+void print_thread(void) {
     while (true) {
         Thread::wait(1000);
         print_char();
     }
 }
-*/
 
 int main() {
-    device_update.start(fifteen_second_function);
+    device_update.start(&fifteen_second_function);
+    blinky.start(&print_thread);
 
     /*
     printf("\n\n\r*** RTOS basic example ***\n\r");
