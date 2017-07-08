@@ -13,7 +13,7 @@ bool pv_available = false;
 
 double temperature_max;
 double temperature_set;
-double temperature_current;
+double temperature_moment;
 
 void device::set_mode(uint8_t mode_new) {
     mode_current = mode_new;
@@ -25,18 +25,23 @@ uint8_t device::set_relays(uint8_t state) {
         case TURN_OFF_ALL:
             relay_sun_on = false;
             relay_grid_on = false;
+            printf("ALL OFF\n\r");
         break;
         
         case TURN_ON_GRID:
             relay_sun_on = false;
             relay_grid_on = true;
+            printf("GRID ON\n\r");
         break;
         
         case TURN_ON_PV:
             relay_grid_on = false;
             relay_sun_on = true;
+            printf("PV ON\n\r");
         break;
     }
+    printf("\n\r");
+    return 0;   //change to meaningful return
 }
 
 uint8_t device::get_mode() {
@@ -48,8 +53,8 @@ void device::run(uint8_t mode) {
         default:  //mode is any other value than the ones below
         case MODE_DEFAULT:
             printf("[ MODE ] DEFAULT\n\r");
-            printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d\n\r", temperature_max, temperature_current, temperature_set, pv_available);
-            response = mode_default::run(temperature_max, temperature_current, temperature_set, pv_available);
+            printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d\n\r", temperature_max, temperature_moment, temperature_set, pv_available);
+            response = mode_default::run(temperature_max, temperature_moment, temperature_set, pv_available);
         break;
         
         case MODE_BOOST:
@@ -73,7 +78,7 @@ void device_tests::set_temperature_max(double temperature) {
 }
 
 void device_tests::set_temperature_current(double temperature) {
-    temperature_current = temperature;
+    temperature_moment = temperature;
 }
 
 void device_tests::set_temperature_scheduled(double temperature) {
