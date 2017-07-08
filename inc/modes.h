@@ -4,7 +4,7 @@
 namespace device {
     void    set_mode(uint8_t);
     uint8_t set_relays(uint8_t);
-    uint8_t get_mode();
+    uint8_t get_mode(void);
     
     void    run(uint8_t);
 }
