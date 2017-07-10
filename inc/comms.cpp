@@ -17,20 +17,25 @@ uint8_t power_board::stop(void) {
 }
 
 double power_board::get_voltage(void) {
-    double voltage;
-    char received;
+    float voltage;
+    //int result;
     comms_power.putc(RECEIVE_VOLTAGE);
     while(!comms_power.readable()) {
     }
-    while(comms_power.readable()) {
-        received = comms_power.getc();
-        printf("Received1: %c", received);
-    }
-    return 0.23;
+    //result = comms_power.scanf("%f", &voltage);
+    comms_power.scanf("%f", &voltage);
+    comms_power.getc();
+    return voltage;
 }
 
 double power_board::get_current(void) {
-    
+    float current;
+    comms_power.putc(RECEIVE_CURRENT);
+    while(!comms_power.readable()) {
+    }
+    comms_power.scanf("%f", &current);
+    comms_power.getc();
+    return current;
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
