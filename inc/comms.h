@@ -19,7 +19,7 @@ namespace power_board {
 
 namespace power_board_tests {
     uint8_t pwm(float);
-    uint8_t shutdown(int);
+    uint8_t shutdown(void);
 }
 
 namespace esp {

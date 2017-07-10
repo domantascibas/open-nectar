@@ -38,4 +38,16 @@ double power_board::get_current(void) {
     return current;
 }
 
+uint8_t power_board_tests::pwm(float duty) {
+    comms_power.putc(SEND_PWM_DUTY);
+    comms_power.printf("%f\n", duty);
+    
+    return 0;
+}
+
+uint8_t power_board_tests::shutdown(void) {
+    comms_power.putc(SEND_SHUTDOWN);
+    return 0;
+}
+
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
