@@ -117,6 +117,8 @@ int main() {
             break;
             
             case STOP:
+                measure.detach();
+                shutdown = 1;
                 pc.printf("STOPPING\n\r");
                 pwm::reset();
                 next_state = IDLE;
@@ -243,7 +245,8 @@ uint8_t get_command(uint8_t command, uint8_t state) {
         
         case SET_SHUTDOWN:
             //shutdown power board
-            return 2;       //back in main turn off power
+            shutdown = 1;
+            return STOP;       //back in main turn off power
         break;
     }
     return 0;
