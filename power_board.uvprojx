@@ -1869,6 +1869,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\storage.cpp</FilePath>
             </File>
+            <File>
+              <FileName>comms.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\comms.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1908,6 +1913,11 @@
               <FileName>utils.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\utils.h</FilePath>
+            </File>
+            <File>
+              <FileName>comms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\comms.h</FilePath>
             </File>
           </Files>
         </Group>
