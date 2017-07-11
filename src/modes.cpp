@@ -1,6 +1,5 @@
 #include "mbed.h"
 #include "modes.h"
-#include "mode_default.h"
 #include "utils.h"
 
 DigitalOut relay_sun_on(PB_3);
@@ -54,7 +53,28 @@ void device::run(uint8_t mode) {
         case MODE_DEFAULT:
             printf("[ MODE ] DEFAULT\n\r");
             printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d\n\r", temperature_max, temperature_moment, temperature_set, pv_available);
-            response = mode_default::run(temperature_max, temperature_moment, temperature_set, pv_available);
+            //if Tcurrent < Tmax ? check if PV avail : do nothing
+            if(temperature_moment < temperature_max) {
+                if(pv_available) {
+                    //heat water
+                    printf("T < T_MAX\n\r");
+                    response = TURN_ON_PV;
+                } else {
+                    //if Tcurrent < Tset ? use GRID : do nothing
+                    if(temperature_moment < temperature_set) {
+                        //turn on grid power
+                        printf("T < T_SET\n\r");
+                        response = TURN_ON_GRID;
+                    } else {
+                        //do nothing
+                        printf("T > T_SET\n\r");
+                        response = TURN_OFF_ALL;
+                    }
+                }
+            } else {
+                printf("T >= T_MAX\n\r");
+                response = TURN_OFF_ALL;
+            }
         break;
         
         case MODE_BOOST:
