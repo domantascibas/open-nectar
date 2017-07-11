@@ -1869,11 +1869,6 @@
               <FileType>8</FileType>
               <FilePath>.\src\storage.cpp</FilePath>
             </File>
-            <File>
-              <FileName>comms.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\comms.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "measurements.h"
 #include "pwm_adjust.h"
+#include "comms.h"
 #include "utils.h"
 
 //TODO
@@ -16,21 +17,17 @@ InterruptIn calibrationButton(PC_13);
 
 // Create a Serial objects to communicate via USB
 Serial pc(USBTX, USBRX);
+Serial main_board(PC_10, PC_11);
 extern I2C i2c;
 
 Ticker measure;
 
-volatile int calibrating = false;
-volatile int new_measurement = false;
+volatile uint8_t calibrating = false;
+volatile uint8_t new_measurement = false;
 
-double voltage = 0.0;
-double current = 0.0;
-double power = 0.0;
-
-namespace command {
-    char start = '1';
-    char stop = '0';
-}
+float voltage = 0.0;
+float current = 0.0;
+float power = 0.0;
 
 //TODO create namespace for States
 //TODO move States into a separate file
@@ -42,15 +39,16 @@ enum States {
     STOP
 };
 
-int     board_config(float, int, int, int, bool calibrate=false);
-int     self_check(void);
+uint8_t board_config(float, uint32_t, uint32_t, uint16_t, bool calibrate=false);
+uint8_t self_check(void);
+uint8_t get_command(uint8_t, uint8_t);
 void    calibrate_ISR(void);
 void    update_measurements_ISR(void);
 
 int main() {
-    int curr_state = 0;
-    int next_state = 0;
-    int response;
+    uint8_t curr_state = 0;
+    uint8_t next_state = 0;
+    uint8_t response;
     shutdown = 1;
     
     board_config(0.5, 115200, 400000, 5);
@@ -61,7 +59,7 @@ int main() {
             case IDLE: //IDLE state
                 pc.printf("IDLE\n\r");
                 calibrating = false;
-                while(!pc.readable()) {
+                while(!main_board.readable()) {
                     if(calibrating) {
                         calibrating = false;
                         response = sensors::calibrate();
@@ -74,14 +72,7 @@ int main() {
                     }
                     __WFI();
                 }
-                //master_cmd = pc.getc();
-                
-                //pc.putc(master_cmd);
-                if(pc.getc() == command::start) {
-                    next_state = STARTUP;
-                } else {
-                    next_state = IDLE;
-                }
+                next_state = get_command(main_board.getc(), curr_state);
             break;
             
             case STARTUP: //STARTUP state
@@ -107,7 +98,7 @@ int main() {
                 pc.printf("RUNNING\n\r");
                 measure.attach(&update_measurements_ISR, 0.5);
                 shutdown = 0;
-                while(!pc.readable()) {
+                while(!main_board.readable()) {
                     if(new_measurement) {
                         led = !led;
                         new_measurement = false;
@@ -122,13 +113,7 @@ int main() {
                     }
                     __WFI();
                 }
-                if(pc.getc() == command::stop) {
-                    measure.detach();
-                    shutdown = 1;
-                    next_state = STOP;
-                } else {
-                    next_state = RUNNING;
-                }
+                next_state = get_command(main_board.getc(), curr_state);
             break;
             
             case STOP:
@@ -145,8 +130,8 @@ int main() {
     }
 }
 
-int self_check(void) {
-    int response;
+uint8_t self_check(void) {
+    uint8_t response;
     double voltage, current;
 
     //check for calibration data from EEPROM
@@ -188,8 +173,9 @@ int self_check(void) {
     return STARTUP_OK;
 }
 
-int board_config(float measure_interval, int serial_baud, int i2c_freq, int pwm_freq, bool) {
+uint8_t board_config(float measure_interval, uint32_t serial_baud, uint32_t i2c_freq, uint16_t pwm_freq, bool) {
     pc.baud(serial_baud);
+    //comms::config(serial_baud);
     pc.printf("\n\r[ START ]\n\r");
     pc.printf("********************\n\r");
     pc.printf("Serial started\n\rBaud rate: %d\n\n\r", serial_baud);
@@ -214,6 +200,53 @@ int board_config(float measure_interval, int serial_baud, int i2c_freq, int pwm_
     pc.printf("[ SETUP OK ]\n\r");
     wait(0.5);
     return BOARD_CONFIG_OK;
+}
+
+uint8_t get_command(uint8_t command, uint8_t state) {
+    switch(command) {
+        case POWER_BOARD_START:
+            if(state == IDLE) {
+                return STARTUP;
+            } else {
+                return state;
+            }
+        break;
+            
+        case POWER_BOARD_STOP:
+            if(state == RUNNING) {
+                return STOP;
+            } else {
+                return state;
+            }
+        break;
+        
+        case SEND_VOLTAGE:
+            main_board.printf("%f\n", voltage);
+            //printf("[ SENT ] V\n\r");
+            return 0;
+        break;
+        
+        case SEND_CURRENT:
+            main_board.printf("%f\n", current);
+            //printf("[ SENT ] I\n\r");
+            return 0;
+        break;
+        
+        case SET_PWM_DUTY:
+            float duty;
+            main_board.scanf("%f", &duty);
+            main_board.getc();
+            //printf("[ RECEIVED ] D: %f\n\r", duty);
+            //set PWM duty
+            return 1;       //back in main set PWM duty
+        break;
+        
+        case SET_SHUTDOWN:
+            //shutdown power board
+            return 2;       //back in main turn off power
+        break;
+    }
+    return 0;
 }
 
 void update_measurements_ISR(void) {
