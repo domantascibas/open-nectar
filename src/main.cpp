@@ -60,26 +60,34 @@ void print_thread(void) {
 }
 
 int main() {
-    //comms_power.printf("ready to go\n\r");
+    pc.printf("ready to go\n\r");
     //device::set_relays(TURN_OFF_ALL);
-    
+    while(1) {
     //printf("\n\n\r[ STARTING ]\n\r");
     //power_board::start();
     //wait(1);
     //blinky.start(&print_thread);
     //default_mode_test();
     //power_board::stop();
-    
-    //pc.printf("Received: %5.3f\n\r", power_board::get_voltage());
-    pc.printf("Starting\n\r");
+    double voltage = power_board::get_voltage();
+    pc.printf("Received: %fV\n\r", voltage);
+    double current = power_board::get_current();
+    pc.printf("Received: %fA\n\r", current);
+    wait(0.1);
+        
+        power_board_tests::pwm(0.54);
+        power_board_tests::shutdown();
+        
+        wait(1.0);
+    //int i;
+    //pc.printf("Starting\n\r");
     //comms_power.putc(0x56);
-    double voltage = 120.50;
-    int voltage_int = voltage * 2049;
-    comms_power.putc(voltage_int);
+    //float voltage = 120.12345;
+    //pc.printf("V%f\n\r", voltage);
+    
+    //comms_power.printf("%f\n", voltage); //must include a the newline char at the end of transmission, so scanf knows where's the end
     //comms_power.printf("%f", voltage);
     pc.printf("done\n\r");
-    while(1) {
-        __WFI();
     }
 }
 
