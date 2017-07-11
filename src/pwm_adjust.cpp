@@ -11,13 +11,13 @@ double      old_power = 0.0;
 bool        reverse = false;
 int         duty_reduce_count = 0;
 
-int pwm::init(int frequency = 10000) {
+uint8_t pwm::init(uint16_t frequency = 10) {
     pwm_gen.period_us(1000/frequency);
     pwm_gen.write(PWM_DUTY);
     return PWM_OK;
 }
 
-int pwm::set(double voltage, double current) {
+uint8_t pwm::set(double voltage, double current) {
     double power;
     double dP;
     double PWM_DUTY_STEP_CHANGE = 0.05;
@@ -52,7 +52,13 @@ int pwm::set(double voltage, double current) {
     return PWM_OK;
 }
 
-int pwm::reset(void) {
+uint8_t pwm::set_pwm(float duty) {
+    PWM_DUTY = duty;
+    pwm_gen.write(PWM_DUTY);
+    return PWM_OK;
+}
+
+uint8_t pwm::reset(void) {
     PWM_DUTY = 0.1;
     pwm_gen.write(PWM_DUTY);
     
@@ -62,7 +68,7 @@ int pwm::reset(void) {
     return PWM_OK;
 }
 
-int pwm::swipe(float min, float max, float step) {
+uint8_t pwm::swipe(float min, float max, float step) {
     if(!reverse) {
         if(PWM_DUTY >= max) {
             reverse = true;

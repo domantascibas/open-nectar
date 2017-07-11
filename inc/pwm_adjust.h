@@ -2,14 +2,16 @@
 #define PWM_ADJUST_H
 
 namespace pwm {
-    int     init(int);
+    uint8_t init(uint16_t);
     
-    int     set(double, double);
-    int     reset();
+    uint8_t set(double, double);
+    uint8_t set_pwm(float);
+    uint8_t reset(void);
     
-    float   getDuty();
     
-    int     swipe(float, float, float);
+    float   getDuty(void);
+    
+    uint8_t swipe(float, float, float);
     double  clamp(float, float, float);
 };
 
