@@ -10,9 +10,10 @@ uint8_t mode_current = MODE_DEFAULT;
 uint8_t response = TURN_OFF_ALL;
 bool pv_available = false;
 
-double temperature_max;
-double temperature_set;
-double temperature_moment;
+float temperature_max;
+float temperature_min;
+float temperature_set;
+float temperature_moment;
 
 void device::set_mode(uint8_t mode_new) {
     mode_current = mode_new;
@@ -53,7 +54,7 @@ void device::run(uint8_t mode) {
         case MODE_DEFAULT:
             printf("[ MODE ] DEFAULT\n\r");
             printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d\n\r", temperature_max, temperature_moment, temperature_set, pv_available);
-            //if Tcurrent < Tmax ? check if PV avail : do nothing
+            //Tcurrent < Tmax ? check if PV avail : do nothing
             if(temperature_moment < temperature_max) {
                 if(pv_available) {
                     //heat water
@@ -79,14 +80,36 @@ void device::run(uint8_t mode) {
         
         case MODE_BOOST:
             printf("[ MODE ] BOOST\n\r");
+            //Tcurrent < Tmax ? use GRID : do nothing
+            if(temperature_moment < temperature_max) {
+                response = TURN_ON_GRID;
+            } else {
+                response = TURN_OFF_ALL;
+            }
         break;
         
         case MODE_AWAY:
             printf("[ MODE ] AWAY\n\r");
+            //pv available ? use PV : check Tcurrent < Tmax
+            if(pv_available) {
+                response = TURN_ON_PV;
+            } else {
+                //Tcurrent > Tmin ? do nothing : use GRID
+                if(temperature_moment > temperature_min) {
+                    response = TURN_OFF_ALL;
+                } else {
+                    response = TURN_ON_GRID;
+                }
+            }
         break;
         
         case MODE_NO_GRID:
             printf("[ MODE ] NO GRID\n\r");
+            if(pv_available) {
+                response = TURN_ON_PV;
+            } else {
+                response = TURN_OFF_ALL;
+            }
         break;
     }
     set_relays(response);
