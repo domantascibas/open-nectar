@@ -23,7 +23,26 @@ namespace power_board_tests {
 }
 
 namespace esp {
+    uint8_t read_message(void);
     
+    //cmd from ESP
+    //temperature_min
+    //temperature_max
+    //temperature_scheduled
+    //current_mode
+    //cancel_boost
+    
+    //return to ESP
+    //moment_sun_watt
+    //pwm_duty
+    //sun_voltage
+    //sun_current
+    //sun_relay_on
+    //grid_relay_on
+    //water_temperature
+    //device_temperature
+    //capacitor_temperature
+    //transistor_overheat_on
 }
 
 #endif

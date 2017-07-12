@@ -399,6 +399,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\comms.cpp</FilePath>
             </File>
+            <File>
+              <FileName>data.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\data.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2198,6 +2203,11 @@
               <FileName>comms.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\comms.h</FilePath>
+            </File>
+            <File>
+              <FileName>data.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\data.h</FilePath>
             </File>
           </Files>
         </Group>
