@@ -385,11 +385,6 @@
               <FilePath>.\src\main.cpp</FilePath>
             </File>
             <File>
-              <FileName>mode_default.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\mode_default.cpp</FilePath>
-            </File>
-            <File>
               <FileName>modes.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\modes.cpp</FilePath>
@@ -2178,11 +2173,6 @@
               <FileName>mbed_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\mbed_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>mode_default.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\mode_default.h</FilePath>
             </File>
             <File>
               <FileName>modes.h</FileName>
