@@ -7,7 +7,11 @@
 #define RECEIVE_CURRENT         0x49    //'I'
 
 #define SEND_PWM_DUTY           0x44    //'D'
-#define SEND_SHUTDOWN           0x53    //'S'
+#define SHUTDOWN_STATUS_ON      0x41    //'A'
+#define SHUTDOWN_STATUS_OFF     0x42    //'B'
+
+#define COMMS_POWER_TX      PB_10
+#define COMMS_POWER_RX      PB_11
 
 namespace power_board {
     uint8_t start(void);
@@ -15,34 +19,13 @@ namespace power_board {
     
     double get_voltage(void);
     double get_current(void);
+    
+    uint8_t shutdown(bool);
 }
 
 namespace power_board_tests {
     uint8_t pwm(float);
-    uint8_t shutdown(void);
-}
-
-namespace esp {
-    uint8_t read_message(void);
-    
-    //cmd from ESP
-    //temperature_min
-    //temperature_max
-    //temperature_scheduled
-    //current_mode
-    //cancel_boost
-    
-    //return to ESP
-    //moment_sun_watt
-    //pwm_duty
-    //sun_voltage
-    //sun_current
-    //sun_relay_on
-    //grid_relay_on
-    //water_temperature
-    //device_temperature
-    //capacitor_temperature
-    //transistor_overheat_on
+    uint8_t shutdown(bool);
 }
 
 #endif
