@@ -1,20 +1,8 @@
 #ifndef MODES_H
 #define MODES_H
 
-namespace device {
-    void    set_mode(uint8_t);
-    uint8_t set_relays(uint8_t);
-    uint8_t get_mode(void);
-    
-    void    run(uint8_t);
-}
-
-//test functions. Delete for release
-namespace device_tests {
-    void    set_temperature_max(double);
-    void    set_temperature_current(double);
-    void    set_temperature_scheduled(double);
-    void    set_pv_available(bool);
+namespace nectar {    
+    uint8_t    run();
 }
 
 #endif
