@@ -4,10 +4,16 @@
 //Global constants
 #define PWM_MIN					0.1
 #define PWM_MAX					0.95
-#define	V_REF					2.500
+#define	V_REF					3.00
 
 #define OVERVOLTAGE				350.0
 #define OVERCURRENT				10.0
+
+#define LED_ON                  0
+#define LED_OFF                 1
+
+#define DRIVER_ON               0
+#define DRIVER_OFF              1
 
 enum error_codes{
 	OK,

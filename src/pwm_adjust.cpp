@@ -2,14 +2,14 @@
 #include "pwm_adjust.h"
 #include "utils.h"
 
-PwmOut pwm_gen(PC_6);
+PwmOut pwm_gen(PB_1);
 
-double      PWM_DUTY = 0.1;
-double      PWM_DUTY_STEP_CHANGE = 0.01;
-double      old_voltage = 0.0;
-double      old_power = 0.0;
+float       PWM_DUTY = 0.1;
+float       PWM_DUTY_STEP_CHANGE = 0.01;
+float       old_voltage = 0.0;
+float       old_power = 0.0;
 bool        reverse = false;
-int         duty_reduce_count = 0;
+uint8_t     duty_reduce_count = 0;
 
 uint8_t pwm::init(uint16_t frequency = 10) {
     pwm_gen.period_us(1000/frequency);
@@ -17,10 +17,10 @@ uint8_t pwm::init(uint16_t frequency = 10) {
     return PWM_OK;
 }
 
-uint8_t pwm::set(double voltage, double current) {
+float pwm::set(float voltage, float current) {
     double power;
-    double dP;
-    double PWM_DUTY_STEP_CHANGE = 0.05;
+    float dP;
+    float PWM_DUTY_STEP_CHANGE = 0.05;
     
     power = voltage * current;
     dP = power - old_power;
@@ -49,7 +49,7 @@ uint8_t pwm::set(double voltage, double current) {
     PWM_DUTY = clamp(PWM_DUTY, PWM_MIN, PWM_MAX);
     
     pwm_gen.write(PWM_DUTY);
-    return PWM_OK;
+    return PWM_DUTY;
 }
 
 uint8_t pwm::set_pwm(float duty) {
@@ -68,6 +68,11 @@ uint8_t pwm::reset(void) {
     return PWM_OK;
 }
 
+
+float pwm::get_duty(void) {
+    return PWM_DUTY;
+}
+
 uint8_t pwm::swipe(float min, float max, float step) {
     if(!reverse) {
         if(PWM_DUTY >= max) {
@@ -84,6 +89,7 @@ uint8_t pwm::swipe(float min, float max, float step) {
             reverse = true;
         }
     }
+    pwm_gen.write(PWM_DUTY);
     return PWM_OK;
 }
 

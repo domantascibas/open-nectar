@@ -16,6 +16,19 @@
 #define REG_ADDR_CONVL          0x06
 #define REG_ADDR_CONVH          0x07
 
+struct data_collection {
+    float moment_voltage;
+    float moment_current;
+    
+    float reference_voltage;
+    float reference_current;
+    
+    float pwm_duty;
+    float capacitor_temperature;
+    
+    bool calibrated;
+};
+
 //Interface
 namespace measurements {	
     int     init();
