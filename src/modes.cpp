@@ -1,12 +1,11 @@
 #include "mbed.h"
 #include "modes.h"
-#include "utils.h"
 #include "data.h"
 
 DigitalOut relay_sun_on(PB_3);
 DigitalOut relay_grid_on(PB_4);
 
-extern data_collection nectar_data;
+extern Data data;
 
 namespace nectar {
     uint8_t response = TURN_OFF_ALL;
@@ -38,21 +37,21 @@ namespace nectar {
         return 0;   //change to meaningful return
     }
 
-    uint8_t run() {
-        switch(nectar_data.current_mode) {
+    uint8_t loop(void) {
+        switch(data.current_mode) {
             default:  //mode is any other value than the ones below
             case MODE_DEFAULT:
                 //printf("[ MODE ] DEFAULT ");
                 //printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d ", nectar_data.temperature_max, nectar_data.temperature_moment, nectar_data.temperature_scheduled, nectar_data.pv_available);
                 //Tcurrent < Tmax ? check if PV avail : do nothing
-                if(nectar_data.temperature_moment < nectar_data.temperature_max) {
-                    if(nectar_data.pv_available) {
+                if(data.temp_boiler < data.temp_max) {
+                    if(data.pv_available) {
                         //heat water
                         //printf("T < T_MAX ");
                         response = TURN_ON_PV;
                     } else {
                         //if Tcurrent < Tset ? use GRID : do nothing
-                        if(nectar_data.temperature_moment < nectar_data.temperature_scheduled) {
+                        if(data.temp_boiler < data.temp_scheduled) {
                             //turn on grid power
                             //printf("T < T_SET ");
                             response = TURN_ON_GRID;
@@ -71,7 +70,7 @@ namespace nectar {
             case MODE_BOOST:
                 //printf("[ MODE ] BOOST\n\r");
                 //Tcurrent < Tmax ? use GRID : do nothing
-                if(nectar_data.temperature_moment < nectar_data.temperature_max) {
+                if(data.temp_boiler < data.temp_max) {
                     response = TURN_ON_GRID;
                 } else {
                     response = TURN_OFF_ALL;
@@ -81,11 +80,11 @@ namespace nectar {
             case MODE_AWAY:
                 //printf("[ MODE ] AWAY\n\r");
                 //pv available ? use PV : check Tcurrent < Tmax
-                if(nectar_data.pv_available) {
+                if(data.pv_available) {
                     response = TURN_ON_PV;
                 } else {
                     //Tcurrent > Tmin ? do nothing : use GRID
-                    if(nectar_data.temperature_moment > nectar_data.temperature_min) {
+                    if(data.temp_boiler > data.temp_min) {
                         response = TURN_OFF_ALL;
                     } else {
                         response = TURN_ON_GRID;
@@ -95,7 +94,7 @@ namespace nectar {
             
             case MODE_NO_GRID:
                 //printf("[ MODE ] NO GRID\n\r");
-                if(nectar_data.pv_available) {
+                if(data.pv_available) {
                     response = TURN_ON_PV;
                 } else {
                     response = TURN_OFF_ALL;

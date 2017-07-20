@@ -1,30 +1,61 @@
 #ifndef COMMS_H
 #define COMMS_H
 
-#define POWER_BOARD_START       0x0F
-#define POWER_BOARD_STOP        0xF0
-#define RECEIVE_VOLTAGE         0x56    //'V'
-#define RECEIVE_CURRENT         0x49    //'I'
+namespace pc_monitor {
+    void init(uint32_t);    
+    void loop(void);
+    
+    //commands to manually control the power board
+}
 
-#define SEND_PWM_DUTY           0x44    //'D'
-#define SHUTDOWN_STATUS_ON      0x41    //'A'
-#define SHUTDOWN_STATUS_OFF     0x42    //'B'
-
-#define COMMS_POWER_TX      PB_10
-#define COMMS_POWER_RX      PB_11
+namespace esp {
+    void init(uint32_t);
+    
+    //reads message from ESP
+    //sets the temperature_max, temperature_min, temperature_scheduled and current_mode
+    uint8_t set_mode(void);
+    
+    //sends data back to ESP as a string
+    //  temperature_moment,
+    //  sun_power_moment,
+    //  sun_voltage,
+    //  sun_current,
+    //  pwm_duty,
+    //  device_temperature,
+    //  capacitor_temperature,
+    //  sun_relay_on,
+    //  grid_relay_on,
+    //  transistor_overheat_on
+    uint8_t get_stats(void);
+    
+    uint8_t cancel_boost(void);
+}
 
 namespace power_board {
+    void init(uint32_t);
+    
+    //starts the power board
     uint8_t start(void);
+    
+    //stops the power board
     uint8_t stop(void);
     
-    double get_voltage(void);
-    double get_current(void);
+    //get voltage, current, pwm_duty, Tcapacitor, and mosfet_overheat_on
+    uint8_t get_data(void);
     
+    //get ref_voltage and ref_current
+    uint8_t get_calibration_data(void);
+    
+    //toggles the PWM generator
+    //shutdown(DRIVER_ON(=0)) turns the PWM driver ON
+    //shutdown(DRIVER_OFF(=1)) turns the PWM driver OFF
     uint8_t shutdown(bool);
+    
+    uint8_t set_pwm(void);
 }
 
 namespace power_board_tests {
-    uint8_t pwm(float);
+    uint8_t set_pwm(float);
     uint8_t shutdown(bool);
 }
 

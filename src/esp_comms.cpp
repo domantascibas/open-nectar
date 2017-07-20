@@ -7,7 +7,7 @@
 #include <iostream>
 
 Serial comms_esp(ESP_TX, ESP_RX);
-extern data_collection nectar_data;
+//extern data_collection nectar_data;
 
 data_collection nectar_data = {80.0, 18.0, 56.0, 42.0, 0, 0, 0, 0.1, 23.3, 32.0, false, false, false, false, MODE_DEFAULT};
 

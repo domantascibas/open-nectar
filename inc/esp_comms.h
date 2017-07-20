@@ -1,8 +1,8 @@
 #ifndef ESP_COMMS_H
 #define ESP_COMMS_H
 
-#define ESP_TX      PB_10//PA_9
-#define ESP_RX      PB_11//PA_10
+#define ESP_TX      PA_9
+#define ESP_RX      PA_10
 
 #define NUM_FIELDS  12 //number of comma seperated values in the data...TODO does this remain constant?
 

@@ -2,7 +2,7 @@
 #define MODES_H
 
 namespace nectar {    
-    uint8_t    run();
+    uint8_t     loop(void);
 }
 
 #endif

@@ -399,11 +399,6 @@
               <FileType>8</FileType>
               <FilePath>.\src\data.cpp</FilePath>
             </File>
-            <File>
-              <FileName>esp_comms.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\esp_comms.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -2198,11 +2193,6 @@
               <FileName>data.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\data.h</FilePath>
-            </File>
-            <File>
-              <FileName>esp_comms.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\esp_comms.h</FilePath>
             </File>
           </Files>
         </Group>
