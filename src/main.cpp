@@ -55,7 +55,7 @@ void check_capacitor_temperature() {
 
 
 void startup() {
-    pc_monitor::init(256000);
+    pc_monitor::init(115200);
     power_board::init(19200);
     esp::init(19200);
     

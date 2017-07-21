@@ -23,8 +23,8 @@
 #define KEYBOARD_PWM_ON             0x39    //'9'
 #define INCREASE_PWM_DUTY           0x2B    //'+'
 #define DECREASE_PWM_DUTY           0x2D    //'-'
-#define AUTO_MODE                   0x41    //'A'
-#define MANUAL_MODE                 0x4D    //'M'
+#define AUTO_MODE                   0x61    //'a'
+#define MANUAL_MODE                 0x6D    //'m'
 
 #define CMD_POWER_BOARD_START       0x0F
 #define CMD_POWER_BOARD_STOP        0xF0
@@ -165,10 +165,10 @@ namespace pc_monitor {
                         comms_pc.printf("POWER BOARD Getting data\n\r");
                         resp = power_board::get_data();
                         if(resp == NS_OK) {
-                            comms_pc.printf("V:%f I:%f D:%f Tcap:%f Overheat:%d\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.capacitor_temp, data.mosfet_overheat_on);
+                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tcap:%7.3f Overheat:%d\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.capacitor_temp, data.mosfet_overheat_on);
                         } else {
                             comms_pc.printf("Error: 0x%X\n\r", resp);
-                            comms_pc.printf("V:%f I:%f D:%f Tcap:%f Overheat:%d\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.capacitor_temp, data.mosfet_overheat_on);
+                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tcap:%7.3f Overheat:%d\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.capacitor_temp, data.mosfet_overheat_on);
                         }
                     break;
                         
@@ -200,6 +200,63 @@ namespace pc_monitor {
                         if(resp == ACK) {
                             comms_pc.printf("PWM ON\n\r");
                             relay_sun_on = true;
+                        } else {
+                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                        }
+                    break;
+                        
+                    case AUTO_MODE:
+                        comms_pc.printf("AUTO MODE\n\r");
+                        resp = power_board::enter_service_menu(false);
+                        if(resp == ACK) {
+                            relay_sun_on = true;
+                            comms_pc.printf("Power Board running\n\r");
+                        } else {
+                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                        }
+                    break;
+                        
+                    case MANUAL_MODE:
+                        comms_pc.printf("MANUAL MODE\n\r");
+                        resp = power_board::enter_service_menu(true);
+                        if(resp == NS_OK) {
+                            comms_pc.printf("Service Menu\n\rPWM duty: %f\n\r", data.pwm_duty);
+                            resp = power_board::get_data();
+                            if(resp == NS_OK) {
+                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty);
+                            } else {
+                                comms_pc.printf("Error: 0x%X\n\r", resp);
+                            }
+                        } else {
+                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                        }
+                    break;
+                        
+                    case INCREASE_PWM_DUTY:
+                        comms_pc.printf("INCREASE DUTY\n\r");
+                        resp = power_board::increase_pwm(true);
+                        if(resp == NS_OK) {
+                            resp = power_board::get_data();
+                            if(resp == NS_OK) {
+                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty);
+                            } else {
+                                comms_pc.printf("Error: 0x%X\n\r", resp);
+                            }
+                        } else {
+                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                        }
+                    break;
+                        
+                    case DECREASE_PWM_DUTY:
+                        comms_pc.printf("DECREASE DUTY\n\r");
+                        resp = power_board::increase_pwm(false);
+                        if(resp == NS_OK) {
+                            resp = power_board::get_data();
+                            if(resp == NS_OK) {
+                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty);
+                            } else {
+                                comms_pc.printf("Error: 0x%X\n\r", resp);
+                            }
                         } else {
                             comms_pc.printf("Error: 0x%X\n\r", resp);
                         }
@@ -274,48 +331,28 @@ namespace power_board {
     }
     
     uint8_t get_data(void) {
-        uint8_t err = 0x00;
-        uint8_t response = get_float_data(CMD_GET_VOLTAGE, &data.pv_voltage);
-        if(response != NS_OK) {
-            err |= 0x01 << 0;
-        }
-        response = get_float_data(CMD_GET_CURRENT, &data.pv_current);
-        if(response != NS_OK) {
-            err |= 0x01 << 1;
-        }
-        response = get_float_data(CMD_GET_PWM_DUTY, &data.pwm_duty);
-        if(response != NS_OK) {
-            err |= 0x01 << 2;
-        }
-        response = get_float_data(CMD_GET_CAP_TEMP, &data.capacitor_temp);
-        if(response != NS_OK) {
-            err |= 0x01 << 3;
-        }
-        response = get_int_data(CMD_GET_MOSFET_OHEAT, &data.mosfet_overheat_on);
-        if(response != NS_OK) {
-            err |= 0x01 << 4;
-        }
-        if(err == 0x00) {
+        uint8_t response = send_cmd(KEYBOARD_GET_DATA);
+        if(response == INCOMING_DATA) {
+            while(!comms_power.readable()) {
+            }
+            comms_power.scanf("%f,%f,%f,%f,%d", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.capacitor_temp, &data.mosfet_overheat_on);
+            comms_power.getc();
             return NS_OK;
         } else {
-            return err;
+            return response;
         }
     }
     
     uint8_t get_calibration_data(void) {
-        uint8_t err = 0x00;
-        uint8_t response = get_float_data(CMD_GET_REF_VOLTAGE, &data.pv_ref_voltage);
-        if(response != NS_OK) {
-            err |= 0x01 << 0;
-        }
-        response = get_float_data(CMD_GET_REF_CURRENT, &data.pv_ref_current);
-        if(response != NS_OK) {
-            err |= 0x01 << 1;
-        }
-        if(err == 0x00) {
+        uint8_t response = send_cmd(KEYBOARD_GET_CALIB_DATA);
+        if(response == INCOMING_DATA) {
+            while(!comms_power.readable()) {
+            }
+            comms_power.scanf("%f,%f", &data.pv_ref_voltage, &data.pv_ref_current);
+            comms_power.getc();
             return NS_OK;
         } else {
-            return err;
+            return response;
         }
     }
 
@@ -329,15 +366,55 @@ namespace power_board {
         }
     }
     
-/*    
-    uint8_t set_pwm(void) {
-        uint8_t resp = get_float_data(CMD_GET_PWM_DUTY, &data.pwm_duty);
-        if(resp == NS_OK) {
-            data.pwm_duty += 0.05;
-            resp = send_float_data(CMD_SET_PWM_DUTY, data.pwm_duty);
-            comms_pc.printf("pwm set %f", data.pwm_duty);
+    uint8_t enter_service_menu(bool service_menu) {
+        uint8_t response;
+        if(service_menu) {
+            response = send_cmd(MANUAL_MODE);
+            if(response == ACK) {
+                response = send_cmd(CMD_GET_PWM_DUTY);
+                if(response == INCOMING_DATA) {
+                    while(!comms_power.readable()) {}
+                    comms_power.scanf("%f", &data.pwm_duty);
+                    comms_power.getc();
+                    return NS_OK;
+                }else {
+                    return response;
+                }
+            } else {
+                return response;
+            }
+        } else {
+            return send_cmd(AUTO_MODE);
+        }
     }
-*/
+    
+    uint8_t increase_pwm(bool increase) {
+        if(data.pwm_duty < 0.1) {
+            data.pwm_duty = 0.1;
+        }
+        uint8_t response = send_cmd(CMD_SET_PWM_DUTY);
+        if(response == WAITING_FOR_DATA) {
+            while(!comms_power.writeable()) {}
+            if(increase) {
+                if((data.pwm_duty + 0.1) > 0.95) {
+                    data.pwm_duty = 0.95;
+                } else {
+                    data.pwm_duty += 0.1;
+                }
+            } else {
+                if((data.pwm_duty - 0.1) < 0.1) {
+                    data.pwm_duty = 0.1;
+                } else {
+                    data.pwm_duty -= 0.1;
+                }
+            }
+            comms_power.printf("%f\n", data.pwm_duty);
+            comms_pc.printf("set PWM duty %f\n\r", data.pwm_duty);
+            return NS_OK;
+        } else {
+            comms_pc.printf("Error: 0x%X\n\r", response);
+        }
+    }
 }
 
 namespace power_board_tests {

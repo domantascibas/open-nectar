@@ -51,7 +51,9 @@ namespace power_board {
     //shutdown(DRIVER_OFF(=1)) turns the PWM driver OFF
     uint8_t shutdown(bool);
     
-    uint8_t set_pwm(void);
+    uint8_t enter_service_menu(bool);
+    
+    uint8_t increase_pwm(bool);
 }
 
 namespace power_board_tests {
