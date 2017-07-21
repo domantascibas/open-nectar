@@ -10,8 +10,8 @@
 #define KEYBOARD_PWM_ON             0x39    //'9'
 #define INCREASE_PWM_DUTY           0x2B    //'+'
 #define DECREASE_PWM_DUTY           0x2D    //'-'
-#define AUTO_MODE                   0x41    //'A'
-#define MANUAL_MODE                 0x4D    //'M'
+#define AUTO_MODE                   0x61    //'a'
+#define MANUAL_MODE                 0x6D    //'m'
 
 #define CMD_POWER_BOARD_START       0x0F
 #define CMD_POWER_BOARD_STOP        0xF0

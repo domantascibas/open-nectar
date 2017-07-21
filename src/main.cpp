@@ -39,7 +39,8 @@ enum States {
     IDLE,
     STARTUP,
     RUNNING,
-    STOP
+    STOP,
+    SERVICE
 };
 
 uint8_t board_config(float, uint32_t, uint32_t, uint16_t, bool calibrate=false);
@@ -59,7 +60,7 @@ int main() {
     uint8_t response;
     shutdown = DRIVER_OFF;
     
-    board_config(0.5, 19200, 400000, 5);
+    board_config(0.5, 19200, 400000, 2);
     pc.printf("\n\r");
     
     while(1) {
@@ -134,6 +135,26 @@ int main() {
                 pc.printf("STOPPING\n\r");
                 pwm::reset();
                 next_state = IDLE;
+            break;
+            
+            case SERVICE:
+                //TODO add temperature and overvoltage/overcurrent checks
+                pc.printf("SERVICE\n\r");
+                measure.attach(&update_measurements_ISR, 0.5);
+                while(!main_board.readable()) {
+                    if(new_measurement) {
+                        led = !led;
+                        new_measurement = false;
+                        
+                        voltage = measurements::getVoltage();
+                        current = measurements::getCurrent();
+                        power = current * voltage;
+                        
+                        pc.printf("%7.3fW %7.3fV %7.3fA\n\r", power, voltage, current);
+                    }
+                    __WFI();
+                }
+                next_state = get_command(main_board.getc(), curr_state);
             break;
             
             default: //GOTO IDLE state
@@ -227,6 +248,7 @@ uint8_t get_command(uint8_t command, uint8_t state) {
     
     if(command != NULL) {
         switch(command) {
+            case AUTO_MODE:
             case CMD_POWER_BOARD_START:
             case KEYBOARD_START:
                 main_board.putc(ACK);
@@ -234,7 +256,14 @@ uint8_t get_command(uint8_t command, uint8_t state) {
                 if(state == IDLE) {
                     return STARTUP;
                 } else {
-                    return state;
+                    if(state == SERVICE) {
+                        measure.detach();
+                        shutdown = DRIVER_OFF;
+                        pwm::set_pwm(0.1);
+                        return STARTUP;
+                    } else {
+                        return state;
+                    }
                 }
             break;
                 
@@ -266,21 +295,33 @@ uint8_t get_command(uint8_t command, uint8_t state) {
             break;
             
             case KEYBOARD_GET_DATA:
+                main_board.putc(INCOMING_DATA);
+                while(!main_board.writeable()) {}
                 main_board.printf("%f,%f,%f,%f,%d\n", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.capacitor_temperature, overheat); //print to ESP serial
-                pc.printf("[ SENT ] Data: %f, %f, %f, %f, %d\n", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.capacitor_temperature, overheat);
+                pc.printf("[ SENT ] %f, %f, %f, %f, %d\n\r", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.capacitor_temperature, overheat);
+                return state;
+            break;
+                    
+            case KEYBOARD_GET_CALIB_DATA:
+                main_board.putc(INCOMING_DATA);
+                while(!main_board.writeable()) {}
+                main_board.printf("%f,%f\n", power_board_data.reference_voltage, power_board_data.reference_current);
+                pc.printf("[ SENT ] %f, %f\n\r", power_board_data.reference_voltage, power_board_data.reference_current);
                 return state;
             break;
             
             case CMD_SET_PWM_DUTY:
                 if(state == IDLE) {
+                    main_board.putc(NACK);
                     return IDLE;
                 } else {
-                    float duty;
-                    main_board.scanf("%f", &duty);
+                    main_board.putc(WAITING_FOR_DATA);
+                    while(!main_board.readable()) {}
+                    main_board.scanf("%f", &power_board_data.pwm_duty);
                     main_board.getc();
                     pc.printf("[ RECEIVED ] Duty\n\r");
-                    //set PWM duty
-                    return RUNNING;       //back in main set PWM duty
+                    pwm::set_pwm(power_board_data.pwm_duty);
+                    return state;       //back in main set PWM duty
                 }
             break;
             
@@ -292,7 +333,7 @@ uint8_t get_command(uint8_t command, uint8_t state) {
                     //turn on PWM driver
                     shutdown = DRIVER_ON;
                     pc.printf("[ RECEIVED ] Driver ON\n\r");
-                    return RUNNING;       //back in main turn off power
+                    return state;       //back in main turn off power
                 }
             break;
             
@@ -304,7 +345,7 @@ uint8_t get_command(uint8_t command, uint8_t state) {
                     //turn off PWM driver
                     shutdown = DRIVER_OFF;
                     pc.printf("[ RECEIVED ] Driver OFF\n\r");
-                    return RUNNING;
+                    return state;
                     }
             break;
                     
@@ -345,6 +386,15 @@ uint8_t get_command(uint8_t command, uint8_t state) {
                 while(!main_board.writeable()) {}
                 main_board.printf("%f\n", power_board_data.capacitor_temperature);
                 return state;
+            break;
+                    
+            case MANUAL_MODE:
+                main_board.putc(ACK);
+                if(state != IDLE) {
+                    measure.detach();
+                }
+                pc.printf("[ RECEIVED ] AUTO_MODE\n\r");
+                return SERVICE;
             break;
                     
             default:
