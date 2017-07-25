@@ -41,6 +41,7 @@ struct Data {
     
     float pwm_duty;
     float capacitor_temp;
+    float device_temperature;
     
     uint8_t  mosfet_overheat_on;
 };
