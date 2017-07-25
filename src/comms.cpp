@@ -261,6 +261,12 @@ namespace pc_monitor {
                             comms_pc.printf("Error: 0x%X\n\r", resp);
                         }
                     break;
+                        
+                    case GET_STATS:
+                        //send stats to ESP
+                        comms_pc.printf("ESP GET STATS\n\r");
+                        esp::get_stats();
+                    break;
 
                     default:
                         comms_pc.printf("Unrecognized CMD 0x%X\n\r", command);
@@ -277,10 +283,54 @@ namespace esp {
     void init(uint32_t baudrate) {
         comms_esp.baud(baudrate);
     }
+    
+    void loop(void) {
+        uint8_t command, resp;
+        while(!comms_esp.readable()) {
+            __WFI();
+        }
+        if(comms_esp.readable()) {
+            if(command != NULL) {
+                comms_pc.printf("\n\rCMD: 0x%X\n\r", command);
+                switch(command) {
+                    case GET_STATS:
+                        //send stats to ESP
+                        comms_pc.printf("ESP GET STATS\n\r");
+                        esp::get_stats();
+                    break;
+                    
+                    default:
+                        comms_pc.printf("Unrecognized CMD 0x%X\n\r", command);
+                    break;
+                }
+            } else {
+                comms_pc.printf("CMD: NULL\n\r");
+            }
+        }
+    }
+    
+    //sends data back to ESP as a string
+    //  temperature_moment,
+    //  sun_power_moment,
+    //  sun_voltage,
+    //  sun_current,
+    //  pwm_duty,
+    //  device_temperature,
+    //  capacitor_temperature,
+    //  sun_relay_on,
+    //  grid_relay_on,
+    //  transistor_overheat_on
+    uint8_t get_stats(void) {
+        comms_pc.printf("sent 0x%X\n\r", INCOMING_DATA);
+        comms_esp.putc(INCOMING_DATA);
+        //can send 64 chars max
+        comms_esp.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.capacitor_temp, data.pwm_duty);
+        comms_pc.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n\r", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.capacitor_temp, data.pwm_duty);
+    }
 }
 
 namespace power_board {
-    char buffer[128];
+    //char buffer[128];
     
     void init(uint32_t baudrate) {
         comms_power.baud(baudrate);
@@ -292,42 +342,6 @@ namespace power_board {
     
     uint8_t stop(void) {
         return send_cmd(CMD_POWER_BOARD_STOP);
-    }
-    
-    uint8_t get_float_data(uint8_t command, float *result) {
-        uint8_t response = send_cmd(command);
-        if(response == INCOMING_DATA) {
-            while(!comms_power.readable()) {
-            }
-            comms_power.scanf("%f", result);
-            comms_power.getc();
-            return NS_OK;
-        } else {
-            return response;
-        }
-    }
-    
-    uint8_t get_int_data(uint8_t command, uint8_t *result) {
-        uint8_t response = send_cmd(command);
-        if(response == INCOMING_DATA) {
-            while(!comms_power.readable()) {
-            }
-            comms_power.scanf("%d", result);
-            comms_power.getc();
-            return NS_OK;
-        } else {
-            return response;
-        }
-    }
-    
-    uint8_t send_float_data(uint8_t command, float data) {
-        uint8_t response = send_cmd(command);
-        if(response == WAITING_FOR_DATA) {
-            comms_power.printf("%f\n", data);
-            return NS_OK;
-        } else {
-            return response;
-        }
     }
     
     uint8_t get_data(void) {
