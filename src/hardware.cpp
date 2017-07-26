@@ -54,6 +54,7 @@ namespace hardware {
     }
     
     uint8_t startup(void) {
+        uint8_t resp;
         //startup sequence
         //run safety checks, instruct power board to turn on/off
         
@@ -64,6 +65,18 @@ namespace hardware {
         if(data.temp_boiler < 1) {
             printf("[BOILER] ERROR\r\n");
         }
+        
+        comms_pc.printf("POWER BOARD Starting\n\r");
+        relay_sun = true;
+        resp = power_board::start();
+        if(resp == 0x06) {
+            comms_pc.printf("Started\n\r");
+        } else {
+            relay_sun = false;
+            comms_pc.printf("Not Started: 0x%X\n\r", resp);
+        }
+        data.sun_relay_on = relay_sun;
+
         
         //init heatsink thermometer
         //check if <40C
@@ -82,6 +95,7 @@ namespace hardware {
         
         //check grid relay
         //turn on grid relay, measure boiler temperature
+        
         return NS_OK;
     }
     
@@ -115,6 +129,7 @@ namespace comms {
         pc_monitor::init(115200);
         power_board::init(19200);
         esp::init(19200);
+        esp::start();
     }
     
     uint8_t esp_loop(void) {
