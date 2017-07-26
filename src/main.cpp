@@ -3,6 +3,7 @@
 #include "pwm_adjust.h"
 #include "comms.h"
 #include "utils.h"
+#include "DS1820.h"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -24,7 +25,11 @@ Serial pc(PA_2, PA_3);
 Serial main_board(PC_10, PC_11);
 extern I2C i2c;
 
+DS1820  probe_1(PC_6);
+DS1820  probe_2(PC_7);
+
 Ticker measure;
+Ticker measure_temperatures;
 
 volatile uint8_t calibrating = false;
 volatile uint8_t new_measurement = false;
@@ -43,12 +48,14 @@ enum States {
     SERVICE
 };
 
-uint8_t board_config(float, uint32_t, uint32_t, uint16_t, bool calibrate=false);
+uint8_t board_config(float, uint32_t, uint32_t, float, bool calibrate=false);
 uint8_t self_check(void);
 uint8_t get_command(uint8_t, uint8_t);
-void    blink_code(uint8_t, uint8_t);
-void    calibrate_ISR(void);
-void    update_measurements_ISR(void);
+void blink_code(uint8_t, uint8_t);
+
+void calibrate_ISR(void);
+void update_measurements_ISR(void);
+void update_temperatures_ISR(void);
 
 int main() {
     float voltage = 0.0;
@@ -60,7 +67,15 @@ int main() {
     uint8_t response;
     shutdown = DRIVER_OFF;
     
-    board_config(0.5, 19200, 400000, 2);
+    probe_1.begin();
+    probe_2.begin();
+    
+    probe_1.startConversion();
+    probe_2.startConversion();
+    
+    measure_temperatures.attach(&update_temperatures_ISR, 2.0);
+    
+    board_config(0.5, 19200, 400000, 3);
     pc.printf("\n\r");
     
     while(1) {
@@ -194,7 +209,7 @@ uint8_t self_check(void) {
     
     //measure Idc == ~0.0
     current = measurements::getCurrent();
-    if(current > 0.1) {
+    if(current > 0.15) {
         pc.printf("[ ERROR ] DC Current Leaks %7.3fA\n\r", current);
         return DC_CURRENT_LEAKS;
     }
@@ -209,7 +224,7 @@ uint8_t self_check(void) {
     return STARTUP_OK;
 }
 
-uint8_t board_config(float measure_interval, uint32_t serial_baud, uint32_t i2c_freq, uint16_t pwm_freq, bool) {
+uint8_t board_config(float measure_interval, uint32_t serial_baud, uint32_t i2c_freq, float pwm_freq, bool) {
     pc.baud(serial_baud);
     main_board.baud(serial_baud);
     //comms::config(serial_baud);
@@ -297,8 +312,8 @@ uint8_t get_command(uint8_t command, uint8_t state) {
             case KEYBOARD_GET_DATA:
                 main_board.putc(INCOMING_DATA);
                 while(!main_board.writeable()) {}
-                main_board.printf("%f,%f,%f,%f,%d\n", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.capacitor_temperature, overheat); //print to ESP serial
-                pc.printf("[ SENT ] %f, %f, %f, %f, %d\n\r", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.capacitor_temperature, overheat);
+                main_board.printf("%f,%f,%f,%f,%d,%f\n", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.radiator_temperature, overheat, power_board_data.airgap_temperature); //print to ESP serial
+                pc.printf("[ SENT ] %f, %f, %f, %f, %d, %f\n\r", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.radiator_temperature, overheat, power_board_data.airgap_temperature);
                 return state;
             break;
                     
@@ -380,13 +395,15 @@ uint8_t get_command(uint8_t command, uint8_t state) {
                 pc.printf("[ SENT ] Overheat: %d\n\r", overheat);
                 return state;
             break;
-                    
+            
+            /*
             case CMD_GET_CAP_TEMP:
                 main_board.putc(INCOMING_DATA);
                 while(!main_board.writeable()) {}
-                main_board.printf("%f\n", power_board_data.capacitor_temperature);
+                main_board.printf("%f\n", power_board_data.airgap_temperature);
                 return state;
             break;
+            */
                     
             case MANUAL_MODE:
                 main_board.putc(ACK);
@@ -453,6 +470,14 @@ void blink_code(uint8_t state, uint8_t code) {
 
 void update_measurements_ISR(void) {
     new_measurement = true;
+}
+
+void update_temperatures_ISR(void) {
+    power_board_data.airgap_temperature = probe_1.read();
+    power_board_data.radiator_temperature = probe_2.read();
+    
+    probe_1.startConversion();
+    probe_2.startConversion();
 }
 
 void calibrate_ISR(void) {

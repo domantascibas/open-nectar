@@ -11,7 +11,7 @@ float       old_power = 0.0;
 bool        reverse = false;
 uint8_t     duty_reduce_count = 0;
 
-uint8_t pwm::init(uint16_t frequency = 10) {
+uint8_t pwm::init(float frequency = 10) {
     pwm_gen.period_us(1000/frequency);
     pwm_gen.write(PWM_DUTY);
     return PWM_OK;

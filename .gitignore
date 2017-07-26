@@ -2,3 +2,4 @@
 *.uvoptx
 BUILD/
 *.scvd
+*.TMP

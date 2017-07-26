@@ -2,7 +2,7 @@
 #define PWM_ADJUST_H
 
 namespace pwm {
-    uint8_t init(uint16_t);
+    uint8_t init(float);
     
     float set(float, float);
     uint8_t set_pwm(float);
