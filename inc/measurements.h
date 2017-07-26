@@ -26,8 +26,8 @@ struct data_collection {
     float pwm_duty;
     float  airgap_temperature;
     float radiator_temperature;
-    bool mosfet_overheat_on;
     
+    bool mosfet_overheat_on;
     bool calibrated;
 };
 

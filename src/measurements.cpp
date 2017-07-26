@@ -8,7 +8,7 @@ extern Serial pc;
 
 //Global variables
 const double    INPUT_VDIV = 4.1/400;
-data_collection power_board_data = { 0.00, 0.00, 0.00, 0.00, 0.1, 0.0, storage::isCalibrated() };
+data_collection power_board_data = { 0.00, 0.00, 0.00, 0.00, 0.1, 0.0, 0.0, false, storage::isCalibrated() };
 
 //MEASUREMENTS
 namespace measurements {    
