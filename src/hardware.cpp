@@ -41,7 +41,7 @@ namespace hardware {
     //setup all hardware when started
     uint8_t setup(void) {
         comms::setup();
-        comms_pc.printf("[COMMS] tarted\r\n");
+        comms_pc.printf("[COMMS] Started\r\n");
         
         response = temperature::setup();
         if(response != NS_OK) {

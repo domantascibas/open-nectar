@@ -212,60 +212,60 @@ namespace pc_monitor {
                         comms_pc.printf("MANUAL MODE\n\r");
                         resp = power_board::enter_service_menu(true);
                         if(resp == NS_OK) {
-                            comms_pc.printf("Service Menu\n\rPWM duty: %f\n\r", data.pwm_duty);
+                            comms_pc.printf("Service Menu\n\rPWM duty: %f\r\n", data.pwm_duty);
                             resp = power_board::get_data();
                             if(resp == NS_OK) {
-                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty);
+                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
                             } else {
-                                comms_pc.printf("Error: 0x%X\n\r", resp);
+                                comms_pc.printf("Error: 0x%X\r\n", resp);
                             }
                         } else {
-                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                            comms_pc.printf("Error: 0x%X\r\n", resp);
                         }
                     break;
                         
                     case INCREASE_PWM_DUTY:
-                        comms_pc.printf("INCREASE DUTY\n\r");
+                        comms_pc.printf("INCREASE DUTY\r\n");
                         resp = power_board::increase_pwm(true);
                         if(resp == NS_OK) {
                             resp = power_board::get_data();
                             if(resp == NS_OK) {
-                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty);
+                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
                             } else {
-                                comms_pc.printf("Error: 0x%X\n\r", resp);
+                                comms_pc.printf("Error: 0x%X\r\n", resp);
                             }
                         } else {
-                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                            comms_pc.printf("Error: 0x%X\r\n", resp);
                         }
                     break;
                         
                     case DECREASE_PWM_DUTY:
-                        comms_pc.printf("DECREASE DUTY\n\r");
+                        comms_pc.printf("DECREASE DUTY\r\n");
                         resp = power_board::increase_pwm(false);
                         if(resp == NS_OK) {
                             resp = power_board::get_data();
                             if(resp == NS_OK) {
-                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty);
+                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
                             } else {
-                                comms_pc.printf("Error: 0x%X\n\r", resp);
+                                comms_pc.printf("Error: 0x%X\r\n", resp);
                             }
                         } else {
-                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                            comms_pc.printf("Error: 0x%X\r\n", resp);
                         }
                     break;
                         
                     case GET_STATS:
                         //send stats to ESP
-                        comms_pc.printf("ESP GET STATS\n\r");
+                        comms_pc.printf("ESP GET STATS\r\n");
                         //esp::get_stats();
                     break;
 
                     default:
-                        comms_pc.printf("Unrecognized CMD 0x%X\n\r", command);
+                        comms_pc.printf("Unrecognized CMD 0x%X\r\n", command);
                     break;
                 }
             } else {
-                comms_pc.printf("CMD: NULL\n\r");
+                comms_pc.printf("CMD: NULL\r\n");
             }
         }
     }

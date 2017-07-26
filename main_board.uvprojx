@@ -399,6 +399,16 @@
               <FileType>8</FileType>
               <FilePath>.\src\data.cpp</FilePath>
             </File>
+            <File>
+              <FileName>hardware.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\hardware.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>threads.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\threads.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2193,6 +2203,16 @@
               <FileName>data.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\data.h</FilePath>
+            </File>
+            <File>
+              <FileName>hardware.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\hardware.h</FilePath>
+            </File>
+            <File>
+              <FileName>threads.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\threads.h</FilePath>
             </File>
           </Files>
         </Group>
