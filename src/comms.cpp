@@ -1,18 +1,9 @@
 #include "mbed.h"
-#include "rtos.h"
 #include "data.h"
 #include "comms.h"
 #include <string>
 #include <sstream>
 #include <iostream>
-
-//Serial com pins
-#define PC_TX                       PA_2
-#define PC_RX                       PA_3
-#define POWER_TX                    PB_10
-#define POWER_RX                    PB_11
-#define ESP_TX                      PA_9
-#define ESP_RX                      PA_10
 
 //Commands
 #define KEYBOARD_STOP               0x30    //'0'
@@ -54,12 +45,11 @@
 #define WAITING_FOR_DATA            0x23    //'#'
 #define NUM_FIELDS                  12 //number of comma seperated values in the data...TODO does this remain constant?
 
-Serial comms_pc(PC_TX, PC_RX);
-Serial comms_power(POWER_TX, POWER_RX);
-Serial comms_esp(ESP_TX, ESP_RX);
-extern DigitalOut relay_sun_on;
-extern DigitalOut relay_grid_on;
-extern Mutex serial;
+extern Serial comms_pc;
+extern Serial comms_power;
+extern Serial comms_esp;
+extern DigitalOut relay_sun;
+extern DigitalOut relay_grid;
 
 extern Data data;
 char* pFields[NUM_FIELDS];
@@ -137,13 +127,15 @@ namespace pc_monitor {
             command = comms_pc.getc();
             if(command != NULL) {
                 comms_pc.printf("\n\rCMD: 0x%X\n\r", command);
+                
                 switch(command) {
+                    
                     case KEYBOARD_STOP:
                         comms_pc.printf("POWER BOARD Stopping\n\r");
                         resp = power_board::stop();
                         if(resp == ACK) {
                             comms_pc.printf("Stopped\n\r");
-                            relay_sun_on = false;
+                            relay_sun = false;
                         } else {
                             comms_pc.printf("Not Stopped: 0x%X\n\r", resp);
                         }
@@ -151,12 +143,12 @@ namespace pc_monitor {
                     
                     case KEYBOARD_START:
                         comms_pc.printf("POWER BOARD Starting\n\r");
-                        relay_sun_on = true;
+                        relay_sun = true;
                         resp = power_board::start();
                         if(resp == ACK) {
                             comms_pc.printf("Started\n\r");
                         } else {
-                            relay_sun_on = false;
+                            relay_sun = false;
                             comms_pc.printf("Not Started: 0x%X\n\r", resp);
                         }
                     break;
@@ -188,7 +180,7 @@ namespace pc_monitor {
                         resp = power_board::shutdown(DRIVER_OFF);
                         if(resp == ACK) {
                             comms_pc.printf("PWM OFF\n\r");
-                            relay_sun_on = false;
+                            relay_sun = false;
                         } else {
                             comms_pc.printf("Error: 0x%X\n\r", resp);
                         }
@@ -199,7 +191,7 @@ namespace pc_monitor {
                         resp = power_board::shutdown(DRIVER_ON);
                         if(resp == ACK) {
                             comms_pc.printf("PWM ON\n\r");
-                            relay_sun_on = true;
+                            relay_sun = true;
                         } else {
                             comms_pc.printf("Error: 0x%X\n\r", resp);
                         }
@@ -209,7 +201,7 @@ namespace pc_monitor {
                         comms_pc.printf("AUTO MODE\n\r");
                         resp = power_board::enter_service_menu(false);
                         if(resp == ACK) {
-                            relay_sun_on = true;
+                            relay_sun = true;
                             comms_pc.printf("Power Board running\n\r");
                         } else {
                             comms_pc.printf("Error: 0x%X\n\r", resp);
@@ -301,6 +293,7 @@ namespace esp {
         //can send 64 chars max
         comms_esp.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
         comms_pc.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n\r", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
+        comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
     }
     
     void loop(void) {

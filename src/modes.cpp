@@ -2,8 +2,8 @@
 #include "modes.h"
 #include "data.h"
 
-DigitalOut relay_sun_on(PB_3);
-DigitalOut relay_grid_on(PB_4);
+extern DigitalOut relay_sun;
+extern DigitalOut relay_grid;
 
 extern Data data;
 
@@ -14,22 +14,22 @@ namespace nectar {
         switch(state) {
             default:
             case TURN_OFF_ALL:
-                relay_sun_on = false;
-                relay_grid_on = false;
+                relay_sun = false;
+                relay_grid = false;
                 //printf("ALL OFF\r");
             break;
             
             case TURN_ON_GRID:
-                relay_sun_on = false;
+                relay_sun = false;
                 wait(1);
-                relay_grid_on = true;
+                relay_grid = true;
                 //printf("GRID ON\r");
             break;
             
             case TURN_ON_PV:
-                relay_grid_on = false;
+                relay_grid = false;
                 wait(1);
-                relay_sun_on = true;
+                relay_sun = true;
                 //printf("PV ON\r");
             break;
         }
