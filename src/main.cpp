@@ -310,9 +310,9 @@ uint8_t get_command(uint8_t command, uint8_t state) {
             break;
             
             case KEYBOARD_GET_DATA:
-                main_board.putc(INCOMING_DATA);
-                while(!main_board.writeable()) {}
-                main_board.printf("%f,%f,%f,%f,%d,%f\n", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.radiator_temperature, overheat, power_board_data.airgap_temperature); //print to ESP serial
+                //main_board.putc(INCOMING_DATA);
+                //while(!main_board.writeable()) {}
+                main_board.printf("#%f,%f,%f,%f,%d,%f$\n", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.radiator_temperature, overheat, power_board_data.airgap_temperature); //print to ESP serial
                 pc.printf("[ SENT ] %f, %f, %f, %f, %d, %f\n\r", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.radiator_temperature, overheat, power_board_data.airgap_temperature);
                 return state;
             break;
