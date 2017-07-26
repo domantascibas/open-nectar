@@ -165,10 +165,10 @@ namespace pc_monitor {
                         comms_pc.printf("POWER BOARD Getting data\n\r");
                         resp = power_board::get_data();
                         if(resp == NS_OK) {
-                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tcap:%7.3f Overheat:%d\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.capacitor_temp, data.mosfet_overheat_on);
+                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                         } else {
                             comms_pc.printf("Error: 0x%X\n\r", resp);
-                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tcap:%7.3f Overheat:%d\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.capacitor_temp, data.mosfet_overheat_on);
+                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                         }
                     break;
                         
@@ -265,7 +265,7 @@ namespace pc_monitor {
                     case GET_STATS:
                         //send stats to ESP
                         comms_pc.printf("ESP GET STATS\n\r");
-                        esp::get_stats();
+                        //esp::get_stats();
                     break;
 
                     default:
@@ -284,6 +284,25 @@ namespace esp {
         comms_esp.baud(baudrate);
     }
     
+    //sends data back to ESP as a string
+    //  temperature_moment,
+    //  sun_power_moment,
+    //  sun_voltage,
+    //  sun_current,
+    //  pwm_duty,
+    //  device_temperature,
+    //   erature,
+    //  sun_relay_on,
+    //  grid_relay_on,
+    //  transistor_overheat_on
+    uint8_t get_stats(void) {
+        comms_pc.printf("sent 0x%X\n\r", INCOMING_DATA);
+        comms_esp.putc(INCOMING_DATA);
+        //can send 64 chars max
+        comms_esp.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
+        comms_pc.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n\r", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
+    }
+    
     void loop(void) {
         uint8_t command, resp;
         while(!comms_esp.readable()) {
@@ -296,7 +315,7 @@ namespace esp {
                     case GET_STATS:
                         //send stats to ESP
                         comms_pc.printf("ESP GET STATS\n\r");
-                        esp::get_stats();
+                        get_stats();
                     break;
                     
                     default:
@@ -307,25 +326,6 @@ namespace esp {
                 comms_pc.printf("CMD: NULL\n\r");
             }
         }
-    }
-    
-    //sends data back to ESP as a string
-    //  temperature_moment,
-    //  sun_power_moment,
-    //  sun_voltage,
-    //  sun_current,
-    //  pwm_duty,
-    //  device_temperature,
-    //  capacitor_temperature,
-    //  sun_relay_on,
-    //  grid_relay_on,
-    //  transistor_overheat_on
-    uint8_t get_stats(void) {
-        comms_pc.printf("sent 0x%X\n\r", INCOMING_DATA);
-        comms_esp.putc(INCOMING_DATA);
-        //can send 64 chars max
-        comms_esp.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.capacitor_temp, data.pwm_duty);
-        comms_pc.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n\r", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.capacitor_temp, data.pwm_duty);
     }
 }
 
@@ -349,7 +349,7 @@ namespace power_board {
         if(response == INCOMING_DATA) {
             while(!comms_power.readable()) {
             }
-            comms_power.scanf("%f,%f,%f,%f,%d", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.capacitor_temp, &data.mosfet_overheat_on);
+            comms_power.scanf("%f,%f,%f,%f,%d,%f", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
             comms_power.getc();
             return NS_OK;
         } else {

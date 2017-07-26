@@ -6,9 +6,11 @@
 
 DigitalOut led1(LED1);
 DigitalIn zero_cross(PB_5);
-//OLED SDA PB_7, SCL PB_6
+
 //Temperature aux PB_8 (boiler)
 //Temperature device PB_9 (inside)
+
+//OLED SDA PB_7, SCL PB_6
 //DigitalIn left PA_5
 //DigitalIn center PA_6
 //DigitalIn right PA_7
@@ -27,12 +29,20 @@ uint8_t cal;
 void startup();
 
 void pc_thread();
+void esp_thread();
 void check_heatsink_temperature();
-void check_capacitor_temperature();
+void check_airgap_temperature();
+void check_device_temperature();
 
 void pc_thread() {
     while(1) {
         pc_monitor::loop();
+    }
+}
+
+void esp_thread() {
+    while(1) {
+        esp::loop();
     }
 }
 
@@ -44,15 +54,21 @@ void check_heatsink_temperature() {
     }
 }
 
-void check_capacitor_temperature() {
+void check_airgap_temperature() {
     while(1) {
         //measure T capacitor
-        //if capacitor_temp ? shutdown power board : run power board
+        //if airgap_temp ? shutdown power board : run power board
         Thread::wait(1000);
     }
 }
 
-
+void check_device_temperature() {
+    while(1) {
+        //measure internal device T
+        //if temp > safe ? shutdown power board : run power board
+        Thread::wait(1000);
+    }
+}
 
 void startup() {
     pc_monitor::init(115200);
@@ -92,7 +108,12 @@ int main() {
     
     startup();
     thread1.start(pc_thread);
+    thread2.start(esp_thread);
     printf("ready to go\n\r");
+    
+    while(1) {
+        __WFI();
+    }
 
 /*    
     while(1) {

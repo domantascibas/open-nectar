@@ -11,22 +11,11 @@ namespace pc_monitor {
 namespace esp {
     void init(uint32_t);
     
+    void loop(void);
+    
     //reads message from ESP
     //sets the temperature_max, temperature_min, temperature_scheduled and current_mode
     uint8_t set_mode(void);
-    
-    //sends data back to ESP as a string
-    //  temperature_moment,
-    //  sun_power_moment,
-    //  sun_voltage,
-    //  sun_current,
-    //  pwm_duty,
-    //  device_temperature,
-    //  capacitor_temperature,
-    //  sun_relay_on,
-    //  grid_relay_on,
-    //  transistor_overheat_on
-    uint8_t get_stats(void);
     
     uint8_t cancel_boost(void);
 }

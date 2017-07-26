@@ -40,7 +40,8 @@ struct Data {
     bool  pv_available;
     
     float pwm_duty;
-    float capacitor_temp;
+    float airgap_temp;
+    float radiator_temp;
     float device_temperature;
     
     uint8_t  mosfet_overheat_on;
