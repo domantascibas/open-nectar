@@ -294,27 +294,42 @@ namespace esp {
     //  grid_relay_on,
     //  transistor_overheat_on
     uint8_t get_stats(void) {
-        comms_pc.printf("sent 0x%X\n\r", INCOMING_DATA);
-        comms_esp.putc(INCOMING_DATA);
+        comms_pc.printf("sent 0x%X\r\n", INCOMING_DATA);
+        //comms_esp.putc(INCOMING_DATA);
         //can send 64 chars max
-        comms_esp.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
-        comms_pc.printf("%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f\n\r", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
-        comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+        comms_esp.printf("#%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f$\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
+        //comms_pc.printf("<%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f>\n\r", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
+        comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+    }
+    
+    uint8_t start(void) {
     }
     
     void loop(void) {
         uint8_t command, resp;
+        
         while(!comms_esp.readable()) {
-            __WFI();
         }
         if(comms_esp.readable()) {
+            
+            serial.lock();
+            command = comms_esp.getc();
             if(command != NULL) {
-                comms_pc.printf("\n\rCMD: 0x%X\n\r", command);
+                comms_pc.printf("\r\nCMD: 0x%X\r\n", command);
                 switch(command) {
                     case GET_STATS:
-                        //send stats to ESP
-                        comms_pc.printf("ESP GET STATS\n\r");
-                        get_stats();
+                        comms_pc.printf("POWER BOARD Getting data\n\r");
+                        resp = power_board::get_data();
+                        if(resp == NS_OK) {
+                            //comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+                            //send stats to ESP
+                            comms_pc.printf("ESP GET STATS\n\r");
+                            get_stats();
+                        } else {
+                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+                            comms_esp.putc(NACK);
+                        }
                     break;
                     
                     default:
@@ -347,11 +362,15 @@ namespace power_board {
     
     uint8_t get_data(void) {
         uint8_t response = send_cmd(KEYBOARD_GET_DATA);
-        if(response == INCOMING_DATA) {
-            while(!comms_power.readable()) {
-            }
-            comms_power.scanf("%f,%f,%f,%f,%d,%f", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
+        if(response == '#') {
+            comms_power.scanf("%f,%f,%f,%f,%d,%f$", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
             comms_power.getc();
+            data.pv_power = data.pv_voltage * data.pv_current;
+            if(data.pv_power > 5.00) {
+                data.pv_available = true;
+            } else {
+                data.pv_available = false;
+            }
             return NS_OK;
         } else {
             return response;
