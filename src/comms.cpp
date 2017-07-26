@@ -1,4 +1,5 @@
 #include "mbed.h"
+#include "rtos.h"
 #include "data.h"
 #include "comms.h"
 #include <string>
@@ -50,6 +51,8 @@ extern Serial comms_power;
 extern Serial comms_esp;
 extern DigitalOut relay_sun;
 extern DigitalOut relay_grid;
+
+Mutex serial;
 
 extern Data data;
 char* pFields[NUM_FIELDS];
@@ -121,13 +124,13 @@ namespace pc_monitor {
     void loop(void) {
         uint8_t command, resp;
         while(!comms_pc.readable()) {
-            __WFI();
         }
         if(comms_pc.readable()) {
+            serial.lock();
+            
             command = comms_pc.getc();
             if(command != NULL) {
                 comms_pc.printf("\n\rCMD: 0x%X\n\r", command);
-                
                 switch(command) {
                     
                     case KEYBOARD_STOP:
@@ -268,11 +271,14 @@ namespace pc_monitor {
                 comms_pc.printf("CMD: NULL\r\n");
             }
         }
+        
+        serial.unlock();
     }
 }
 
 namespace esp {
     void init(uint32_t baudrate) {
+        uint8_t resp;
         comms_esp.baud(baudrate);
     }
     
@@ -319,6 +325,8 @@ namespace esp {
                 comms_pc.printf("CMD: NULL\n\r");
             }
         }
+        
+        serial.unlock();
     }
 }
 
