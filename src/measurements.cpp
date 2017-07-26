@@ -22,11 +22,13 @@ namespace measurements {
 
     double getVoltage() {
         power_board_data.moment_voltage = (sensors::sample(USENSE_ADDR, RUNNING_SAMPLES) - power_board_data.reference_voltage) / INPUT_VDIV;
+        if(power_board_data.moment_voltage < 0) power_board_data.moment_voltage = 0;
         return power_board_data.moment_voltage;
     }
 
     double getCurrent() {
         power_board_data.moment_current = (sensors::sample(ISENSE_ADDR, RUNNING_SAMPLES) - power_board_data.reference_current) * 5.000;
+        if(power_board_data.moment_current < 0) power_board_data.moment_current = 0;
         return power_board_data.moment_current;
     }
 
