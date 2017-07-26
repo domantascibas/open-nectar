@@ -4,13 +4,10 @@
 
 int main() {
     hardware::setup();
+    hardware::startup();
     
     threads::start();
     printf("ready to go\n\r");
-    
-    while(1) {
-        __WFI();
-    }
 
 /*    
     while(1) {
