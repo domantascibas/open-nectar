@@ -1,114 +1,11 @@
 #include "mbed.h"
-#include "rtos.h"
-#include "modes.h"
-#include "comms.h"
-#include "data.h"
-
-DigitalOut led1(LED1);
-DigitalIn zero_cross(PB_5);
-
-//Temperature aux PB_8 (boiler)
-//Temperature device PB_9 (inside)
-
-//OLED SDA PB_7, SCL PB_6
-//DigitalIn left PA_5
-//DigitalIn center PA_6
-//DigitalIn right PA_7
-
-Thread thread1;
-Thread thread2;
-Thread thread3;
-Thread thread4;
-Mutex serial;
-
-extern Serial comms_power;
-extern Serial comms_esp;
-extern Data data;
-uint8_t cal;
-
-void startup();
-
-void pc_thread();
-void esp_thread();
-void check_heatsink_temperature();
-void check_airgap_temperature();
-void check_device_temperature();
-
-void pc_thread() {
-    while(1) {
-        pc_monitor::loop();
-    }
-}
-
-void esp_thread() {
-    while(1) {
-        esp::loop();
-    }
-}
-
-void check_heatsink_temperature() {
-    while(1) {
-        //measure T heatsink
-        //if heatsink temp > safe temp ? shutdown power board : run power board
-        Thread::wait(1000);
-    }
-}
-
-void check_airgap_temperature() {
-    while(1) {
-        //measure T capacitor
-        //if airgap_temp ? shutdown power board : run power board
-        Thread::wait(1000);
-    }
-}
-
-void check_device_temperature() {
-    while(1) {
-        //measure internal device T
-        //if temp > safe ? shutdown power board : run power board
-        Thread::wait(1000);
-    }
-}
-
-void startup() {
-    pc_monitor::init(115200);
-    power_board::init(19200);
-    esp::init(19200);
-    
-    //check ESP comms baud rate
-    
-    //startup sequence
-    //run safety checks, instruct power board to turn on/off
-    
-    //init boiler thermometer
-    //check if >0;
-    
-    //init heatsink thermometer
-    //check if <40C
-    
-    //init capacitor thermometer
-    //check if <40C
-    
-    //init transistor overheat
-    //check if off
-    
-    //comms_power.putc(POWER_BOARD_START);
-    //wait for response from power board
-    
-    //check sun relay
-    //turn on sun relay, measure current
-    
-    //check grid relay
-    //turn on grid relay, measure boiler temperature
-}
+#include "hardware.h"
+#include "threads.h"
 
 int main() {
-    uint8_t command_pc, command_esp, command;
-    uint8_t mode;
+    hardware::setup();
     
-    startup();
-    thread1.start(pc_thread);
-    thread2.start(esp_thread);
+    threads::start();
     printf("ready to go\n\r");
     
     while(1) {
