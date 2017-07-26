@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "rtos.h"
 #include "hardware.h"
+#include "modes.h"
 
 Thread thread1;
 Thread thread2;
@@ -43,11 +44,19 @@ void update_temperatures() {
     }
 }
 
+void update_device_mode() {
+    while(1) {
+        nectar::loop();
+        Thread::wait(1000);
+    }
+}
+
 namespace threads {
     uint8_t start(void) {
-        thread1.start(service_thread);
+        //thread1.start(service_thread);
         thread2.start(esp_thread);
         thread3.start(update_temperatures);
+        //thread4.start(update_device_mode);
     }
 }
 
