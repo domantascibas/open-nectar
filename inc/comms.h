@@ -17,8 +17,6 @@ namespace esp {
     //sets the temperature_max, temperature_min, temperature_scheduled and current_mode
     uint8_t set_mode(void);
     
-    uint8_t start(void);
-    
     uint8_t cancel_boost(void);
 }
 

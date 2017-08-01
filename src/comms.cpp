@@ -42,9 +42,11 @@
 #define DRIVER_OFF                  1
 #define ACK                         0x06
 #define NACK                        0x15
-#define INCOMING_DATA               0x24    //'$'
-#define WAITING_FOR_DATA            0x23    //'#'
+#define INCOMING_DATA               0x25    //'%'
+#define WAITING_FOR_DATA            0x26    //'&'
+#define BAD_CMD                     0x21    //'!'
 #define NUM_FIELDS                  12 //number of comma seperated values in the data...TODO does this remain constant?
+#define HANDSHAKE                   0x5E
 
 extern Serial comms_pc;
 extern Serial comms_power;
@@ -63,11 +65,6 @@ struct Message_Result {
 };
 
 Message_Result result = {0.0, 0};
-
-enum data_types {
-    INTEGER,
-    FLOAT
-};
 
 char create_string(ostringstream message) {
     char new_string[128];
@@ -297,12 +294,9 @@ namespace esp {
         comms_pc.printf("sent 0x%X\r\n", INCOMING_DATA);
         //comms_esp.putc(INCOMING_DATA);
         //can send 64 chars max
-        comms_esp.printf("#%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f$\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
+        comms_esp.printf("#%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f,%.2f$\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty, data.airgap_temp);
         //comms_pc.printf("<%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f>\n\r", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
         comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
-    }
-    
-    uint8_t start(void) {
     }
     
     void loop(void) {
@@ -347,7 +341,7 @@ namespace esp {
 
 namespace power_board {
     //char buffer[128];
-    
+
     void init(uint32_t baudrate) {
         comms_power.baud(baudrate);
     }
@@ -362,8 +356,8 @@ namespace power_board {
     
     uint8_t get_data(void) {
         uint8_t response = send_cmd(KEYBOARD_GET_DATA);
-        if(response == '#') {
-            comms_power.scanf("%f,%f,%f,%f,%d,%f$", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
+        if(response == INCOMING_DATA) {
+            comms_power.scanf("#%f,%f,%f,%f,%d,%f$", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
             comms_power.getc();
             data.pv_power = data.pv_voltage * data.pv_current;
             if(data.pv_power > 5.00) {
@@ -382,7 +376,7 @@ namespace power_board {
         if(response == INCOMING_DATA) {
             while(!comms_power.readable()) {
             }
-            comms_power.scanf("%f,%f", &data.pv_ref_voltage, &data.pv_ref_current);
+            comms_power.scanf("#%f,%f$", &data.pv_ref_voltage, &data.pv_ref_current);
             comms_power.getc();
             return NS_OK;
         } else {
@@ -408,7 +402,7 @@ namespace power_board {
                 response = send_cmd(CMD_GET_PWM_DUTY);
                 if(response == INCOMING_DATA) {
                     while(!comms_power.readable()) {}
-                    comms_power.scanf("%f", &data.pwm_duty);
+                    comms_power.scanf("#%f$", &data.pwm_duty);
                     comms_power.getc();
                     return NS_OK;
                 }else {
@@ -442,7 +436,7 @@ namespace power_board {
                     data.pwm_duty -= 0.1;
                 }
             }
-            comms_power.printf("%f\n", data.pwm_duty);
+            comms_power.printf("#%f$\n", data.pwm_duty);
             comms_pc.printf("set PWM duty %f\n\r", data.pwm_duty);
             return NS_OK;
         } else {

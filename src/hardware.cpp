@@ -129,7 +129,6 @@ namespace comms {
         pc_monitor::init(115200);
         power_board::init(19200);
         esp::init(19200);
-        esp::start();
     }
     
     uint8_t esp_loop(void) {
@@ -139,9 +138,6 @@ namespace comms {
     uint8_t service_loop(void) {
         pc_monitor::loop();
     }
-}
-
-namespace relays {
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

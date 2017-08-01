@@ -53,8 +53,8 @@ void update_device_mode() {
 
 namespace threads {
     uint8_t start(void) {
-        //thread1.start(service_thread);
-        thread2.start(esp_thread);
+        thread1.start(service_thread);
+        //thread2.start(esp_thread);
         thread3.start(update_temperatures);
         //thread4.start(update_device_mode);
     }
