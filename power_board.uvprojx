@@ -1915,11 +1915,6 @@
               <FilePath>.\inc\storage.h</FilePath>
             </File>
             <File>
-              <FileName>utils.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\utils.h</FilePath>
-            </File>
-            <File>
               <FileName>comms.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\comms.h</FilePath>

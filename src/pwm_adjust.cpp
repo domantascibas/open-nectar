@@ -53,8 +53,8 @@ namespace pwm {
         return pwm_duty;
     }
     
-    uint8_t set(float duty) {
-        pwm_gen.write(duty);
+    uint8_t set() {
+        pwm_gen.write(data.pwm_duty);
         return PWM_OK;
     }
     

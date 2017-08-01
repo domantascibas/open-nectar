@@ -156,6 +156,7 @@ int main() {
                         data.moment_power = data.moment_current * data.moment_voltage;
                         
                         pc.printf("%7.2fW %7.2fV %7.2fA\r\n", data.moment_power, data.moment_voltage, data.moment_current);
+                        pwm::set();
                     }
                     __WFI();
                 }
@@ -174,14 +175,14 @@ uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
     uint8_t overheat = mosfet_overheat;
     
     if(command != NULL) {
-        switch(command) {
-            case AUTO_MODE:
-            case CMD_POWER_BOARD_START:
-            case KEYBOARD_START:
-                if(response != NS_OK) {
-                    main_board.putc(NACK);
-                    main_board.putc(response);
-                } else {
+        if(response != NS_OK) {
+            main_board.putc(NACK);
+            main_board.putc(response);
+        } else {
+            switch(command) {
+                case AUTO_MODE:
+                case CMD_POWER_BOARD_START:
+                case KEYBOARD_START:
                     main_board.putc(ACK);
                     pc.printf("[RECEIVED] START\r\n");
                     if(state == IDLE) {
@@ -190,158 +191,147 @@ uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
                         if(state == SERVICE) {
                             //measure.detach();
                             shutdown = DRIVER_OFF;
-                            pwm::set(0.1);
+                            pwm::reset();
                             return STARTUP;
                         } else {
                             return state;
                         }
                     }
-                }
-            break;
+                break;
+                    
+                case CMD_POWER_BOARD_STOP:
+                case KEYBOARD_STOP:
+                    main_board.putc(ACK);
+                    pc.printf("[RECEIVED] STOP\r\n");
+                    if(state == RUNNING) {
+                        return STOP;
+                    } else {
+                        return state;
+                    }
+                break;
                 
-            case CMD_POWER_BOARD_STOP:
-            case KEYBOARD_STOP:
-                main_board.putc(ACK);
-                pc.printf("[RECEIVED] STOP\r\n");
-                if(state == RUNNING) {
-                    return STOP;
-                } else {
+                /*
+                case CMD_GET_VOLTAGE:
+                    main_board.putc(INCOMING_DATA);
+                    while(!main_board.writeable()) {}
+                    main_board.printf("%f\n", data.moment_voltage);
+                    pc.printf("[SENT] Voltage: %f\r\n", data.moment_voltage);
                     return state;
-                }
-            break;
-            
-            case CMD_GET_VOLTAGE:
-                main_board.putc(INCOMING_DATA);
-                while(!main_board.writeable()) {}
-                main_board.printf("%f\n", data.moment_voltage);
-                pc.printf("[SENT] Voltage: %f\r\n", data.moment_voltage);
-                return state;
-            break;
-            
-            case CMD_GET_CURRENT:
-                main_board.putc(INCOMING_DATA);
-                while(!main_board.writeable()) {}
-                main_board.printf("%f\n", data.moment_current);
-                pc.printf("[SENT] Current: %f\r\n", data.moment_current);
-                return state;
-            break;
-            
-            case KEYBOARD_GET_DATA:
-                //main_board.putc(INCOMING_DATA);
-                //while(!main_board.writeable()) {}
-                if(response != NS_OK) {
-                    main_board.putc(NACK);
-                    main_board.putc(response);
-                } else {
+                break;
+                
+                case CMD_GET_CURRENT:
+                    main_board.putc(INCOMING_DATA);
+                    while(!main_board.writeable()) {}
+                    main_board.printf("%f\n", data.moment_current);
+                    pc.printf("[SENT] Current: %f\r\n", data.moment_current);
+                    return state;
+                break;
+                */
+                    
+                case KEYBOARD_GET_DATA:
+                    //main_board.putc(INCOMING_DATA);
+                    //while(!main_board.writeable()) {}
+                    main_board.putc(INCOMING_DATA);
                     main_board.printf("#%f,%f,%f,%f,%d,%f$\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, overheat, data.airgap_temperature); //print to ESP serial
                     pc.printf("[SENT] %f, %f, %f, %f, %d, %f\r\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, overheat, data.airgap_temperature);
-                }
-                return state;
-            break;
-                    
-            case KEYBOARD_GET_CALIB_DATA:
-                main_board.putc(INCOMING_DATA);
-                while(!main_board.writeable()) {}
-                main_board.printf("%f,%f\n", data.reference_voltage, data.reference_current);
-                pc.printf("[SENT] %f, %f\r\n", data.reference_voltage, data.reference_current);
-                return state;
-            break;
-            
-            case CMD_SET_PWM_DUTY:
-                if(state == IDLE) {
-                    main_board.putc(NACK);
-                    return IDLE;
-                } else {
+                    return state;
+                break;
+                        
+                case KEYBOARD_GET_CALIB_DATA:
+                    main_board.putc(INCOMING_DATA);
+                    main_board.printf("#%f,%f$\n", data.reference_voltage, data.reference_current);
+                    pc.printf("[SENT] %f, %f\r\n", data.reference_voltage, data.reference_current);
+                    return state;
+                break;
+                
+                case CMD_SET_PWM_DUTY:
                     main_board.putc(WAITING_FOR_DATA);
-                    while(!main_board.readable()) {}
-                    main_board.scanf("%f", &data.pwm_duty);
+                    main_board.scanf("#%f$", &data.pwm_duty);
                     main_board.getc();
                     pc.printf("[RECEIVED] Duty\r\n");
-                    pwm::set(data.pwm_duty);
-                    return state;       //back in main set PWM duty
-                }
-            break;
-            
-            case CMD_PWM_ON:
-                main_board.putc(ACK);
-                if(state == IDLE) {
-                    return IDLE;
-                } else {
-                    //turn on PWM driver
-                    shutdown = DRIVER_ON;
-                    pc.printf("[RECEIVED] Driver ON\r\n");
-                    return state;       //back in main turn off power
-                }
-            break;
-            
-            case CMD_PWM_OFF:
-                main_board.putc(ACK);
-                if(state == IDLE) {
-                    return IDLE;
-                } else {
-                    //turn off PWM driver
-                    shutdown = DRIVER_OFF;
-                    pc.printf("[RECEIVED] Driver OFF\r\n");
-                    return state;
+                    return state;   //back in main set PWM duty
+                break;
+                
+                case CMD_PWM_ON:
+                    main_board.putc(ACK);
+                    if(state == IDLE) {
+                        return IDLE;
+                    } else {
+                        //turn on PWM driver
+                        shutdown = DRIVER_ON;
+                        pc.printf("[RECEIVED] Driver ON\r\n");
+                        return state;       //back in main turn off power
                     }
-            break;
-                    
-            case CMD_GET_REF_VOLTAGE:
-                main_board.putc(INCOMING_DATA);
-                while(!main_board.writeable()) {}
-                main_board.printf("%f\n", data.reference_voltage); //print to ESP serial
-                pc.printf("[SENT] Calibration: %f\r\n", data.reference_voltage);
-                return state;
-            break;
-            
-            case CMD_GET_REF_CURRENT:
-                main_board.putc(INCOMING_DATA);
-                while(!main_board.writeable()) {}
-                main_board.printf("%f\n", data.reference_current);
-                pc.printf("[SENT] Calibration: %f\r\n", data.reference_voltage);
-                return state;
-            break;
-            
-            case CMD_GET_PWM_DUTY:
-                main_board.putc(INCOMING_DATA);
-                while(!main_board.writeable()) {}
-                main_board.printf("%f\n", data.pwm_duty);
-                pc.printf("[SENT] Duty: %fD\r\n", data.pwm_duty);
-                return state;
-            break;
-            
-            case CMD_GET_MOSFET_OHEAT:
-                main_board.putc(INCOMING_DATA);
-                while(!main_board.writeable()) {}
-                main_board.printf("%d\n", overheat);
-                pc.printf("[SENT] Overheat: %d\r\n", overheat);
-                return state;
-            break;
-            
-            /*
-            case CMD_GET_CAP_TEMP:
-                main_board.putc(INCOMING_DATA);
-                while(!main_board.writeable()) {}
-                main_board.printf("%f\n", power_board_data.airgap_temperature);
-                return state;
-            break;
-            */
-                    
-            case MANUAL_MODE:
-                main_board.putc(ACK);
-                if(state != IDLE) {
-                    //measure.detach();
-                }
-                pc.printf("[RECEIVED] AUTO_MODE\r\n");
-                return SERVICE;
-            break;
-                    
-            default:
-                main_board.putc(NACK);
-                main_board.putc(BAD_CMD);
-                pc.printf("Unrecognized CMD 0x%X\r\n", command);
-                return state;
-            break;
+                break;
+                
+                case CMD_PWM_OFF:
+                    main_board.putc(ACK);
+                    if(state == IDLE) {
+                        return IDLE;
+                    } else {
+                        //turn off PWM driver
+                        shutdown = DRIVER_OFF;
+                        pc.printf("[RECEIVED] Driver OFF\r\n");
+                        return state;
+                        }
+                break;
+                
+                /*
+                case CMD_GET_REF_VOLTAGE:
+                    main_board.putc(INCOMING_DATA);
+                    main_board.printf("#%f$\n", data.reference_voltage); //print to ESP serial
+                    pc.printf("[SENT] Calibration: %f\r\n", data.reference_voltage);
+                    return state;
+                break;
+                
+                case CMD_GET_REF_CURRENT:
+                    main_board.putc(INCOMING_DATA);
+                    main_board.printf("#%f$\n", data.reference_current);
+                    pc.printf("[SENT] Calibration: %f\r\n", data.reference_voltage);
+                    return state;
+                break;
+                
+                case CMD_GET_PWM_DUTY:
+                    main_board.putc(INCOMING_DATA);
+                    while(!main_board.writeable()) {}
+                    main_board.printf("%f\n", data.pwm_duty);
+                    pc.printf("[SENT] Duty: %fD\r\n", data.pwm_duty);
+                    return state;
+                break;
+                
+                case CMD_GET_MOSFET_OHEAT:
+                    main_board.putc(INCOMING_DATA);
+                    while(!main_board.writeable()) {}
+                    main_board.printf("%d\n", overheat);
+                    pc.printf("[SENT] Overheat: %d\r\n", overheat);
+                    return state;
+                break;
+                */
+                /*
+                case CMD_GET_CAP_TEMP:
+                    main_board.putc(INCOMING_DATA);
+                    while(!main_board.writeable()) {}
+                    main_board.printf("%f\n", power_board_data.airgap_temperature);
+                    return state;
+                break;
+                */
+                        
+                case MANUAL_MODE:
+                    main_board.putc(ACK);
+                    if(state != IDLE) {
+                        //measure.detach();
+                    }
+                    pc.printf("[RECEIVED] AUTO_MODE\r\n");
+                    return SERVICE;
+                break;
+                        
+                default:
+                    main_board.putc(NACK);
+                    main_board.putc(BAD_CMD);
+                    pc.printf("Unrecognized CMD 0x%X\r\n", command);
+                    return state;
+                break;
+            }
         }
     } else {
         main_board.putc(NACK);

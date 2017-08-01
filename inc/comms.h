@@ -37,8 +37,8 @@
 #define DRIVER_OFF                  1
 #define ACK                         0x06
 #define NACK                        0x15
-#define INCOMING_DATA               0x24    //'$'
-#define WAITING_FOR_DATA            0x23    //'#'
+#define INCOMING_DATA               0x25    //'%'
+#define WAITING_FOR_DATA            0x26    //'&'
 #define BAD_CMD                     0x21    //'!'
 
 #endif
