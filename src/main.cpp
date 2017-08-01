@@ -2,11 +2,8 @@
 #include "measurements.h"
 #include "pwm_adjust.h"
 #include "comms.h"
-#include "utils.h"
-#include "DS1820.h"
-#include <string>
-#include <sstream>
-#include <iostream>
+#include "hardware.h"
+#include "data.h"
 
 //TODO
 //- move code from main.cpp into separate files for better readability
@@ -16,26 +13,24 @@
 
 // Create a DigitalOut object for the LED
 DigitalOut led(PA_15);
-DigitalOut shutdown(PB_0);
-InterruptIn calibrationButton(PC_12);
-DigitalIn mosfet_overheat(PD_2);
-
-// Create a Serial objects to communicate via USB
-Serial pc(PA_2, PA_3);
-Serial main_board(PC_10, PC_11);
-extern I2C i2c;
-
-DS1820  probe_1(PC_6);
-DS1820  probe_2(PC_7);
-
 Ticker measure;
-Ticker measure_temperatures;
 
-volatile uint8_t calibrating = false;
-volatile uint8_t new_measurement = false;
+extern Data data;
+extern Serial pc;
+extern Serial main_board;
+extern I2C i2c;
+extern DigitalIn mosfet_overheat;
+extern DigitalOut shutdown;
 
-extern data_collection power_board_data;
+uint8_t get_command(uint8_t, uint8_t, uint8_t);
+void blink_code(uint8_t, uint8_t);
+void update_measurements_ISR(void);
+
 char buffer[128];
+volatile uint8_t new_measurement = false;
+extern volatile uint8_t calibrating;
+
+//TODO move temperature::update() from the ISR to main. introduce a bool flag in main for temp updates
 
 //TODO create namespace for States
 //TODO move States into a separate file
@@ -48,15 +43,6 @@ enum States {
     SERVICE
 };
 
-uint8_t board_config(float, uint32_t, uint32_t, float, bool calibrate=false);
-uint8_t self_check(void);
-uint8_t get_command(uint8_t, uint8_t);
-void blink_code(uint8_t, uint8_t);
-
-void calibrate_ISR(void);
-void update_measurements_ISR(void);
-void update_temperatures_ISR(void);
-
 int main() {
     float voltage = 0.0;
     float current = 0.0;
@@ -67,109 +53,113 @@ int main() {
     uint8_t response;
     shutdown = DRIVER_OFF;
     
-    probe_1.begin();
-    probe_2.begin();
+    hardware::init();
+    response = hardware::self_check();
     
-    probe_1.startConversion();
-    probe_2.startConversion();
-    
-    measure_temperatures.attach(&update_temperatures_ISR, 2.0);
-    
-    board_config(0.5, 19200, 400000, 3);
-    pc.printf("\n\r");
+    __WFI();
+    get_command(main_board.getc(), curr_state, response);
     
     while(1) {
         switch(curr_state) {
             case IDLE: //IDLE state
                 led = LED_OFF;
-                pc.printf("IDLE\n\r");
+                pc.printf("IDLE\r\n");
                 calibrating = false;
+                measure.attach(&update_measurements_ISR, 0.5);
                 while(!main_board.readable()) {
                     if(calibrating) {
                         calibrating = false;
                         response = sensors::calibrate();
-                        if(response == CALIBRATION_OK) {
-                            pc.printf("[ OK ] CALIBRATION DONE\n\r");
-                            pc.printf("V = %7.3f I = %7.3f\n\r", power_board_data.reference_voltage, power_board_data.reference_current);
+                        if(response == NS_OK) {
+                            pc.printf("[OK] CALIBRATION DONE\r\n");
+                            pc.printf("V = %7.3f I = %7.3f\r\n", data.reference_voltage, data.reference_current);
                         } else {
-                            pc.printf("[ ERROR ] CALIBRATION ERROR: %d\n\r", response);
-                            blink_code(curr_state, response);
+                            pc.printf("[ERROR] CALIBRATION ERROR: %d\r\n", response);
+                            //blink_code(curr_state, response);
                         }
+                    }
+                    if(new_measurement) {
+                        led = !led;
+                        new_measurement = false;
+                        
+                        measurements::getVoltage();
+                        measurements::getCurrent();
+                        
+                        pc.printf("%7.2fV %7.2fA\r\n", voltage, current);
                     }
                     __WFI();
                 }
-                next_state = get_command(main_board.getc(), curr_state);
+                next_state = get_command(main_board.getc(), curr_state, response);
             break;
             
             case STARTUP: //STARTUP state
-                int result;
-                pc.printf("STARTING\n\r");
+                //int result;
+                pc.printf("STARTING\r\n");
                 
-                result = self_check();
+                //result = hardware::self_check();
                 //result = STARTUP_OK;
-                if(result == STARTUP_OK) {
-                    pc.printf("[ STARTUP OK ]\n\n\r");
-                    measure.attach(&update_measurements_ISR, 0.5);
-                    shutdown = DRIVER_ON;
-                    next_state = RUNNING;
-                } else {
+                //if(result == STARTUP_OK) {
+                //    pc.printf("[STARTUP OK]\r\n\n");
+                //    shutdown = DRIVER_ON;
+                next_state = RUNNING;
+                //} else {
                     //send error code to screen
                     //TODO
                     //something like print(result), but have an ENUM for result to convert it to readable error codes or text
-                    pc.printf("[ STARTUP ERROR ]\n\n\r");
-                    blink_code(curr_state, result);
-                    next_state = IDLE;
-                }
+                //    pc.printf("[STARTUP ERROR]\r\n\n");
+                    //blink_code(curr_state, result);
+                //    next_state = IDLE;
+                //}
             break;
             
             case RUNNING: //RUNNING state
                 //TODO add temperature and overvoltage/overcurrent checks
-                pc.printf("RUNNING\n\r");
+                pc.printf("RUNNING\r\n");
                 while(!main_board.readable()) {
                     if(new_measurement) {
                         led = !led;
                         new_measurement = false;
                         
-                        voltage = measurements::getVoltage();
-                        current = measurements::getCurrent();
-                        power = current * voltage;
+                        measurements::getVoltage();
+                        measurements::getCurrent();
+                        data.moment_power = data.moment_current * data.moment_voltage;
                         
-                        pc.printf("%7.3fW %7.3fV %7.3fA\n\r", power, voltage, current);
-                        power_board_data.pwm_duty = pwm::set(voltage, current);
+                        pc.printf("%7.2fW %7.2fV %7.2fA\r\n", data.moment_power, data.moment_voltage, data.moment_current);
+                        pwm::adjust();
                         //pwm::swipe(0.15, 0.85, 0.05);
                     }
                     __WFI();
                 }
-                next_state = get_command(main_board.getc(), curr_state);
+                next_state = get_command(main_board.getc(), curr_state, response);
             break;
             
             case STOP:
-                measure.detach();
+                //measure.detach();
                 shutdown = DRIVER_OFF;
                 led = LED_OFF;
-                pc.printf("STOPPING\n\r");
+                pc.printf("STOPPING\r\n");
                 pwm::reset();
                 next_state = IDLE;
             break;
             
             case SERVICE:
                 //TODO add temperature and overvoltage/overcurrent checks
-                pc.printf("SERVICE\n\r");
-                measure.attach(&update_measurements_ISR, 0.5);
+                pc.printf("SERVICE\r\n");
+                //measure.attach(&update_measurements_ISR, 0.5);
                 while(!main_board.readable()) {
                     if(new_measurement) {
                         led = !led;
                         new_measurement = false;
                         
-                        voltage = measurements::getVoltage();
-                        current = measurements::getCurrent();
-                        power = current * voltage;
+                        measurements::getVoltage();
+                        measurements::getCurrent();
+                        data.moment_power = data.moment_current * data.moment_voltage;
                         
-                        pc.printf("%7.3fW %7.3fV %7.3fA\n\r", power, voltage, current);
+                        pc.printf("%7.2fW %7.2fV %7.2fA\r\n", data.moment_power, data.moment_voltage, data.moment_current);
                     }
                     __WFI();
                 }
-                next_state = get_command(main_board.getc(), curr_state);
+                next_state = get_command(main_board.getc(), curr_state, response);
             break;
             
             default: //GOTO IDLE state
@@ -180,104 +170,31 @@ int main() {
     }
 }
 
-uint8_t self_check(void) {
-    uint8_t response;
-    float voltage, current;
-
-    //check for calibration data from EEPROM
-    response = calibration::check();
-    if(response != CALIBRATION_OK){
-        pc.printf("[ ERROR ] Device Not Calibrated\n\rPLEASE CALIBRATE\n\r");
-        return CALIBRATION_ERROR;
-    }
-    pc.printf("[ OK ] Device Calibrated\n\r");
-    
-    
-    //initialise ADCs
-    response = measurements::init();
-    //wait(0.2);  //maybe necessary
-    
-    //measure Vdc < 350
-    voltage = measurements::getVoltage();
-    if(voltage > OVERVOLTAGE) {
-        pc.printf("[ ERROR ] DC Over-Voltage %7.3fV\n\r", voltage);
-        return DC_OVER_VOLTAGE;
-    }
-    
-    pc.printf("[ DATA ] V = %7.3fV\n\r", voltage);
-    //maybe should also check for Vdc == 0 - solar disconnected
-    
-    //measure Idc == ~0.0
-    current = measurements::getCurrent();
-    if(current > 0.15) {
-        pc.printf("[ ERROR ] DC Current Leaks %7.3fA\n\r", current);
-        return DC_CURRENT_LEAKS;
-    }
-    pc.printf("[ DATA ] I = %7.3fA\n\r", current);
-    
-    //check Tcap and Tmosfet
-    //TODO
-    
-    //check PWM generator
-    //TODO
-    
-    return STARTUP_OK;
-}
-
-uint8_t board_config(float measure_interval, uint32_t serial_baud, uint32_t i2c_freq, float pwm_freq, bool) {
-    pc.baud(serial_baud);
-    main_board.baud(serial_baud);
-    //comms::config(serial_baud);
-    pc.printf("\n\r[ START ]\n\r");
-    pc.printf("********************\n\r");
-    pc.printf("Serial started\n\rBaud rate: %d\n\n\r", serial_baud);
-    wait(0.2);
-    
-    //check calibration flag in flash
-    pwm::init(pwm_freq);
-    pc.printf("PWM frequency: %dkHz\n\r", pwm_freq);
-    wait(0.2);
-    
-    sensors::setFrequency(i2c_freq);
-    pc.printf("I2C frequency: %dHz\n\r", i2c_freq);
-    wait(0.2);
-    
-    //pc.printf("\n\r");
-    calibrationButton.fall(&calibrate_ISR);
-    pc.printf("Calibration ISR set\n\rMeasurement ISR set\n\r");
-    //pc.printf("Interval: %5.2fs\n\r", measure_interval);
-    //pc.printf("ADC read: %d samples, calibration: %d samples\n\n\r", SAMPLES, CALIB_SAMPLES);
-    
-    //pc.printf("********************\n\r");
-    pc.printf("[ SETUP OK ]\n\r");
-    wait(0.5);
-    return BOARD_CONFIG_OK;
-}
-
-uint8_t get_command(uint8_t command, uint8_t state) {
+uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
     uint8_t overheat = mosfet_overheat;
-    uint8_t length;
-    ostringstream message;
-    string s;
-    const char* p;
     
     if(command != NULL) {
         switch(command) {
             case AUTO_MODE:
             case CMD_POWER_BOARD_START:
             case KEYBOARD_START:
-                main_board.putc(ACK);
-                pc.printf("[ RECEIVED ] START\n\r");
-                if(state == IDLE) {
-                    return STARTUP;
+                if(response != NS_OK) {
+                    main_board.putc(NACK);
+                    main_board.putc(response);
                 } else {
-                    if(state == SERVICE) {
-                        measure.detach();
-                        shutdown = DRIVER_OFF;
-                        pwm::set_pwm(0.1);
+                    main_board.putc(ACK);
+                    pc.printf("[RECEIVED] START\r\n");
+                    if(state == IDLE) {
                         return STARTUP;
                     } else {
-                        return state;
+                        if(state == SERVICE) {
+                            //measure.detach();
+                            shutdown = DRIVER_OFF;
+                            pwm::set(0.1);
+                            return STARTUP;
+                        } else {
+                            return state;
+                        }
                     }
                 }
             break;
@@ -285,7 +202,7 @@ uint8_t get_command(uint8_t command, uint8_t state) {
             case CMD_POWER_BOARD_STOP:
             case KEYBOARD_STOP:
                 main_board.putc(ACK);
-                pc.printf("[ RECEIVED ] STOP\n\r");
+                pc.printf("[RECEIVED] STOP\r\n");
                 if(state == RUNNING) {
                     return STOP;
                 } else {
@@ -296,32 +213,37 @@ uint8_t get_command(uint8_t command, uint8_t state) {
             case CMD_GET_VOLTAGE:
                 main_board.putc(INCOMING_DATA);
                 while(!main_board.writeable()) {}
-                main_board.printf("%f\n", power_board_data.moment_voltage);
-                pc.printf("[ SENT ] Voltage: %f\n\r", power_board_data.moment_voltage);
+                main_board.printf("%f\n", data.moment_voltage);
+                pc.printf("[SENT] Voltage: %f\r\n", data.moment_voltage);
                 return state;
             break;
             
             case CMD_GET_CURRENT:
                 main_board.putc(INCOMING_DATA);
                 while(!main_board.writeable()) {}
-                main_board.printf("%f\n", power_board_data.moment_current);
-                pc.printf("[ SENT ] Current: %f\n\r", power_board_data.moment_current);
+                main_board.printf("%f\n", data.moment_current);
+                pc.printf("[SENT] Current: %f\r\n", data.moment_current);
                 return state;
             break;
             
             case KEYBOARD_GET_DATA:
                 //main_board.putc(INCOMING_DATA);
                 //while(!main_board.writeable()) {}
-                main_board.printf("#%f,%f,%f,%f,%d,%f$\n", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.radiator_temperature, overheat, power_board_data.airgap_temperature); //print to ESP serial
-                pc.printf("[ SENT ] %f, %f, %f, %f, %d, %f\n\r", power_board_data.moment_voltage, power_board_data.moment_current, power_board_data.pwm_duty, power_board_data.radiator_temperature, overheat, power_board_data.airgap_temperature);
+                if(response != NS_OK) {
+                    main_board.putc(NACK);
+                    main_board.putc(response);
+                } else {
+                    main_board.printf("#%f,%f,%f,%f,%d,%f$\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, overheat, data.airgap_temperature); //print to ESP serial
+                    pc.printf("[SENT] %f, %f, %f, %f, %d, %f\r\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, overheat, data.airgap_temperature);
+                }
                 return state;
             break;
                     
             case KEYBOARD_GET_CALIB_DATA:
                 main_board.putc(INCOMING_DATA);
                 while(!main_board.writeable()) {}
-                main_board.printf("%f,%f\n", power_board_data.reference_voltage, power_board_data.reference_current);
-                pc.printf("[ SENT ] %f, %f\n\r", power_board_data.reference_voltage, power_board_data.reference_current);
+                main_board.printf("%f,%f\n", data.reference_voltage, data.reference_current);
+                pc.printf("[SENT] %f, %f\r\n", data.reference_voltage, data.reference_current);
                 return state;
             break;
             
@@ -332,10 +254,10 @@ uint8_t get_command(uint8_t command, uint8_t state) {
                 } else {
                     main_board.putc(WAITING_FOR_DATA);
                     while(!main_board.readable()) {}
-                    main_board.scanf("%f", &power_board_data.pwm_duty);
+                    main_board.scanf("%f", &data.pwm_duty);
                     main_board.getc();
-                    pc.printf("[ RECEIVED ] Duty\n\r");
-                    pwm::set_pwm(power_board_data.pwm_duty);
+                    pc.printf("[RECEIVED] Duty\r\n");
+                    pwm::set(data.pwm_duty);
                     return state;       //back in main set PWM duty
                 }
             break;
@@ -347,7 +269,7 @@ uint8_t get_command(uint8_t command, uint8_t state) {
                 } else {
                     //turn on PWM driver
                     shutdown = DRIVER_ON;
-                    pc.printf("[ RECEIVED ] Driver ON\n\r");
+                    pc.printf("[RECEIVED] Driver ON\r\n");
                     return state;       //back in main turn off power
                 }
             break;
@@ -359,7 +281,7 @@ uint8_t get_command(uint8_t command, uint8_t state) {
                 } else {
                     //turn off PWM driver
                     shutdown = DRIVER_OFF;
-                    pc.printf("[ RECEIVED ] Driver OFF\n\r");
+                    pc.printf("[RECEIVED] Driver OFF\r\n");
                     return state;
                     }
             break;
@@ -367,24 +289,24 @@ uint8_t get_command(uint8_t command, uint8_t state) {
             case CMD_GET_REF_VOLTAGE:
                 main_board.putc(INCOMING_DATA);
                 while(!main_board.writeable()) {}
-                main_board.printf("%f\n", power_board_data.reference_voltage); //print to ESP serial
-                pc.printf("[ SENT ] Calibration: %f\n\r", power_board_data.reference_voltage);
+                main_board.printf("%f\n", data.reference_voltage); //print to ESP serial
+                pc.printf("[SENT] Calibration: %f\r\n", data.reference_voltage);
                 return state;
             break;
             
             case CMD_GET_REF_CURRENT:
                 main_board.putc(INCOMING_DATA);
                 while(!main_board.writeable()) {}
-                main_board.printf("%f\n", power_board_data.reference_current);
-                pc.printf("[ SENT ] Calibration: %f\n\r", power_board_data.reference_voltage);
+                main_board.printf("%f\n", data.reference_current);
+                pc.printf("[SENT] Calibration: %f\r\n", data.reference_voltage);
                 return state;
             break;
             
             case CMD_GET_PWM_DUTY:
                 main_board.putc(INCOMING_DATA);
                 while(!main_board.writeable()) {}
-                main_board.printf("%f\n", pwm::get_duty());
-                pc.printf("[ SENT ] Duty: %fD\n\r", pwm::get_duty());
+                main_board.printf("%f\n", data.pwm_duty);
+                pc.printf("[SENT] Duty: %fD\r\n", data.pwm_duty);
                 return state;
             break;
             
@@ -392,7 +314,7 @@ uint8_t get_command(uint8_t command, uint8_t state) {
                 main_board.putc(INCOMING_DATA);
                 while(!main_board.writeable()) {}
                 main_board.printf("%d\n", overheat);
-                pc.printf("[ SENT ] Overheat: %d\n\r", overheat);
+                pc.printf("[SENT] Overheat: %d\r\n", overheat);
                 return state;
             break;
             
@@ -408,16 +330,16 @@ uint8_t get_command(uint8_t command, uint8_t state) {
             case MANUAL_MODE:
                 main_board.putc(ACK);
                 if(state != IDLE) {
-                    measure.detach();
+                    //measure.detach();
                 }
-                pc.printf("[ RECEIVED ] AUTO_MODE\n\r");
+                pc.printf("[RECEIVED] AUTO_MODE\r\n");
                 return SERVICE;
             break;
                     
             default:
                 main_board.putc(NACK);
                 main_board.putc(BAD_CMD);
-                pc.printf("Unrecognized CMD 0x%X\n\r", command);
+                pc.printf("Unrecognized CMD 0x%X\r\n", command);
                 return state;
             break;
         }
@@ -470,18 +392,6 @@ void blink_code(uint8_t state, uint8_t code) {
 
 void update_measurements_ISR(void) {
     new_measurement = true;
-}
-
-void update_temperatures_ISR(void) {
-    power_board_data.airgap_temperature = probe_1.read();
-    power_board_data.radiator_temperature = probe_2.read();
-    
-    probe_1.startConversion();
-    probe_2.startConversion();
-}
-
-void calibrate_ISR(void) {
-    calibrating = true;
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

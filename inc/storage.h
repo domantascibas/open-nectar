@@ -5,19 +5,10 @@
 #define DEVICE_CALIBRATED       0xCA
 
 namespace storage {
+    uint8_t init();
+    uint8_t saveData(float, float);
+    
     char    testRead();
-    int     init();
-    
-    bool    getLock();
-    float   getVoltage();
-    float   getCurrent();
-    bool    isCalibrated();
-    
-    int     saveData(float, float);
-    
-    int     unlock();
-    float   read(int);
-    int     write(float, float);
 }
 
 #endif

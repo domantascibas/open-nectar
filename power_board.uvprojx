@@ -1869,6 +1869,16 @@
               <FileType>8</FileType>
               <FilePath>.\src\storage.cpp</FilePath>
             </File>
+            <File>
+              <FileName>hardware.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\hardware.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>data.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\data.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1913,6 +1923,16 @@
               <FileName>comms.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\comms.h</FilePath>
+            </File>
+            <File>
+              <FileName>hardware.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\hardware.h</FilePath>
+            </File>
+            <File>
+              <FileName>data.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\data.h</FilePath>
             </File>
           </Files>
         </Group>

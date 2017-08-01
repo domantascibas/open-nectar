@@ -1,7 +1,6 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef DATA_H
+#define DATA_H
 
-//Global constants
 #define PWM_MIN					0.1
 #define PWM_MAX					0.95
 #define	V_REF					3.00
@@ -23,6 +22,8 @@ enum error_codes{
 	STARTUP_ERROR,
 	ADC_OK,
 	ADC_ERROR,
+    ADC_VOLTAGE_ERROR,
+    ADC_CURRENT_ERROR,
 	ADC_SETUP_OK,
 	ADC_SETUP_ERROR,
 	FLASH_ACCESS_OK,
@@ -34,14 +35,43 @@ enum error_codes{
 	CALIBRATION_OK,
 	CALIBRATION_ERROR,
 	DC_OVER_VOLTAGE,
+    DC_OVER_CURRENT,
 	DC_CURRENT_LEAKS,
 	I2C_OK,
 	I2C_ERROR,
 	PWM_OK,
 	PWM_ERROR,
 	BOARD_CONFIG_OK,
-	BOARD_CONFIG_ERROR
+	BOARD_CONFIG_ERROR,
+    OVERHEAT,
+    RADIATOR_OVERHEAT,
+    AIRGAP_OVERHEAT
 };
+
+enum codes {
+    NS_OK,
+    NS_ERROR,
+    MSG_OK,
+    MSG_ERROR
+};
+
+struct Data {
+    float moment_voltage;
+    float moment_current;
+    float moment_power;
+    
+    float reference_voltage;
+    float reference_current;
+    
+    float pwm_duty;
+    float airgap_temperature;
+    float radiator_temperature;
+    
+    bool mosfet_overheat_on;
+    bool calibrated;
+};
+
+extern Data data;
 
 #endif
 

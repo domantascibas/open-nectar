@@ -1,43 +1,87 @@
 #include "mbed.h"
 #include "measurements.h"
 #include "storage.h"
-#include "utils.h"
+#include "data.h"
+
+#define USENSE_ADDR             0x55 << 1
+#define ISENSE_ADDR             0x5A << 1
+
+#define RUNNING_SAMPLES         128
+#define CALIBRATION_SAMPLES     1024
+
+#define REG_ADDR_RESULT         0x00
+#define REG_ADDR_ALERT          0x01
+#define REG_ADDR_CONFIG         0x02
+#define REG_ADDR_LIMITL         0x03
+#define REG_ADDR_LIMITH         0x04
+#define REG_ADDR_HYST           0x05
+#define REG_ADDR_CONVL          0x06
+#define REG_ADDR_CONVH          0x07
 
 I2C i2c(PB_14, PB_13);
-extern Serial pc;
-
-//Global variables
-const double    INPUT_VDIV = 4.1/400;
-data_collection power_board_data = { 0.00, 0.00, 0.00, 0.00, 0.1, 0.0, 0.0, false, storage::isCalibrated() };
+extern Data data;
 
 //MEASUREMENTS
 namespace measurements {    
-    int init() {
-        if((sensors::check(ISENSE_ADDR) == ADC_OK) && (sensors::check(USENSE_ADDR) == ADC_OK)) {
-            return ADC_SETUP_OK;
+    const double    INPUT_VDIV = 4.1/400;
+    
+    uint8_t init() {
+        uint8_t adc1_resp = sensors::check(USENSE_ADDR);
+        uint8_t adc2_resp = sensors::check(ISENSE_ADDR);
+        
+        if((adc1_resp != NS_OK) && (adc2_resp != NS_OK)) {
+            return ADC_ERROR;
         } else {
-            return ADC_SETUP_ERROR;
+            if(adc1_resp != NS_OK) {
+                return ADC_VOLTAGE_ERROR;
+            }
+            if(adc2_resp != NS_OK) {
+                return ADC_CURRENT_ERROR;
+            }
+            return NS_OK;
         }
     }
 
-    double getVoltage() {
-        power_board_data.moment_voltage = (sensors::sample(USENSE_ADDR, RUNNING_SAMPLES) - power_board_data.reference_voltage) / INPUT_VDIV;
-        if(power_board_data.moment_voltage < 0) power_board_data.moment_voltage = 0;
-        return power_board_data.moment_voltage;
+    uint8_t getVoltage() {
+        float voltage;
+        voltage = (sensors::sample(USENSE_ADDR, RUNNING_SAMPLES) - data.reference_voltage) / INPUT_VDIV;
+        if(voltage > OVERVOLTAGE) {
+            data.moment_voltage = voltage;
+            return DC_OVER_VOLTAGE;
+        } else {
+            if(voltage < 0) {
+                data.moment_voltage = 0;
+            } else {
+                data.moment_voltage = voltage;
+            }
+            return NS_OK;
+        }
     }
 
-    double getCurrent() {
-        power_board_data.moment_current = (sensors::sample(ISENSE_ADDR, RUNNING_SAMPLES) - power_board_data.reference_current) * 5.000;
-        if(power_board_data.moment_current < 0) power_board_data.moment_current = 0;
-        return power_board_data.moment_current;
+    uint8_t getCurrent() {
+        float current;
+        current = (sensors::sample(ISENSE_ADDR, RUNNING_SAMPLES) - data.reference_current) * 5.000;
+        if(current > OVERCURRENT) {
+            data.moment_current = current;
+            return DC_OVER_CURRENT;
+        } else {
+            if(current < 0) {
+                data.moment_current = 0;
+            } else {
+                data.moment_current = current;
+            }
+            return NS_OK;
+        }
     }
 
-    double getReferenceVoltage() {
-        return power_board_data.reference_voltage;
+    //obsolete
+    float getReferenceVoltage() {
+        return data.reference_voltage;
     }
 
-    double getReferenceCurrent() {
-        return power_board_data.reference_current;
+    //obsolete
+    float getReferenceCurrent() {
+        return data.reference_current;
     }
 }
 
@@ -45,40 +89,39 @@ namespace measurements {
 namespace calibration {
     int check() {
         int response = storage::init();
-        if(response != CALIBRATION_OK) {
-            return response;
-        }
-        
-        if(storage::isCalibrated()) {
-            power_board_data.reference_voltage = storage::getVoltage();
-            power_board_data.reference_current = storage::getCurrent();
-            return CALIBRATION_OK;
+        if(response == NS_OK) {
+            if(data.calibrated) {
+                return NS_OK;
+            } else {
+                //could run calibration when no values are found on flash
+                //measurements::calibrate()
+                return CALIBRATION_ERROR;
+            }
         } else {
-            //could run calibration when no values are found on flash
-            //measurements::calibrate()
-            return CALIBRATION_ERROR;
+            //storage init error
+            return response;
         }
     }
 
     int testStorage(float voltage, float current) {
-        storage::unlock();
+        storage::init();
         storage::testRead();
-        return CALIBRATION_OK;
+        return NS_OK;
     }
 }
 
 //SENSORS
 namespace sensors {
     int test(float voltage, float current) {
-        power_board_data.reference_voltage = sample(USENSE_ADDR, CALIBRATION_SAMPLES);
-        power_board_data.reference_current = sample(ISENSE_ADDR, CALIBRATION_SAMPLES);
-        //pc.printf("%7.3fV %7.3fA\n\r", zero_voltage, zero_current);
-        return CALIBRATION_OK;
+        data.reference_voltage = sample(USENSE_ADDR, CALIBRATION_SAMPLES);
+        data.reference_current = sample(ISENSE_ADDR, CALIBRATION_SAMPLES);
+        //printf("%7.3fV %7.3fA\n\r", zero_voltage, zero_current);
+        return NS_OK;
     }
 
     int setFrequency(int frequency) {
         i2c.frequency(frequency);		//I2C stops running at 1MHz
-        return I2C_OK;
+        return NS_OK;
     }
 
     int check(int addr) {
@@ -90,12 +133,12 @@ namespace sensors {
         
         error = i2c.write(addr, cmd, 0);
         if(error == 0) {
-            pc.printf("[ OK ] ADC at 0x%X found\n\r", addr);
+            //printf("[OK] ADC at 0x%X found\r\n", addr);
             i2c.write(addr, cmd, 2, false);
-            return ADC_OK;
+            return NS_OK;
         } else {
-            pc.printf("[ ERROR ] ADC at 0x%X not found!\n\r", addr);
-            return ADC_ERROR;
+            //printf("[ERROR] ADC at 0x%X not found!\r\n", addr);
+            return NS_ERROR;
         }
     }
 
@@ -124,13 +167,12 @@ namespace sensors {
             if(current > max) max = current;
             if(current < min) min = current;
             sum += current;
-            //pc.printf("CURR: %2.3f | MAX: %2.3f | MIN: %2.3f\n\r", current, max, min);
+            //printf("CURR: %2.3f | MAX: %2.3f | MIN: %2.3f\n\r", current, max, min);
         }
         //pc.printf("--------------------------------------\n\r");
         sum = sum - max - min;
         avg = sum / (samples - 2);
-        printf("AVG: %2.3f | MAX: %2.3f | MIN: %2.3f\n\r", avg, max, min);
-        //pc.printf("\n\r");
+        //printf("AVG: %2.3f | MAX: %2.3f | MIN: %2.3f\r\n", avg, max, min);
         if(avg < 0) {
             avg = 0;
         }
@@ -139,14 +181,13 @@ namespace sensors {
 
     int calibrate() {
         int response = storage::init();
-        power_board_data.reference_voltage = sample(USENSE_ADDR, CALIBRATION_SAMPLES);
-        power_board_data.reference_current = sample(ISENSE_ADDR, CALIBRATION_SAMPLES);
-        response = storage::saveData(power_board_data.reference_voltage, power_board_data.reference_current);
-        if(response == FLASH_WRITE_OK) {
-            return CALIBRATION_OK;
-        } else {
+        data.reference_voltage = sample(USENSE_ADDR, CALIBRATION_SAMPLES);
+        data.reference_current = sample(ISENSE_ADDR, CALIBRATION_SAMPLES);
+        response = storage::saveData(data.reference_voltage, data.reference_current);
+        if(response != NS_OK) {
             return response;
         }
+        return NS_OK;
     }
 }
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

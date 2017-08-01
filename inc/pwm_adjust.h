@@ -4,14 +4,11 @@
 namespace pwm {
     uint8_t init(float);
     
-    float set(float, float);
-    uint8_t set_pwm(float);
+    float adjust();
+    uint8_t set(float);
     uint8_t reset(void);
     
-    float   get_duty(void);
-    
     uint8_t swipe(float, float, float);
-    double  clamp(float, float, float);
 };
 
 #endif
