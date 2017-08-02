@@ -66,14 +66,16 @@ namespace hardware {
             printf("[BOILER] ERROR\r\n");
         }
         
-        comms_pc.printf("POWER BOARD Starting\n\r");
-        relay_sun = true;
+        wait(1.0);
+        comms_pc.printf("\nPOWER BOARD Starting\n\r");
         resp = power_board::start();
         if(resp == 0x06) {
-            comms_pc.printf("Started\n\r");
+            relay_sun = true;
+            comms_pc.printf("Started\r\n");
         } else {
             relay_sun = false;
-            comms_pc.printf("Not Started: 0x%X\n\r", resp);
+            //resp = comms_pc.getc();
+            comms_pc.printf("Not Started: 0x%X\r\n", resp);
         }
         data.sun_relay_on = relay_sun;
 
@@ -118,6 +120,8 @@ namespace temperature {
     uint8_t update(void) {
         data.temp_boiler = probe_boiler.read();
         data.device_temperature = probe_internal.read();
+        //printf("[TEMPERATURE] boiler %.2f\r\n", data.temp_boiler);
+        //printf("[TEMPERATURE] device %.2f\r\n", data.device_temperature);
         
         probe_boiler.startConversion();
         probe_internal.startConversion();
