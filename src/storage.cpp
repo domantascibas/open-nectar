@@ -9,11 +9,12 @@ enum data {
     CALIB = 2
 };
 
+uint16_t VirtAddVarTab[NB_OF_VAR] = {0x5555, 0x6666, 0x7777};
+uint16_t VarDataTab[NB_OF_VAR] = {0, 0, 0};
+uint16_t VarValue = 0;
+
 namespace storage {
     bool    locked = true;
-    uint16_t VirtAddVarTab[NB_OF_VAR] = {0x5555, 0x6666, 0x7777};
-    uint16_t VarDataTab[NB_OF_VAR] = {0, 0, 0};
-    uint16_t VarValue = 0;
     
     float read(uint8_t);
     uint8_t write(float, float);
