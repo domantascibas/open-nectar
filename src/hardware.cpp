@@ -53,6 +53,13 @@ namespace hardware {
 
     uint8_t self_check(void) {
         uint8_t response;
+        //initialise ADCs
+        response = measurements::init();
+        if(response != NS_OK) {
+            printf("[ERROR] ADC error 0x%X\r\n", response);
+            return response;
+        }
+        printf("[OK] ADC initialised\r\n");
 
         //check for calibration data from EEPROM
         response = calibration::check();
@@ -62,15 +69,6 @@ namespace hardware {
         }
         printf("[OK] Device Calibrated\r\n");
         
-        
-        //initialise ADCs
-        response = measurements::init();
-        if(response != NS_OK) {
-            printf("[ERROR] ADC error 0x%X\r\n", response);
-            return response;
-        }
-        printf("[OK] ADC initialised\r\n");
-                
         //measure Vdc < 350
         response = measurements::getVoltage();
         if(response != NS_OK) {
