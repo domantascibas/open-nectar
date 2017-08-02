@@ -7,7 +7,7 @@ int main() {
     hardware::startup();
     
     threads::start();
-    printf("ready to go\n\r");
+    //printf("ready to go\n\r");
 
 /*    
     while(1) {
