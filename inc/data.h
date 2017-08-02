@@ -1,6 +1,29 @@
 #ifndef DATA_H
 #define DATA_H
 
+enum error_codes{
+	SETUP_ERROR,
+	STARTUP_ERROR,
+	ADC_ERROR,                  //can't find both ADC sensors
+    ADC_VOLTAGE_ERROR,
+    ADC_CURRENT_ERROR,
+	ADC_SETUP_ERROR,
+	FLASH_ACCESS_ERROR,
+	FLASH_READ_ERROR,
+	FLASH_WRITE_ERROR,
+	CALIBRATION_ERROR,          //no calibration data
+	DC_OVER_VOLTAGE,            //V_pv > 350V
+    DC_OVER_CURRENT,            //I_pv > 10A
+	DC_CURRENT_LEAKS,           //could be a faulty relay, or a short
+	I2C_ERROR,
+    PWM_OK,
+	PWM_ERROR,
+	BOARD_CONFIG_ERROR,
+    OVERHEAT,
+    RADIATOR_OVERHEAT,
+    AIRGAP_OVERHEAT
+};
+
 enum codes {
     NS_OK,
     NS_ERROR,
