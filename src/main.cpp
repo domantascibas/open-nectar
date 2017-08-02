@@ -14,6 +14,7 @@
 // Create a DigitalOut object for the LED
 DigitalOut led(PA_15);
 Ticker measure;
+Ticker measure_temperatures;
 
 extern Data data;
 extern Serial pc;
@@ -25,12 +26,12 @@ extern DigitalOut shutdown;
 uint8_t get_command(uint8_t, uint8_t, uint8_t);
 void blink_code(uint8_t, uint8_t);
 void update_measurements_ISR(void);
+void update_temperatures_ISR(void);
 
 char buffer[128];
 volatile uint8_t new_measurement = false;
+volatile uint8_t update_temperature = false;
 extern volatile uint8_t calibrating;
-
-//TODO move temperature::update() from the ISR to main. introduce a bool flag in main for temp updates
 
 //TODO create namespace for States
 //TODO move States into a separate file
@@ -59,6 +60,7 @@ int main() {
     __WFI();
     get_command(main_board.getc(), curr_state, response);
     
+    measure_temperatures.attach(&update_temperatures_ISR, 10.0);
     while(1) {
         switch(curr_state) {
             case IDLE: //IDLE state
@@ -77,6 +79,10 @@ int main() {
                             pc.printf("[ERROR] CALIBRATION ERROR: %d\r\n", response);
                             //blink_code(curr_state, response);
                         }
+                    }
+                    if(update_temperature) {
+                        update_temperature = false;
+                        temperature::update();
                     }
                     if(new_measurement) {
                         led = !led;
@@ -116,6 +122,10 @@ int main() {
                 //TODO add temperature and overvoltage/overcurrent checks
                 pc.printf("RUNNING\r\n");
                 while(!main_board.readable()) {
+                    if(update_temperature) {
+                        update_temperature = false;
+                        temperature::update();
+                    }
                     if(new_measurement) {
                         led = !led;
                         new_measurement = false;
@@ -378,6 +388,10 @@ void blink_code(uint8_t state, uint8_t code) {
         wait(0.3);
     }
     wait(0.5);
+}
+
+void update_temperatures_ISR(void) {
+    update_temperature = true;
 }
 
 void update_measurements_ISR(void) {

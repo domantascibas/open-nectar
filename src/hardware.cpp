@@ -15,10 +15,8 @@ InterruptIn calibrationButton(PC_12);
 
 DS1820  probe_1(PC_6);
 DS1820  probe_2(PC_7);
-Ticker measure_temperatures;
 
 extern Data data;
-void update_temperatures_ISR(void);
 void calibrate_ISR(void);
 
 volatile uint8_t calibrating = false;
@@ -45,7 +43,6 @@ namespace hardware {
         pc.printf("I2C frequency: %dHz\r\n", i2c_freq);
         wait(0.2);
         
-        measure_temperatures.attach(&update_temperatures_ISR, 2.0);
         calibrationButton.fall(&calibrate_ISR);
         pc.printf("[SETUP OK]\r\n");
         wait(0.5);
@@ -139,10 +136,6 @@ namespace temperature {
         probe_2.startConversion();
         return NS_OK;
     }
-}
-
-void update_temperatures_ISR(void) {
-    temperature::update();
 }
 
 void calibrate_ISR(void) {
