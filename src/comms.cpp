@@ -93,6 +93,7 @@ uint8_t parse_fields(char* inputBuffer, char** pFields, uint32_t numFields, char
     comms_pc.printf("parsed %d values\n\r", length);
     return length;
 }
+void error_message(uint8_t);
 
 uint8_t send_cmd(uint8_t command) {
     //TODO add timeout after sending command
@@ -102,6 +103,12 @@ uint8_t send_cmd(uint8_t command) {
     if(response == NACK) {
         response = comms_power.getc();
         comms_pc.printf("error 0x%X\t", response);
+        error_message(response);
+        //if(comms_power.getc() == INCOMING_DATA) {
+        //    comms_power.scanf("#%f,%f,%f,%f,%d,%f$", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
+        //    comms_power.getc();
+        //    comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+        //}
     }
     return response;
 }
@@ -442,6 +449,81 @@ namespace power_board {
         } else {
             comms_pc.printf("Error: 0x%X\n\r", response);
         }
+    }
+}
+
+void error_message(uint8_t error) {
+    comms_pc.printf("[ERROR] %d\r\n", error);
+    switch(error) {
+        case SETUP_ERROR:
+            
+        break;
+        
+        case STARTUP_ERROR:
+            
+        break;
+        
+        case ADC_ERROR:        //can't find both ADC sensors
+            comms_pc.printf("[ERROR] Can't read ADC sensors\r\n");
+        break;
+        
+        case ADC_VOLTAGE_ERROR:
+            comms_pc.printf("[ERROR] Can't read ADC voltage sensor\r\n");
+        break;
+        
+        case ADC_CURRENT_ERROR:
+            comms_pc.printf("[ERROR] Can't read ADC voltage sensor\r\n");
+        break;
+        
+        case ADC_SETUP_ERROR:
+            
+        break;
+        
+        case FLASH_ACCESS_ERROR:
+            comms_pc.printf("[ERROR] Can't access FLASH memory\r\n");
+        break;
+        
+        case FLASH_READ_ERROR:
+            comms_pc.printf("[ERROR] Can't read FLASH memory\r\n");
+        break;
+        
+        case FLASH_WRITE_ERROR:
+            comms_pc.printf("[ERROR] Can't write to FLASH memory\r\n");
+        break;
+        
+        case CALIBRATION_ERROR:          //no calibration data
+            comms_pc.printf("[ERROR] No CALIBRATION data\r\n");
+        break;
+        
+        case DC_OVER_VOLTAGE:            //V_pv > 350V
+            comms_pc.printf("[ERROR] DC VOLTAGE > 350V\r\n");
+        break;
+        
+        case DC_OVER_CURRENT:            //I_pv > 10A
+            comms_pc.printf("[ERROR] DC CURRENT > 10A\r\n");
+        break;
+        
+        case DC_CURRENT_LEAKS:           //could be a faulty relay, or a short
+            comms_pc.printf("[ERROR] DC CURRENT leaks. Could be faulty relay or a short circuit\r\n");
+        break;
+        
+        case I2C_ERROR:
+        break;
+        
+        case OVERHEAT:
+            comms_pc.printf("[ERROR] DEVICE OVERHEAT\r\n");
+        break;
+        
+        case RADIATOR_OVERHEAT:
+            comms_pc.printf("[ERROR] Radiator TEMPERATURE > 70C\r\n");
+        break;
+        
+        case AIRGAP_OVERHEAT:
+            comms_pc.printf("[ERROR] Airgap TEMPERATURE > 70C\r\n");
+        break;
+        
+        default:
+        break;
     }
 }
 
