@@ -57,17 +57,17 @@ int main() {
     hardware::init();
     response = hardware::self_check();
     
-    __WFI();
-    get_command(main_board.getc(), curr_state, response);
-    
+    //__WFI();
+    //get_command(main_board.getc(), curr_state, response);
+    measure.attach(&update_measurements_ISR, 0.5);
     measure_temperatures.attach(&update_temperatures_ISR, 10.0);
+        
     while(1) {
         switch(curr_state) {
             case IDLE: //IDLE state
                 led = LED_OFF;
                 pc.printf("IDLE\r\n");
                 calibrating = false;
-                measure.attach(&update_measurements_ISR, 0.5);
                 while(!main_board.readable()) {
                     if(calibrating) {
                         calibrating = false;
@@ -88,8 +88,18 @@ int main() {
                         led = !led;
                         new_measurement = false;
                         
-                        measurements::getVoltage();
-                        measurements::getCurrent();
+                        response = measurements::getVoltage();
+                        if(response != NS_OK) {
+                            shutdown = DRIVER_OFF;
+                        }
+                        if(response == NS_OK) {
+                            response = measurements::getCurrent();
+                            if(response != NS_OK) {
+                                shutdown = DRIVER_OFF;
+                            }
+                        } else {
+                            measurements::getCurrent();
+                        }
                         
                         pc.printf("%7.2fV %7.2fA\r\n", voltage, current);
                     }
@@ -99,23 +109,8 @@ int main() {
             break;
             
             case STARTUP: //STARTUP state
-                //int result;
                 pc.printf("STARTING\r\n");
-                
-                //result = hardware::self_check();
-                //result = STARTUP_OK;
-                //if(result == STARTUP_OK) {
-                //    pc.printf("[STARTUP OK]\r\n\n");
-                //    shutdown = DRIVER_ON;
                 next_state = RUNNING;
-                //} else {
-                    //send error code to screen
-                    //TODO
-                    //something like print(result), but have an ENUM for result to convert it to readable error codes or text
-                //    pc.printf("[STARTUP ERROR]\r\n\n");
-                    //blink_code(curr_state, result);
-                //    next_state = IDLE;
-                //}
             break;
             
             case RUNNING: //RUNNING state
@@ -129,14 +124,26 @@ int main() {
                     if(new_measurement) {
                         led = !led;
                         new_measurement = false;
+                        shutdown = DRIVER_ON;
                         
-                        measurements::getVoltage();
-                        measurements::getCurrent();
-                        data.moment_power = data.moment_current * data.moment_voltage;
-                        
-                        pc.printf("%7.2fW %7.2fV %7.2fA\r\n", data.moment_power, data.moment_voltage, data.moment_current);
-                        pwm::adjust();
-                        //pwm::swipe(0.15, 0.85, 0.05);
+                        response = measurements::getVoltage();
+                        if(response != NS_OK) {
+                            shutdown = DRIVER_OFF;
+                            next_state = STOP;
+                        }
+                        if(response == NS_OK) {
+                            response = measurements::getCurrent();
+                            if(response != NS_OK) {
+                                shutdown = DRIVER_OFF;
+                                next_state = STOP;
+                            }
+                            data.moment_power = data.moment_current * data.moment_voltage;
+                            
+                            pc.printf("%7.2fW %7.2fV %7.2fA\r\n", data.moment_power, data.moment_voltage, data.moment_current);
+                            pwm::adjust();
+                        } else {
+                            break;
+                        }
                     }
                     __WFI();
                 }
@@ -144,9 +151,8 @@ int main() {
             break;
             
             case STOP:
-                //measure.detach();
                 shutdown = DRIVER_OFF;
-                led = LED_OFF;
+                //led = LED_OFF;
                 pc.printf("STOPPING\r\n");
                 pwm::reset();
                 next_state = IDLE;
@@ -155,15 +161,22 @@ int main() {
             case SERVICE:
                 //TODO add temperature and overvoltage/overcurrent checks
                 pc.printf("SERVICE\r\n");
-                //measure.attach(&update_measurements_ISR, 0.5);
                 while(!main_board.readable()) {
                     if(new_measurement) {
                         led = !led;
                         new_measurement = false;
                         
-                        measurements::getVoltage();
-                        measurements::getCurrent();
-                        data.moment_power = data.moment_current * data.moment_voltage;
+                        response = measurements::getVoltage();
+                        if(response != NS_OK) {
+                            shutdown = DRIVER_OFF;
+                        }
+                        if(response == NS_OK) {
+                            response = measurements::getCurrent();
+                            if(response != NS_OK) {
+                                shutdown = DRIVER_OFF;
+                            }
+                            data.moment_power = data.moment_current * data.moment_voltage;
+                        }
                         
                         pc.printf("%7.2fW %7.2fV %7.2fA\r\n", data.moment_power, data.moment_voltage, data.moment_current);
                         pwm::set();
@@ -188,6 +201,8 @@ uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
         if(response != NS_OK) {
             main_board.putc(NACK);
             main_board.putc(response);
+            //main_board.putc(INCOMING_DATA);
+            //main_board.printf("#%f,%f,%f,%f,%d,%f$\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, overheat, data.airgap_temperature); //print to ESP serial
         } else {
             switch(command) {
                 case AUTO_MODE:
@@ -242,7 +257,7 @@ uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
                     //main_board.putc(INCOMING_DATA);
                     //while(!main_board.writeable()) {}
                     main_board.putc(INCOMING_DATA);
-                    main_board.printf("#%f,%f,%f,%f,%d,%f$\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, overheat, data.airgap_temperature); //print to ESP serial
+                    main_board.printf("#%.2f,%.2f,%.2f,%.2f,%d,%.2f$\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, overheat, data.airgap_temperature); //print to ESP serial
                     pc.printf("[SENT] %f, %f, %f, %f, %d, %f\r\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, overheat, data.airgap_temperature);
                     return state;
                 break;
@@ -300,7 +315,7 @@ uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
                     pc.printf("[SENT] Calibration: %f\r\n", data.reference_voltage);
                     return state;
                 break;
-                
+                */
                 case CMD_GET_PWM_DUTY:
                     main_board.putc(INCOMING_DATA);
                     while(!main_board.writeable()) {}
@@ -308,7 +323,8 @@ uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
                     pc.printf("[SENT] Duty: %fD\r\n", data.pwm_duty);
                     return state;
                 break;
-                
+                        
+                /*
                 case CMD_GET_MOSFET_OHEAT:
                     main_board.putc(INCOMING_DATA);
                     while(!main_board.writeable()) {}
@@ -316,8 +332,7 @@ uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
                     pc.printf("[SENT] Overheat: %d\r\n", overheat);
                     return state;
                 break;
-                */
-                /*
+
                 case CMD_GET_CAP_TEMP:
                     main_board.putc(INCOMING_DATA);
                     while(!main_board.writeable()) {}
