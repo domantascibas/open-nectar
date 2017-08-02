@@ -6,7 +6,6 @@
 #include <sstream>
 #include <iostream>
 
-//Commands
 #define KEYBOARD_STOP               0x30    //'0'
 #define KEYBOARD_START              0x31    //'1'
 #define KEYBOARD_GET_DATA           0x32    //'2'
@@ -53,56 +52,19 @@ extern Serial comms_power;
 extern Serial comms_esp;
 extern DigitalOut relay_sun;
 extern DigitalOut relay_grid;
-
 Mutex serial;
 
 extern Data data;
-char* pFields[NUM_FIELDS];
-
-struct Message_Result {
-    float float_result;
-    uint8_t int_result;
-};
-
-Message_Result result = {0.0, 0};
-
-char create_string(ostringstream message) {
-    char new_string[128];
-    string s = message.str();
-    const char* p = s.c_str();
-    strlcpy(new_string, p, sizeof(new_string) - 1);
-    return *new_string;
-}
-
-//parses the received message and saves data into the pFields array
-uint8_t parse_fields(char* inputBuffer, char** pFields, uint32_t numFields, char delimiterChars) {
-    char* pString = inputBuffer;
-    char* pField;
-    uint8_t length = 0;
-    comms_pc.printf("[ PARSING ] %s\n\r", inputBuffer);
-    for(uint8_t i=0; i<numFields; i++) {
-        pField = strtok(pString, &delimiterChars);
-        if(pField != NULL) {
-            pFields[i] = pField;
-            length++;
-        } else {
-            pFields[i] = NULL;
-        }
-        pString = NULL; //to make strtok continue parsing the next field rather than start again on the original string (see strtok documentation for more details)
-    }
-    comms_pc.printf("parsed %d values\n\r", length);
-    return length;
-}
 void error_message(uint8_t);
 
 uint8_t send_cmd(uint8_t command) {
     //TODO add timeout after sending command
+    serial.lock();
     uint8_t response;
     comms_power.putc(command);
     response = comms_power.getc();
     if(response == NACK) {
         response = comms_power.getc();
-        comms_pc.printf("error 0x%X\t", response);
         error_message(response);
         //if(comms_power.getc() == INCOMING_DATA) {
         //    comms_power.scanf("#%f,%f,%f,%f,%d,%f$", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
@@ -110,14 +72,8 @@ uint8_t send_cmd(uint8_t command) {
         //    comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
         //}
     }
+    serial.unlock();
     return response;
-}
-
-//if the received command is in the list of commands, respond with ACK
-//send data back
-//if the command is unknown respond with NACK
-//send the error code back
-uint8_t receive_cmd(uint8_t command) {
 }
 
 namespace pc_monitor {
@@ -133,6 +89,7 @@ namespace pc_monitor {
             serial.lock();
             
             command = comms_pc.getc();
+            serial.unlock();
             if(command != NULL) {
                 comms_pc.printf("\n\rCMD: 0x%X\n\r", command);
                 switch(command) {
@@ -149,77 +106,84 @@ namespace pc_monitor {
                     break;
                     
                     case KEYBOARD_START:
-                        comms_pc.printf("POWER BOARD Starting\n\r");
-                        relay_sun = true;
+                        comms_pc.printf("POWER BOARD Starting\r\n");
+                        resp = power_board::get_calibration_data();
+                        if(resp == NS_OK) {
+                            comms_pc.printf("[DATA] Calibration V: %.5f I: %.5f\r\n", data.pv_ref_voltage, data.pv_ref_current);
+                        }
+                    
                         resp = power_board::start();
                         if(resp == ACK) {
-                            comms_pc.printf("Started\n\r");
+                            relay_sun = true;
+                            comms_pc.printf("Started\r\n");
                         } else {
                             relay_sun = false;
-                            comms_pc.printf("Not Started: 0x%X\n\r", resp);
+                            comms_pc.printf("Not Started: 0x%X\r\n", resp);
                         }
                     break;
                         
                     case KEYBOARD_GET_DATA:
+                        serial.lock();
                         comms_pc.printf("POWER BOARD Getting data\n\r");
                         resp = power_board::get_data();
                         if(resp == NS_OK) {
-                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                         } else {
                             comms_pc.printf("Error: 0x%X\n\r", resp);
-                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                         }
+                        serial.unlock();
                     break;
                         
                     case KEYBOARD_GET_CALIB_DATA:
-                        comms_pc.printf("POWER BOARD Getting Calibration data\n\r");
+                        comms_pc.printf("POWER BOARD Getting Calibration data\r\n");
                         resp = power_board::get_calibration_data();
                         if(resp == NS_OK) {
-                            comms_pc.printf("V_ref:%f I_ref:%f\n\r", data.pv_ref_voltage, data.pv_ref_current);
+                            comms_pc.printf("V_ref:%f I_ref:%f\r\n", data.pv_ref_voltage, data.pv_ref_current);
                         } else {
                             comms_pc.printf("Error: 0x%X\n\r", resp);
-                            comms_pc.printf("V_ref:%f I_ref:%f\n\r", data.pv_ref_voltage, data.pv_ref_current);
+                            comms_pc.printf("V_ref:%f I_ref:%f\r\n", data.pv_ref_voltage, data.pv_ref_current);
                         }
                     break;
                         
                     case KEYBOARD_PWM_OFF:
-                        comms_pc.printf("POWER BOARD Turning OFF PWM\n\r");
+                        comms_pc.printf("POWER BOARD Turning OFF PWM\r\n");
                         resp = power_board::shutdown(DRIVER_OFF);
                         if(resp == ACK) {
-                            comms_pc.printf("PWM OFF\n\r");
+                            comms_pc.printf("PWM OFF\r\n");
                             relay_sun = false;
                         } else {
-                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                            comms_pc.printf("Error: 0x%X\r\n", resp);
                         }
                     break;
                         
                     case KEYBOARD_PWM_ON:
-                        comms_pc.printf("POWER BOARD Turning ON PWM\n\r");
+                        comms_pc.printf("POWER BOARD Turning ON PWM\r\n");
                         resp = power_board::shutdown(DRIVER_ON);
                         if(resp == ACK) {
-                            comms_pc.printf("PWM ON\n\r");
+                            comms_pc.printf("PWM ON\r\n");
                             relay_sun = true;
                         } else {
-                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                            comms_pc.printf("Error: 0x%X\r\n", resp);
                         }
                     break;
                         
                     case AUTO_MODE:
-                        comms_pc.printf("AUTO MODE\n\r");
+                        comms_pc.printf("AUTO MODE\r\n");
                         resp = power_board::enter_service_menu(false);
                         if(resp == ACK) {
                             relay_sun = true;
-                            comms_pc.printf("Power Board running\n\r");
+                            comms_pc.printf("Power Board running\r\n");
                         } else {
-                            comms_pc.printf("Error: 0x%X\n\r", resp);
+                            comms_pc.printf("Error: 0x%X\r\n", resp);
                         }
                     break;
                         
                     case MANUAL_MODE:
-                        comms_pc.printf("MANUAL MODE\n\r");
+                        comms_pc.printf("MANUAL MODE\r\n");
                         resp = power_board::enter_service_menu(true);
                         if(resp == NS_OK) {
-                            comms_pc.printf("Service Menu\n\rPWM duty: %f\r\n", data.pwm_duty);
+                            comms_pc.printf("Service Menu\r\nPWM duty: %f\r\n", data.pwm_duty);
                             resp = power_board::get_data();
                             if(resp == NS_OK) {
                                 comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
@@ -275,8 +239,6 @@ namespace pc_monitor {
                 comms_pc.printf("CMD: NULL\r\n");
             }
         }
-        
-        serial.unlock();
     }
 }
 
@@ -301,9 +263,11 @@ namespace esp {
         comms_pc.printf("sent 0x%X\r\n", INCOMING_DATA);
         //comms_esp.putc(INCOMING_DATA);
         //can send 64 chars max
+        serial.lock();
         comms_esp.printf("#%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f,%.2f$\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty, data.airgap_temp);
         //comms_pc.printf("<%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f>\n\r", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
         comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+        serial.unlock();
     }
     
     void loop(void) {
@@ -315,10 +279,12 @@ namespace esp {
             
             serial.lock();
             command = comms_esp.getc();
+            serial.unlock();
             if(command != NULL) {
                 comms_pc.printf("\r\nCMD: 0x%X\r\n", command);
                 switch(command) {
                     case GET_STATS:
+                        serial.lock();
                         comms_pc.printf("POWER BOARD Getting data\n\r");
                         resp = power_board::get_data();
                         if(resp == NS_OK) {
@@ -331,6 +297,7 @@ namespace esp {
                             comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                             comms_esp.putc(NACK);
                         }
+                        serial.unlock();
                     break;
                     
                     default:
@@ -341,8 +308,6 @@ namespace esp {
                 comms_pc.printf("CMD: NULL\n\r");
             }
         }
-        
-        serial.unlock();
     }
 }
 
@@ -367,11 +332,6 @@ namespace power_board {
             comms_power.scanf("#%f,%f,%f,%f,%d,%f$", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
             comms_power.getc();
             data.pv_power = data.pv_voltage * data.pv_current;
-            if(data.pv_power > 5.00) {
-                data.pv_available = true;
-            } else {
-                data.pv_available = false;
-            }
             return NS_OK;
         } else {
             return response;
@@ -381,8 +341,6 @@ namespace power_board {
     uint8_t get_calibration_data(void) {
         uint8_t response = send_cmd(KEYBOARD_GET_CALIB_DATA);
         if(response == INCOMING_DATA) {
-            while(!comms_power.readable()) {
-            }
             comms_power.scanf("#%f,%f$", &data.pv_ref_voltage, &data.pv_ref_current);
             comms_power.getc();
             return NS_OK;
