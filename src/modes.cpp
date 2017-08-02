@@ -1,9 +1,12 @@
 #include "mbed.h"
+#include "rtos.h"
 #include "modes.h"
 #include "data.h"
 
 extern DigitalOut relay_sun;
 extern DigitalOut relay_grid;
+extern DigitalIn zero_cross;
+extern Mutex serial;
 
 extern Data data;
 
@@ -15,22 +18,28 @@ namespace nectar {
             default:
             case TURN_OFF_ALL:
                 relay_sun = false;
+                while(!zero_cross) {}
+                wait_us(600);
                 relay_grid = false;
-                //printf("ALL OFF\r");
+                //printf("ALL OFF\r\n");
             break;
             
             case TURN_ON_GRID:
                 relay_sun = false;
-                wait(1);
+                wait(1.0);
+                while(!zero_cross) {}
+                wait_us(600);
                 relay_grid = true;
-                //printf("GRID ON\r");
+                //printf("GRID ON\r\n");
             break;
             
             case TURN_ON_PV:
+                while(!zero_cross) {}
+                wait_us(600);
                 relay_grid = false;
-                wait(1);
+                wait(1.0);
                 relay_sun = true;
-                //printf("PV ON\r");
+                //printf("PV ON\r\n");
             break;
         }
         //printf("\n\r");
@@ -38,28 +47,17 @@ namespace nectar {
     }
 
     uint8_t loop(void) {
+        serial.lock();
         switch(data.current_mode) {
             default:  //mode is any other value than the ones below
             case MODE_DEFAULT:
-                //printf("[ MODE ] DEFAULT ");
+                //printf("[MODE] DEFAULT\r\n");
                 //printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d ", nectar_data.temperature_max, nectar_data.temperature_moment, nectar_data.temperature_scheduled, nectar_data.pv_available);
                 //Tcurrent < Tmax ? check if PV avail : do nothing
                 if(data.temp_boiler < data.temp_max) {
-                    if(data.pv_available) {
-                        //heat water
-                        //printf("T < T_MAX ");
-                        response = TURN_ON_PV;
-                    } else {
-                        //if Tcurrent < Tset ? use GRID : do nothing
-                        if(data.temp_boiler < data.temp_scheduled) {
-                            //turn on grid power
-                            //printf("T < T_SET ");
-                            response = TURN_ON_GRID;
-                        } else {
-                            //do nothing
-                            //printf("T > T_SET ");
-                            response = TURN_OFF_ALL;
-                        }
+                    response = TURN_ON_PV;
+                    if(data.temp_boiler < data.temp_scheduled) {
+                        response = TURN_ON_GRID;
                     }
                 } else {
                     //printf("T >= T_MAX ");
@@ -101,6 +99,7 @@ namespace nectar {
                 }
             break;
         }
+        serial.unlock();
         set_relays(response);
         return response;
     }
