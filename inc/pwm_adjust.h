@@ -4,7 +4,7 @@
 namespace pwm {
     uint8_t init(float);
     
-    float adjust();
+    uint8_t adjust();
     uint8_t set();
     uint8_t reset(void);
     

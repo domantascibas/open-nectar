@@ -16,10 +16,10 @@ namespace pwm {
     uint8_t init(float frequency = 10) {
         pwm_gen.period_us(1000/frequency);
         pwm_gen.write(data.pwm_duty);
-        return PWM_OK;
+        return NS_OK;
     }
     
-    float adjust() {
+    uint8_t adjust() {
         float pwm_duty = data.pwm_duty;
         float dP;
         
@@ -50,18 +50,18 @@ namespace pwm {
         
         pwm_gen.write(pwm_duty);
         data.pwm_duty = pwm_duty;
-        return pwm_duty;
+        return NS_OK;
     }
     
     uint8_t set() {
         pwm_gen.write(data.pwm_duty);
-        return PWM_OK;
+        return NS_OK;
     }
     
     uint8_t reset(void) {
         data.pwm_duty = 0.1;
         pwm_gen.write(data.pwm_duty);
-        return PWM_OK;
+        return NS_OK;
     }
     
     uint8_t swipe(float min, float max, float step) {
