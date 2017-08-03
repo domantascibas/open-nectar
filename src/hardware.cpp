@@ -69,7 +69,7 @@ namespace hardware {
         }
         
         wait(1.0);
-        comms_pc.printf("\nPOWER BOARD Starting\n\r");
+        comms_pc.printf("\nPOWER BOARD Starting\r\n");
         resp = power_board::start();
         if(resp == 0x06) {
             relay_sun = true;

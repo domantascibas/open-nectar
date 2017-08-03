@@ -91,17 +91,17 @@ namespace pc_monitor {
             command = comms_pc.getc();
             serial.unlock();
             if(command != NULL) {
-                comms_pc.printf("\n\rCMD: 0x%X\n\r", command);
+                comms_pc.printf("\n\rCMD: 0x%X\r\n", command);
                 switch(command) {
                     
                     case KEYBOARD_STOP:
-                        comms_pc.printf("POWER BOARD Stopping\n\r");
+                        comms_pc.printf("POWER BOARD Stopping\r\n");
                         resp = power_board::stop();
                         if(resp == ACK) {
-                            comms_pc.printf("Stopped\n\r");
+                            comms_pc.printf("Stopped\r\n");
                             relay_sun = false;
                         } else {
-                            comms_pc.printf("Not Stopped: 0x%X\n\r", resp);
+                            comms_pc.printf("Not Stopped: 0x%X\r\n", resp);
                         }
                     break;
                     
@@ -124,13 +124,13 @@ namespace pc_monitor {
                         
                     case KEYBOARD_GET_DATA:
                         serial.lock();
-                        comms_pc.printf("POWER BOARD Getting data\n\r");
+                        comms_pc.printf("POWER BOARD Getting data\r\n");
                         resp = power_board::get_data();
                         if(resp == NS_OK) {
-                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+                            comms_pc.printf("V:%5.2f I:%5.2f D:%5.2f Tmosfet:%5.2f Overheat:%d Tairgap:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                         } else {
-                            comms_pc.printf("Error: 0x%X\n\r", resp);
-                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+                            comms_pc.printf("Error: 0x%X\r\n", resp);
+                            comms_pc.printf("V:%5.2f I:%5.2f D:%5.2f Tmosfet:%5.2f Overheat:%d Tairgap:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                         }
                         serial.unlock();
                     break;
@@ -186,7 +186,7 @@ namespace pc_monitor {
                             comms_pc.printf("Service Menu\r\nPWM duty: %f\r\n", data.pwm_duty);
                             resp = power_board::get_data();
                             if(resp == NS_OK) {
-                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
+                                comms_pc.printf("V:%5.2f I:%5.2f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
                             } else {
                                 comms_pc.printf("Error: 0x%X\r\n", resp);
                             }
@@ -201,7 +201,7 @@ namespace pc_monitor {
                         if(resp == NS_OK) {
                             resp = power_board::get_data();
                             if(resp == NS_OK) {
-                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
+                                comms_pc.printf("V:%5.2f I:%5.2f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
                             } else {
                                 comms_pc.printf("Error: 0x%X\r\n", resp);
                             }
@@ -216,7 +216,7 @@ namespace pc_monitor {
                         if(resp == NS_OK) {
                             resp = power_board::get_data();
                             if(resp == NS_OK) {
-                                comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
+                                comms_pc.printf("V:%5.2f I:%5.2f D:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty);
                             } else {
                                 comms_pc.printf("Error: 0x%X\r\n", resp);
                             }
@@ -266,7 +266,8 @@ namespace esp {
         serial.lock();
         comms_esp.printf("#%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f,%.2f$\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty, data.airgap_temp);
         //comms_pc.printf("<%.2f,%d,%.2f,%d,%.2f,%.2f,%.2f,%d,%.2f,%.2f>\n\r", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty);
-        comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+        //comms_pc.printf("P:%.2f GRID:%d Twater:%.2f SUN:%d V:%.2f I:%.2f Tdevice:%.2f MOSFET:%d Trad:%.2f Duty:%.2f Tairgap:%.2f\r\n", data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on, data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on, data.radiator_temp, data.pwm_duty, data.airgap_temp);
+        comms_pc.printf("V:%5.2f I:%5.2f D:%5.2f Tmosfet:%5.2f Overheat:%d Tairgap:%5.2f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
         serial.unlock();
     }
     
@@ -285,27 +286,27 @@ namespace esp {
                 switch(command) {
                     case GET_STATS:
                         serial.lock();
-                        comms_pc.printf("POWER BOARD Getting data\n\r");
+                        comms_pc.printf("POWER BOARD Getting data\r\n");
                         resp = power_board::get_data();
                         if(resp == NS_OK) {
                             //comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                             //send stats to ESP
-                            comms_pc.printf("ESP GET STATS\n\r");
+                            comms_pc.printf("ESP GET STATS\r\n");
                             get_stats();
                         } else {
-                            comms_pc.printf("Error: 0x%X\n\r", resp);
-                            comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
+                            comms_pc.printf("Error: 0x%X\r\n", resp);
+                            comms_pc.printf("V:%5.2f I:%5.2f D:%5.2f Tmosfet:%5.2f Overheat:%d Tairgap:%5.2f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                             comms_esp.putc(NACK);
                         }
                         serial.unlock();
                     break;
                     
                     default:
-                        comms_pc.printf("Unrecognized CMD 0x%X\n\r", command);
+                        comms_pc.printf("Unrecognized CMD 0x%X\r\n", command);
                     break;
                 }
             } else {
-                comms_pc.printf("CMD: NULL\n\r");
+                comms_pc.printf("CMD: NULL\r\n");
             }
         }
     }
@@ -402,10 +403,10 @@ namespace power_board {
                 }
             }
             comms_power.printf("#%f$\n", data.pwm_duty);
-            comms_pc.printf("set PWM duty %f\n\r", data.pwm_duty);
+            comms_pc.printf("set PWM duty %f\r\n", data.pwm_duty);
             return NS_OK;
         } else {
-            comms_pc.printf("Error: 0x%X\n\r", response);
+            comms_pc.printf("Error: 0x%X\r\n", response);
         }
     }
 }
