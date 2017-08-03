@@ -35,6 +35,8 @@ DigitalOut relay_grid(PB_4);
 DigitalIn zero_cross(PB_5);
 DigitalOut led1(LED1);
 
+extern Data data;
+
 namespace hardware {
     uint8_t response;
     
