@@ -5,7 +5,7 @@
 #define PWM_MAX					0.95
 #define	V_REF					3.00
 
-#define OVERVOLTAGE				25.0
+#define OVERVOLTAGE				350.0
 #define OVERCURRENT				10.0
 
 #define LED_ON                  0
