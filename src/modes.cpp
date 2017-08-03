@@ -3,6 +3,7 @@
 #include "modes.h"
 #include "data.h"
 
+Timer delay_t;
 extern DigitalOut relay_sun;
 extern DigitalOut relay_grid;
 extern DigitalIn zero_cross;
@@ -19,7 +20,9 @@ namespace nectar {
             case TURN_OFF_ALL:
                 relay_sun = false;
                 while(!zero_cross) {}
-                //wait_us(600);
+                delay_t.start();
+                while(delay_t.read_us() < 600) {}
+                delay_t.stop();
                 relay_grid = false;
                 //printf("ALL OFF\r\n");
             break;
@@ -28,14 +31,18 @@ namespace nectar {
                 relay_sun = false;
                 Thread::wait(1000);
                 while(!zero_cross) {}
-                //wait_us(600);
+                delay_t.start();
+                while(delay_t.read_us() < 600) {}
+                delay_t.stop();
                 relay_grid = true;
                 //printf("GRID ON\r\n");
             break;
             
             case TURN_ON_PV:
                 while(!zero_cross) {}
-                //wait_us(600);
+                delay_t.start();
+                while(delay_t.read_us() < 600) {}
+                delay_t.stop();
                 relay_grid = false;
                 Thread::wait(1000);
                 relay_sun = true;
