@@ -49,7 +49,6 @@ namespace nectar {
     }
 
     uint8_t loop(void) {
-        serial.lock();
         switch(data.current_mode) {
             default:  //mode is any other value than the ones below
             case MODE_DEFAULT:
@@ -101,67 +100,9 @@ namespace nectar {
                 }
             break;
         }
-        serial.unlock();
         set_relays(response);
         return response;
     }
-//    uint8_t loop(void) {
-//        switch(data.current_mode) {
-//            default:  //mode is any other value than the ones below
-//            case MODE_DEFAULT:
-//                //printf("[MODE] DEFAULT\r\n");
-//                //printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d ", nectar_data.temperature_max, nectar_data.temperature_moment, nectar_data.temperature_scheduled, nectar_data.pv_available);
-//                //Tcurrent < Tmax ? check if PV avail : do nothing
-//                serial.lock();
-//                if(data.temp_boiler < data.temp_max) {
-//                    response = TURN_ON_PV;
-//                    if(data.temp_boiler < data.temp_scheduled) {
-//                        response = TURN_ON_GRID;
-//                    }
-//                } else {
-//                    //printf("T >= T_MAX ");
-//                    response = TURN_OFF_ALL;
-//                }
-//                serial.unlock();
-//            break;
-//            
-//            case MODE_BOOST:
-//                //printf("[ MODE ] BOOST\n\r");
-//                //Tcurrent < Tmax ? use GRID : do nothing
-//                if(data.temp_boiler < data.temp_max) {
-//                    response = TURN_ON_GRID;
-//                } else {
-//                    response = TURN_OFF_ALL;
-//                }
-//            break;
-//            
-//            case MODE_AWAY:
-//                //printf("[ MODE ] AWAY\n\r");
-//                //pv available ? use PV : check Tcurrent < Tmax
-//                if(data.pv_available) {
-//                    response = TURN_ON_PV;
-//                } else {
-//                    //Tcurrent > Tmin ? do nothing : use GRID
-//                    if(data.temp_boiler > data.temp_min) {
-//                        response = TURN_OFF_ALL;
-//                    } else {
-//                        response = TURN_ON_GRID;
-//                    }
-//                }
-//            break;
-//            
-//            case MODE_NO_GRID:
-//                //printf("[ MODE ] NO GRID\n\r");
-//                if(data.pv_available) {
-//                    response = TURN_ON_PV;
-//                } else {
-//                    response = TURN_OFF_ALL;
-//                }
-//            break;
-//        }
-//        set_relays(response);
-//        return response;
-//    }
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
