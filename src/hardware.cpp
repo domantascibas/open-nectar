@@ -46,6 +46,8 @@ namespace hardware {
         calibrationButton.fall(&calibrate_ISR);
         pc.printf("[SETUP OK]\r\n");
         wait(0.5);
+        
+        temperature::init();
     }
 
     uint8_t self_check(void) {
