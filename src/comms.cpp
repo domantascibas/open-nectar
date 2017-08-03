@@ -47,9 +47,9 @@
 #define NUM_FIELDS                  12 //number of comma seperated values in the data...TODO does this remain constant?
 #define HANDSHAKE                   0x5E
 
-extern Serial comms_pc;
-extern Serial comms_power;
-extern Serial comms_esp;
+extern RawSerial comms_pc;
+extern RawSerial comms_power;
+extern RawSerial comms_esp;
 extern DigitalOut relay_sun;
 extern DigitalOut relay_grid;
 Mutex serial;
@@ -57,9 +57,14 @@ Mutex serial;
 extern Data data;
 void error_message(uint8_t);
 
+char* pFields[NUM_FIELDS];
+uint8_t numChars = 128;
+char receivedChars[128];
+char tempChars[128];        // temporary array for use when parsing
+bool newData = false;
+
 uint8_t send_cmd(uint8_t command) {
     //TODO add timeout after sending command
-    serial.lock();
     uint8_t response;
     comms_power.putc(command);
     response = comms_power.getc();
@@ -72,8 +77,60 @@ uint8_t send_cmd(uint8_t command) {
         //    comms_pc.printf("V:%7.3f I:%7.3f D:%5.2f Tmosfet:%7.3f Overheat:%d Tairgap:%7.3f\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
         //}
     }
-    serial.unlock();
     return response;
+}
+
+//parses the received message and saves data into the pFields array
+uint8_t parse_fields(char* inputBuffer, char** pFields, uint32_t numFields, char delimiterChars) {
+    char* pString = inputBuffer;
+    char* pField;
+    uint8_t length = 0;
+    comms_pc.printf("[PARSING] ");
+    for(uint8_t i=0; i<numFields; i++) {
+        pField = strtok(pString, &delimiterChars);
+        if(pField != NULL) {
+            pFields[i] = pField;
+            length++;
+        } else {
+            pFields[i] = NULL;
+        }
+        pString = NULL; //to make strtok continue parsing the next field rather than start again on the original string (see strtok documentation for more details)
+    }
+    comms_pc.printf("parsed %d values\r\n", length);
+    return length;
+}
+
+void receive_message() {
+    bool recvInProgress = false;
+    uint8_t ndx = 0;
+    char startMarker = '#';
+    char endMarker = '$';
+    char rc;
+    
+    while(!comms_power.readable()) {}
+    while(!newData) {
+        rc = comms_power.getc();
+        //comms_pc.putc(rc);
+
+        if (recvInProgress == true) {
+            if (rc != endMarker) {
+                receivedChars[ndx] = rc;
+                ndx++;
+                if (ndx >= numChars) {
+                    ndx = numChars - 1;
+                }
+            } else {
+                receivedChars[ndx] = '\0';  // terminate the string
+                comms_power.getc();         //take the \n char from the serial bus
+                recvInProgress = false;
+                ndx = 0;
+                newData = true;
+                //comms_pc.printf("\r\n");
+            }
+        } else if (rc == startMarker) {
+            recvInProgress = true;
+        }
+    }
 }
 
 namespace pc_monitor {
@@ -273,19 +330,12 @@ namespace esp {
     
     void loop(void) {
         uint8_t command, resp;
-        
-        while(!comms_esp.readable()) {
-        }
         if(comms_esp.readable()) {
-            
-            serial.lock();
             command = comms_esp.getc();
-            serial.unlock();
             if(command != NULL) {
                 comms_pc.printf("\r\nCMD: 0x%X\r\n", command);
                 switch(command) {
                     case GET_STATS:
-                        serial.lock();
                         comms_pc.printf("POWER BOARD Getting data\r\n");
                         resp = power_board::get_data();
                         if(resp == NS_OK) {
@@ -298,7 +348,6 @@ namespace esp {
                             comms_pc.printf("V:%5.2f I:%5.2f D:%5.2f Tmosfet:%5.2f Overheat:%d Tairgap:%5.2f\n\r", data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp);
                             comms_esp.putc(NACK);
                         }
-                        serial.unlock();
                     break;
                     
                     default:
@@ -328,22 +377,57 @@ namespace power_board {
     }
     
     uint8_t get_data(void) {
+        uint8_t value_count;
         uint8_t response = send_cmd(KEYBOARD_GET_DATA);
         if(response == INCOMING_DATA) {
-            comms_power.scanf("#%f,%f,%f,%f,%d,%f$", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
-            comms_power.getc();
-            data.pv_power = data.pv_voltage * data.pv_current;
+            receive_message();
+            if (newData == true) {
+                newData = false;
+                strcpy(tempChars, receivedChars);
+                value_count = parse_fields(receivedChars, pFields, NUM_FIELDS, ',');
+                //comms_power.scanf("#%f,%f,%f,%f,%d,%f$", &data.pv_voltage, &data.pv_current, &data.pwm_duty, &data.radiator_temp, &data.mosfet_overheat_on, &data.airgap_temp);
+                //comms_power.getc();
+                serial.lock();
+                data.pv_voltage = atof(pFields[0]);
+                data.pv_current = atof(pFields[1]);
+                data.pwm_duty = atof(pFields[2]);
+                data.radiator_temp = atof(pFields[3]);
+                data.mosfet_overheat_on = atoi(pFields[4]);
+                data.airgap_temp = atof(pFields[5]);
+                
+                data.pv_power = data.pv_voltage * data.pv_current;
+                serial.unlock();
+            } else {
+                comms_pc.printf("No Data available\r\n");
+            }
             return NS_OK;
         } else {
+            comms_pc.printf("[ERROR] RESTART\r\n");
+            serial.lock();
+            //send_cmd(CMD_POWER_BOARD_STOP);
+            //comms_pc.printf("POWER BOARD stopped\r\n");
+            while(comms_power.readable()) {
+                comms_power.getc();
+            }
+            serial.unlock();
             return response;
         }
     }
     
     uint8_t get_calibration_data(void) {
+        uint8_t value_count;
         uint8_t response = send_cmd(KEYBOARD_GET_CALIB_DATA);
         if(response == INCOMING_DATA) {
-            comms_power.scanf("#%f,%f$", &data.pv_ref_voltage, &data.pv_ref_current);
-            comms_power.getc();
+            serial.lock();
+            receive_message();
+            if (newData == true) {
+                newData = false;
+                strcpy(tempChars, receivedChars);
+                value_count = parse_fields(receivedChars, pFields, NUM_FIELDS, ',');
+                //comms_power.scanf("#%f,%f$", &data.pv_ref_voltage, &data.pv_ref_current);
+                //comms_power.getc();
+            }
+            serial.unlock();
             return NS_OK;
         } else {
             return response;
@@ -368,7 +452,7 @@ namespace power_board {
                 response = send_cmd(CMD_GET_PWM_DUTY);
                 if(response == INCOMING_DATA) {
                     while(!comms_power.readable()) {}
-                    comms_power.scanf("#%f$", &data.pwm_duty);
+                    //comms_power.scanf("#%f$", &data.pwm_duty);
                     comms_power.getc();
                     return NS_OK;
                 }else {

@@ -13,9 +13,9 @@
 #define ESP_RX                      PA_10
 
 //comms
-Serial comms_pc(PC_TX, PC_RX);
-Serial comms_power(POWER_TX, POWER_RX);
-Serial comms_esp(ESP_TX, ESP_RX);
+RawSerial comms_pc(PC_TX, PC_RX);
+RawSerial comms_power(POWER_TX, POWER_RX);
+RawSerial comms_esp(ESP_TX, ESP_RX);
 
 //user interface
 //OLED SDA PB_7, SCL PB_6
