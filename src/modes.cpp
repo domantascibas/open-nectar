@@ -19,7 +19,7 @@ namespace nectar {
             case TURN_OFF_ALL:
                 relay_sun = false;
                 while(!zero_cross) {}
-                wait_us(600);
+                //wait_us(600);
                 relay_grid = false;
                 //printf("ALL OFF\r\n");
             break;
@@ -28,14 +28,14 @@ namespace nectar {
                 relay_sun = false;
                 Thread::wait(1000);
                 while(!zero_cross) {}
-                wait_us(600);
+                //wait_us(600);
                 relay_grid = true;
                 //printf("GRID ON\r\n");
             break;
             
             case TURN_ON_PV:
                 while(!zero_cross) {}
-                wait_us(600);
+                //wait_us(600);
                 relay_grid = false;
                 Thread::wait(1000);
                 relay_sun = true;
