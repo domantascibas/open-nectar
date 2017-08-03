@@ -214,7 +214,6 @@ uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
                         return STARTUP;
                     } else {
                         if(state == SERVICE) {
-                            //measure.detach();
                             shutdown = DRIVER_OFF;
                             pwm::reset();
                             return STARTUP;
@@ -363,46 +362,6 @@ uint8_t get_command(uint8_t command, uint8_t state, uint8_t response) {
         main_board.putc(BAD_CMD);
     }
     return 0;
-}
-
-void blink_code(uint8_t state, uint8_t code) {
-    uint8_t i;
-    led = LED_OFF;
-    for(i=0; i<3; i++) {
-        led = LED_ON;
-        wait(0.2);
-        led = LED_OFF;
-        wait(0.2);
-    }
-    wait(0.2);
-    for(i=0; i<3; i++) {
-        led = LED_ON;
-        wait(0.1);
-        led = LED_OFF;
-        wait(0.1);
-    }
-    wait(0.3);
-    for(i=0; i<3; i++) {
-        led = LED_ON;
-        wait(0.2);
-        led = LED_OFF;
-        wait(0.2);
-    }
-    wait(1.0);
-    for(i=0; i<=state; i++) {
-        led = LED_ON;
-        wait(0.3);
-        led = LED_OFF;
-        wait(0.3);
-    }
-    wait(0.5);
-    for(i=0; i<=code; i++) {
-        led = LED_ON;
-        wait(0.3);
-        led = LED_OFF;
-        wait(0.3);
-    }
-    wait(0.5);
 }
 
 void update_temperatures_ISR(void) {
