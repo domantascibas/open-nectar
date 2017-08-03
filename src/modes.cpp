@@ -43,6 +43,8 @@ namespace nectar {
             break;
         }
         //printf("\n\r");
+        data.grid_relay_on = relay_grid;
+        data.sun_relay_on = relay_sun;
         return 0;   //change to meaningful return
     }
 
