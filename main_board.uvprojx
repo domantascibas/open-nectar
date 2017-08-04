@@ -405,9 +405,19 @@
               <FilePath>.\src\hardware.cpp</FilePath>
             </File>
             <File>
-              <FileName>threads.cpp</FileName>
+              <FileName>service.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\threads.cpp</FilePath>
+              <FilePath>.\src\service.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>esp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\esp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>power_board.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\power_board.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2210,9 +2220,19 @@
               <FilePath>.\inc\hardware.h</FilePath>
             </File>
             <File>
-              <FileName>threads.h</FileName>
+              <FileName>service.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\inc\threads.h</FilePath>
+              <FilePath>.\inc\service.h</FilePath>
+            </File>
+            <File>
+              <FileName>esp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\esp.h</FilePath>
+            </File>
+            <File>
+              <FileName>power_board.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\power_board.h</FilePath>
             </File>
           </Files>
         </Group>

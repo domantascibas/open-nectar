@@ -7,8 +7,6 @@ Timer delay_t;
 extern DigitalOut relay_sun;
 extern DigitalOut relay_grid;
 extern DigitalIn zero_cross;
-extern Mutex serial;
-
 extern Data data;
 
 namespace nectar {

@@ -3,19 +3,9 @@
 #include "DS1820.h"
 #include "data.h"
 #include "comms.h"
-
-//Serial com pins
-#define PC_TX                       PA_2
-#define PC_RX                       PA_3
-#define POWER_TX                    PB_10
-#define POWER_RX                    PB_11
-#define ESP_TX                      PA_9
-#define ESP_RX                      PA_10
-
-//comms
-RawSerial comms_pc(PC_TX, PC_RX);
-RawSerial comms_power(POWER_TX, POWER_RX);
-RawSerial comms_esp(ESP_TX, ESP_RX);
+#include "power_board.h"
+#include "service.h"
+#include "esp.h"
 
 //user interface
 //OLED SDA PB_7, SCL PB_6
@@ -35,6 +25,7 @@ DigitalOut relay_grid(PB_4);
 DigitalIn zero_cross(PB_5);
 DigitalOut led1(LED1);
 
+extern RawSerial comms_pc;
 extern Data data;
 
 namespace hardware {
@@ -42,7 +33,9 @@ namespace hardware {
     
     //setup all hardware when started
     uint8_t setup(void) {
-        comms::setup();
+        service::init(115200);
+        power_board::init(19200);
+        esp::init(19200);
         comms_pc.printf("[COMMS] Started\r\n");
         
         response = temperature::setup();
@@ -102,9 +95,6 @@ namespace hardware {
         
         return NS_OK;
     }
-    
-    void loop(void) {
-    }
 }
 
 namespace temperature {
@@ -127,22 +117,6 @@ namespace temperature {
         
         probe_boiler.startConversion();
         probe_internal.startConversion();
-    }
-}
-
-namespace comms {
-    uint8_t setup(void) {
-        pc_monitor::init(115200);
-        power_board::init(19200);
-        esp::init(19200);
-    }
-    
-    uint8_t esp_loop(void) {
-        esp::loop();
-    }
-    
-    uint8_t service_loop(void) {
-        pc_monitor::loop();
     }
 }
 
