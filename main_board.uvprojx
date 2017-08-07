@@ -385,16 +385,6 @@
               <FilePath>.\src\main.cpp</FilePath>
             </File>
             <File>
-              <FileName>modes.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\modes.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>comms.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\comms.cpp</FilePath>
-            </File>
-            <File>
               <FileName>data.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\data.cpp</FilePath>
@@ -405,11 +395,6 @@
               <FilePath>.\src\hardware.cpp</FilePath>
             </File>
             <File>
-              <FileName>service.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\service.cpp</FilePath>
-            </File>
-            <File>
               <FileName>esp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\esp.cpp</FilePath>
@@ -418,6 +403,16 @@
               <FileName>power_board.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\power_board.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>comms.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\comms.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>modes.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\modes.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2195,21 +2190,6 @@
               <FilePath>.\inc\mbed_config.h</FilePath>
             </File>
             <File>
-              <FileName>modes.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\modes.h</FilePath>
-            </File>
-            <File>
-              <FileName>utils.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\utils.h</FilePath>
-            </File>
-            <File>
-              <FileName>comms.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\comms.h</FilePath>
-            </File>
-            <File>
               <FileName>data.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\data.h</FilePath>
@@ -2220,11 +2200,6 @@
               <FilePath>.\inc\hardware.h</FilePath>
             </File>
             <File>
-              <FileName>service.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\service.h</FilePath>
-            </File>
-            <File>
               <FileName>esp.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\esp.h</FilePath>
@@ -2233,6 +2208,16 @@
               <FileName>power_board.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\power_board.h</FilePath>
+            </File>
+            <File>
+              <FileName>comms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\comms.h</FilePath>
+            </File>
+            <File>
+              <FileName>modes.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\modes.h</FilePath>
             </File>
           </Files>
         </Group>

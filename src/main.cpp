@@ -1,52 +1,32 @@
 #include "mbed.h"
-#include "rtos.h"
 #include "hardware.h"
-#include "modes.h"
 #include "power_board.h"
-#include "service.h"
 #include "esp.h"
+#include "modes.h"
 
-Thread thread1;
-Thread thread2;
-Thread thread3;
+static const PinName TX = PA_2;
+static const PinName RX = PA_3;
 
-void service_thread() {
-    while(1) {
-        service::loop();
-    }
-}
+RawSerial pc(TX, RX);
 
-void power_thread() {
-    while(1) {
-        power_board::loop();
-        Thread::wait(5000);
-    }
-}
-
-void esp_thread() {
-    while(1) {
-        esp::loop();
-    }
-}
-
-void main_board_thread() {
-    while(1) {
-        temperature::update();
-        Thread::wait(500);
-        nectar::loop();
-        Thread::wait(500);
-    }
+void setup() {
+    pc.baud(115200);
+    pc.printf("[COMMS] Started\r\n");
 }
 
 int main() {
+    setup();
     hardware::setup();
-    hardware::startup();
-    
-    thread1.start(power_thread);
-    //thread2.start(esp_thread);
-    //thread3.start(main_board_thread);
+    wait(2.0);
+    power_board::setup();
+    esp::setup();
     
     while(1) {
+        power_board::loop();
+        esp::loop();
+        nectar::loop();
+        hardware::loop();
+        __WFI();
     }
 }
 

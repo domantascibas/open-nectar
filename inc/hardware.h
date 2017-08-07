@@ -2,13 +2,8 @@
 #define HARDWARE_H
 
 namespace hardware {
-    uint8_t setup(void);
-    uint8_t startup(void);
-}
-
-namespace temperature {
-    uint8_t setup(void);
-    uint8_t update(void);
+    uint8_t setup();
+    void loop();
 }
 
 #endif
