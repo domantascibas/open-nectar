@@ -1,12 +1,11 @@
 #include "mbed.h"
-#include "rtos.h"
 #include "modes.h"
 #include "data.h"
 
 Timer delay_t;
-extern DigitalOut relay_sun;
-extern DigitalOut relay_grid;
-extern DigitalIn zero_cross;
+DigitalOut relay_sun(PB_3);
+DigitalOut relay_grid(PB_4);
+DigitalIn zero_cross(PB_5);
 extern Data data;
 
 namespace nectar {
@@ -27,7 +26,10 @@ namespace nectar {
             
             case TURN_ON_GRID:
                 relay_sun = false;
-                Thread::wait(1000);
+                delay_t.start();
+                while(delay_t.read_ms() < 1000) {}
+                delay_t.stop();
+                delay_t.reset();
                 while(!zero_cross) {}
                 delay_t.start();
                 while(delay_t.read_us() < 600) {}
@@ -41,8 +43,12 @@ namespace nectar {
                 delay_t.start();
                 while(delay_t.read_us() < 600) {}
                 delay_t.stop();
+                delay_t.reset();
                 relay_grid = false;
-                Thread::wait(1000);
+                delay_t.start();
+                while(delay_t.read_ms() < 1000) {}
+                delay_t.stop();
+                delay_t.reset();
                 relay_sun = true;
                 //printf("PV ON\r\n");
             break;
