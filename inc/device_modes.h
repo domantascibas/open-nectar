@@ -1,8 +1,8 @@
-#ifndef MODES_H
-#define MODES_H
+#ifndef DEVICE_MODES_H
+#define DEVICE_MODES_H
 
-namespace nectar {    
-    uint8_t     loop(void);
+namespace device_modes {    
+    void loop();
 }
 
 #endif

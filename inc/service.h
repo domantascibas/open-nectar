@@ -3,7 +3,7 @@
 
 namespace service {
     void init(uint32_t);    
-    void loop(void);
+    void loop();
     
     //commands to manually control the power board
 }

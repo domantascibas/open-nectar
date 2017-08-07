@@ -12,9 +12,6 @@
 #define AUTO_MODE                   0x61    //'a'
 #define MANUAL_MODE                 0x6D    //'m'
 
-#define SET_MODE                    0x4D    //'M'
-#define GET_STATS                   0x54    //'T'
-
 //Constants
 #define DRIVER_ON                   0
 #define DRIVER_OFF                  1
@@ -23,75 +20,61 @@
 #define INCOMING_DATA               0x25    //'%'
 #define WAITING_FOR_DATA            0x26    //'&'
 #define BAD_CMD                     0x21    //'!'
-#define NUM_FIELDS                  12 //number of comma seperated values in the data...TODO does this remain constant?
 #define HANDSHAKE                   0x5E
 
 enum error_codes{
-	SETUP_ERROR,
-	STARTUP_ERROR,
-	ADC_ERROR,                  //can't find both ADC sensors
-    ADC_VOLTAGE_ERROR,
-    ADC_CURRENT_ERROR,
-	ADC_SETUP_ERROR,
-	FLASH_ACCESS_ERROR,
-	FLASH_READ_ERROR,
-	FLASH_WRITE_ERROR,
-	CALIBRATION_ERROR,          //no calibration data
-	DC_OVER_VOLTAGE,            //V_pv > 350V
-    DC_OVER_CURRENT,            //I_pv > 10A
-	DC_CURRENT_LEAKS,           //could be a faulty relay, or a short
-	I2C_ERROR,
-    PWM_OK,
-	PWM_ERROR,
-	BOARD_CONFIG_ERROR,
-    OVERHEAT,
-    RADIATOR_OVERHEAT,
-    AIRGAP_OVERHEAT
+  SETUP_ERROR,
+  STARTUP_ERROR,
+  ADC_ERROR,                  //can't find both ADC sensors
+  ADC_VOLTAGE_ERROR,
+  ADC_CURRENT_ERROR,
+  ADC_SETUP_ERROR,
+  FLASH_ACCESS_ERROR,
+  FLASH_READ_ERROR,
+  FLASH_WRITE_ERROR,
+  CALIBRATION_ERROR,          //no calibration data
+  DC_OVER_VOLTAGE,            //V_pv > 350V
+  DC_OVER_CURRENT,            //I_pv > 10A
+  DC_CURRENT_LEAKS,           //could be a faulty relay, or a short
+  I2C_ERROR,
+  PWM_OK,
+  PWM_ERROR,
+  BOARD_CONFIG_ERROR,
+  OVERHEAT,
+  RADIATOR_OVERHEAT,
+  AIRGAP_OVERHEAT
 };
 
 enum codes {
-    NS_OK,
-    NS_ERROR,
-    MSG_ERROR
-};
-
-enum mode_power_source {
-    TURN_ON_GRID,
-    TURN_ON_PV,
-    TURN_OFF_ALL
-};
-
-enum mode_operational {
-    MODE_DEFAULT,
-    MODE_BOOST,
-    MODE_AWAY,
-    MODE_NO_GRID
+  NS_OK,
+  NS_ERROR,
+  MSG_ERROR
 };
 
 struct Data {
-    uint8_t current_mode;
-    
-    float temp_max;
-    float temp_min;
-    float temp_scheduled;
-    float temp_boiler;
-    
-    bool  sun_relay_on;
-    bool  grid_relay_on;
-    
-    float pv_power;
-    float pv_voltage;
-    float pv_current;
-    float pv_ref_voltage;
-    float pv_ref_current;
-    bool  pv_available;
-    
-    float pwm_duty;
-    float airgap_temp;
-    float radiator_temp;
-    float device_temperature;
-    
-    uint8_t  mosfet_overheat_on;
+  uint8_t current_mode;
+
+  float temp_max;
+  float temp_min;
+  float temp_scheduled;
+  float temp_boiler;
+
+  bool  sun_relay_on;
+  bool  grid_relay_on;
+
+  float pv_power;
+  float pv_voltage;
+  float pv_current;
+  float pv_ref_voltage;
+  float pv_ref_current;
+  bool  pv_available;
+
+  float pwm_duty;
+  float airgap_temp;
+  float radiator_temp;
+  float device_temperature;
+
+  uint8_t  mosfet_overheat_on;
 };
 
 extern Data data;

@@ -2,8 +2,8 @@
 #define POWER_BOARD_H
 
 namespace power_board {
-    void setup(void);
-    void loop(void);
+  void setup(void);
+  void loop(void);
 }
 
 #endif

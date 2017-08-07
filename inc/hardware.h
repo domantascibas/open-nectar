@@ -2,8 +2,8 @@
 #define HARDWARE_H
 
 namespace hardware {
-    uint8_t setup();
-    void loop();
+  uint8_t setup();
+  void loop();
 }
 
 #endif

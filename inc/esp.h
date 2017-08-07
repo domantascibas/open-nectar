@@ -2,8 +2,8 @@
 #define ESP_H
 
 namespace esp {
-    void setup();
-    void loop();
+  void setup();
+  void loop();
 }
 
 #endif
