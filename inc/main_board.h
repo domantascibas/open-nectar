@@ -1,5 +1,5 @@
-#ifndef COMMS_H
-#define COMMS_H
+#ifndef MAIN_BOARD_H
+#define MAIN_BOARD_H
 
 //Commands
 #define KEYBOARD_STOP               0x30    //'0'
@@ -40,6 +40,11 @@
 #define INCOMING_DATA               0x25    //'%'
 #define WAITING_FOR_DATA            0x26    //'&'
 #define BAD_CMD                     0x21    //'!'
+
+namespace main_board {
+  void setup();
+  void loop();
+}
 
 #endif
 
