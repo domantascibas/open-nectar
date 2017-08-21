@@ -32,6 +32,8 @@ enum error_codes{
   OVERHEAT,
   RADIATOR_OVERHEAT,
   AIRGAP_OVERHEAT,
+  RESTART_REQUIRED = 0xAA,
+  BOILER_TEMP_SENSOR_ERROR
 };
 
 enum codes {
