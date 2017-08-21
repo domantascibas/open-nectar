@@ -1,11 +1,11 @@
 #include "mbed.h"
-#include "hardware.h"
-#include "data.h"
 #include "DS1820.h"
+#include "data.h"
+#include "hardware.h"
 
 Ticker update_temperature;
-DS1820  probe_boiler(PB_8);
-DS1820  probe_internal(PB_9);
+DS1820 probe_boiler(PB_8);
+DS1820 probe_internal(PB_9);
 
 namespace hardware {
   volatile bool update_temp = false;

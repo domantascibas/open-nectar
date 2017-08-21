@@ -3,18 +3,10 @@
 #include "power_board.h"
 #include "esp.h"
 #include "device_modes.h"
-
-static const PinName TX = PA_2;
-static const PinName RX = PA_3;
-RawSerial pc(TX, RX);
-
-void setup() {
-  pc.baud(115200);
-  pc.printf("[COMMS] Started\r\n");
-}
+#include "service.h"
 
 int main() {
-  setup();
+  service::setup();
   hardware::setup();
   wait(2.0);
   power_board::setup();
@@ -25,6 +17,7 @@ int main() {
     power_board::loop();
     esp::loop();
     device_modes::loop();
+    service::loop();
     __WFI();
   }
 }
