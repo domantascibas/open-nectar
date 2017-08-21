@@ -17,13 +17,16 @@ static const uint8_t DECREASE_PWM = 0x2D;           //'-'
 static const uint8_t CLEAR_ERROR = 0x20;            //'SPACE'
 
 Ticker get_data_tick;
+Timeout error_timeout;
 RawSerial power_board_serial(TX, RX);
 
 namespace power_board {
   volatile bool new_data = false;
   volatile bool new_ref_data = false;
+  volatile bool error_clearing = false;
   static const uint8_t num_chars = 128;
   static const uint8_t num_fields = 12;
+  static uint8_t error_counter = 0;
   char* power_response[num_fields];
   char received_chars[num_chars];
   
@@ -63,8 +66,17 @@ namespace power_board {
     comms::send_command(GET_DATA);
   }
   
+  void error_timeout_handler() {
+    comms::send_command(CLEAR_ERROR);
+    error_clearing = false;
   }
+  
+  void start() {
+    comms::send_command(POWER_BOARD_START);
   }
+  
+  void stop() {
+    comms::send_command(POWER_BOARD_STOP);
   }
 
   void setup() {
@@ -79,6 +91,19 @@ namespace power_board {
 
   void loop() {
     uint8_t message_count;
+    
+    if((data.error != 0x00) & (!error_clearing)) {
+      if(error_counter < 3) {
+        error_clearing = true;
+        error_timeout.attach(&error_timeout_handler, 600.0);
+        error_counter++;
+      } else {
+        comms::send_command(POWER_BOARD_STOP);
+        data.error = RESTART_REQUIRED;
+      }
+    } else if((data.error == 0x00) & (error_counter != 0)) {
+      error_counter = 0;
+    }
 
     if(new_data) {
       new_data = false;
