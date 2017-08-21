@@ -6,6 +6,8 @@
 static const PinName SUN = PB_3;
 static const PinName GRID = PB_4;
 static const PinName ZERO_CROSS = PB_5;
+static const float HIST = 5.0;
+
 Timer delay_t;
 DigitalOut relay_sun(SUN);
 DigitalOut relay_grid(GRID);
@@ -80,15 +82,25 @@ namespace device_modes {
       case MODE_DEFAULT:
         //printf("[MODE] DEFAULT\r\n");
         //printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d ", nectar_data.temperature_max, nectar_data.temperature_moment, nectar_data.temperature_scheduled, nectar_data.pv_available);
-        //Tcurrent < Tmax ? check if PV avail : do nothing
-        if(data.temp_boiler < data.temp_max) {
-          response = TURN_ON_PV;
-          if(data.temp_boiler < data.temp_scheduled) {
-            response = TURN_ON_GRID;
-          }
-        } else {
-          //printf("T >= T_MAX ");
+        if((data.temp_boiler < data.temp_min) || (data.temp_boiler > data.temp_max)) {
           response = TURN_OFF_ALL;
+          //data.error = BOILER_TEMP_SENSOR_ERROR;
+        } else {
+          response = TURN_ON_PV;
+          if(data.grid_relay_on) {
+            if(data.temp_boiler < (data.temp_scheduled + HIST)) {
+              response = TURN_ON_GRID;
+            } else {
+              response = TURN_ON_PV;
+            }
+          }
+          if(data.sun_relay_on) {
+            if(data.temp_boiler > (data.temp_scheduled - HIST)) {
+              response = TURN_ON_PV;
+            } else {
+              response = TURN_ON_GRID;
+            }
+          }
         }
       break;
 
