@@ -1,17 +1,6 @@
 #ifndef DATA_H
 #define DATA_H
 
-#define KEYBOARD_STOP               0x30    //'0'
-#define KEYBOARD_START              0x31    //'1'
-#define KEYBOARD_GET_DATA           0x32    //'2'
-#define KEYBOARD_GET_CALIB_DATA     0x33    //'3'
-#define KEYBOARD_PWM_OFF            0x38    //'8'
-#define KEYBOARD_PWM_ON             0x39    //'9'
-#define INCREASE_PWM_DUTY           0x2B    //'+'
-#define DECREASE_PWM_DUTY           0x2D    //'-'
-#define AUTO_MODE                   0x61    //'a'
-#define MANUAL_MODE                 0x6D    //'m'
-
 //Constants
 #define DRIVER_ON                   0
 #define DRIVER_OFF                  1
@@ -23,7 +12,7 @@
 #define HANDSHAKE                   0x5E
 
 enum error_codes{
-  SETUP_ERROR,
+  SETUP_ERROR = 0x01,
   STARTUP_ERROR,
   ADC_ERROR,                  //can't find both ADC sensors
   ADC_VOLTAGE_ERROR,
@@ -42,7 +31,7 @@ enum error_codes{
   BOARD_CONFIG_ERROR,
   OVERHEAT,
   RADIATOR_OVERHEAT,
-  AIRGAP_OVERHEAT
+  AIRGAP_OVERHEAT,
 };
 
 enum codes {
@@ -74,7 +63,8 @@ struct Data {
   float radiator_temp;
   float device_temperature;
 
-  uint8_t  mosfet_overheat_on;
+  uint8_t mosfet_overheat_on;
+  uint8_t error;
 };
 
 extern Data data;
