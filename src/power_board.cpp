@@ -1,23 +1,27 @@
 #include "mbed.h"
 #include "data.h"
-#include "power_board.h"
 #include "comms.h"
-
-Ticker get_data_tick;
+#include "power_board.h"
 
 static const PinName TX = PB_10;
 static const PinName RX = PB_11;
-RawSerial power_board_serial(TX, RX);
 
-static const uint8_t CMD_POWER_BOARD_START = 0x0F;
-static const uint8_t CMD_POWER_BOARD_STOP = 0xF0;
-static const uint8_t CMD_GET_REF_DATA = 0x43;       //'C'
-static const uint8_t CMD_GET_DATA = 0x32;           //'2'   0x44;           //'D'
-static const uint8_t CMD_PWM_ON = 0x41;             //'A'
-static const uint8_t CMD_PWM_OFF = 0x42;            //'B'
+static const uint8_t POWER_BOARD_STOP = 0x30;       //'0'
+static const uint8_t POWER_BOARD_START = 0x31;      //'1'
+static const uint8_t GET_DATA = 0x32;               //'2'
+static const uint8_t GET_REF_DATA = 0x33;           //'3'
+static const uint8_t ENTER_SERVICE_MODE = 0x6D;     //'m'
+
+static const uint8_t INCREASE_PWM = 0x2B;           //'+'
+static const uint8_t DECREASE_PWM = 0x2D;           //'-'
+static const uint8_t CLEAR_ERROR = 0x20;            //'SPACE'
+
+Ticker get_data_tick;
+RawSerial power_board_serial(TX, RX);
 
 namespace power_board {
   volatile bool new_data = false;
+  volatile bool new_ref_data = false;
   static const uint8_t num_chars = 128;
   static const uint8_t num_fields = 12;
   char* power_response[num_fields];
@@ -26,6 +30,7 @@ namespace power_board {
   void Rx_interrupt() {
     static const char start_marker = '#';
     static const char end_marker = '$';
+    static const char ref_data_marker = '&';
     static bool recv_in_progress = false;
     static uint8_t ndx = 0;
     
@@ -34,9 +39,13 @@ namespace power_board {
 
     if(recv_in_progress) {
       if(rc != end_marker) {
-        received_chars[ndx] = rc;
-        ndx++;
-        printf("%c", rc);
+        if(rc == ref_data_marker) {
+          new_ref_data = true;
+        } else {
+          received_chars[ndx] = rc;
+          ndx++;
+          printf("%c", rc);
+        }
       } else {
         while(power_board_serial.readable()) {
           power_board_serial.getc();
@@ -49,31 +58,22 @@ namespace power_board {
       recv_in_progress = true;
     }
   }
-  
-  uint8_t send_command(uint8_t command) {
-    //TODO add timeout after sending command
-    uint8_t response;
-    power_board_serial.putc(command);
-    response = power_board_serial.getc();
-    if(response == NACK) {
-      response = power_board_serial.getc();
-      comms::print_error(response);
-    }
-    return response;
-  }
-
-  void stop() {
-    send_command(CMD_POWER_BOARD_STOP);
-  }
 
   void get_data_ISR() {
-    send_command(CMD_GET_DATA);
+    comms::send_command(GET_DATA);
+  }
+  
+  }
+  }
   }
 
   void setup() {
-    power_board_serial.baud(19200);
-    send_command(CMD_POWER_BOARD_START);
-    get_data_tick.attach(&get_data_ISR, 1.0);
+    static const uint16_t baudrate = 19200;
+    static const float interval = 1.0;
+    
+    power_board_serial.baud(baudrate);
+    comms::send_command(POWER_BOARD_START);
+    get_data_tick.attach(&get_data_ISR, interval);
     power_board_serial.attach(&Rx_interrupt);
   }
 
@@ -82,22 +82,40 @@ namespace power_board {
 
     if(new_data) {
       new_data = false;
-      printf(" [PARSING] ");
-      message_count = comms::parse_fields(received_chars, power_response, num_fields, ',');
-      if(message_count == 6) {
-        __disable_irq();
-        data.pv_voltage = atof(power_response[0]);
-        data.pv_current = atof(power_response[1]);
-        data.pwm_duty = atof(power_response[2]);
-        data.radiator_temp = atof(power_response[3]);
-        data.mosfet_overheat_on = atoi(power_response[4]);
-        data.airgap_temp = atof(power_response[5]);
-
-        data.pv_power = data.pv_voltage * data.pv_current;
-        __enable_irq();
-        printf("parsed\r\n");
+      if(new_ref_data) {
+        new_ref_data = false;
+        printf(" [PARSING REF] ");
+        message_count = comms::parse_fields(received_chars, power_response, num_fields, ',');
+        if(message_count == 2) {
+          __disable_irq();
+          data.pv_ref_voltage = atof(power_response[0]);
+          data.pv_ref_current = atof(power_response[1]);
+          __enable_irq();
+          printf("parsed\r\n");
+        
+        } else {
+          printf("[ERROR] partial message received\r\n");
+        }
       } else {
-        printf("[ERROR] partial message received\r\n");
+        printf(" [PARSING] ");
+        message_count = comms::parse_fields(received_chars, power_response, num_fields, ',');
+        if(message_count == 7) {
+          __disable_irq();
+          data.pv_voltage = atof(power_response[0]);
+          data.pv_current = atof(power_response[1]);
+          data.pwm_duty = atof(power_response[2]);
+          data.radiator_temp = atof(power_response[3]);
+          data.mosfet_overheat_on = atoi(power_response[4]);
+          data.airgap_temp = atof(power_response[5]);
+          data.error = atoi(power_response[6]);
+          
+          data.pv_power = data.pv_voltage * data.pv_current;
+          __enable_irq();
+          printf("parsed\r\n");
+          
+        } else {
+          printf("[ERROR] partial message received\r\n");
+        }
       }
     }
   }

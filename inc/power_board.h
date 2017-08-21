@@ -2,8 +2,11 @@
 #define POWER_BOARD_H
 
 namespace power_board {
-  void setup(void);
-  void loop(void);
+  void setup();
+  void loop();
+  void get_data_ISR();
+  void start();
+  void stop();
 }
 
 #endif
