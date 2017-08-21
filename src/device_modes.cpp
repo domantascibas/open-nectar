@@ -1,11 +1,15 @@
 #include "mbed.h"
 #include "device_modes.h"
+#include "power_board.h"
 #include "data.h"
 
+static const PinName SUN = PB_3;
+static const PinName GRID = PB_4;
+static const PinName ZERO_CROSS = PB_5;
 Timer delay_t;
-DigitalOut relay_sun(PB_3);
-DigitalOut relay_grid(PB_4);
-DigitalIn zero_cross(PB_5);
+DigitalOut relay_sun(SUN);
+DigitalOut relay_grid(GRID);
+DigitalIn zero_cross(ZERO_CROSS);
 
 namespace device_modes {
   enum power_source {
@@ -43,11 +47,15 @@ namespace device_modes {
     switch(state) {
       default:
       case TURN_OFF_ALL:
+        power_board::stop();
+        while(data.pv_current > 0.05) {}
         relay_sun = false;
         grid_relay_state(false);
       break;
 
       case TURN_ON_GRID:
+        power_board::stop();
+        while(data.pv_current > 0.05) {}
         relay_sun = false;
         delay(1.0);
         grid_relay_state(true);
@@ -57,6 +65,8 @@ namespace device_modes {
         grid_relay_state(false);
         delay(1.0);
         relay_sun = true;
+        delay(1.0);
+        power_board::start();
       break;
     }
     data.grid_relay_on = relay_grid;
