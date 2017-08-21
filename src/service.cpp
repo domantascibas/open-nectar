@@ -1,16 +1,110 @@
 #include "mbed.h"
 #include "data.h"
 #include "comms.h"
+#include "service.h"
 #include "power_board.h"
 
-//extern RawSerial comms_pc;
-//extern RawSerial comms_power;
-//extern RawSerial comms_esp;
+static const PinName TX = PA_2;
+static const PinName RX = PA_3;
 
-//extern DigitalOut relay_sun;
-//extern DigitalOut relay_grid;
+/*
+static const uint8_t POWER_BOARD_STOP = 0x30;   //'0'
+static const uint8_t POWER_BOARD_START = 0x31;  //'1'
+static const uint8_t GET_DATA = 0x32;           //'2'
+static const uint8_t GET_REF_DATA = 0x33;       //'3'
+static const uint8_t GET_PWM = 0x37;            //'7'
+static const uint8_t PWM_OFF = 0x38;            //'8'
+static const uint8_t PWM_ON = 0x39;             //'9'
+static const uint8_t INCREASE_PWM = 0x2B;       //'+'
+static const uint8_t DECREASE_PWM = 0x2D;       //'-'
+static const uint8_t AUTO_MODE = 0x61;          //'a'
+static const uint8_t MANUAL_MODE = 0x6D;        //'m'
+*/
+
+static const uint8_t POWER_BOARD_STOP = 0x30;       //'0'
+static const uint8_t POWER_BOARD_START = 0x31;      //'1'
+static const uint8_t GET_DATA = 0x32;               //'2'
+static const uint8_t GET_REF_DATA = 0x33;           //'3'
+static const uint8_t ENTER_SERVICE_MODE = 0x6D;     //'m'
+
+static const uint8_t INCREASE_PWM = 0x2B;           //'+'
+static const uint8_t DECREASE_PWM = 0x2D;           //'-'
+static const uint8_t CLEAR_ERROR = 0x20;            //'SPACE'
+
+RawSerial pc(TX, RX);
+extern Ticker get_data_tick;
+static const float interval = 1.0;
 
 namespace service {
+  volatile char command = NULL;
+  
+  void Rx_interrupt() {
+    //comms::send_command(ENTER_SERVICE_MODE);
+    command = pc.getc();
+    pc.putc(command);
+  }
+  
+  void setup() {
+    static const uint32_t baudrate = 115200;
+    
+    pc.baud(baudrate);
+    pc.printf("[COMMS] Started\r\n");
+    pc.attach(&Rx_interrupt);
+  }
+  
+  void loop() {
+    if(command != NULL) {
+      switch(command) {
+        case POWER_BOARD_STOP:
+          //printf("stopping\r\n");
+          comms::send_command(POWER_BOARD_STOP);
+        break;
+        
+        case POWER_BOARD_START:
+          //printf("starting\r\n");
+          comms::send_command(POWER_BOARD_START);
+          get_data_tick.attach(&power_board::get_data_ISR, interval);
+        break;
+        
+        case CLEAR_ERROR:
+          //printf("clearing error\r\n");
+          comms::send_command(CLEAR_ERROR);
+        break;
+        
+        case ENTER_SERVICE_MODE:
+          //printf("entering service mode\r\n");
+          comms::send_command(ENTER_SERVICE_MODE);
+          get_data_tick.detach();
+        break;
+        
+        case INCREASE_PWM:
+          //printf("increase pwm\r\n");
+          comms::send_command(INCREASE_PWM);
+        break;
+        
+        case DECREASE_PWM:
+          //printf("decrease pwm\r\n");
+          comms::send_command(DECREASE_PWM);
+        break;
+        
+        case GET_DATA:
+          //printf("get data\r\n");
+          comms::send_command(GET_DATA);
+        break;
+        
+        case GET_REF_DATA:
+          //printf("get ref data\r\n");
+          comms::send_command(GET_REF_DATA);
+        break;
+        
+        default:
+          printf("Unrecognized command 0x%X\r\n", command);
+        break;
+      }
+      command = NULL;
+    }
+  }
+  
   uint8_t get_calibration_data(void) {
   //        uint8_t response = comms::send_cmd_power(KEYBOARD_GET_CALIB_DATA);
   //        if(response == INCOMING_DATA) {

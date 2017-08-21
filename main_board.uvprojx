@@ -410,9 +410,14 @@
               <FilePath>.\src\comms.cpp</FilePath>
             </File>
             <File>
-              <FileName>modes.cpp</FileName>
+              <FileName>device_modes.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\modes.cpp</FilePath>
+              <FilePath>.\src\device_modes.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>service.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\service.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1960,9 +1965,14 @@
               <FilePath>.\inc\comms.h</FilePath>
             </File>
             <File>
-              <FileName>modes.h</FileName>
+              <FileName>device_modes.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\inc\modes.h</FilePath>
+              <FilePath>.\inc\device_modes.h</FilePath>
+            </File>
+            <File>
+              <FileName>service.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\service.h</FilePath>
             </File>
           </Files>
         </Group>
