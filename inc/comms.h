@@ -3,6 +3,7 @@
 
 namespace comms {
   uint8_t parse_fields(char*, char**, uint32_t, char);
+  uint8_t send_command(uint8_t);
   void print_error(uint8_t);
 }
 

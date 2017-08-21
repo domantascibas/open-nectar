@@ -3,6 +3,8 @@
 #include "comms.h"
 #include <string>
 
+extern RawSerial power_board_serial;
+
 namespace comms {
   uint8_t parse_fields(char* inputBuffer, char** pFields, uint32_t numFields, char delimiterChars) {
     char* pString = inputBuffer;
@@ -20,16 +22,29 @@ namespace comms {
     }
     return length;
   }
+  
+  uint8_t send_command(uint8_t command) {
+    //TODO add timeout after sending command
+    uint8_t response;
+    power_board_serial.putc(command);
+    response = power_board_serial.getc();
+    if(response == NACK) {
+      response = power_board_serial.getc();
+      data.error = response;
+      comms::print_error(response);
+    }
+    return response;
+  }
 
   void print_error(uint8_t error) {
     printf("[ERROR] %d\r\n", error);
     switch(error) {
       case SETUP_ERROR:
-
+        printf("[ERROR] SETUP ERROR\r\n");
       break;
 
       case STARTUP_ERROR:
-
+        printf("[ERROR] STARTUP ERROR\r\n");
       break;
 
       case ADC_ERROR:        //can't find both ADC sensors
@@ -45,7 +60,7 @@ namespace comms {
       break;
 
       case ADC_SETUP_ERROR:
-
+        printf("[ERROR] ADC SETUP ERROR\r\n");
       break;
 
       case FLASH_ACCESS_ERROR:
@@ -77,6 +92,7 @@ namespace comms {
       break;
 
       case I2C_ERROR:
+        printf("[ERROR] I2C ERROR\r\n");
       break;
 
       case OVERHEAT:
@@ -92,6 +108,7 @@ namespace comms {
       break;
 
       default:
+        printf("[ERROR] OTHER ERROR\r\n");
       break;
     }
   }
