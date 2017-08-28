@@ -48,17 +48,18 @@ struct Data {
   float temp_max;
   float temp_min;
   float temp_scheduled;
+  float temp_away;
   float temp_boiler;
 
-  bool  sun_relay_on;
-  bool  grid_relay_on;
+  bool sun_relay_on;
+  bool grid_relay_on;
+  bool generator_on;
 
   float pv_power;
   float pv_voltage;
   float pv_current;
   float pv_ref_voltage;
   float pv_ref_current;
-  bool  pv_available;
 
   float pwm_duty;
   float airgap_temp;
@@ -67,6 +68,7 @@ struct Data {
 
   uint8_t mosfet_overheat_on;
   uint8_t error;
+  bool calibrated;
 };
 
 extern Data data;
