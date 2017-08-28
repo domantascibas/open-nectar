@@ -4,6 +4,7 @@
 namespace hardware {
   uint8_t setup();
   void loop();
+  extern bool available;
 }
 
 #endif

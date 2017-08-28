@@ -2,6 +2,8 @@
 #include "data.h"
 #include "comms.h"
 #include "power_board.h"
+#include "device_modes.h"
+#include "hardware.h"
 
 static const PinName TX = PB_10;
 static const PinName RX = PB_11;
@@ -55,10 +57,13 @@ namespace power_board {
         }
         ndx = 0;
         recv_in_progress = false;
+        hardware::available = true;
         new_data = true;
+        printf("\r\n");
       }
     } else if(rc == start_marker){
       recv_in_progress = true;
+      hardware::available = false;
     }
   }
 

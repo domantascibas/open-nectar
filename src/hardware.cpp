@@ -9,6 +9,7 @@ DS1820 probe_internal(PB_9);
 
 namespace hardware {
   volatile bool update_temp = false;
+  bool available = true;
 
   void update() {
     update_temp = true;
@@ -28,17 +29,19 @@ namespace hardware {
   }
 
   void loop() {
-    if(update_temp) {
+    if(update_temp && available) {
       update_temp = false;
       
       __disable_irq();
-      data.temp_boiler = probe_boiler.read();
-      data.device_temperature = probe_internal.read();
+      probe_boiler.read(data.temp_boiler);
+      probe_boiler.startConversion();
+      
+      probe_internal.read(data.device_temperature);
+      probe_internal.startConversion();
       __enable_irq();
 
-      probe_boiler.startConversion();
-      probe_internal.startConversion();
       printf("[TEMPERATURE] boiler %.2f\r\n", data.temp_boiler);
+      printf("[TEMPERATURE] internal %.2f\r\n", data.device_temperature);
     }
   }
 }
