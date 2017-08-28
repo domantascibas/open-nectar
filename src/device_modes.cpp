@@ -16,7 +16,7 @@ DigitalIn zero_cross(ZERO_CROSS);
 namespace device_modes {
   enum power_source {
     TURN_ON_GRID,
-    TURN_ON_PV,
+    TURN_ON_SUN,
     TURN_OFF_ALL
   };
 
@@ -46,57 +46,75 @@ namespace device_modes {
   uint8_t response = TURN_OFF_ALL;
 
   uint8_t set_relays(uint8_t state) {
-    switch(state) {
-      default:
-      case TURN_OFF_ALL:
-        power_board::stop();
-        while(data.pv_current > 0.05) {}
-        relay_sun = false;
-        grid_relay_state(false);
-      break;
+    static uint8_t last_state;
+//    if(state != last_state) {
+      switch(state) {
+        default:
+        case TURN_OFF_ALL:
+          power_board::stop();
+          //while(data.pv_current > 0.1) {}
+          delay(1.0);
+          relay_sun = false;
+          grid_relay_state(false);
+        break;
 
-      case TURN_ON_GRID:
-        power_board::stop();
-        while(data.pv_current > 0.05) {}
-        relay_sun = false;
-        delay(1.0);
-        grid_relay_state(true);
-      break;
+        case TURN_ON_GRID:
+          power_board::stop();
+          delay(1.0);
+          //while(data.pv_current > 0.1) {}
+          relay_sun = false;
+          delay(1.0);
+          grid_relay_state(true);
+        break;
 
-      case TURN_ON_PV:
-        grid_relay_state(false);
-        delay(1.0);
-        relay_sun = true;
-        delay(1.0);
-        power_board::start();
-      break;
-    }
-    data.grid_relay_on = relay_grid;
-    data.sun_relay_on = relay_sun;
+        case TURN_ON_SUN:
+          grid_relay_state(false);
+          if((!data.generator_on) && (data.error == 0)) {
+            delay(1.0);
+            relay_sun = true;
+            delay(1.0);
+            power_board::start();
+          }
+        break;
+      }
+      __disable_irq();
+      data.grid_relay_on = relay_grid;
+      data.sun_relay_on = relay_sun;
+      __enable_irq();
+//    }
+//    last_state = state;
     return 0;   //TODO change to meaningful return
   }
 
   void loop(void) {
+    __disable_irq();
+    float temp_boiler = data.temp_boiler;
+    float temp_min = data.temp_min;
+    float temp_max = data.temp_max;
+    float temp_scheduled = data.temp_scheduled;
+    float temp_away = data.temp_away;
+    __enable_irq();
+    
     switch(data.current_mode) {
       default:  //mode is any other value than the ones below
       case MODE_DEFAULT:
         //printf("[MODE] DEFAULT\r\n");
         //printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d ", nectar_data.temperature_max, nectar_data.temperature_moment, nectar_data.temperature_scheduled, nectar_data.pv_available);
-        if((data.temp_boiler < data.temp_min) || (data.temp_boiler > data.temp_max)) {
+        if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
           response = TURN_OFF_ALL;
           //data.error = BOILER_TEMP_SENSOR_ERROR;
         } else {
-          response = TURN_ON_PV;
-          if(data.grid_relay_on) {
-            if(data.temp_boiler < (data.temp_scheduled + HIST)) {
+          response = TURN_ON_SUN;
+          if(relay_grid) {
+            if(temp_boiler < (temp_scheduled + HIST)) {
               response = TURN_ON_GRID;
             } else {
-              response = TURN_ON_PV;
+              response = TURN_ON_SUN;
             }
           }
-          if(data.sun_relay_on) {
-            if(data.temp_boiler > (data.temp_scheduled - HIST)) {
-              response = TURN_ON_PV;
+          if(relay_sun) {
+            if(temp_boiler > (temp_scheduled - HIST)) {
+              response = TURN_ON_SUN;
             } else {
               response = TURN_ON_GRID;
             }
@@ -105,40 +123,51 @@ namespace device_modes {
       break;
 
       case MODE_BOOST:
-        //printf("[ MODE ] BOOST\n\r");
-        //Tcurrent < Tmax ? use GRID : do nothing
-        if(data.temp_boiler < data.temp_max) {
-          response = TURN_ON_GRID;
-        } else {
+        if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
           response = TURN_OFF_ALL;
+          //data.error = BOILER_TEMP_SENSOR_ERROR;
+          if(temp_boiler > temp_max) {
+            //return to default mode after reaching temp_max
+            data.current_mode = MODE_DEFAULT;
+          }
+        } else {
+          response = TURN_ON_GRID;
         }
       break;
 
       case MODE_AWAY:
-        //printf("[ MODE ] AWAY\n\r");
-        //pv available ? use PV : check Tcurrent < Tmax
-        if(data.pv_available) {
-            response = TURN_ON_PV;
+        if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
+          response = TURN_OFF_ALL;
+          //data.error = BOILER_TEMP_SENSOR_ERROR;
         } else {
-          //Tcurrent > Tmin ? do nothing : use GRID
-          if(data.temp_boiler > data.temp_min) {
-            response = TURN_OFF_ALL;
-          } else {
-            response = TURN_ON_GRID;
+          response = TURN_ON_SUN;
+          if(relay_grid) {
+            if(temp_boiler < (temp_away + HIST)) {
+              response = TURN_ON_GRID;
+            } else {
+              response = TURN_ON_SUN;
+            }
+          }
+          if(relay_sun) {
+            if(temp_boiler > (temp_away - HIST)) {
+              response = TURN_ON_SUN;
+            } else {
+              response = TURN_ON_GRID;
+            }
           }
         }
       break;
 
       case MODE_NO_GRID:
-        //printf("[ MODE ] NO GRID\n\r");
-        if(data.pv_available) {
-          response = TURN_ON_PV;
-        } else {
+        if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
           response = TURN_OFF_ALL;
+          //data.error = BOILER_TEMP_SENSOR_ERROR;
+        } else {
+          response = TURN_ON_SUN;
         }
       break;
     }
-    set_relays(response);
+    //set_relays(response);
   }
 }
 
