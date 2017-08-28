@@ -93,9 +93,11 @@ namespace power_board {
     uint8_t message_count;
     
     if((data.error != 0x00) & (!error_clearing)) {
-      if(error_counter < 3) {
+      if(error_counter < 5) {
         error_clearing = true;
-        error_timeout.attach(&error_timeout_handler, 600.0);
+        comms::print_error(data.error);
+        printf("ERROR COUNTER ++\r\n");
+        error_timeout.attach(&error_timeout_handler, 10.0);
         error_counter++;
       } else {
         comms::send_command(POWER_BOARD_STOP);
@@ -103,6 +105,7 @@ namespace power_board {
       }
     } else if((data.error == 0x00) & (error_counter != 0)) {
       error_counter = 0;
+      printf("ERROR COUNTER RESET\r\n");
     }
 
     if(new_data) {
@@ -124,7 +127,7 @@ namespace power_board {
       } else {
         printf(" [PARSING] ");
         message_count = comms::parse_fields(received_chars, power_response, num_fields, ',');
-        if(message_count == 7) {
+        if(message_count == 9) {
           __disable_irq();
           data.pv_voltage = atof(power_response[0]);
           data.pv_current = atof(power_response[1]);
@@ -133,6 +136,8 @@ namespace power_board {
           data.mosfet_overheat_on = atoi(power_response[4]);
           data.airgap_temp = atof(power_response[5]);
           data.error = atoi(power_response[6]);
+          data.calibrated = atoi(power_response[7]);
+          data.generator_on = atoi(power_response[8]);
           
           data.pv_power = data.pv_voltage * data.pv_current;
           __enable_irq();
