@@ -1,5 +1,6 @@
 #include "mbed.h"
 #include "pwm.h"
+#include "device_modes.h"
 #include "data.h"
 
 static const PinName PWM = PB_1;
@@ -41,8 +42,9 @@ namespace pwm {
 
     if((data.moment_voltage >= VOLTAGE_LIMIT) || (data.moment_current >= CURRENT_LIMIT)) {
       shutdown = DRIVER_OFF;
-    } else if(data.moment_current < 0.5 || ) {
-      
+    } else if((data.moment_current < 0.3) && (pwm_duty > 0.35)) {
+      reset();
+      data.error = NO_LOAD;
     } else {
       shutdown = DRIVER_ON;
       moment_power = data.moment_current * data.moment_voltage;
@@ -64,9 +66,9 @@ namespace pwm {
         pwm_duty += PWM_DUTY_STEP_CHANGE;
       }
 
-      if(data.moment_current < 0.5) {
-        pwm_duty -= 0.25;
-      }
+      //if(data.moment_current < 0.3) {
+      //  pwm_duty -= 0.25;
+      //}
       
       pwm_duty = clamp(pwm_duty, PWM_MIN, PWM_MAX);
       pwm_gen.write(pwm_duty);
