@@ -86,9 +86,9 @@ namespace main_board {
         
         case GET_DATA:
           main_board_serial.putc(ACK);
-          main_board_serial.printf("#%.2f,%.2f,%.2f,%.2f,%d,%.2f,%d$\n",
+          main_board_serial.printf("#%.2f,%.2f,%.2f,%.2f,%d,%.2f,%d,%d,%d$\n",
             data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature,
-            data.mosfet_overheat_on, data.airgap_temperature, data.error
+            data.mosfet_overheat_on, data.airgap_temperature, data.error, data.calibrated, data.generator_on
           );
           printf("[SENT] %f, %f, %f, %f, %d, %f, 0x%X\r\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, data.mosfet_overheat_on, data.airgap_temperature, data.error);
         break;

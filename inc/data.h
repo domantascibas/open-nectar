@@ -63,6 +63,7 @@ struct Data {
 
   bool mosfet_overheat_on;
   bool calibrated;
+  bool generator_on;
   
   uint8_t error;
 };
