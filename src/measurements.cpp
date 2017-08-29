@@ -26,7 +26,7 @@ static const uint8_t RUNNING_SAMPLES = 128;
 static const uint16_t CALIBRATION_SAMPLES = 1024;
 
 static const float INPUT_VDIV = 4.1/400;
-static const float CURRENT_OFFSET = 0.2;
+static const float CURRENT_OFFSET = 0.00;
 static const float V_REF = 3.00;
 
 Ticker measure_voltage;
@@ -63,7 +63,7 @@ namespace sensors {
 
     error = i2c.write(addr, cmd, 0);
     if(error == 0) {
-      //printf("[ok] ADC at 0x%X found\r\n", addr);
+      printf("[ok] ADC at 0x%X found\r\n", addr);
       i2c.write(addr, cmd, 2, false);
       return NS_OK;
     } else {
@@ -115,7 +115,7 @@ namespace sensors {
   void get_voltage() {
     float voltage;
     voltage = (sample(USENSE_ADDR, RUNNING_SAMPLES) - data.reference_voltage) / INPUT_VDIV;
-    if(voltage > VOLTAGE_LIMIT) {
+    if(voltage >= VOLTAGE_LIMIT) {
       data.moment_voltage = voltage;
       data.error = DC_OVER_VOLTAGE;
       printf("[ERROR] DC Over-Voltage %7.2fV\r\n", data.moment_voltage);
@@ -131,8 +131,8 @@ namespace sensors {
   
   void get_current() {
     float current;
-    current = (sample(ISENSE_ADDR, RUNNING_SAMPLES) - data.reference_current) * 5.000;// - CURRENT_OFFSET;
-    if(current > CURRENT_LIMIT) {
+    current = (sample(ISENSE_ADDR, RUNNING_SAMPLES) - data.reference_current) * 5.000 - CURRENT_OFFSET;
+    if(current >= CURRENT_LIMIT) {
       data.moment_current = current;
       data.error = DC_OVER_CURRENT;
       printf("[ERROR] DC Over-Current %7.2fA\r\n", data.moment_current);
@@ -206,8 +206,10 @@ namespace sensors {
       measure_v = false;
       get_voltage();
       if(data.error != 0x00) {
-        printf("[ERROR] stopping device 0x%X\r\n", data.error);
-        device_modes::stop();
+        if(data.current_state != STOP) {
+          printf("[ERROR] stopping device 0x%X\r\n", data.error);
+          device_modes::stop();
+        }
         return;
       }
       //printf("V %.2fV\r\n", data.moment_voltage);
