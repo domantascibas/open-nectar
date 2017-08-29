@@ -4,6 +4,7 @@
 #include "power_board.h"
 #include "device_modes.h"
 #include "hardware.h"
+#include "stat_counter.h"
 
 static const PinName TX = PB_10;
 static const PinName RX = PB_11;
@@ -147,7 +148,7 @@ namespace power_board {
           data.pv_power = data.pv_voltage * data.pv_current;
           __enable_irq();
           printf("parsed\r\n");
-          
+          stat_counter::hourly_stats();
         } else {
           printf("[ERROR] partial message received\r\n");
         }
