@@ -167,7 +167,7 @@ namespace device_modes {
         }
       break;
     }
-    //set_relays(response);
+    set_relays(response);
   }
 }
 
