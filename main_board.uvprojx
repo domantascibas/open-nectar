@@ -419,6 +419,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\service.cpp</FilePath>
             </File>
+            <File>
+              <FileName>stat_counter.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\stat_counter.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1973,6 +1978,11 @@
               <FileName>service.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\service.h</FilePath>
+            </File>
+            <File>
+              <FileName>stat_counter.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\stat_counter.h</FilePath>
             </File>
           </Files>
         </Group>
