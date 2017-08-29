@@ -69,6 +69,8 @@ struct Data {
   uint8_t mosfet_overheat_on;
   uint8_t error;
   bool calibrated;
+  
+  double hourly_kwh;
 };
 
 extern Data data;
