@@ -4,6 +4,8 @@
 
 Timer hour_stat_timer;
 
+static const float boiler_power = 2.0;
+
 namespace stat_counter {
   void hourly_stats() {
     hour_stat_timer.stop();
@@ -13,6 +15,8 @@ namespace stat_counter {
     hour_stat_timer.reset();
     hour_stat_timer.start();
   }
+  
+  
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
