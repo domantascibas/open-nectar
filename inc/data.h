@@ -7,7 +7,7 @@
 #define DRIVER_ON         0
 #define DRIVER_OFF        1
 
-const float VOLTAGE_LIMIT = 350.0;
+const float VOLTAGE_LIMIT = 400.0;
 const float CURRENT_LIMIT = 10.0;
 
 enum error_codes{

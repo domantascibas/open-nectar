@@ -6,6 +6,8 @@
 #include "measurements.h"
 #include "data.h"
 
+//PC_9 voltage monitor. RESET active - low. normal operation - 1, when <8.5V - 0.
+
 uint8_t self_check() {
   
 }
