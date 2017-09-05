@@ -21,14 +21,15 @@ float radiator_temp = 0.0;
 float device_temperature = 0.0;
 uint8_t mosfet_overheat_on = false;
 bool calibrated = false;
-double hourly_kwh = 0.0;
+double solar_kwh = 0.0;
+double grid_kwh = 0.0;
 
 Data data = { 
   current_mode, temp_max, temp_min, temp_scheduled, temp_away, temp_boiler,
   sun_relay_on, grid_relay_on, generator_on,
   pv_power, pv_voltage, pv_current, pv_ref_voltage, pv_ref_current, pwm_duty,
   airgap_temp, radiator_temp, device_temperature, mosfet_overheat_on,
-  0x00, calibrated, hourly_kwh
+  0x00, calibrated, solar_kwh, grid_kwh
 };
 //Data data = { 0, 65.0, 5.0, 40.0, 0.0, false, false, 0.0, 0.0, 0.0, 0.0, 0.0, false, 0.1, 0.0, 0.0, 0.0, false, 0x00 };
 

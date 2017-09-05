@@ -70,7 +70,8 @@ struct Data {
   uint8_t error;
   bool calibrated;
   
-  double hourly_kwh;
+  double solar_kwh;
+  double grid_kwh;
 };
 
 extern Data data;
