@@ -148,7 +148,7 @@ namespace power_board {
           data.pv_power = data.pv_voltage * data.pv_current;
           __enable_irq();
           printf("parsed\r\n");
-          stat_counter::hourly_stats();
+          stat_counter::increase();
         } else {
           printf("[ERROR] partial message received\r\n");
         }

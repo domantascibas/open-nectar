@@ -2,7 +2,7 @@
 #define STAT_COUNTER_H
 
 namespace stat_counter {    
-    void hourly_stats();
+    void increase();
 }
 
 #endif
