@@ -1,0 +1,3 @@
+[submodule "submodules/nectar_serial"]
+	path = submodules/nectar_serial
+	url = https://paplaukias@bitbucket.org/nectarsun/nectar_serial.git
