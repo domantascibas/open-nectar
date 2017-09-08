@@ -15,7 +15,6 @@ int main() {
   while(1) {
     hardware::loop();
     power_board::loop();
-    esp::loop();
     device_modes::loop();
     service::loop();
     __WFI();
