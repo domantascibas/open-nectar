@@ -8,7 +8,6 @@ namespace esp {
   extern nectar_contract::NectarStatus status;
   
   void setup();
-  void loop();
 }
 
 class mbedStream : public IStreamDelegate {
@@ -24,8 +23,9 @@ public:
   void Rx_interrupt();
 
   virtual void write(uint8_t byte);
-  virtual void received_main_board_stats(const nectar_contract::MainBoardStats &stats);
-  virtual void received_esp_status(const nectar_contract::NectarStatus &status);
+  virtual void received_cmd_stats();
+  virtual void received_status(const nectar_contract::NectarStatus &status);
+  virtual void received_time(const nectar_contract::NectarTime &time);
   NectarStream stream;
 
 private:
