@@ -1,3 +1,6 @@
 [submodule "submodules/nectar_serial"]
 	path = submodules/nectar_serial
 	url = https://paplaukias@bitbucket.org/nectarsun/nectar_serial.git
+[submodule "submodules/device_menu"]
+	path = submodules/device_menu
+	url = https://paplaukias@bitbucket.org/nectarsun/device_menu.git

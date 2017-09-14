@@ -4,8 +4,10 @@
 #include "esp.h"
 #include "device_modes.h"
 #include "service.h"
+#include "menu_service.h"
 
 int main() {
+  menu_service::setup();
   service::setup();
   hardware::setup();
   wait(2.0);
