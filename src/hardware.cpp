@@ -9,32 +9,32 @@ DS1820 probe_internal(PB_9);
 
 namespace hardware {
   volatile bool update_temp = false;
-  bool available = true;
+//  bool available = true;
 
   void update() {
     update_temp = true;
   }
 
   uint8_t setup() {
-    if(probe_boiler.isPresent()) {
+//    if(probe_boiler.isPresent()) {
       probe_boiler.begin();
       probe_boiler.startConversion();
-      if(probe_internal.isPresent()) {
+//      if(probe_internal.isPresent()) {
         probe_internal.begin();
         probe_internal.startConversion();
 
         wait(0.5);
         update_temperature.attach(&update, 5.0);
-      } else {
-        data.error = INTERNAL_TEMP_SENSOR_NOT_PRESENT;
-      }
-    } else {
-      data.error = WATER_TEMP_SENSOR_NOT_PRESENT;
-    }
+//      } else {
+//        data.error = INTERNAL_TEMP_SENSOR_NOT_PRESENT;
+//      }
+//    } else {
+//      data.error = WATER_TEMP_SENSOR_NOT_PRESENT;
+//    }
   }
 
   void loop() {
-    if(update_temp && available) {
+    if(update_temp) {// && available) {
       update_temp = false;
       
       __disable_irq();
