@@ -4,6 +4,7 @@
 namespace hardware {
   extern bool available;
   void setup();
+  void updateTemperature();
 }
 
 #endif

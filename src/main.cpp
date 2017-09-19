@@ -4,26 +4,26 @@
 #include "esp.h"
 #include "device_modes.h"
 #include "service.h"
-#include "screen.h"
-//#include "menu_service.h"
+#include "menu_service.h"
 
 int main() {
-//  menu_service::setup();
+  menu_service::setup();
   service::setup();
-  screen::setup();
   hardware::setup();
   wait(2.0);
 //  power_board::setup();
-//  esp::setup();
+  esp::setup();
 
   while(1) {
-    screen::loop();
-//    hardware::loop();
+    if(menu_service::updated) {
+      menu_service::updateScreen();
+    }
+    service::loop();
+    hardware::updateTemperature();
 //    power_board::loop();
 //    device_modes::loop();
-//    service::loop();
-//    __WFI();
-    wait(1);
+
+    __WFI();
   }
 }
 
