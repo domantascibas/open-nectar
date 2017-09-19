@@ -3,7 +3,7 @@
 #include "data.h"
 #include "hardware.h"
 
-Ticker update_temperature;
+Ticker update_tick;
 DS1820 probe_boiler(PB_8);
 DS1820 probe_internal(PB_9);
 
@@ -11,11 +11,21 @@ namespace hardware {
   volatile bool update_temp = false;
 //  bool available = true;
 
-  void update() {
-    update_temp = true;
-  }
+  void updateTemperature() {      
+    __disable_irq();
+    //probe_boiler.read(data.temp_boiler);
+    //probe_boiler.startConversion();
+    data.temp_boiler = data.temp_boiler + 1;
+    
+    //probe_internal.read(data.device_temperature);
+    //probe_internal.startConversion();
+    __enable_irq();
 
-  uint8_t setup() {
+    printf("[TEMPERATURE] boiler %.2f\r\n", data.temp_boiler);
+    printf("[TEMPERATURE] internal %.2f\r\n", data.device_temperature);
+  }
+  
+  void setup() {
 //    if(probe_boiler.isPresent()) {
       probe_boiler.begin();
       probe_boiler.startConversion();
@@ -24,30 +34,13 @@ namespace hardware {
         probe_internal.startConversion();
 
         wait(0.5);
-        update_temperature.attach(&update, 5.0);
+        update_tick.attach(&updateTemperature, 5.0);
 //      } else {
 //        data.error = INTERNAL_TEMP_SENSOR_NOT_PRESENT;
 //      }
 //    } else {
 //      data.error = WATER_TEMP_SENSOR_NOT_PRESENT;
 //    }
-  }
-
-  void loop() {
-    if(update_temp) {// && available) {
-      update_temp = false;
-      
-      __disable_irq();
-      probe_boiler.read(data.temp_boiler);
-      probe_boiler.startConversion();
-      
-      probe_internal.read(data.device_temperature);
-      probe_internal.startConversion();
-      __enable_irq();
-
-      printf("[TEMPERATURE] boiler %.2f\r\n", data.temp_boiler);
-      printf("[TEMPERATURE] internal %.2f\r\n", data.device_temperature);
-    }
   }
 }
 

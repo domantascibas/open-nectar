@@ -1,7 +1,7 @@
 #include "mbed.h"
 #include "data.h"
 #include "Adafruit_SSD1306.h"
-#include "OpenSansLight44pt.h"
+#include "../Fonts/OpenSansLight44pt.h"
 
 InterruptIn keyUp(PA_5);        //KEY_L
 InterruptIn keyCenter(PA_6);    //KEY_C
@@ -20,6 +20,7 @@ Adafruit_SSD1306_I2c oled(oled_i2c, PC_13);
 
 namespace screen {
   void setup() {
+    oled.setCursor(0,0);
     oled.setTextColor(WHITE);
     oled.clearDisplay();
     oled.printf("Gathering Nectar...");
@@ -32,6 +33,7 @@ namespace screen {
     oled.setFont(&OpenSans_Light44pt7b);
     oled.setCursor(15, -56);
     oled.printf("%2.0f", data.temp_boiler);
+    printf("%2.0f\r\n", data.temp_boiler);
     //printf("yAdv %d\r\n", oled.gfxFont->yAdvance);
     //printf("X: %d Y: %d\r\n", oled.getCursorX(), oled.getCursorY());
     oled.display();
