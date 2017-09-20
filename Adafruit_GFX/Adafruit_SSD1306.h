@@ -141,8 +141,7 @@ public:
 		: Adafruit_GFX(rawWidth,rawHeight)
 		, rst(RST,false)
 	{
-		buffer.resize(rawHeight * rawWidth / 8);
-	};
+  };
 
 	void begin(uint8_t switchvcc = SSD1306_SWITCHCAPVCC);
 	
@@ -157,15 +156,10 @@ public:
 
 	/// Cause the display to be updated with the buffer content.
 	void display();
-	/// Fill the buffer with the AdaFruit splash screen.
-	virtual void splash();
     
 protected:
-	virtual void sendDisplayBuffer() = 0;
+	virtual void sendDisplayBuffer(uint8_t *buffer) = 0;
 	DigitalOut2 rst;
-
-	// the memory buffer for the LCD
-	std::vector<uint8_t> buffer;
 };
 
 
@@ -215,13 +209,12 @@ public:
 	};
 
 protected:
-	virtual void sendDisplayBuffer()
-	{
+	virtual void sendDisplayBuffer(uint8_t *buffer) {
 		char buff[17];
 		buff[0] = 0x40; // Data Mode
 
 		// send display buffer in 16 byte chunks
-		for(uint16_t i=0, q=buffer.size(); i<q; i+=16 ) 
+		for(uint16_t i=0; i<1024; i+=16 ) 
 		{	uint8_t x ;
 
 			// TODO - this will segfault if buffer.size() % 16 != 0
