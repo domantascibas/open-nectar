@@ -2149,6 +2149,11 @@
               <FileType>5</FileType>
               <FilePath>.\Fonts\OpenSansSemibold10pt.h</FilePath>
             </File>
+            <File>
+              <FileName>OpenSansSemiBold5pt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Fonts\OpenSansSemiBold5pt.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
