@@ -2194,6 +2194,36 @@
               <FileType>5</FileType>
               <FilePath>.\Fonts\OpenSansSemiBold12px.h</FilePath>
             </File>
+            <File>
+              <FileName>OpenSansSemiBold7pt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Fonts\OpenSansSemiBold7pt.h</FilePath>
+            </File>
+            <File>
+              <FileName>OpenSansSemiBold7_5pt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Fonts\OpenSansSemiBold7_5pt.h</FilePath>
+            </File>
+            <File>
+              <FileName>OpenSansLight12pt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Fonts\OpenSansLight12pt.h</FilePath>
+            </File>
+            <File>
+              <FileName>OpenSansLight7_5pt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Fonts\OpenSansLight7_5pt.h</FilePath>
+            </File>
+            <File>
+              <FileName>OpenSansLight9pt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Fonts\OpenSansLight9pt.h</FilePath>
+            </File>
+            <File>
+              <FileName>OpenSansLight10_5pt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Fonts\OpenSansLight10_5pt.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
