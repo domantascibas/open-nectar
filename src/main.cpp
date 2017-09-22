@@ -41,7 +41,7 @@ int main() {
   service::setup();
   hardware::setup();
   wait(2.0);
-//  power_board::setup();
+  power_board::setup();
   esp::setup();
   
   menu_service::updated = true;
@@ -49,12 +49,12 @@ int main() {
   while(1) {
     if(menu_service::updated) {
       menu_service::updateScreen();
-      printf("\nAvailable memory = %d\r\n", availableMemory(1) );
+      printf("Available memory = %d\r\n\n", availableMemory(1) );
     }
     service::loop();
     hardware::updateTemperature();
-//    power_board::loop();
-//    device_modes::loop();
+    power_board::loop();
+    device_modes::loop();
 
     __WFI();
   }
