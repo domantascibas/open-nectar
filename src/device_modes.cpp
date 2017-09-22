@@ -56,6 +56,7 @@ namespace device_modes {
           delay(1.0);
           relay_sun = false;
           grid_relay_state(false);
+          //printf("turn off all\r\n");
         break;
 
         case TURN_ON_GRID:
@@ -65,6 +66,7 @@ namespace device_modes {
           relay_sun = false;
           delay(1.0);
           grid_relay_state(true);
+          //printf("turn on grid\r\n");
         break;
 
         case TURN_ON_SUN:
@@ -75,6 +77,7 @@ namespace device_modes {
             delay(1.0);
             power_board::start();
           }
+          printf("turn on sun\r\n");
         break;
       }
       __disable_irq();
@@ -98,7 +101,7 @@ namespace device_modes {
     switch(data.current_mode) {
       default:  //mode is any other value than the ones below
       case MODE_DEFAULT:
-        //printf("[MODE] DEFAULT\r\n");
+        printf("[MODE] DEFAULT\r\n");
         //printf("T_max = %5.2fC T_curr = %5.2fC T_set = %5.2fC PV = %d ", nectar_data.temperature_max, nectar_data.temperature_moment, nectar_data.temperature_scheduled, nectar_data.pv_available);
         if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
           response = TURN_OFF_ALL;
@@ -123,6 +126,7 @@ namespace device_modes {
       break;
 
       case MODE_BOOST:
+        printf("[MODE] BOOST\r\n");
         if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
           response = TURN_OFF_ALL;
           //data.error = BOILER_TEMP_SENSOR_ERROR;
