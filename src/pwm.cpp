@@ -27,7 +27,7 @@ namespace pwm {
   }
 
   void setup() {
-    static const float frequency = 1.8;    //in kHz
+    static const float frequency = 3.6;    //in kHz
     pwm_gen.period_us(1000/frequency);
     pwm_gen.write(data.pwm_duty);
     shutdown = DRIVER_OFF;
