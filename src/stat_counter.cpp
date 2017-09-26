@@ -15,7 +15,9 @@ namespace stat_counter {
     if(data.grid_relay_on) {
       data.grid_kwh += boiler_power * time_passed / 3600 / 1000;
     } else if(data.sun_relay_on) {
-      data.solar_kwh += data.pv_power * time_passed / 3600 / 1000;
+      if(data.pv_power > 0) {
+        data.solar_kwh += data.pv_power * time_passed / 3600 / 1000;
+      }
     }
     printf("solar: %.2fkWh grid: %.2fkWh\r\n", data.solar_kwh, data.grid_kwh);
     stat_timer.reset();
