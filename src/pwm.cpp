@@ -31,6 +31,8 @@ namespace pwm {
     pwm_gen.period_us(1000/frequency);
     pwm_gen.write(data.pwm_duty);
     shutdown = DRIVER_OFF;
+    
+    data.generator_on = 0;
   }
 
   uint8_t adjust() {
@@ -43,6 +45,7 @@ namespace pwm {
     float dP;
     
     shutdown = DRIVER_ON;
+    data.generator_on = 1;
     moment_power = data.moment_current * data.moment_voltage;
     dP = moment_power - old_power;
     
@@ -78,8 +81,10 @@ namespace pwm {
   void set() {
     if((data.moment_voltage >= VOLTAGE_LIMIT) || (data.moment_current >= CURRENT_LIMIT)) {
       shutdown = DRIVER_OFF;
+      data.generator_on = 0;
     } else {
       shutdown = DRIVER_ON;
+      data.generator_on = 1;
       pwm_gen.write(data.pwm_duty);
     }
   }
@@ -100,6 +105,8 @@ namespace pwm {
     shutdown = DRIVER_OFF;
     data.pwm_duty = 0.1;
     pwm_gen.write(data.pwm_duty);
+    
+    data.generator_on = 0;
   }
 
   void swipe(float min, float max, float step) {

@@ -43,7 +43,7 @@ namespace device_modes {
     if(update_mode) {
       update_mode = false;
       //uint8_t current_state = data.current_state;
-      //printf("Current State %d\r\n", data.current_state);
+      printf("Current State %d\r\n", data.current_state);
       
       switch(data.current_state) {
         default:

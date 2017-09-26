@@ -23,7 +23,10 @@ public:
 
   virtual void write(uint8_t byte);
   virtual void received_cmd_stats();
-
+    
+  virtual void received_cmd_power_stop();
+  virtual void received_cmd_power_start();
+    
   NectarStream stream;
 
 private:
