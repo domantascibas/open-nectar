@@ -16,21 +16,21 @@ namespace hardware {
   }
 
   uint8_t setup() {
-    if(probe_boiler.isPresent()) {
+//    if(probe_boiler.isPresent()) {
       probe_boiler.begin();
       probe_boiler.startConversion();
-      if(probe_internal.isPresent()) {
+//      if(probe_internal.isPresent()) {
         probe_internal.begin();
         probe_internal.startConversion();
 
         wait(0.5);
         update_temperature.attach(&update, 5.0);
-      } else {
-        data.error = INTERNAL_TEMP_SENSOR_NOT_PRESENT;
-      }
-    } else {
-      data.error = WATER_TEMP_SENSOR_NOT_PRESENT;
-    }
+//      } else {
+//        data.error = INTERNAL_TEMP_SENSOR_NOT_PRESENT;
+//      }
+//    } else {
+//      data.error = WATER_TEMP_SENSOR_NOT_PRESENT;
+//    }
   }
 
   void loop() {

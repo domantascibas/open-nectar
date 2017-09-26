@@ -16,7 +16,7 @@ int main() {
     hardware::loop();
     power_board::loop();
     device_modes::loop();
-    service::loop();
+//    service::loop();
     __WFI();
   }
 }
