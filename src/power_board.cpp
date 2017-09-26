@@ -90,7 +90,7 @@ namespace power_board {
     static const float interval = 1.0;
     
     power_board_serial.baud(baudrate);
-    comms::send_command(POWER_BOARD_START);
+    comms::send_command(GET_DATA);
     get_data_tick.attach(&get_data_ISR, interval);
     power_board_serial.attach(&Rx_interrupt);
   }
