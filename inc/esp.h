@@ -26,6 +26,7 @@ public:
   virtual void received_cmd_stats();
   virtual void received_status(const nectar_contract::NectarStatus &status);
   virtual void received_time(const nectar_contract::NectarTime &time);
+
   NectarStream stream;
 
 private:

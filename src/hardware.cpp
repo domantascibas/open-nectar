@@ -24,13 +24,15 @@ void updateTemperatureISR() {
         probe_internal.startConversion();
 
         wait(0.5);
-        update_tick.attach(&updateTemperatureISR, 5.0);
+        update_tick.attach(&updateTemperatureISR, 10.0);
 //      } else {
 //        data.error = INTERNAL_TEMP_SENSOR_NOT_PRESENT;
 //      }
 //    } else {
 //      data.error = WATER_TEMP_SENSOR_NOT_PRESENT;
 //    }
+    
+    update_temp = true;
   }
   
   void updateTemperature() {

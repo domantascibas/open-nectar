@@ -1,10 +1,10 @@
 #include "mbed.h"
 #include "hardware.h"
-#include "power_board.h"
 #include "esp.h"
+#include "power_board.h"
 #include "device_modes.h"
 #include "service.h"
-#include "menu_service.h"
+//#include "menu_service.h"
 
 // Function prototype
  
@@ -37,23 +37,24 @@ int availableMemory(int resolution, int maximum, bool disableInterrupts) {
 // Calling the function
  
 int main() {
-  menu_service::setup();
+//  menu_service::setup();
   service::setup();
   hardware::setup();
   wait(2.0);
+  hardware::updateTemperature();
   power_board::setup();
   esp::setup();
+  wait(0.5);
+  device_modes::setup();
   
-  menu_service::updated = true;
+//  menu_service::updated = true;
 
   while(1) {
-    if(menu_service::updated) {
-      menu_service::updateScreen();
-      printf("Available memory = %d\r\n\n", availableMemory(1) );
-    }
-    service::loop();
+//    if(menu_service::updated) {
+//      menu_service::updateScreen();
+//      printf("Available memory = %d\r\n\n", availableMemory(1) );
+//    }
     hardware::updateTemperature();
-    power_board::loop();
     device_modes::loop();
 
     __WFI();

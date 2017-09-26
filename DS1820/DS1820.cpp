@@ -30,13 +30,23 @@
  *
  */
  
+#include "mbed.h"
 #include "DS1820.h"
+
+static Timer delay_t;
 
 #define DEBUG 0
 
 #if DEBUG
 extern Serial serial;
 #endif
+
+static void delay(float seconds) {
+  delay_t.reset();
+  delay_t.start();
+  while(delay_t.read() < seconds) {}
+  delay_t.stop();
+}
 
 /**
  * @brief   Constructs a generic DS1820 sensor
@@ -80,13 +90,13 @@ DS1820::DS1820(char model, PinName pin) :
  */
 bool DS1820::begin(void) {
     oneWire.reset_search();
-    wait_ms(250);
+    delay(0.250);
     if(!oneWire.search(addr)) {
 #if DEBUG
         serial.printf("No addresses.\r\n");
 #endif
         oneWire.reset_search();
-        wait_ms(250);
+        delay(0.250);
         return false;
     }
 

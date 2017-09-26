@@ -1,6 +1,8 @@
 #ifndef DATA_H
 #define DATA_H
 
+#include "NectarStream.h"
+
 //Constants
 #define DRIVER_ON                   0
 #define DRIVER_OFF                  1
@@ -77,6 +79,10 @@ struct Data {
 };
 
 extern Data data;
+
+namespace power_data {
+  extern nectar_contract::PowerBoardStats stats;
+}
 
 #endif
 

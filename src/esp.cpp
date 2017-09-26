@@ -38,7 +38,7 @@ namespace esp {
 
 void mbedStream::setup() {
   m_serial.baud(C_SERIAL_BAUD_RATE);
-  printf("m_serial setup\r\n");
+  printf("esp_serial setup\r\n");
   m_serial.attach(this, &mbedStream::Rx_interrupt);
 }
 
