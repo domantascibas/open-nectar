@@ -26,7 +26,7 @@ namespace power_board {
   powerStream m_stream(TX, RX);
   
   void error_timeout_handler() {
-    //comms::send_command(CLEAR_ERROR);
+    m_stream.stream.sendObject(C_SERVICE_CLEAR_ERROR);
     error_clearing = false;
   }
   
@@ -44,8 +44,103 @@ namespace power_board {
     line_busy_timeout.attach(line_busy_ISR, 0.05);
   }
   
+  void print_error(uint8_t error) {
+    printf("[ERROR] %d\r\n", error);
+    switch(error) {
+      case SETUP_ERROR:
+        printf("[ERROR] SETUP ERROR\r\n");
+      break;
+
+      case STARTUP_ERROR:
+        printf("[ERROR] STARTUP ERROR\r\n");
+      break;
+
+      case ADC_ERROR:        //can't find both ADC sensors
+        printf("[ERROR] Can't read ADC sensors\r\n");
+      break;
+
+      case ADC_VOLTAGE_ERROR:
+        printf("[ERROR] Can't read ADC voltage sensor\r\n");
+      break;
+
+      case ADC_CURRENT_ERROR:
+        printf("[ERROR] Can't read ADC voltage sensor\r\n");
+      break;
+
+      case ADC_SETUP_ERROR:
+        printf("[ERROR] ADC SETUP ERROR\r\n");
+      break;
+
+      case FLASH_ACCESS_ERROR:
+        printf("[ERROR] Can't access FLASH memory\r\n");
+      break;
+
+      case FLASH_READ_ERROR:
+        printf("[ERROR] Can't read FLASH memory\r\n");
+      break;
+
+      case FLASH_WRITE_ERROR:
+        printf("[ERROR] Can't write to FLASH memory\r\n");
+      break;
+
+      case CALIBRATION_ERROR:          //no calibration data
+        printf("[ERROR] No CALIBRATION data\r\n");
+      break;
+
+      case DC_OVER_VOLTAGE:            //V_pv > 350V
+        printf("[ERROR] DC VOLTAGE > 350V\r\n");
+      break;
+
+      case DC_OVER_CURRENT:            //I_pv > 10A
+        printf("[ERROR] DC CURRENT > 10A\r\n");
+      break;
+
+      case DC_CURRENT_LEAKS:           //could be a faulty relay, or a short
+        printf("[ERROR] DC CURRENT leaks. Could be faulty relay or a short circuit\r\n");
+      break;
+
+      case I2C_ERROR:
+        printf("[ERROR] I2C ERROR\r\n");
+      break;
+
+      case OVERHEAT:
+        printf("[ERROR] DEVICE OVERHEAT\r\n");
+      break;
+
+      case RADIATOR_OVERHEAT:
+        printf("[ERROR] Radiator TEMPERATURE > 70C\r\n");
+      break;
+
+      case AIRGAP_OVERHEAT:
+        printf("[ERROR] Airgap TEMPERATURE > 70C\r\n");
+      break;
+
+      default:
+        printf("[ERROR] OTHER ERROR\r\n");
+      break;
+    }
+  }
+  
   void setup() {
     m_stream.setup();
+  }
+  
+  void loop() {
+    if((data.error != 0x00) & (!error_clearing)) {
+      if(error_counter < 5) {
+        error_clearing = true;
+        print_error(data.error);
+        printf("ERROR COUNTER ++\r\n");
+        error_timeout.attach(&error_timeout_handler, 10.0);
+        error_counter++;
+      } else {
+        m_stream.stream.sendObject(C_POWER_BOARD_STOP);
+        data.error = RESTART_REQUIRED;
+      }
+    } else if((data.error == 0x00) & (error_counter != 0)) {
+      error_counter = 0;
+      printf("ERROR COUNTER RESET\r\n");
+    } 
   }
 }
 
@@ -96,6 +191,7 @@ void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &s
   data.generator_on = stats.pwm_generator_on;
   __enable_irq();
   
+  stat_counter::increase();
   printf("%.3f %.2f %.2f %.2f %d %d %d\r\n", data.pv_voltage, data.pv_current, data.airgap_temp, data.radiator_temp, data.error, data.generator_on, data.calibrated);
 }
 
