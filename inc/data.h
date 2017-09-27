@@ -79,6 +79,7 @@ struct Data {
 };
 
 extern Data data;
+extern bool line_busy;
 
 namespace power_data {
   extern nectar_contract::PowerBoardStats stats;

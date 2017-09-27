@@ -3,6 +3,8 @@
 #include "NectarStream.h"
 #include "NectarContract.h"
 
+bool line_busy = false;
+
 uint8_t current_mode = 0;
 float temp_max = 70.0;
 float temp_min = 5.0;

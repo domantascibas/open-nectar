@@ -9,7 +9,12 @@
 #include "NectarContract.h"
 
 Ticker get_data_tick;
+Timeout line_busy_timeout;
 Timeout error_timeout;
+
+void line_busy_ISR() {
+  line_busy = false;
+}
 
 namespace power_board {
   static const PinName TX = PB_10;
@@ -35,6 +40,8 @@ namespace power_board {
   
   void get_data_ISR() {
     m_stream.stream.sendObject(C_POWER_BOARD_STATS);
+    line_busy = true;
+    line_busy_timeout.attach(line_busy_ISR, 0.05);
   }
   
   void setup() {
@@ -51,6 +58,8 @@ void powerStream::setup() {
   
   m_serial.baud(C_SERIAL_BAUD_RATE);
   stream.sendObject(C_POWER_BOARD_STATS);
+  line_busy = true;
+  line_busy_timeout.attach(line_busy_ISR, 0.2);
   get_data_tick.attach(&power_board::get_data_ISR, interval);
   
   m_serial.attach(this, &powerStream::Rx_interrupt);
@@ -59,13 +68,16 @@ void powerStream::setup() {
 
 void powerStream::Rx_interrupt() {
   while(m_serial.readable()) {
+    __disable_irq();
     char rcv = m_serial.getc();
     //printf("%c", rcv);
     stream.receiveChar(rcv);
+    __enable_irq();
   }
 }
 
 void powerStream::write(uint8_t byte) {
+  //while(!m_serial.writeable()) {}
   m_serial.putc(byte);
 }
 

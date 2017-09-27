@@ -102,7 +102,7 @@ namespace device_modes {
   }
 
   void loop() {
-    if(update_mode) {
+    if(update_mode && !line_busy) {
       update_mode = false;
       
       __disable_irq();

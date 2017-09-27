@@ -44,7 +44,6 @@ int main() {
   hardware::updateTemperature();
   power_board::setup();
   esp::setup();
-  wait(0.5);
   device_modes::setup();
   
 //  menu_service::updated = true;
