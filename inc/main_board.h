@@ -26,6 +26,7 @@ public:
     
   virtual void received_cmd_power_stop();
   virtual void received_cmd_power_start();
+  virtual void received_cmd_service_clear_error();
     
   NectarStream stream;
 
