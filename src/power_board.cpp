@@ -1,11 +1,107 @@
 #include "mbed.h"
 #include "data.h"
-#include "comms.h"
 #include "power_board.h"
 #include "device_modes.h"
 #include "hardware.h"
 #include "stat_counter.h"
 
+#include "NectarStream.h"
+#include "NectarContract.h"
+
+Ticker get_data_tick;
+Timeout line_busy_timeout;
+Timeout error_timeout;
+
+void line_busy_ISR() {
+  line_busy = false;
+}
+
+namespace power_board {
+  static const PinName TX = PB_10;
+  static const PinName RX = PB_11;
+  
+  volatile bool error_clearing = false;
+  static uint8_t error_counter = 0;
+  
+  powerStream m_stream(TX, RX);
+  
+  void error_timeout_handler() {
+    //comms::send_command(CLEAR_ERROR);
+    error_clearing = false;
+  }
+  
+  void start() {
+    m_stream.stream.sendObject(C_POWER_BOARD_START);
+  }
+  
+  void stop() {
+    m_stream.stream.sendObject(C_POWER_BOARD_STOP);
+  }
+  
+  void get_data_ISR() {
+    m_stream.stream.sendObject(C_POWER_BOARD_STATS);
+    line_busy = true;
+    line_busy_timeout.attach(line_busy_ISR, 0.05);
+  }
+  
+  void setup() {
+    m_stream.setup();
+  }
+}
+
+/*
+ * Class implementation
+ */
+
+void powerStream::setup() {
+  static const float interval = 1.0;
+  
+  m_serial.baud(C_SERIAL_BAUD_RATE);
+  stream.sendObject(C_POWER_BOARD_STATS);
+  line_busy = true;
+  line_busy_timeout.attach(line_busy_ISR, 0.2);
+  get_data_tick.attach(&power_board::get_data_ISR, interval);
+  
+  m_serial.attach(this, &powerStream::Rx_interrupt);
+  printf("power_serial setup\r\n");
+}
+
+void powerStream::Rx_interrupt() {
+  while(m_serial.readable()) {
+    __disable_irq();
+    char rcv = m_serial.getc();
+    //printf("%c", rcv);
+    stream.receiveChar(rcv);
+    __enable_irq();
+  }
+}
+
+void powerStream::write(uint8_t byte) {
+  //while(!m_serial.writeable()) {}
+  m_serial.putc(byte);
+}
+
+void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &stats) {
+  //power_data::stats = stats;
+
+  __disable_irq();
+  data.pv_voltage = stats.sun_voltage;
+  data.pv_current = stats.sun_current;
+  data.pwm_duty = stats.pwm_duty;
+  data.radiator_temp = stats.radiator_temperature;
+  data.mosfet_overheat_on = stats.transistor_overheat_on;
+  data.airgap_temp = stats.airgap_temperature;
+  data.error = stats.power_board_error_code;
+  data.calibrated = stats.device_calibrated;
+  data.generator_on = stats.pwm_generator_on;
+  __enable_irq();
+  
+  printf("%.3f %.2f %.2f %.2f %d %d %d\r\n", data.pv_voltage, data.pv_current, data.airgap_temp, data.radiator_temp, data.error, data.generator_on, data.calibrated);
+}
+
+// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
+
+/*
 static const PinName TX = PB_10;
 static const PinName RX = PB_11;
 
@@ -58,13 +154,13 @@ namespace power_board {
         }
         ndx = 0;
         recv_in_progress = false;
-        hardware::available = true;
+//        hardware::available = true;
         new_data = true;
         printf("\r\n");
       }
     } else if(rc == start_marker){
       recv_in_progress = true;
-      hardware::available = false;
+//      hardware::available = false;
     }
   }
 
@@ -113,48 +209,10 @@ namespace power_board {
       error_counter = 0;
       printf("ERROR COUNTER RESET\r\n");
     }
-
-    if(new_data) {
-      new_data = false;
-      if(new_ref_data) {
-        new_ref_data = false;
-        printf(" [PARSING REF] ");
-        message_count = comms::parse_fields(received_chars, power_response, num_fields, ',');
-        if(message_count == 2) {
-          __disable_irq();
-          data.pv_ref_voltage = atof(power_response[0]);
-          data.pv_ref_current = atof(power_response[1]);
-          __enable_irq();
-          printf("parsed\r\n");
-        
-        } else {
-          printf("[ERROR] partial message received\r\n");
-        }
-      } else {
-        printf(" [PARSING] ");
-        message_count = comms::parse_fields(received_chars, power_response, num_fields, ',');
-        if(message_count == 9) {
-          __disable_irq();
-          data.pv_voltage = atof(power_response[0]);
-          data.pv_current = atof(power_response[1]);
-          data.pwm_duty = atof(power_response[2]);
-          data.radiator_temp = atof(power_response[3]);
-          data.mosfet_overheat_on = atoi(power_response[4]);
-          data.airgap_temp = atof(power_response[5]);
-          data.error = atoi(power_response[6]);
-          data.calibrated = atoi(power_response[7]);
-          data.generator_on = atoi(power_response[8]);
-          
-          data.pv_power = data.pv_voltage * data.pv_current;
-          __enable_irq();
-          printf("parsed\r\n");
-          stat_counter::increase();
-        } else {
-          printf("[ERROR] partial message received\r\n");
-        }
-      }
-    }
+    
   }
 }
+
+*/
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

@@ -49,60 +49,60 @@ namespace service {
     
     pc.baud(baudrate);
     pc.printf("[COMMS] Started\r\n");
-    pc.attach(&Rx_interrupt);
+    //pc.attach(&Rx_interrupt);
   }
   
   void loop() {
-    if(command != NULL) {
-      switch(command) {
-        case POWER_BOARD_STOP:
-          //printf("stopping\r\n");
-          comms::send_command(POWER_BOARD_STOP);
-        break;
-        
-        case POWER_BOARD_START:
-          //printf("starting\r\n");
-          comms::send_command(POWER_BOARD_START);
-          get_data_tick.attach(&power_board::get_data_ISR, interval);
-        break;
-        
-        case CLEAR_ERROR:
-          //printf("clearing error\r\n");
-          comms::send_command(CLEAR_ERROR);
-        break;
-        
-        case ENTER_SERVICE_MODE:
-          //printf("entering service mode\r\n");
-          comms::send_command(ENTER_SERVICE_MODE);
-          get_data_tick.detach();
-        break;
-        
-        case INCREASE_PWM:
-          //printf("increase pwm\r\n");
-          comms::send_command(INCREASE_PWM);
-        break;
-        
-        case DECREASE_PWM:
-          //printf("decrease pwm\r\n");
-          comms::send_command(DECREASE_PWM);
-        break;
-        
-        case GET_DATA:
-          //printf("get data\r\n");
-          comms::send_command(GET_DATA);
-        break;
-        
-        case GET_REF_DATA:
-          //printf("get ref data\r\n");
-          comms::send_command(GET_REF_DATA);
-        break;
-        
-        default:
-          printf("Unrecognized command 0x%X\r\n", command);
-        break;
-      }
-      command = NULL;
-    }
+//    if(command != NULL) {
+//      switch(command) {
+//        case POWER_BOARD_STOP:
+//          //printf("stopping\r\n");
+//          comms::send_command(POWER_BOARD_STOP);
+//        break;
+//        
+//        case POWER_BOARD_START:
+//          //printf("starting\r\n");
+//          comms::send_command(POWER_BOARD_START);
+//          //get_data_tick.attach(&power_board::get_data_ISR, interval);
+//        break;
+//        
+//        case CLEAR_ERROR:
+//          //printf("clearing error\r\n");
+//          comms::send_command(CLEAR_ERROR);
+//        break;
+//        
+//        case ENTER_SERVICE_MODE:
+//          //printf("entering service mode\r\n");
+//          comms::send_command(ENTER_SERVICE_MODE);
+//          get_data_tick.detach();
+//        break;
+//        
+//        case INCREASE_PWM:
+//          //printf("increase pwm\r\n");
+//          comms::send_command(INCREASE_PWM);
+//        break;
+//        
+//        case DECREASE_PWM:
+//          //printf("decrease pwm\r\n");
+//          comms::send_command(DECREASE_PWM);
+//        break;
+//        
+//        case GET_DATA:
+//          //printf("get data\r\n");
+//          comms::send_command(GET_DATA);
+//        break;
+//        
+//        case GET_REF_DATA:
+//          //printf("get ref data\r\n");
+//          comms::send_command(GET_REF_DATA);
+//        break;
+//        
+//        default:
+//          printf("Unrecognized command 0x%X\r\n", command);
+//        break;
+//      }
+//      command = NULL;
+//    }
   }
   
   uint8_t get_calibration_data(void) {

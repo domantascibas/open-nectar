@@ -1,12 +1,10 @@
-#ifndef HARDWARE_H
-#define HARDWARE_H
+#ifndef SCREEN_H
+#define SCREEN_H
 
-namespace hardware {
-  extern bool available;
+namespace screen {
   void setup();
-  void updateTemperature();
+  void loop();
 }
 
 #endif
-
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
