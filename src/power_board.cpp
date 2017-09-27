@@ -191,6 +191,7 @@ void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &s
   data.generator_on = stats.pwm_generator_on;
   __enable_irq();
   
+  stat_counter::increase();
   printf("%.3f %.2f %.2f %.2f %d %d %d\r\n", data.pv_voltage, data.pv_current, data.airgap_temp, data.radiator_temp, data.error, data.generator_on, data.calibrated);
 }
 
