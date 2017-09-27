@@ -44,38 +44,52 @@ namespace pwm {
     float moment_power;
     float dP;
     
-    shutdown = DRIVER_ON;
-    data.generator_on = 1;
     moment_power = data.moment_current * data.moment_voltage;
     dP = moment_power - old_power;
-    
-    if(dP != 0) {
-      if(dP > 0) {
-        if(last_increase) {
-          pwm_duty += PWM_DUTY_STEP_CHANGE;
-          last_increase = true;
+
+    if((data.moment_voltage >= VOLTAGE_LIMIT) || (data.moment_current >= CURRENT_LIMIT)) {
+      shutdown = DRIVER_OFF;
+      data.generator_on = 0;
+    } else if((data.moment_current < 0.3) && (pwm_duty > 0.35)) {
+      reset();
+      data.error = NO_LOAD;
+    } else {
+      shutdown = DRIVER_ON;
+      data.generator_on = 1;
+      if(dP != 0) {
+        if(dP > 0) {
+          if(last_increase) {
+            pwm_duty += PWM_DUTY_STEP_CHANGE;
+            last_increase = true;
+          } else {
+            pwm_duty -= PWM_DUTY_STEP_CHANGE;
+            last_increase = false;
+          }
         } else {
-          pwm_duty -= PWM_DUTY_STEP_CHANGE;
-          last_increase = false;
+          if(last_increase) {
+            pwm_duty -= PWM_DUTY_STEP_CHANGE;
+            last_increase = false;
+          } else {
+            pwm_duty += PWM_DUTY_STEP_CHANGE;
+            last_increase = true;
+          }
         }
+        old_power = moment_power;
       } else {
         if(last_increase) {
-          pwm_duty -= PWM_DUTY_STEP_CHANGE;
-          last_increase = false;
-        } else {
           pwm_duty += PWM_DUTY_STEP_CHANGE;
           last_increase = true;
+        } else {
+          pwm_duty -= PWM_DUTY_STEP_CHANGE;
+          last_increase = false;
         }
       }
-      old_power = moment_power;
+      
+      pwm_duty = clamp(pwm_duty, PWM_MIN, PWM_MAX);
+      pwm_gen.write(pwm_duty);
+      data.pwm_duty = pwm_duty;
+      return NS_OK;
     }
-    
-    //TODO: else - follow last_increase
-    
-    pwm_duty = clamp(pwm_duty, PWM_MIN, PWM_MAX);
-    pwm_gen.write(pwm_duty);
-    data.pwm_duty = pwm_duty;
-    return NS_OK;
   }
 
   void set() {
