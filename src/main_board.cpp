@@ -76,4 +76,8 @@ void mbedStream::received_cmd_power_stop() {
   device_modes::stop();
 }
 
+void mbedStream::received_cmd_service_clear_error() {
+  data.error = 0x00;
+}
+
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
