@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "data.h"
 #include "esp.h"
+
 #include "NectarStream.h"
 #include "NectarContract.h"
 
@@ -16,14 +17,6 @@ namespace esp {
       data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on,
       data.radiator_temp, data.pwm_duty, data.airgap_temp, data.error, 0
     };
-    
-    /*
-    nectar_contract::MainBoardStats stats = {
-      1250, 0, 56.87, 1,
-      255, 3.55, 35.8, 0,
-      32.5, 0.85, 45.8, 0x00, 0
-    };    
-    */
     
     m_stream.stream.sendObject(C_MAIN_BOARD_STATS, &stats, sizeof(stats));
     printf("sent %d bytes\r\n", sizeof(stats));

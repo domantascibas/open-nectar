@@ -6,12 +6,6 @@
 //Constants
 #define DRIVER_ON                   0
 #define DRIVER_OFF                  1
-#define ACK                         0x06
-#define NACK                        0x15
-#define INCOMING_DATA               0x25    //'%'
-#define WAITING_FOR_DATA            0x26    //'&'
-#define BAD_CMD                     0x21    //'!'
-#define HANDSHAKE                   0x5E
 
 enum error_codes{
   SETUP_ERROR = 0x01,

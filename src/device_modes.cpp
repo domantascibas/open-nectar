@@ -140,7 +140,6 @@ namespace device_modes {
           }
         break;
 
-        /*
         case MODE_BOOST:
           printf("[MODE] BOOST\r\n");
           if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
@@ -154,9 +153,7 @@ namespace device_modes {
             response = TURN_ON_GRID;
           }
         break;
-        */
 
-        /*
         case MODE_AWAY:
           if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
             response = TURN_OFF_ALL;
@@ -179,9 +176,7 @@ namespace device_modes {
             }
           }
         break;
-        */
 
-        /*
         case MODE_NO_GRID:
           if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
             response = TURN_OFF_ALL;
@@ -190,7 +185,6 @@ namespace device_modes {
             response = TURN_ON_SUN;
           }
         break;
-        */
       }
       set_relays(response);
     }

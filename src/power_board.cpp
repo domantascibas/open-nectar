@@ -1,8 +1,6 @@
 #include "mbed.h"
 #include "data.h"
 #include "power_board.h"
-#include "device_modes.h"
-#include "hardware.h"
 #include "stat_counter.h"
 
 #include "NectarStream.h"
