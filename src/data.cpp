@@ -35,21 +35,6 @@ Data data = {
   airgap_temp, radiator_temp, device_temperature, mosfet_overheat_on,
   0x00, calibrated, solar_kwh, grid_kwh
 };
-//Data data = { 0, 65.0, 5.0, 40.0, 0.0, false, false, 0.0, 0.0, 0.0, 0.0, 0.0, false, 0.1, 0.0, 0.0, 0.0, false, 0x00 };
-
-/*
-struct PowerBoardStats {
-  float sun_voltage;
-  float sun_current;
-  float pwm_duty;
-  float radiator_temperature;
-  bool transistor_overheat_on;
-  float airgap_temperature;
-  uint8_t power_board_error_code;
-  uint8_t device_calibrated;
-  uint8_t pwm_generator_on;
-};
-*/
 
 namespace power_data {
   nectar_contract::PowerBoardStats stats = {
