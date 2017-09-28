@@ -53,7 +53,7 @@ struct PowerBoardStats {
 
 namespace power_data {
   nectar_contract::PowerBoardStats stats = {
-    data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp, data.error, data.calibrated, data.generator_on
+    data.pv_power, data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.airgap_temp, data.error, data.calibrated, data.generator_on
   };
 }
 

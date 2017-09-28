@@ -178,6 +178,7 @@ void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &s
   //power_data::stats = stats;
 
   __disable_irq();
+  data.pv_power = stats.sun_power;
   data.pv_voltage = stats.sun_voltage;
   data.pv_current = stats.sun_current;
   data.pwm_duty = stats.pwm_duty;
