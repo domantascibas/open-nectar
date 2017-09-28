@@ -15,17 +15,6 @@ namespace main_board {
   void send_stats() {
     //printf("sending %.3f, %.2f, %.2f, %d, %d\r\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.calibrated, data.generator_on);
     nectar_contract::PowerBoardStats stats = {
-      /*
-      float sun_voltage;
-      float sun_current;
-      float pwm_duty;
-      float radiator_temperature;
-      bool transistor_overheat_on;
-      float airgap_temperature;
-      uint8_t power_board_error_code;
-      uint8_t device_calibrated;
-      uint8_t pwm_generator_on;
-      */
       data.moment_power, data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, data.mosfet_overheat_on,
       data.airgap_temperature, data.error, data.calibrated, data.generator_on
     };
