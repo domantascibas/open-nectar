@@ -45,6 +45,7 @@ namespace pwm {
     float dP;
     
     moment_power = data.moment_current * data.moment_voltage;
+    data.moment_power = moment_power;
     dP = moment_power - old_power;
 
     if((data.moment_voltage >= VOLTAGE_LIMIT) || (data.moment_current >= CURRENT_LIMIT)) {

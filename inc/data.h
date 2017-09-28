@@ -51,6 +51,7 @@ enum modes {
 struct Data {
   uint8_t current_state;
   
+  float moment_power;
   float moment_voltage;
   float moment_current;
 

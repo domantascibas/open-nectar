@@ -26,8 +26,7 @@ namespace main_board {
       uint8_t device_calibrated;
       uint8_t pwm_generator_on;
       */
-      
-      data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, data.mosfet_overheat_on,
+      data.moment_power, data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, data.mosfet_overheat_on,
       data.airgap_temperature, data.error, data.calibrated, data.generator_on
     };
     
