@@ -1,6 +1,5 @@
 #include "mbed.h"
 #include "data.h"
-#include "comms.h"
 #include "service.h"
 #include "power_board.h"
 
