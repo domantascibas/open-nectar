@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "device_modes.h"
 #include "power_board.h"
+#include "stat_counter.h"
 #include "data.h"
 
 static const PinName SUN = PB_3;
@@ -99,11 +100,14 @@ namespace device_modes {
   
   void setup() {
     update_mode_tick.attach(update_mode_ISR, 1.0);
+    stat_counter::setup();
   }
 
   void loop() {
     if(update_mode && !line_busy) {
       update_mode = false;
+      
+      stat_counter::increase();
       
       __disable_irq();
       float temp_boiler = data.temp_boiler;

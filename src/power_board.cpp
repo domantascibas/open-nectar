@@ -1,7 +1,6 @@
 #include "mbed.h"
 #include "data.h"
 #include "power_board.h"
-#include "stat_counter.h"
 
 #include "NectarStream.h"
 #include "NectarContract.h"
@@ -112,6 +111,10 @@ namespace power_board {
       case AIRGAP_OVERHEAT:
         printf("[ERROR] Airgap TEMPERATURE > 70C\r\n");
       break;
+      
+      case NO_LOAD:
+        printf("[ERROR] Load disconnected\r\n");
+      break;
 
       default:
         printf("[ERROR] OTHER ERROR\r\n");
@@ -184,14 +187,13 @@ void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &s
   data.pwm_duty = stats.pwm_duty;
   data.radiator_temp = stats.radiator_temperature;
   data.mosfet_overheat_on = stats.transistor_overheat_on;
-  data.airgap_temp = stats.airgap_temperature;
   data.error = stats.power_board_error_code;
   data.calibrated = stats.device_calibrated;
   data.generator_on = stats.pwm_generator_on;
+  data.solar_kwh = stats.sun_meter_kwh;
   __enable_irq();
   
-  stat_counter::increase();
-  printf("%.3f %.2f %.2f %.2f %d %d %d\r\n", data.pv_voltage, data.pv_current, data.airgap_temp, data.radiator_temp, data.error, data.generator_on, data.calibrated);
+  printf("%.3f %.2f %.2f %.3fkWh %d %d %d\r\n", data.pv_voltage, data.pv_current, data.radiator_temp, data.solar_kwh, data.error, data.generator_on, data.calibrated);
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

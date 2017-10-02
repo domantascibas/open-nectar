@@ -1,8 +1,9 @@
 #ifndef STAT_COUNTER_H
 #define STAT_COUNTER_H
 
-namespace stat_counter {    
-    void increase();
+namespace stat_counter {
+  void setup();
+  void increase();
 }
 
 #endif

@@ -69,8 +69,8 @@ struct Data {
   uint8_t error;
   bool calibrated;
   
-  double solar_kwh;
-  double grid_kwh;
+  float solar_kwh;
+  float grid_kwh;
 };
 
 extern Data data;

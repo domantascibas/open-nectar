@@ -15,7 +15,7 @@ namespace esp {
     nectar_contract::MainBoardStats stats = {
       data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on,
       data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on,
-      data.radiator_temp, data.pwm_duty, data.airgap_temp, data.error, 0
+      data.radiator_temp, data.pwm_duty, data.error, 0, data.solar_kwh, data.grid_kwh
     };
     
     m_stream.stream.sendObject(C_MAIN_BOARD_STATS, &stats, sizeof(stats));
