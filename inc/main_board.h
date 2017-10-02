@@ -27,6 +27,7 @@ public:
   virtual void received_cmd_power_stop();
   virtual void received_cmd_power_start();
   virtual void received_cmd_service_clear_error();
+  virtual void received_grid_meter(const nectar_contract::PowerBoardGridMeter &grid_meter);
     
   NectarStream stream;
 

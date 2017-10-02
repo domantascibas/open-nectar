@@ -16,7 +16,7 @@ namespace main_board {
     //printf("sending %.3f, %.2f, %.2f, %d, %d\r\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.calibrated, data.generator_on);
     nectar_contract::PowerBoardStats stats = {
       data.moment_power, data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, data.mosfet_overheat_on,
-      data.airgap_temperature, data.error, data.calibrated, data.generator_on
+      data.error, data.calibrated, data.generator_on, data.sun_energy_meter_kwh
     };
     
     m_stream.stream.sendObject(C_POWER_BOARD_STATS, &stats, sizeof(stats));
@@ -66,6 +66,10 @@ void mbedStream::received_cmd_power_stop() {
 
 void mbedStream::received_cmd_service_clear_error() {
   data.error = 0x00;
+}
+
+void mbedStream::received_grid_meter(const nectar_contract::PowerBoardGridMeter &grid_meter) {
+  data.grid_energy_meter_kwh = grid_meter.grid_meter_kwh;
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
