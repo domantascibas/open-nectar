@@ -2,8 +2,10 @@
 #include "pwm.h"
 #include "data.h"
 #include "device_modes.h"
+#include "storage.h"
 
 Ticker update_device_mode;
+InterruptIn no_power(PC_9);
 
 namespace device_modes {
   static volatile bool update_mode = false;
@@ -31,8 +33,17 @@ namespace device_modes {
     pwm::decrease_duty();
   }
   
+  void no_power_ISR(){
+    //save two values to flash
+    storage::saveMeters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+    printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+    
+  }
+  
   void setup() {
     static const float update_interval = 0.5;
+    
+    no_power.fall(&no_power_ISR);
     
     printf("[DEVICE MODES]\r\n");
     update_device_mode.attach(&update_device_mode_ISR, update_interval);

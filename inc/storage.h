@@ -4,6 +4,7 @@
 namespace storage {
   uint8_t init();
   uint8_t saveData(float, float);
+  uint8_t saveMeters(float, float);
 }
 
 #endif

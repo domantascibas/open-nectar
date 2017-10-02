@@ -57,6 +57,9 @@ struct Data {
 
   float reference_voltage;
   float reference_current;
+  
+  float grid_energy_meter_kwh;
+  float sun_energy_meter_kwh;
 
   float pwm_duty;
   float airgap_temperature;

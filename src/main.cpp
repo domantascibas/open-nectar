@@ -20,6 +20,7 @@ int main() {
   pwm::setup();
   device_modes::setup();
   sensors::setup();
+  printf("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   printf("SETUP DONE\r\n");
   printf("starting program loops\r\n");
   
