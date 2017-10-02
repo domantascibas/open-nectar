@@ -4,6 +4,8 @@
 #include "device_modes.h"
 #include "storage.h"
 
+//PC_9 voltage monitor. RESET active - low. normal operation - 1, when <8.5V - 0.
+Timer stat_timer;
 Ticker update_device_mode;
 InterruptIn no_power(PC_9);
 
@@ -48,12 +50,24 @@ namespace device_modes {
     printf("[DEVICE MODES]\r\n");
     update_device_mode.attach(&update_device_mode_ISR, update_interval);
     printf("[ok] interval %.2fs\r\n\n", update_interval);
+    stat_timer.start();
   }
   
-  void loop() {
-    if(update_mode) {
+  void loop() {    
+    if(update_mode) {      
       update_mode = false;
-      //uint8_t current_state = data.current_state;
+      
+      if(!data.generator_on) {
+        stat_timer.reset();
+      } else {
+        float time_passed = stat_timer.read();
+        stat_timer.reset();
+        data.sun_energy_meter_kwh += data.moment_power * time_passed / 3600 / 1000;
+      }
+      
+      data.grid_energy_meter_kwh += 0;
+      printf("[LOOP] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+      
       printf("Current State %d\r\n", data.current_state);
       
       switch(data.current_state) {
