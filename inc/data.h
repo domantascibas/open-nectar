@@ -78,6 +78,7 @@ extern bool line_busy;
 
 namespace power_data {
   extern nectar_contract::PowerBoardStats stats;
+  extern nectar_contract::PowerBoardGridMeter grid_meter;
 }
 
 #endif

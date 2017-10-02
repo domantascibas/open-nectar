@@ -55,6 +55,7 @@ int main() {
 //    }
     hardware::updateTemperature();
     device_modes::loop();
+    power_board::loop();
 
     __WFI();
   }

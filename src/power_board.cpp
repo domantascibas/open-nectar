@@ -35,10 +35,21 @@ namespace power_board {
     m_stream.stream.sendObject(C_POWER_BOARD_STOP);
   }
   
+  void send_grid_meter() {
+    nectar_contract::PowerBoardGridMeter grid_meter = {
+      data.grid_kwh
+    };
+    
+    m_stream.stream.sendObject(C_POWER_BOARD_GRID_METER, &grid_meter, sizeof(grid_meter));
+  }
+  
   void get_data_ISR() {
     m_stream.stream.sendObject(C_POWER_BOARD_STATS);
     line_busy = true;
     line_busy_timeout.attach(line_busy_ISR, 0.05);
+  }
+  
+  void config() {
   }
   
   void print_error(uint8_t error) {

@@ -5,10 +5,13 @@
 
 namespace power_board {
   extern nectar_contract::PowerBoardStats stats;
+  extern nectar_contract::PowerBoardGridMeter grid_meter;
   
   void setup();
+  void loop();
   void start();
   void stop();
+  void send_grid_meter();
 }
 
 class powerStream : public IStreamDelegate {

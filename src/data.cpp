@@ -42,6 +42,8 @@ namespace power_data {
     data.solar_kwh
   };
   
+  nectar_contract::PowerBoardGridMeter grid_meter = {
+    data.grid_kwh
   };
 }
 
