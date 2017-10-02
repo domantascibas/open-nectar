@@ -121,11 +121,11 @@ namespace sensors {
       printf("[ERROR] DC Over-Voltage %7.2fV\r\n", data.moment_voltage);
       return;
     } else {
-//      if(voltage < 0) {
-//        data.moment_voltage = 0;
-//      } else {
+      if(voltage < 0) {
+        data.moment_voltage = 0;
+      } else {
         data.moment_voltage = voltage;
-//      }
+      }
     }
   }
   
@@ -138,11 +138,11 @@ namespace sensors {
       printf("[ERROR] DC Over-Current %7.2fA\r\n", data.moment_current);
       return;
     } else {
-//      if(current < 0) {
-//        data.moment_current = 0;
-//      } else {
+      if(current < 0) {
+        data.moment_current = 0;
+      } else {
         data.moment_current = current;
-//      }
+      }
     }
   }
   
