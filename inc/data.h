@@ -55,6 +55,7 @@ struct Data {
   float temp_max;
   float temp_min;
   float temp_scheduled;
+  float temp_scheduled_night;
   float temp_away;
   float temp_boiler;
 
