@@ -24,7 +24,7 @@ namespace device_modes {
     TURN_OFF_ALL
   };
 
-  enum modes {
+  enum MODE {
     MODE_DEFAULT,
     MODE_BOOST,
     MODE_AWAY,

@@ -35,6 +35,14 @@ enum error_codes{
   INTERNAL_TEMP_SENSOR_NOT_PRESENT
 };
 
+enum MODE {
+  MODE_DEFAULT,
+  MODE_BOOST,
+  MODE_AWAY,
+  MODE_NO_GRID,
+  MODE_COUNT
+};
+
 enum codes {
   NS_OK,
   NS_ERROR,
@@ -42,7 +50,7 @@ enum codes {
 };
 
 struct Data {
-  uint8_t current_mode;
+  MODE current_mode;
 
   float temp_max;
   float temp_min;

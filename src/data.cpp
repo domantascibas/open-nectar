@@ -5,7 +5,7 @@
 
 bool line_busy = false;
 
-uint8_t current_mode = 0;
+MODE current_mode = MODE_DEFAULT;
 float temp_max = 70.0;
 float temp_min = 5.0;
 float temp_scheduled = 40.0;
