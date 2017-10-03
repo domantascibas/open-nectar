@@ -23,13 +23,6 @@ namespace device_modes {
     TURN_ON_SUN,
     TURN_OFF_ALL
   };
-
-  enum MODE {
-    MODE_DEFAULT,
-    MODE_BOOST,
-    MODE_AWAY,
-    MODE_NO_GRID
-  };
   
   void delay(float seconds) {
     delay_t.reset();
