@@ -34,11 +34,11 @@ namespace pwm {
     
     data.generator_on = 0;
   }
-
+  
+  static bool last_increase = true;
   uint8_t adjust() {
     static float old_power = 0.0;
     static uint8_t duty_reduce_count;
-    static bool last_increase = true;
     
     float pwm_duty = data.pwm_duty;
     float moment_power;
@@ -51,9 +51,9 @@ namespace pwm {
     if((data.moment_voltage >= VOLTAGE_LIMIT) || (data.moment_current >= CURRENT_LIMIT)) {
       shutdown = DRIVER_OFF;
       data.generator_on = 0;
-    } else if((data.moment_current < 0.3) && (pwm_duty > 0.35)) {
-      reset();
-      data.error = NO_LOAD;
+//    } else if((data.moment_current < 0.3) && (pwm_duty > 0.35)) {
+//      reset();
+//      data.error = NO_LOAD;
     } else {
       shutdown = DRIVER_ON;
       data.generator_on = 1;
@@ -120,6 +120,7 @@ namespace pwm {
     shutdown = DRIVER_OFF;
     data.pwm_duty = 0.1;
     pwm_gen.write(data.pwm_duty);
+    last_increase = true;
     
     data.generator_on = 0;
   }
