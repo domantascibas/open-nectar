@@ -66,9 +66,9 @@ namespace device_modes {
       }
       
       data.grid_energy_meter_kwh += 0;
-      printf("[LOOP] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+      //printf("[LOOP] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
       
-      printf("Current State %d\r\n", data.current_state);
+      //printf("Current State %d\r\n", data.current_state);
       
       switch(data.current_state) {
         default:
