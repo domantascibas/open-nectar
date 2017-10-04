@@ -6,11 +6,11 @@
 bool line_busy = false;
 
 MODE current_mode = MODE_DEFAULT;
-float temp_max = 70.0;
+float temp_max = 75.0;
 float temp_min = 5.0;
 float temp_scheduled = 40.0;
 float temp_scheduled_night = 30.0;
-float temp_away = 27.0;
+float temp_away = 10.0;
 float temp_boiler = 0.0;
 bool sun_relay_on = false;
 bool grid_relay_on = false;

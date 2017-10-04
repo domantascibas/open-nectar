@@ -138,6 +138,8 @@ namespace device_modes {
         break;
 
         case MODE_BOOST:
+          //TODO after boost completes, return to previous mode
+          //TODO boost mode heats water up to 66C
           printf("[MODE] BOOST\r\n");
           if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
             response = TURN_OFF_ALL;
@@ -152,6 +154,7 @@ namespace device_modes {
         break;
 
         case MODE_AWAY:
+          //TODO add temp_max 45.0
           if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
             response = TURN_OFF_ALL;
             //data.error = BOILER_TEMP_SENSOR_ERROR;
@@ -175,6 +178,7 @@ namespace device_modes {
         break;
 
         case MODE_NO_GRID:
+          //TODO turn on grid when temperature drops below 5.0C
           if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
             response = TURN_OFF_ALL;
             //data.error = BOILER_TEMP_SENSOR_ERROR;
