@@ -1894,6 +1894,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\service.cpp</FilePath>
             </File>
+            <File>
+              <FileName>sensor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\sensor.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1948,6 +1953,11 @@
               <FileName>service.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\service.h</FilePath>
+            </File>
+            <File>
+              <FileName>sensor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\sensor.h</FilePath>
             </File>
           </Files>
         </Group>
