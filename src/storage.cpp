@@ -1,11 +1,6 @@
-#include "mbed.h"
 #include "storage.h"
 #include "eeprom.h"
 #include "data.h"
-
-//data written to and read from memory address 0x08002000
-static const uint8_t DEVICE_CALIBRATED = 0xCA;
-static const uint16_t CALIB_ADDRESS = 0x4555;
 
 void StoredItem::load(float *item) {
   EE_ReadVariable(lo_address, &u.b[1]);
@@ -24,6 +19,9 @@ void StoredItem::read(float *item) {
 }
 
 namespace Storage {
+  static const uint8_t DEVICE_CALIBRATED = 0xCA;
+  static const uint16_t CALIB_ADDRESS = 0x4555;
+  
   StoredItem ref_voltage(0x5555);
   StoredItem ref_current(0x6555);
   StoredItem grid_meter(0x7555);

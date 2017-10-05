@@ -1,5 +1,8 @@
 #ifndef STORAGE_H
 #define STORAGE_H
+#include <stdint.h>
+
+//data stored in memory address 0x08002000
 
 struct StoredItem {
   StoredItem(const uint16_t address) 
