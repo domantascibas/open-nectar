@@ -28,4 +28,8 @@ Data data = {
   pwm_duty, airgap_temperature, radiator_temperature, mosfet_overheat_on, calibrated, generator_on, power_board_error
 };
 
+StorageData storage_data = {
+  reference_voltage, reference_current, sun_energy_meter_kwh, grid_energy_meter_kwh
+};
+
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

@@ -20,7 +20,7 @@ enum error_codes{
   FLASH_ACCESS_ERROR,
   FLASH_READ_ERROR,
   FLASH_WRITE_ERROR,
-  CALIBRATION_ERROR,
+  NOT_CALIBRATED,
   DC_OVER_VOLTAGE,
   DC_OVER_CURRENT,
   DC_CURRENT_LEAKS,
@@ -72,7 +72,15 @@ struct Data {
   uint8_t error;
 };
 
+struct StorageData {
+  float ref_voltage;
+  float ref_current;
+  float sun_meter;
+  float grid_meter;
+};
+
 extern Data data;
+extern StorageData storage_data;
 
 #endif
 
