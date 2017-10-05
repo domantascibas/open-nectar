@@ -146,7 +146,7 @@ namespace device_modes {
             //data.error = BOILER_TEMP_SENSOR_ERROR;
             if(temp_boiler > temp_max) {
               //return to default mode after reaching temp_max
-              data.current_mode = MODE_DEFAULT;
+              data.current_mode = data.previous_mode;
             }
           } else {
             response = TURN_ON_GRID;

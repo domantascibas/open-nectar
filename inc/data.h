@@ -51,6 +51,7 @@ enum codes {
 
 struct Data {
   MODE current_mode;
+  MODE previous_mode;
 
   float temp_max;
   float temp_min;

@@ -6,6 +6,7 @@
 bool line_busy = false;
 
 MODE current_mode = MODE_DEFAULT;
+MODE previous_mode = MODE_DEFAULT;
 float temp_max = 75.0;
 float temp_min = 5.0;
 float temp_scheduled = 40.0;
@@ -30,7 +31,7 @@ float solar_kwh = 0.0;
 float grid_kwh = 0.0;
 
 Data data = { 
-  current_mode, temp_max, temp_min, temp_scheduled, temp_scheduled_night, temp_away, temp_boiler,
+  current_mode, previous_mode, temp_max, temp_min, temp_scheduled, temp_scheduled_night, temp_away, temp_boiler,
   sun_relay_on, grid_relay_on, generator_on,
   pv_power, pv_voltage, pv_current, pv_ref_voltage, pv_ref_current, pwm_duty,
   airgap_temp, radiator_temp, device_temperature, mosfet_overheat_on,
