@@ -166,7 +166,7 @@ void powerStream::setup() {
   m_serial.baud(C_SERIAL_BAUD_RATE);
   stream.sendObject(C_POWER_BOARD_STATS);
   line_busy = true;
-  line_busy_timeout.attach(line_busy_ISR, 0.2);
+  line_busy_timeout.attach(line_busy_ISR, 0.05);
   get_data_tick.attach(&power_board::get_data_ISR, interval);
   
   m_serial.attach(this, &powerStream::Rx_interrupt);
@@ -204,7 +204,7 @@ void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &s
   data.solar_kwh = stats.sun_meter_kwh;
   __enable_irq();
   
-  printf("%.3f %.2f %.2f %.3fkWh %d %d %d\r\n", data.pv_voltage, data.pv_current, data.radiator_temp, data.solar_kwh, data.error, data.generator_on, data.calibrated);
+  printf("%.3f %.2f %.2f %.3fkWh %d %d %d\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.solar_kwh, data.error, data.generator_on, data.calibrated);
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
