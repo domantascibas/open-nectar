@@ -1899,6 +1899,16 @@
               <FileType>8</FileType>
               <FilePath>.\src\sensor.cpp</FilePath>
             </File>
+            <File>
+              <FileName>sensor_circuit.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\sensor_circuit.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>error_handler.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\error_handler.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1958,6 +1968,16 @@
               <FileName>sensor.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\sensor.h</FilePath>
+            </File>
+            <File>
+              <FileName>sensor_circuit.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\sensor_circuit.h</FilePath>
+            </File>
+            <File>
+              <FileName>error_handler.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\error_handler.h</FilePath>
             </File>
           </Files>
         </Group>
