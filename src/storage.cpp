@@ -1,6 +1,5 @@
 #include "storage.h"
 #include "eeprom.h"
-#include "data.h"
 
 void StoredItem::load(float *item) {
   EE_ReadVariable(lo_address, &u.b[1]);
@@ -27,20 +26,20 @@ namespace Storage {
   StoredItem grid_meter(0x7555);
   StoredItem sun_meter(0x8555);
   
-  uint8_t init() {
+  void init() {
     uint16_t cal;
     
     if(FLASH->CR & (0x1 << 0x7)) {
       FLASH->KEYR = 0x45670123; //FLASH KEY 1
       FLASH->KEYR = 0xCDEF89AB; //FLASH KEY 2
-    } else return FLASH_ACCESS_ERROR;
+    }// else return FLASH_ACCESS_ERROR;
     
     EE_Init();
     EE_ReadVariable(CALIB_ADDRESS, &cal);
     if(cal != DEVICE_CALIBRATED) {
-      return NOT_CALIBRATED;
+//      return NOT_CALIBRATED;
     }
-    return NS_OK;
+//    return NS_OK;
   }
   
   void load_data(float *voltage, float *current, float *sun, float *grid) {

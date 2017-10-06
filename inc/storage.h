@@ -22,7 +22,7 @@ struct StoredItem {
 };
 
 namespace Storage {
-  uint8_t init();
+  void init();
   void load_data(float *, float *, float *, float *);
   void save_data(float, float, float, float);
 };
