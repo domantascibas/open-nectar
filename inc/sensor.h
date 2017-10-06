@@ -1,27 +1,25 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
-static const PinName SDA = PB_14;
-static const PinName SCL = PB_13;
-static const float V_REF = 3.00;
-
-static const uint8_t SAMPLES = 128; //for calibration SAMPLES << 3
+static const uint16_t SAMPLE_NUM = 128; //for calibration SAMPLES << 3
 
 struct Sensor {
-  Sensor(const uint8_t addr)
-    : address(addr), m_i2c(SDA, SCL) {
-//      m_i2c.frequency = 400000;
-    };
-      
-  float value;
+  Sensor(const uint8_t addr, float *ref);
+  
+  float *reference;
+  bool ready_to_sample;
+  
   void ping();
-  void sample(uint16_t samples = SAMPLES);    
+  void attach_ticker();
+  void detach_ticker();
+  float sample(const uint16_t = SAMPLE_NUM);
   
   private:
     const uint8_t address;
     char cmd[2];
-  
-    I2C m_i2c;
+    
+    Ticker t;
+    void start_sampling();
 };
 
 #endif

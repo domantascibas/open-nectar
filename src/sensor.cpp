@@ -10,6 +10,26 @@
 #define REG_ADDR_CONVL          0x06
 #define REG_ADDR_CONVH          0x07
 
+static const PinName SDA = PB_14;
+static const PinName SCL = PB_13;
+static const float V_REF = 3.00;
+
+I2C m_i2c(SDA, SCL);
+
+Sensor::Sensor(const uint8_t addr, float *ref) 
+  : address(addr), ready_to_sample(false), reference(ref) {
+//    m_i2c.frequency(400000);
+    attach_ticker();
+}
+  
+void Sensor::attach_ticker() {
+  t.attach(callback(this, &Sensor::start_sampling), 0.5);
+}
+
+void Sensor::detach_ticker() {
+  t.detach();
+}
+
 void Sensor::ping() {
   uint8_t error;
   
@@ -27,11 +47,17 @@ void Sensor::ping() {
   }
 }
 
-void Sensor::sample(uint16_t samples) {
+void Sensor::start_sampling() {
+  ready_to_sample = true;
+}
+
+float Sensor::sample(const uint16_t samples) {
   float raw;
   float sum = 0;
   float avg = 0;
   uint16_t i = 0;
+  
+  ready_to_sample = false;
 
   for(i=0; i<samples; i++) {
     cmd[0] = REG_ADDR_RESULT;
@@ -45,6 +71,6 @@ void Sensor::sample(uint16_t samples) {
   if(avg < 0) {
     avg = 0;
   }
-  //printf("ADC 0x%X %.2f\r\n", address, avg);
-  value = avg;
+  DEBUG_PRINT("ADC 0x%X %.2f\r\n", address, avg);
+  return avg;
 }
