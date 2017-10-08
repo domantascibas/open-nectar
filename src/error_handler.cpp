@@ -10,6 +10,7 @@ void ErrorHandler::set_error(ERROR_CODE err) {
   last_error = err;
   has_errors = true;
   raised_errors |= 1 << err;
+  //TODO printf error to serial
 }
 
 void ErrorHandler::get_errors(uint32_t *err) {
