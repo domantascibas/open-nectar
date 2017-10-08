@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "sensor.h"
 #include "sensor_circuit.h"
+#include "error_handler.h"
 #include "data.h"
 
 namespace SensorCircuit {
@@ -54,21 +55,12 @@ namespace SensorCircuit {
   
   void init() {
     led = 0;
-    v_sensor.ping();
-    i_sensor.ping();
-//TODO add error handling
-    
-//    if(adc1_resp != NS_OK) {
-//      printf("[ERROR] Voltage ADC not found\r\n");
-//      data.error = ADC_VOLTAGE_ERROR;
-//      return;
-//    }
-//    if(adc2_resp != NS_OK) {
-//      printf("[ERROR] Current ADC not found\r\n");
-//      data.error = ADC_CURRENT_ERROR;
-//      return;
-//    }
-//    printf("[ok] ADC\r\n");
+    if(!v_sensor.ping()) {
+      NectarError.set_error(ADC_VOLTAGE_ERROR);
+    }
+    if(!i_sensor.ping()) {
+      NectarError.set_error(ADC_CURRENT_ERROR);
+    }
   }
   
   void measure() {
