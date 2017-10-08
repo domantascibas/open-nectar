@@ -30,7 +30,7 @@ void Sensor::detach_ticker() {
   t.detach();
 }
 
-void Sensor::ping() {
+uint8_t Sensor::ping() {
   uint8_t error;
   
   cmd[0] = REG_ADDR_CONFIG;
@@ -40,10 +40,10 @@ void Sensor::ping() {
   if(error == 0) {
     printf("[ok] ADC at 0x%X found\r\n", address);
     m_i2c.write(address, cmd, 2, false);
-//    return NS_OK;
+    return 1;
   } else {
     printf("[ERROR] ADC at 0x%X not found!\r\n", address);
-//    return NS_ERROR;
+    return 0;
   }
 }
 

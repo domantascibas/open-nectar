@@ -9,7 +9,7 @@ struct Sensor {
   float *reference;
   bool ready_to_sample;
   
-  void ping();
+  uint8_t ping();
   void attach_ticker();
   void detach_ticker();
   float sample(const uint16_t = SAMPLE_NUM);
