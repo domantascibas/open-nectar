@@ -5,8 +5,6 @@
 
 typedef enum {
   FLASH_ACCESS_ERROR,
-  FLASH_READ_ERROR,
-  FLASH_WRITE_ERROR,
   ADC_VOLTAGE_ERROR,
   ADC_CURRENT_ERROR,
   CALIBRATION_ERROR,
@@ -30,11 +28,13 @@ struct ErrorHandler {
     void get_last_error(ERROR_CODE *);
     void clear_error();
     void clear_error(ERROR_CODE);
+    bool has_error(ERROR_CODE);
     bool has_errors;
     
   private:
     uint32_t raised_errors;
     ERROR_CODE last_error;
+    void print_error(ERROR_CODE *);
 };
 
 extern ErrorHandler NectarError;

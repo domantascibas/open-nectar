@@ -11,6 +11,7 @@ InterruptIn no_power(PC_9);
 
 namespace device_modes {
   static volatile bool update_mode = false;
+  
   void update_device_mode_ISR() {
     update_mode = true;
   }
@@ -36,8 +37,7 @@ namespace device_modes {
   }
   
   void no_power_ISR(){
-    //save two values to flash
-    storage::saveMeters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+    Storage::save_meters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
     printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
     
   }
@@ -83,8 +83,8 @@ namespace device_modes {
         break;
         
         case RUNNING:
-          pwm::adjust();
-//          pwm::swipe(0.1, 0.95, 0.1);
+//          pwm::adjust();
+          pwm::swipe(0.1, 0.95, 0.1);
         break;
         
         case SERVICE:
