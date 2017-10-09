@@ -1,5 +1,6 @@
 #include "storage.h"
 #include "eeprom.h"
+#include "error_handler.h"
 
 void StoredItem::load(float *item) {
   EE_ReadVariable(lo_address, &u.b[1]);
@@ -32,14 +33,13 @@ namespace Storage {
     if(FLASH->CR & (0x1 << 0x7)) {
       FLASH->KEYR = 0x45670123; //FLASH KEY 1
       FLASH->KEYR = 0xCDEF89AB; //FLASH KEY 2
-    }// else return FLASH_ACCESS_ERROR;
+    } else NectarError.set_error(FLASH_ACCESS_ERROR);
     
     EE_Init();
     EE_ReadVariable(CALIB_ADDRESS, &cal);
     if(cal != DEVICE_CALIBRATED) {
-//      return NOT_CALIBRATED;
+      NectarError.set_error(CALIBRATION_ERROR);
     }
-//    return NS_OK;
   }
   
   void load_data(float *voltage, float *current, float *sun, float *grid) {
@@ -49,13 +49,16 @@ namespace Storage {
     grid_meter.load(grid);
   }
   
-  void save_data(float voltage, float current, float sun, float grid) {
+  void save_data(float voltage, float current) {
     ref_voltage.save(voltage);
     ref_current.save(current);
-    sun_meter.save(sun);
-    grid_meter.save(grid);
     
     EE_WriteVariable(CALIB_ADDRESS, DEVICE_CALIBRATED);
+  }
+  
+  void save_meters(float sun, float grid) {
+    sun_meter.save(sun);
+    grid_meter.save(grid);
   }
 };
 

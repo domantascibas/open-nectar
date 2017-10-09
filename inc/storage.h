@@ -24,7 +24,8 @@ struct StoredItem {
 namespace Storage {
   void init();
   void load_data(float *, float *, float *, float *);
-  void save_data(float, float, float, float);
+  void save_data(float, float);
+  void save_meters(float, float);
 };
 
 #endif
