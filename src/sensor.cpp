@@ -18,7 +18,7 @@ I2C m_i2c(SDA, SCL);
 
 Sensor::Sensor(const uint8_t addr, float *ref) 
   : address(addr), ready_to_sample(false), reference(ref) {
-//    m_i2c.frequency(400000);
+    m_i2c.frequency(400000);
     attach_ticker();
 }
   

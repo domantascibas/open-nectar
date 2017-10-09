@@ -3,6 +3,7 @@
 #include "storage.h"
 #include "device_modes.h"
 #include "sensor_circuit.h"
+#include "error_handler.h"
 #include "data.h"
 
 static const PinName CALIBRATION_BTN = PC_12;
@@ -21,18 +22,15 @@ namespace sensors {
     
     printf("[MEASUREMENTS]\r\n");
     SensorCircuit::init();
-
-    //check for calibration data from EEPROM
-    uint8_t response = NS_OK;
-    Storage::init();
-    if(response == NS_OK) {
-      data.calibrated = true;
-      Storage::load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
-    } else {
-      data.calibrated = false;
-      data.error = response;
-      printf("ERROR 0x%X\r\n", data.error);
-      return;
+    
+    if(!NectarError.has_errors) {
+      Storage::init();
+      if(!NectarError.has_errors) {
+        Storage::load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
+        data.calibrated = true;
+      } else {
+        data.calibrated = false;
+      }
     }
     DEBUG_PRINT("calib: 0x%X, vref: %f, iref: %f, sun meter: %f, grid meter: %f\r\n", data.calibrated, data.reference_voltage, data.reference_current, data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
    
@@ -63,12 +61,18 @@ namespace sensors {
   }
   
   void loop() {
-    SensorCircuit::measure();
+    if(!NectarError.has_error(CALIBRATION_ERROR)) {
+      SensorCircuit::measure();
+    }
     
     if(calibrate_sensors) {
+      if(NectarError.has_error(CALIBRATION_ERROR)) {
+        NectarError.clear_error(CALIBRATION_ERROR);
+      }
+      data.calibrated = true;
       calibrate_sensors = false;
       SensorCircuit::calibrate();
-      Storage::save_data(data.reference_voltage, data.reference_current, data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+      Storage::save_data(data.reference_voltage, data.reference_current);
     }
   }
 }

@@ -17,40 +17,26 @@ namespace SensorCircuit {
   
   void get_voltage(float *value) {
     float v = (v_sensor.sample() - *v_sensor.reference) / INPUT_VDIV;
-//TODO add error handling
     
-//    if(voltage >= VOLTAGE_LIMIT) {
-//      data.moment_voltage = voltage;
-//      data.error = DC_OVER_VOLTAGE;
-//      printf("[ERROR] DC Over-Voltage %7.2fV\r\n", data.moment_voltage);
-//      return;
-//    } else {
-//      if(voltage < 0) {
-//        data.moment_voltage = 0;
-//      } else {
-//        data.moment_voltage = voltage;
-//      }
-//    }
-    *value = v;
+    if(v >= VOLTAGE_LIMIT) {
+      *value = v;
+      NectarError.set_error(DC_OVER_VOLTAGE);
+    } else {
+      if(v < 0) v = 0;
+      else *value = v;
+    }
   }
   
   void get_current(float *value) {
     float i = (i_sensor.sample() - *i_sensor.reference) * 5.000;
-//TODO add error handling
-    
-//    if(current >= CURRENT_LIMIT) {
-//      data.moment_current = current;
-//      data.error = DC_OVER_CURRENT;
-//      printf("[ERROR] DC Over-Current %7.2fA\r\n", data.moment_current);
-//      return;
-//    } else {
-//      if(current < 0) {
-//        data.moment_current = 0;
-//      } else {
-//        data.moment_current = current;
-//      }
-//    }
-    *value = i;
+
+    if(i >= CURRENT_LIMIT) {
+      *value = i;
+      NectarError.set_error(DC_OVER_CURRENT);
+    } else {
+      if(i < 0) i = 0;
+      else *value = i;
+    }
   }  
   
   void init() {
@@ -66,13 +52,13 @@ namespace SensorCircuit {
   void measure() {
     if(v_sensor.ready_to_sample) {
       get_voltage(&data.moment_voltage);
-      DEBUG_PRINT("%fV, ", data.moment_voltage);
+      printf("%fV, ", data.moment_voltage);
       led = !led;
     }
     
     if(i_sensor.ready_to_sample) {
       get_current(&data.moment_current);
-      DEBUG_PRINT("%fA\r\n", data.moment_current);
+      printf("%fA\r\n", data.moment_current);
     }
   }
   
@@ -81,7 +67,6 @@ namespace SensorCircuit {
     i_sensor.detach_ticker();
     
     printf("Calibrating\r\n");
-    printf("v_ref = %fV, i_ref = %fA\r\n", *v_sensor.reference, *i_sensor.reference);
     
     *v_sensor.reference = v_sensor.sample(SAMPLE_NUM << 3);
     *i_sensor.reference = i_sensor.sample(SAMPLE_NUM << 3);
@@ -97,7 +82,6 @@ namespace SensorCircuit {
 ////    data.reference_voltage = sample(USENSE_ADDR, CALIBRATION_SAMPLES);
 ////    data.reference_current = sample(ISENSE_ADDR, CALIBRATION_SAMPLES);
 //    device_modes::stop();
-//    Storage::save_data(data.reference_voltage, data.reference_current, data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
 //    if(response != NS_OK) {
 //      return response;
 //    }
