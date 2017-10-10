@@ -5,7 +5,7 @@
 #include "NectarStream.h"
 #include "NectarContract.h"
 
-namespace esp {  
+namespace esp {
   static const PinName TX = PA_9;   //D8
   static const PinName RX = PA_10;  //D2
   
@@ -34,7 +34,7 @@ namespace esp {
 void mbedStream::setup() {
   m_serial.baud(C_SERIAL_BAUD_RATE);
   printf("esp_serial setup\r\n");
-  m_serial.attach(this, &mbedStream::Rx_interrupt);
+  m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
 }
 
 void mbedStream::Rx_interrupt() {

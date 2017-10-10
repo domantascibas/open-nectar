@@ -169,7 +169,7 @@ void powerStream::setup() {
   line_busy_timeout.attach(line_busy_ISR, 0.05);
   get_data_tick.attach(&power_board::get_data_ISR, interval);
   
-  m_serial.attach(this, &powerStream::Rx_interrupt);
+  m_serial.attach(callback(this, &powerStream::Rx_interrupt));
   printf("power_serial setup\r\n");
 }
 
