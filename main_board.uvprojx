@@ -469,6 +469,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\stat_counter.cpp</FilePath>
             </File>
+            <File>
+              <FileName>state_service.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\state_service.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2023,6 +2028,11 @@
               <FileName>stat_counter.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\stat_counter.h</FilePath>
+            </File>
+            <File>
+              <FileName>state_service.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\state_service.h</FilePath>
             </File>
           </Files>
         </Group>

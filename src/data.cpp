@@ -3,10 +3,13 @@
 #include "NectarStream.h"
 #include "NectarContract.h"
 
+//default init values
 bool line_busy = false;
-
-MODE current_mode = MODE_DEFAULT;
-MODE previous_mode = MODE_DEFAULT;
+bool has_config = false;
+bool has_internet = false;
+HeaterMode current_mode = None;
+HeaterMode previous_mode = None;
+const float boiler_power = 0.0;
 float temp_max = 75.0;
 float temp_min = 5.0;
 float temp_scheduled = 40.0;
@@ -29,13 +32,18 @@ uint8_t mosfet_overheat_on = false;
 bool calibrated = false;
 float solar_kwh = 0.0;
 float grid_kwh = 0.0;
+uint8_t relay_state;
 
-Data data = { 
-  current_mode, previous_mode, temp_max, temp_min, temp_scheduled, temp_scheduled_night, temp_away, temp_boiler,
+Data data = {
+  current_mode, previous_mode, boiler_power, temp_max, temp_min, temp_scheduled, temp_scheduled_night, temp_away, temp_boiler,
   sun_relay_on, grid_relay_on, generator_on,
   pv_power, pv_voltage, pv_current, pv_ref_voltage, pv_ref_current, pwm_duty,
   airgap_temp, radiator_temp, device_temperature, mosfet_overheat_on,
-  0x00, calibrated, solar_kwh, grid_kwh
+  0x00, calibrated, solar_kwh, grid_kwh, relay_state
+};
+
+nectar_contract::NectarStatus EspDeviceData = {
+  nectar_contract::None, true, false, temp_scheduled, temp_max, 2.2
 };
 
 namespace power_data {

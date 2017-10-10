@@ -35,12 +35,12 @@ enum error_codes{
   INTERNAL_TEMP_SENSOR_NOT_PRESENT
 };
 
-enum MODE {
-  MODE_DEFAULT,
-  MODE_BOOST,
-  MODE_AWAY,
-  MODE_NO_GRID,
-  MODE_COUNT
+enum HeaterMode {
+  None,
+  Boost,
+  Away,
+  Nogrid,
+  Count
 };
 
 enum codes {
@@ -50,8 +50,10 @@ enum codes {
 };
 
 struct Data {
-  MODE current_mode;
-  MODE previous_mode;
+  HeaterMode current_mode;
+  HeaterMode previous_mode;
+  
+  const float boiler_power;
 
   float temp_max;
   float temp_min;
@@ -81,9 +83,12 @@ struct Data {
   
   float solar_kwh;
   float grid_kwh;
+  
+  uint8_t relay_state;
 };
 
 extern Data data;
+extern nectar_contract::NectarStatus EspDeviceData;
 extern bool line_busy;
 
 namespace power_data {
