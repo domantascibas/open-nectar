@@ -4,7 +4,8 @@
 #include "power_board.h"
 #include "device_modes.h"
 #include "service.h"
-//#include "menu_service.h"
+#include "state_service.h"
+#include "menu_service.h"
 
 // Function prototype
  
@@ -37,7 +38,8 @@ int availableMemory(int resolution, int maximum, bool disableInterrupts) {
 // Calling the function
  
 int main() {
-//  menu_service::setup();
+  menu_service::setup();
+  StateService::setup();
   service::setup();
   hardware::setup();
   wait(2.0);
@@ -46,13 +48,15 @@ int main() {
   esp::setup();
   device_modes::setup();
   
-//  menu_service::updated = true;
+  menu_service::needUpdate = true;
 
   while(1) {
-//    if(menu_service::updated) {
-//      menu_service::updateScreen();
-//      printf("Available memory = %d\r\n\n", availableMemory(1) );
-//    }
+    StateService::loop();
+    if(menu_service::needUpdate) {
+      menu_service::updateScreen();
+      printf("Available memory = %d\r\n\n", availableMemory(1) );
+//          printf("daytemp: %.2f nightemp: %.2f\r\n", data.temp_scheduled, data.temp_scheduled_night);
+    }
     hardware::updateTemperature();
     device_modes::loop();
     power_board::loop();
