@@ -65,6 +65,8 @@ void mbedStream::received_time(const nectar_contract::NectarTime &time) {
   printf("time %s", buffer);
 }
 
-void mbedStream::received_status(const nectar_contract::NectarStatus &status) {}
+void mbedStream::received_status(const nectar_contract::NectarStatus &status) {
+  EspDeviceData = status;
+}
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
