@@ -138,18 +138,18 @@ namespace power_board {
   }
   
   void loop() {
-    if((data.error != 0x00) & (!error_clearing)) {
+    if((data.power_board_error != 0x00) & (!error_clearing)) {
       if(error_counter < 5) {
         error_clearing = true;
-        print_error(data.error);
+        print_error(data.power_board_error);
         printf("ERROR COUNTER ++\r\n");
         error_timeout.attach(&error_timeout_handler, 10.0);
         error_counter++;
       } else {
         m_stream.stream.sendObject(C_POWER_BOARD_STOP);
-        data.error = RESTART_REQUIRED;
+        data.power_board_error = RESTART_REQUIRED;
       }
-    } else if((data.error == 0x00) & (error_counter != 0)) {
+    } else if((data.power_board_error == 0x00) & (error_counter != 0)) {
       error_counter = 0;
       printf("ERROR COUNTER RESET\r\n");
     } 
@@ -198,13 +198,13 @@ void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &s
   data.pwm_duty = stats.pwm_duty;
   data.radiator_temp = stats.radiator_temperature;
   data.mosfet_overheat_on = stats.transistor_overheat_on;
-  data.error = stats.power_board_error_code;
+  data.power_board_error = stats.power_board_error_code;
   data.calibrated = stats.device_calibrated;
   data.generator_on = stats.pwm_generator_on;
   data.solar_kwh = stats.sun_meter_kwh;
   __enable_irq();
   
-  printf("%.3f %.2f %.2f %.3fkWh %d %d %d\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.solar_kwh, data.error, data.generator_on, data.calibrated);
+  printf("%.3f %.2f %.2f %.3fkWh %d %d %d\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.solar_kwh, data.power_board_error, data.generator_on, data.calibrated);
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

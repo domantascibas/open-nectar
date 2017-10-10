@@ -76,15 +76,15 @@ struct Data {
   float airgap_temp;
   float radiator_temp;
   float device_temperature;
-
   uint8_t mosfet_overheat_on;
-  uint8_t error;
-  bool calibrated;
+  uint8_t power_board_error;
   
+  bool calibrated;
   float solar_kwh;
   float grid_kwh;
-  
   uint8_t relay_state;
+  bool has_config;
+  bool has_internet;
 };
 
 extern Data data;

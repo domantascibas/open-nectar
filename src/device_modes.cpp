@@ -67,7 +67,7 @@ namespace device_modes {
 
       case TURN_ON_SUN:
         grid_relay_state(false);
-        if((!data.generator_on) && (data.error == 0)) {
+        if((!data.generator_on) && (data.power_board_error == 0)) {
           delay(1.0);
           relay_sun = true;
           delay(1.0);
