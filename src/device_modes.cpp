@@ -47,7 +47,7 @@ namespace device_modes {
     switch(data.relay_state) {
       default:
       case TURN_OFF_ALL:
-          power_board::stop();
+        power_board::stop();
         //while(data.pv_current > 0.1) {}
         delay(1.0);
         relay_sun = false;
@@ -56,7 +56,7 @@ namespace device_modes {
       break;
 
       case TURN_ON_GRID:
-          power_board::stop();
+        power_board::stop();
         delay(1.0);
         //while(data.pv_current > 0.1) {}
         relay_sun = false;
@@ -71,8 +71,7 @@ namespace device_modes {
           delay(1.0);
           relay_sun = true;
           delay(1.0);
-//            power_board::start();
-            power_board::stop();
+          power_board::start();
           printf("power board start\r\n");
         }
         printf("turn on sun\r\n");
@@ -177,6 +176,7 @@ namespace device_modes {
         break;
 
         case Nogrid:
+          printf("[MODE] NO GRID\r\n");
           //TODO turn on grid when temperature drops below 5.0C
           if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
             response = TURN_OFF_ALL;
