@@ -1860,11 +1860,6 @@
               <FilePath>.\src\eeprom.c</FilePath>
             </File>
             <File>
-              <FileName>hardware.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\hardware.cpp</FilePath>
-            </File>
-            <File>
               <FileName>main_board.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\main_board.cpp</FilePath>
@@ -1928,11 +1923,6 @@
               <FileName>eeprom.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\eeprom.h</FilePath>
-            </File>
-            <File>
-              <FileName>hardware.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\hardware.h</FilePath>
             </File>
             <File>
               <FileName>main_board.h</FileName>

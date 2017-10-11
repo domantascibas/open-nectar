@@ -1,5 +1,4 @@
 #include "mbed.h"
-#include "hardware.h"
 #include "device_modes.h"
 #include "pwm.h"
 #include "main_board.h"
@@ -11,7 +10,6 @@
 int main() {
   service::setup();
   main_board::setup();
-  hardware::setup();
   pwm::setup();
   device_modes::setup();
   sensors::setup();
@@ -19,7 +17,6 @@ int main() {
   printf("SETUP DONE\r\n");
   
   while(1) {
-    hardware::loop();
     if(NectarError.has_error(CALIBRATION_ERROR)) {
       sensors::loop();
       __WFI();
