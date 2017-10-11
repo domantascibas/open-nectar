@@ -2154,6 +2154,11 @@
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Fonts\OpenSansLight16pt.h</FilePath>
             </File>
+            <File>
+              <FileName>OpenSansLight44pt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Fonts\OpenSansLight44pt.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2275,6 +2280,16 @@
           <GroupName>01</GroupName>
           <Files>
             <File>
+              <FileName>DeviceModeScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\DeviceModeScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>DeviceModeScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\DeviceModeScreen.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ActiveStatusScreen.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\01\ActiveStatusScreen.cpp</FilePath>
@@ -2303,6 +2318,16 @@
               <FileName>SettingsScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\01\SettingsScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>IdleScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\IdleScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>IdleScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\IdleScreen.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2358,16 +2383,6 @@
               <FileName>TimeScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\02\TimeScreen.h</FilePath>
-            </File>
-            <File>
-              <FileName>DeviceModeScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\DeviceModeScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>DeviceModeScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\DeviceModeScreen.h</FilePath>
             </File>
           </Files>
         </Group>
