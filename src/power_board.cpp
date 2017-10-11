@@ -23,7 +23,7 @@ namespace power_board {
   powerStream m_stream(TX, RX);
   
   void error_timeout_handler() {
-    m_stream.stream.sendObject(C_SERVICE_CLEAR_ERROR);
+    //m_stream.stream.sendObject(C_SERVICE_CLEAR_ERROR);
     error_clearing = false;
   }
   
@@ -138,21 +138,21 @@ namespace power_board {
   }
   
   void loop() {
-    if((data.power_board_error != 0x00) & (!error_clearing)) {
-      if(error_counter < 5) {
-        error_clearing = true;
-        print_error(data.power_board_error);
-        printf("ERROR COUNTER ++\r\n");
-        error_timeout.attach(&error_timeout_handler, 10.0);
-        error_counter++;
-      } else {
-        m_stream.stream.sendObject(C_POWER_BOARD_STOP);
-        data.power_board_error = RESTART_REQUIRED;
-      }
-    } else if((data.power_board_error == 0x00) & (error_counter != 0)) {
-      error_counter = 0;
-      printf("ERROR COUNTER RESET\r\n");
-    } 
+//    if((data.power_board_error != 0x00) & (!error_clearing)) {
+//      if(error_counter < 5) {
+//        error_clearing = true;
+//        print_error(data.power_board_error);
+//        printf("ERROR COUNTER ++\r\n");
+//        error_timeout.attach(&error_timeout_handler, 10.0);
+//        error_counter++;
+//      } else {
+//        m_stream.stream.sendObject(C_POWER_BOARD_STOP);
+//        data.power_board_error = RESTART_REQUIRED;
+//      }
+//    } else if((data.power_board_error == 0x00) & (error_counter != 0)) {
+//      error_counter = 0;
+//      printf("ERROR COUNTER RESET\r\n");
+//    } 
   }
 }
 
