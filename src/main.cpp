@@ -6,10 +6,7 @@
 #include "measurements.h"
 #include "data.h"
 #include "service.h"
-
-uint8_t self_check() {
-  
-}
+#include "error_handler.h"
 
 int main() {
   service::setup();
@@ -18,15 +15,19 @@ int main() {
   pwm::setup();
   device_modes::setup();
   sensors::setup();
-  printf("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+  DEBUG_PRINT("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   printf("SETUP DONE\r\n");
-  printf("starting program loops\r\n");
   
   while(1) {
-    device_modes::loop();
-    sensors::loop();
     hardware::loop();
-    __WFI();
+    if(NectarError.has_error(CALIBRATION_ERROR)) {
+      sensors::loop();
+      __WFI();
+    } else {
+        device_modes::loop();
+        sensors::loop();
+        __WFI();
+    }
   }
 }
 

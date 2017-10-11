@@ -107,28 +107,28 @@ namespace pwm {
   void increase_duty() {
     data.pwm_duty += PWM_DUTY_STEP_CHANGE;
     data.pwm_duty = clamp(data.pwm_duty, PWM_MIN, PWM_MAX);
-    printf("PWM DUTY: %.2f\r\n", data.pwm_duty);
+//    printf("PWM DUTY: %.2f\r\n", data.pwm_duty);
   }
   
   void decrease_duty() {
     data.pwm_duty -= PWM_DUTY_STEP_CHANGE;
     data.pwm_duty = clamp(data.pwm_duty, PWM_MIN, PWM_MAX);
-    printf("PWM DUTY: %.2f\r\n", data.pwm_duty);
+//    printf("PWM DUTY: %.2f\r\n", data.pwm_duty);
   }
 
   void reset() {
     shutdown = DRIVER_OFF;
+    data.generator_on = 0;
     data.pwm_duty = 0.1;
     pwm_gen.write(data.pwm_duty);
     last_increase = true;
-    
-    data.generator_on = 0;
   }
 
   void swipe(float min, float max, float step) {
     static bool reverse = false;
     float pwm_duty = data.pwm_duty;
     shutdown = DRIVER_ON;
+    data.generator_on = 1;
     if(!reverse) {
       if(pwm_duty >= max) {
         reverse = true;

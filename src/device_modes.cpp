@@ -73,21 +73,25 @@ namespace device_modes {
       switch(data.current_state) {
         default:
         case STOP:
+          printf("[MODE] stop\r\n");
           pwm::reset();
           data.current_state = IDLE;
         break;
         
         case IDLE:
+          printf("[MODE] idle\r\n");
           //wait for start command
           //PWM driver OFF
         break;
         
         case RUNNING:
-//          pwm::adjust();
-          pwm::swipe(0.1, 0.95, 0.1);
+          printf("[MODE] running\r\n");
+          pwm::adjust();
+//          pwm::swipe(0.1, 0.95, 0.1);
         break;
         
         case SERVICE:
+          printf("[MODE] service\r\n");
           pwm::set();
         break;
       }

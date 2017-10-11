@@ -52,13 +52,13 @@ namespace SensorCircuit {
   void measure() {
     if(v_sensor.ready_to_sample) {
       get_voltage(&data.moment_voltage);
-      printf("%fV, ", data.moment_voltage);
+//      printf("%fV, ", data.moment_voltage);
       led = !led;
     }
     
     if(i_sensor.ready_to_sample) {
       get_current(&data.moment_current);
-      printf("%fA\r\n", data.moment_current);
+//      printf("%fA\r\n", data.moment_current);
     }
   }
   

@@ -20,7 +20,6 @@ namespace main_board {
     };
     
     m_stream.stream.sendObject(C_POWER_BOARD_STATS, &stats, sizeof(stats));
-    //printf("sent %d bytes to main board\r\n", sizeof(stats));
   }
   
   void setup() {
@@ -35,7 +34,7 @@ namespace main_board {
 void mbedStream::setup() {
   m_serial.baud(C_SERIAL_BAUD_RATE);
   printf("m_serial setup\r\n");
-  m_serial.attach(this, &mbedStream::Rx_interrupt);
+  m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
 }
 
 void mbedStream::Rx_interrupt() {
@@ -58,10 +57,12 @@ void mbedStream::received_cmd_stats() {
 
 void mbedStream::received_cmd_power_start() {
   device_modes::start();
+  printf("[COMMAND] start\r\n");
 }
 
 void mbedStream::received_cmd_power_stop() {
   device_modes::stop();
+  printf("[COMMAND] stop\r\n");
 }
 
 void mbedStream::received_cmd_service_clear_error() {
