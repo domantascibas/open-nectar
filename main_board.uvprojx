@@ -474,6 +474,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\state_service.cpp</FilePath>
             </File>
+            <File>
+              <FileName>memory_checker.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\memory_checker.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2034,6 +2039,11 @@
               <FileType>5</FileType>
               <FilePath>.\inc\state_service.h</FilePath>
             </File>
+            <File>
+              <FileName>memory_checker.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\memory_checker.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2218,6 +2228,16 @@
               <FileName>ScreenModel.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\ScreenModel.h</FilePath>
+            </File>
+            <File>
+              <FileName>screen_display.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\mbed\screen_display.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>screen_display.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\mbed\screen_display.h</FilePath>
             </File>
           </Files>
         </Group>
