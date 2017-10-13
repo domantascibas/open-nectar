@@ -36,6 +36,8 @@ uint8_t power_board_error = 0x00;
 
 bool calibrated = false;
 float solar_kwh = 0.0;
+float solar_kwh_today = 0.0;
+float d_kwh = 0.0;
 float grid_kwh = 0.0;
 uint8_t relay_state;
 bool has_config = false;
@@ -46,7 +48,7 @@ Data data = {
   sun_relay_on, grid_relay_on, generator_on,
   pv_power, pv_voltage, pv_current, pv_ref_voltage, pv_ref_current, pwm_duty,
   airgap_temp, radiator_temp, device_temperature, mosfet_overheat_on,
-  power_board_error, calibrated, solar_kwh, grid_kwh, relay_state, has_config, has_internet
+  power_board_error, calibrated, solar_kwh, solar_kwh_today, d_kwh, grid_kwh, relay_state, has_config, has_internet
 };
 
 nectar_contract::NectarStatus EspDeviceData = {

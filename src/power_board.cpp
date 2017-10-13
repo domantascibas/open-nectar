@@ -9,6 +9,8 @@ Ticker get_data_tick;
 Timeout line_busy_timeout;
 Timeout error_timeout;
 
+bool isFirst = true;
+
 void line_busy_ISR() {
   line_busy = false;
 }
@@ -202,6 +204,12 @@ void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &s
   data.calibrated = stats.device_calibrated;
   data.generator_on = stats.pwm_generator_on;
   data.solar_kwh = stats.sun_meter_kwh;
+  
+  if(isFirst) {
+    isFirst = false;
+    data.d_kwh = data.solar_kwh;
+  }
+  data.solar_kwh_today = data.solar_kwh - data.d_kwh;  
   __enable_irq();
   
   printf("%.3f %.2f %.2f %.3fkWh %d %d %d\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.solar_kwh, data.power_board_error, data.generator_on, data.calibrated);

@@ -81,6 +81,8 @@ struct Data {
   
   bool calibrated;
   float solar_kwh;
+  float solar_kwh_today;
+  float d_kwh;
   float grid_kwh;
   uint8_t relay_state;
   bool has_config;
