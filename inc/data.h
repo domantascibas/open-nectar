@@ -49,6 +49,7 @@ enum modes {
 };
 
 struct Data {
+  bool isTestMode;
   uint8_t current_state;
   
   float moment_power;
