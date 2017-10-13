@@ -29,6 +29,10 @@ namespace power_board {
     error_clearing = false;
   }
   
+  void enter_test_mode() {
+    m_stream.stream.sendObject(C_POWER_BOARD_TEST_MODE);
+  }
+  
   void start() {
     m_stream.stream.sendObject(C_POWER_BOARD_START);
   }

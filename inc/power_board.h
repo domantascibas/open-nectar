@@ -12,6 +12,7 @@ namespace power_board {
   void start();
   void stop();
   void send_grid_meter();
+  void enter_test_mode();
 }
 
 class powerStream : public IStreamDelegate {

@@ -7,14 +7,7 @@
 #include "state_service.h"
 #include "menu_service.h"
 
-#include "memory_checker.h"
-//#include "button.h"
-
-//void test_ISR() {
-//  printf("test isr\r\n");
-//}
-
-//Button key1(PA_5, &test_ISR);
+static bool isFirst = true;
 
 int main() {
   service::setup();
@@ -51,8 +44,13 @@ int main() {
         break;
       
       case TEST_MODE:
-        printf("This is test mode. Returning to Welcome\r\n");
-        StateService::currentDeviceState = WELCOME;
+        if(isFirst) {
+          isFirst = false;
+          printf("This is test mode. Returning to Welcome\r\n");
+          power_board::enter_test_mode();
+        }
+        device_modes::loop();
+        power_board::loop();
         break;
     }
 
