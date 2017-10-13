@@ -4,10 +4,9 @@
 #include "device_modes.h"
 #include "storage.h"
 
-//PC_9 voltage monitor. RESET active - low. normal operation - 1, when <8.5V - 0.
 Timer stat_timer;
 Ticker update_device_mode;
-InterruptIn no_power(PC_9);
+InterruptIn no_power(PC_9); //PC_9 voltage monitor. RESET active - low. normal operation - 1, when <8.5V - 0.
 
 namespace device_modes {
   static volatile bool update_mode = false;
@@ -57,18 +56,16 @@ namespace device_modes {
     if(update_mode) {      
       update_mode = false;
       
-      if(!data.generator_on) {
-        stat_timer.reset();
-      } else {
+      if(!data.generator_on && !data.isTestMode) {
         float time_passed = stat_timer.read();
         stat_timer.reset();
         data.sun_energy_meter_kwh += data.moment_power * time_passed / 3600 / 1000;
+      } else {
+        stat_timer.reset();
       }
       
       data.grid_energy_meter_kwh += 0;
       //printf("[LOOP] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
-      
-      //printf("Current State %d\r\n", data.current_state);
       
       switch(data.current_state) {
         default:
@@ -76,24 +73,24 @@ namespace device_modes {
           printf("[MODE] stop\r\n");
           pwm::reset();
           data.current_state = IDLE;
-        break;
+          break;
         
         case IDLE:
           printf("[MODE] idle\r\n");
           //wait for start command
           //PWM driver OFF
-        break;
+          break;
         
         case RUNNING:
           printf("[MODE] running\r\n");
           pwm::adjust();
 //          pwm::swipe(0.1, 0.95, 0.1);
-        break;
+          break;
         
         case SERVICE:
           printf("[MODE] service\r\n");
           pwm::set();
-        break;
+          break;
       }
     }
   }

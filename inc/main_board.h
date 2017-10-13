@@ -24,6 +24,7 @@ public:
   virtual void write(uint8_t byte);
   virtual void received_cmd_stats();
     
+  virtual void received_cmd_test_mode();
   virtual void received_cmd_power_stop();
   virtual void received_cmd_power_start();
   virtual void received_cmd_service_clear_error();

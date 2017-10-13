@@ -27,10 +27,6 @@ namespace main_board {
   }
 }
 
-/*
- * Class implementation
- */
-
 void mbedStream::setup() {
   m_serial.baud(C_SERIAL_BAUD_RATE);
   printf("m_serial setup\r\n");
@@ -54,6 +50,10 @@ void mbedStream::write(uint8_t byte) {
 void mbedStream::received_cmd_stats() {
   main_board::send_stats();
 }
+
+void mbedStream::received_cmd_test_mode() {
+  data.isTestMode = true;
+ }
 
 void mbedStream::received_cmd_power_start() {
   device_modes::start();
