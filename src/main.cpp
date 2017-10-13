@@ -7,40 +7,19 @@
 #include "state_service.h"
 #include "menu_service.h"
 
-// Function prototype
- 
-int availableMemory(int = 256, int = 0x8000, bool = true);
- 
-// Calculation function 
- 
-int availableMemory(int resolution, int maximum, bool disableInterrupts) {
-  if(resolution < 1) resolution = 1;
-  if(maximum < 0) maximum = 0;
+#include "memory_checker.h"
+//#include "button.h"
 
-  int low = 0;
-  int high = maximum + 1;
+//void test_ISR() {
+//  printf("test isr\r\n");
+//}
 
-  if(disableInterrupts) __disable_irq();
-  while(high - low > resolution) {
-    int mid = (low + high) / 2;
-    void* p = malloc(mid);
-    if(p == NULL) {
-      high = mid;
-    } else {
-      free(p);
-      low = mid;
-    }
-  }
-  if(disableInterrupts) __enable_irq();
-  return low;
-}
- 
-// Calling the function
- 
+//Button key1(PA_5, &test_ISR);
+
 int main() {
-  menu_service::setup();
   StateService::setup();
   service::setup();
+  menu_service::setup();
   hardware::setup();
   wait(2.0);
   hardware::updateTemperature();
@@ -54,8 +33,6 @@ int main() {
     StateService::loop();
     if(menu_service::needUpdate) {
       menu_service::updateScreen();
-      printf("Available memory = %d\r\n\n", availableMemory(1) );
-//          printf("daytemp: %.2f nightemp: %.2f\r\n", data.temp_scheduled, data.temp_scheduled_night);
     }
     hardware::updateTemperature();
     device_modes::loop();
