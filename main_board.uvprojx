@@ -477,7 +477,12 @@
             <File>
               <FileName>memory_checker.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\memory_checker.cpp</FilePath>
+              <FilePath>.\src\memory_checker.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>button.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\button.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2044,6 +2049,11 @@
               <FileType>5</FileType>
               <FilePath>.\inc\memory_checker.h</FilePath>
             </File>
+            <File>
+              <FileName>button.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\button.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2413,6 +2423,21 @@
               <FileName>Icons.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\Icons.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>welcome</GroupName>
+          <Files>
+            <File>
+              <FileName>WelcomeScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\welcome\WelcomeScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WelcomeScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\welcome\WelcomeScreen.h</FilePath>
             </File>
           </Files>
         </Group>
