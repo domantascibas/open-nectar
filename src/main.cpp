@@ -17,7 +17,6 @@
 //Button key1(PA_5, &test_ISR);
 
 int main() {
-  StateService::setup();
   service::setup();
   menu_service::setup();
   hardware::setup();
@@ -30,14 +29,34 @@ int main() {
   menu_service::needUpdate = true;
 
   while(1) {
-    StateService::loop();
     if(menu_service::needUpdate) {
       menu_service::updateScreen();
+//      printf("Available memory = %d\r\n\n", Memory::availableMemory(1) );
     }
-    hardware::updateTemperature();
-    device_modes::loop();
-    power_board::loop();
+    
+    switch(StateService::currentDeviceState) {
+      default:
+      case NOT_CONFIGURED:
+        if(data.has_config) StateService::currentDeviceState = CONFIGURED;
+        device_modes::loop();
+        power_board::loop();
+        break;
+      
+      case CONFIGURED:
+        device_modes::loop();
+        power_board::loop();
+        break;
+      
+      case WELCOME:
+        break;
+      
+      case TEST_MODE:
+        printf("This is test mode. Returning to Welcome\r\n");
+        StateService::currentDeviceState = WELCOME;
+        break;
+    }
 
+    hardware::updateTemperature();
     __WFI();
   }
 }

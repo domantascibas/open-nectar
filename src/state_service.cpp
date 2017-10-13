@@ -2,42 +2,7 @@
 #include "NectarContract.h"
 
 namespace StateService {
-  typedef enum {
-    WELCOME,
-    NOT_CONFIGURED,
-    CONFIGURED,
-    TEST_MODE
-  } DeviceState;
-  
-  DeviceState currentDeviceState, lastDeviceState;
-  
-  void setup() {
-    //select device state to start with
-    currentDeviceState = NOT_CONFIGURED;
-  }
-  
-  void loop() {
-    if(currentDeviceState != lastDeviceState) {
-      lastDeviceState = currentDeviceState;
-      switch(currentDeviceState) {
-        default:
-        case NOT_CONFIGURED:
-          printf("gData %d %f %f\r\n", *get_device_mode(), get_temperature(), get_temperature_max());
-          break;
-        
-        case CONFIGURED:
-          //DeviceStateData = pointer to ESP data struct
-  //        printf("gData %d %f %f\r\n", gData->current_mode, gData->temperature, gData->temperature_max);
-          break;
-        
-        case WELCOME:
-          break;
-        
-        case TEST_MODE:
-          break;
-      }
-    }
-  }
+  DeviceState currentDeviceState = WELCOME;
   
   float get_temperature() {
     if(currentDeviceState == CONFIGURED) {
@@ -69,5 +34,13 @@ namespace StateService {
     } else {
       return &data.current_mode;
     }
+  }
+  
+  DeviceState *get_state() {
+    return &currentDeviceState;
+  }
+  
+  void set_state(DeviceState state) {
+    currentDeviceState = state;
   }
 }
