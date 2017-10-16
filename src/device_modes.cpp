@@ -56,7 +56,7 @@ namespace device_modes {
     if(update_mode) {      
       update_mode = false;
       
-      if(!data.generator_on && !data.isTestMode) {
+      if(data.generator_on && !data.isTestMode) {
         float time_passed = stat_timer.read();
         stat_timer.reset();
         data.sun_energy_meter_kwh += data.moment_power * time_passed / 3600 / 1000;
@@ -64,7 +64,7 @@ namespace device_modes {
         stat_timer.reset();
       }
       
-      data.grid_energy_meter_kwh += 0;
+//      data.grid_energy_meter_kwh += 0;
       //printf("[LOOP] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
       
       switch(data.current_state) {
