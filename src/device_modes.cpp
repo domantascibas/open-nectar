@@ -3,6 +3,7 @@
 #include "data.h"
 #include "device_modes.h"
 #include "storage.h"
+#include "error_handler.h"
 
 Timer stat_timer;
 Ticker update_device_mode;
@@ -36,9 +37,10 @@ namespace device_modes {
   }
   
   void no_power_ISR(){
-    Storage::save_meters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
-    printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
-    
+    if(data.isTestMode == false) {
+      Storage::save_meters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+      printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+    }
   }
   
   void setup() {
@@ -56,16 +58,15 @@ namespace device_modes {
     if(update_mode) {      
       update_mode = false;
       
-      if(data.generator_on && !data.isTestMode) {
-        float time_passed = stat_timer.read();
-        stat_timer.reset();
-        data.sun_energy_meter_kwh += data.moment_power * time_passed / 3600 / 1000;
-      } else {
-        stat_timer.reset();
+      if(NectarError.has_error(DC_OVER_CURRENT) || NectarError.has_error(DC_OVER_VOLTAGE)) {
+        data.current_state = STOP;
       }
       
-//      data.grid_energy_meter_kwh += 0;
-      //printf("[LOOP] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+      if(data.generator_on && (data.isTestMode == false)) {
+        float time_passed = stat_timer.read();
+        data.sun_energy_meter_kwh += data.moment_power * time_passed / 3600 / 1000;
+      }
+      stat_timer.reset();
       
       switch(data.current_state) {
         default:

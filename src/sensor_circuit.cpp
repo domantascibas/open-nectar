@@ -18,25 +18,17 @@ namespace SensorCircuit {
   void get_voltage(float *value) {
     float v = (v_sensor.sample() - *v_sensor.reference) / INPUT_VDIV;
     
-    if(v >= VOLTAGE_LIMIT) {
-      *value = v;
-      NectarError.set_error(DC_OVER_VOLTAGE);
-    } else {
-      if(v < 0) v = 0;
-      else *value = v;
-    }
+    if(v >= VOLTAGE_LIMIT) NectarError.set_error(DC_OVER_VOLTAGE);
+    if(v < 0) v = 0;
+    *value = v;
   }
   
   void get_current(float *value) {
     float i = (i_sensor.sample() - *i_sensor.reference) * 5.000;
 
-    if(i >= CURRENT_LIMIT) {
-      *value = i;
-      NectarError.set_error(DC_OVER_CURRENT);
-    } else {
-      if(i < 0) i = 0;
-      else *value = i;
-    }
+    if(i >= CURRENT_LIMIT) NectarError.set_error(DC_OVER_CURRENT);
+    if(i < 0) i = 0;
+    *value = i;
   }  
   
   void init() {
@@ -76,15 +68,5 @@ namespace SensorCircuit {
     
     printf("[ok] calibrated. v_ref = %fV, i_ref = %fA\r\n", *v_sensor.reference, *i_sensor.reference);
 //TODO add error checking
-    
-//    uint8_t response = NS_OK;
-//    device_modes::start();
-////    data.reference_voltage = sample(USENSE_ADDR, CALIBRATION_SAMPLES);
-////    data.reference_current = sample(ISENSE_ADDR, CALIBRATION_SAMPLES);
-//    device_modes::stop();
-//    if(response != NS_OK) {
-//      return response;
-//    }
-//    return NS_OK;
   }
 }

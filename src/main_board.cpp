@@ -52,17 +52,20 @@ void mbedStream::received_cmd_stats() {
 }
 
 void mbedStream::received_cmd_test_mode() {
+  __disable_irq();
   data.isTestMode = true;
+  __enable_irq();
+  printf("[COMMS] received command test mode\r\n");
  }
 
 void mbedStream::received_cmd_power_start() {
   device_modes::start();
-  printf("[COMMAND] start\r\n");
+  printf("[COMMS] power board start\r\n");
 }
 
 void mbedStream::received_cmd_power_stop() {
   device_modes::stop();
-  printf("[COMMAND] stop\r\n");
+  printf("[COMMS] power board stop\r\n");
 }
 
 void mbedStream::received_cmd_service_clear_error() {
