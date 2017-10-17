@@ -7,9 +7,8 @@
 #include "state_service.h"
 #include "menu_service.h"
 
-static bool isFirst = true;
-
 int main() {
+  static bool isFirst = true;
   service::setup();
   menu_service::setup();
   hardware::setup();
@@ -44,9 +43,8 @@ int main() {
         break;
       
       case TEST_MODE:
-        if(isFirst) {
+        if(isFirst && !line_busy) {
           isFirst = false;
-          printf("This is test mode. Returning to Welcome\r\n");
           power_board::enter_test_mode();
         }
         device_modes::loop();
