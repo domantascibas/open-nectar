@@ -484,6 +484,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\button.cpp</FilePath>
             </File>
+            <File>
+              <FileName>error_handler.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\error_handler.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2054,6 +2059,11 @@
               <FileType>5</FileType>
               <FilePath>.\inc\button.h</FilePath>
             </File>
+            <File>
+              <FileName>error_handler.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\error_handler.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2413,6 +2423,16 @@
               <FileName>TimeScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\02\TimeScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>PairingScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\PairingScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>PairingScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\PairingScreen.h</FilePath>
             </File>
           </Files>
         </Group>
