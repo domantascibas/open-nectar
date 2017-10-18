@@ -15,7 +15,7 @@ namespace main_board {
   void send_stats() {
     printf("sending %.3f, %.2f, %.2f, %d, %d\r\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.calibrated, data.generator_on);
     nectar_contract::PowerBoardStats stats = {
-      data.moment_power, data.moment_voltage, data.moment_current, data.pwm_duty, data.radiator_temperature, data.mosfet_overheat_on,
+      data.moment_power, data.moment_voltage, data.moment_current, data.pwm_duty, data.mosfet_overheat_on,
       data.error, data.calibrated, data.generator_on, data.sun_energy_meter_kwh
     };
     
