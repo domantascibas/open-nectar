@@ -470,11 +470,6 @@
               <FilePath>.\src\stat_counter.cpp</FilePath>
             </File>
             <File>
-              <FileName>state_service.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\state_service.cpp</FilePath>
-            </File>
-            <File>
               <FileName>memory_checker.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\memory_checker.cpp</FilePath>
@@ -488,6 +483,11 @@
               <FileName>error_handler.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\error_handler.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>OperationalMode.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\OperationalMode.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2045,11 +2045,6 @@
               <FilePath>.\inc\stat_counter.h</FilePath>
             </File>
             <File>
-              <FileName>state_service.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\state_service.h</FilePath>
-            </File>
-            <File>
               <FileName>memory_checker.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\memory_checker.h</FilePath>
@@ -2063,6 +2058,11 @@
               <FileName>error_handler.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\error_handler.h</FilePath>
+            </File>
+            <File>
+              <FileName>OperationalMode.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\OperationalMode.h</FilePath>
             </File>
           </Files>
         </Group>

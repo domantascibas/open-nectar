@@ -4,8 +4,8 @@
 #include "power_board.h"
 #include "device_modes.h"
 #include "service.h"
-#include "state_service.h"
 #include "menu_service.h"
+#include "OperationalMode.h"
 
 int main() {
   static bool isFirst = true;
@@ -26,10 +26,10 @@ int main() {
 //      printf("Available memory = %d\r\n\n", Memory::availableMemory(1) );
     }
     
-    switch(StateService::currentDeviceState) {
+    switch(deviceOpMode.currentMode) {
       default:
       case NOT_CONFIGURED:
-        if(data.has_config) StateService::currentDeviceState = CONFIGURED;
+        if(data.has_config) deviceOpMode.setConfigured();
         device_modes::loop();
         power_board::loop();
         break;
@@ -40,6 +40,8 @@ int main() {
         break;
       
       case WELCOME:
+        //nothing to do here
+        //wait for user to finish onboarding
         break;
       
       case TEST_MODE:

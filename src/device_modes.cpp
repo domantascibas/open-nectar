@@ -2,7 +2,7 @@
 #include "device_modes.h"
 #include "power_board.h"
 #include "stat_counter.h"
-#include "state_service.h"
+#include "OperationalMode.h"
 #include "data.h"
 
 static const PinName SUN = PB_3;
@@ -97,15 +97,14 @@ namespace device_modes {
       stat_counter::increase();
       
       __disable_irq();
+      float *temp = deviceOpMode.getTemperature();
       float temp_boiler = data.temp_boiler;
       float temp_min = data.temp_min;
       float temp_max = data.temp_max;
       float temp_away = data.temp_away;
       __enable_irq();
       
-      printf("current mode: %d\r\n", *StateService::get_device_mode());
-      
-      switch(*StateService::get_device_mode()) {
+      switch(data.current_mode) {
         default:  //mode is any other value than the ones below
         case None:
           printf("[MODE] DEFAULT\r\n");
@@ -117,14 +116,14 @@ namespace device_modes {
           } else {
             response = TURN_ON_SUN;
             if(relay_grid) {
-              if(temp_boiler < (StateService::get_temperature() + HIST)) {
+              if(temp_boiler < (*temp + HIST)) {
                 response = TURN_ON_GRID;
               } else {
                 response = TURN_ON_SUN;
               }
             }
             if(relay_sun) {
-              if(temp_boiler > (StateService::get_temperature() - HIST)) {
+              if(temp_boiler > (*temp - HIST)) {
                 response = TURN_ON_SUN;
               } else {
                 response = TURN_ON_GRID;

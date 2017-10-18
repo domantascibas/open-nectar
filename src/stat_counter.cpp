@@ -1,7 +1,7 @@
 #include "mbed.h"
 #include "data.h"
 #include "stat_counter.h"
-#include "state_service.h"
+#include "OperationalMode.h"
 
 Timer stat_timer;
 
@@ -11,7 +11,7 @@ namespace stat_counter {
   }
   
   void increase() {
-    if(data.grid_relay_on && (*StateService::get_state() != TEST_MODE)) {
+    if(data.grid_relay_on && !deviceOpMode.inTestMode) {
       float time_passed = stat_timer.read();
       stat_timer.reset();
       data.grid_kwh += data.boiler_power * time_passed / 3600 / 1000;
