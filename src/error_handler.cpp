@@ -2,6 +2,7 @@
 #include "error_handler.h"
 
 ErrorHandler MainBoardError;
+ErrorHandler PowerBoardError;
 
 ErrorHandler::ErrorHandler()
   : has_errors(false), last_error(NONE), raised_errors(0x00000000) {
@@ -16,6 +17,10 @@ void ErrorHandler::set_error(ERROR_CODE err) {
 
 void ErrorHandler::get_errors(uint32_t *err) {
   *err = raised_errors;
+}
+
+void ErrorHandler::save_error_code(uint32_t err) {
+  raised_errors = err;
 }
 
 void ErrorHandler::get_last_error(ERROR_CODE *err) {

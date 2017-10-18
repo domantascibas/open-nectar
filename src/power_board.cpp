@@ -125,7 +125,7 @@ void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &s
     data.pv_current = stats.sun_current;
     data.pwm_duty = stats.pwm_duty;
     data.mosfet_overheat_on = stats.transistor_overheat_on;
-    data.power_board_error = stats.power_board_error_code;
+    PowerBoardError.save_error_code(stats.power_board_error_code);
     data.calibrated = stats.device_calibrated;
     data.generator_on = stats.pwm_generator_on;
     data.solar_kwh = stats.sun_meter_kwh;

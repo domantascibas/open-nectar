@@ -1,5 +1,3 @@
-#include <stdint.h>
-
 #ifndef ERROR_HANDLER_H
 #define ERROR_HANDLER_H
 
@@ -25,6 +23,7 @@ struct ErrorHandler {
   public:
     void set_error(ERROR_CODE);
     void get_errors(uint32_t *);
+    void save_error_code(uint32_t);
     void get_last_error(ERROR_CODE *);
     void clear_error();
     void clear_error(ERROR_CODE);
