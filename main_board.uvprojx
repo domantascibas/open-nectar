@@ -2359,16 +2359,6 @@
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\01\SettingsScreen.h</FilePath>
             </File>
-            <File>
-              <FileName>IdleScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\01\IdleScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>IdleScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\01\IdleScreen.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -2468,6 +2458,26 @@
               <FileName>DebugScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\welcome\DebugScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>IdleScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\welcome\IdleScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>IdleScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\welcome\IdleScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>ErrorScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\welcome\ErrorScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ErrorScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\welcome\ErrorScreen.h</FilePath>
             </File>
           </Files>
         </Group>
