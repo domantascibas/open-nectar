@@ -56,7 +56,7 @@ nectar_contract::NectarStatus EspDeviceData = {
 
 namespace power_data {
   nectar_contract::PowerBoardStats stats = {
-    data.pv_power, data.pv_voltage, data.pv_current, data.pwm_duty, data.radiator_temp, data.mosfet_overheat_on, data.power_board_error, data.calibrated, data.generator_on,
+    data.pv_power, data.pv_voltage, data.pv_current, data.pwm_duty, data.mosfet_overheat_on, data.power_board_error, data.calibrated, data.generator_on,
     data.solar_kwh
   };
   
