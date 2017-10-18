@@ -1,5 +1,6 @@
 #include "mbed.h"
 #include "device_modes.h"
+#include "error_handler.h"
 #include "data.h"
 #include <string>
 #include "main_board.h"
@@ -13,6 +14,7 @@ namespace main_board {
   mbedStream m_stream(TX, RX);
 
   void send_stats() {
+    NectarError.get_errors(&data.error);
     printf("sending %.3f, %.2f, %.2f, %d, %d\r\n", data.moment_voltage, data.moment_current, data.pwm_duty, data.calibrated, data.generator_on);
     nectar_contract::PowerBoardStats stats = {
       data.moment_power, data.moment_voltage, data.moment_current, data.pwm_duty, data.mosfet_overheat_on,

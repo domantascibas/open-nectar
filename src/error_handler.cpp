@@ -18,6 +18,10 @@ void ErrorHandler::get_errors(uint32_t *err) {
   *err = raised_errors;
 }
 
+void ErrorHandler::save_error_code(uint32_t err) {
+  raised_errors = err;
+}
+
 void ErrorHandler::get_last_error(ERROR_CODE *err) {
   *err = last_error;
 }

@@ -69,7 +69,7 @@ struct Data {
   bool calibrated;
   bool generator_on;
   
-  uint8_t error;
+  uint32_t error;
 };
 
 struct StorageData {
