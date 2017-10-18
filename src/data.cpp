@@ -29,7 +29,6 @@ float pv_ref_current = 0.0;
 float pwm_duty = 0.1;
 
 float airgap_temp = 0.0;
-float radiator_temp = 0.0;
 float device_temperature = 0.0;
 uint8_t mosfet_overheat_on = false;
 uint8_t power_board_error = 0x00;
@@ -47,7 +46,7 @@ Data data = {
   current_mode, previous_mode, boiler_power, temp_max, temp_min, temp_scheduled, temp_scheduled_night, temp_away, temp_boiler,
   sun_relay_on, grid_relay_on, generator_on,
   pv_power, pv_voltage, pv_current, pv_ref_voltage, pv_ref_current, pwm_duty,
-  airgap_temp, radiator_temp, device_temperature, mosfet_overheat_on,
+  airgap_temp, device_temperature, mosfet_overheat_on,
   power_board_error, calibrated, solar_kwh, solar_kwh_today, d_kwh, grid_kwh, relay_state, has_config, has_internet
 };
 

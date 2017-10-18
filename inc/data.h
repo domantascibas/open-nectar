@@ -46,7 +46,6 @@ struct Data {
 
   float pwm_duty;
   float airgap_temp;
-  float radiator_temp;
   float device_temperature;
   uint8_t mosfet_overheat_on;
   uint8_t power_board_error;
