@@ -63,11 +63,17 @@ void mbedStream::received_time(const nectar_contract::NectarTime &time) {
   time_t got_time = time.time;
   
   strftime(buffer, 32, "%Y/%m/%d %I:%M:%S\r\n", localtime(&got_time));
-  printf("time %s", buffer);
+  printf("time %s\r\n", buffer);
 }
 
 void mbedStream::received_status(const nectar_contract::NectarStatus &status) {
   EspDeviceData = status;
+  printf("Received ESP stats\r\n");
+  printf("[CONFIG] %d\r\n", status.isConfigured);
+  printf("[INTERNET] %d\r\n", status.hasInternetConnection);
+  printf("[TEMP MAX] %f\r\n", status.temperature_max);
+  printf("[TEMP] %f\r\n", status.temperature);
+  printf("[BOILER POWER] %f\r\n", status.boilerPower);
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
