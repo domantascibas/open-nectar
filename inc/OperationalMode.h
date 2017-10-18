@@ -13,12 +13,13 @@ enum operationalModes {
 
 struct OperationalMode {
   OperationalMode()
-  : currentMode(WELCOME), inTestMode(false), inOnboarding(true), isConfigured(false) {};
+  : currentMode(WELCOME), inTestMode(false), inOnboarding(true), isConfigured(false), isPairing(true) {};
     
   operationalModes currentMode;
   bool inTestMode;
   bool inOnboarding;
   bool isConfigured;
+  bool isPairing;
     
   uint8_t getCurrentMode();
   void endOnboarding();
