@@ -1,14 +1,10 @@
 #include "mbed.h"
 #include "data.h"
 #include "power_board.h"
+#include "OperationalMode.h"
 #include "error_handler.h"
 
-#include "NectarStream.h"
 #include "NectarContract.h"
-
-Ticker get_data_tick;
-Timeout line_busy_timeout;
-Timeout error_timeout;
 
 bool isFirst = true;
 
@@ -17,6 +13,10 @@ void line_busy_ISR() {
 }
 
 namespace power_board {
+  Ticker get_data_tick;
+  Timeout line_busy_timeout;
+  Timeout error_timeout;
+
   static const PinName TX = PB_10;
   static const PinName RX = PB_11;
   
@@ -25,39 +25,25 @@ namespace power_board {
   
   powerStream m_stream(TX, RX);
   
-  void error_timeout_handler() {
-    //m_stream.stream.sendObject(C_SERVICE_CLEAR_ERROR);
-    error_clearing = false;
-  }
-  
-  void enter_test_mode() {
-    m_stream.stream.sendObject(C_POWER_BOARD_TEST_MODE);
-    printf("[COMMS] Enter test mode sent\r\n");
+  void get_data_ISR() {
+    nectar_contract::MainBoardStateForPower mainStateForPower = {
+      data.grid_kwh,
+      data.start,
+      deviceOpMode.inTestMode
+    };
+    
+    StreamObject _mainStateForPower(&mainStateForPower, sizeof(mainStateForPower));
+    m_stream.stream.send_state_to_power_board(_mainStateForPower);
+//    line_busy = true;
+//    line_busy_timeout.attach(line_busy_ISR, 0.05);
   }
   
   void start() {
-    m_stream.stream.sendObject(C_POWER_BOARD_START);
+    data.start = true;
   }
   
   void stop() {
-    m_stream.stream.sendObject(C_POWER_BOARD_STOP);
-  }
-  
-  void send_grid_meter() {
-    nectar_contract::PowerBoardGridMeter grid_meter = {
-      data.grid_kwh
-    };
-    
-    m_stream.stream.sendObject(C_POWER_BOARD_GRID_METER, &grid_meter, sizeof(grid_meter));
-  }
-  
-  void get_data_ISR() {
-    m_stream.stream.sendObject(C_POWER_BOARD_STATS);
-    line_busy = true;
-    line_busy_timeout.attach(line_busy_ISR, 0.05);
-  }
-  
-  void config() {
+    data.start = false;
   }
   
   void setup() {
@@ -91,10 +77,9 @@ void powerStream::setup() {
   static const float interval = 1.0;
   
   m_serial.baud(C_SERIAL_BAUD_RATE);
-  stream.sendObject(C_POWER_BOARD_STATS);
   line_busy = true;
-  line_busy_timeout.attach(line_busy_ISR, 0.05);
-  get_data_tick.attach(&power_board::get_data_ISR, interval);
+  power_board::line_busy_timeout.attach(line_busy_ISR, 0.05);
+  power_board::get_data_tick.attach(&power_board::get_data_ISR, interval);
   
   m_serial.attach(callback(this, &powerStream::Rx_interrupt));
   printf("power_serial setup\r\n");
@@ -115,146 +100,18 @@ void powerStream::write(uint8_t byte) {
   m_serial.putc(byte);
 }
 
-void powerStream::received_power_stats(const nectar_contract::PowerBoardStats &stats) {
-  //power_data::stats = stats;
-
-  if(stats.sun_meter_kwh > 0) {
-    __disable_irq();
-    data.pv_power = stats.sun_power;
-    data.pv_voltage = stats.sun_voltage;
-    data.pv_current = stats.sun_current;
-    data.pwm_duty = stats.pwm_duty;
-    data.mosfet_overheat_on = stats.transistor_overheat_on;
-    PowerBoardError.save_error_code(stats.power_board_error_code);
-    data.calibrated = stats.device_calibrated;
-    data.generator_on = stats.pwm_generator_on;
-    data.solar_kwh = stats.sun_meter_kwh;
-    
-    if(isFirst) {
-      isFirst = false;
-      data.d_kwh = data.solar_kwh;
-    }
-    data.solar_kwh_today = data.solar_kwh - data.d_kwh;  
-    __enable_irq();
-  }
-  
-  printf("%.3f %.2f %.2f %.3fkWh %d %d %d\r\n", data.pv_voltage, data.pv_current, data.pwm_duty, data.solar_kwh, data.power_board_error, data.generator_on, data.calibrated);
+void powerStream::received_power_board_state(const nectar_contract::PowerBoardState &state) {
+  data.pv_power = state.sun_power;
+  data.pv_voltage = state.sun_voltage;
+  data.pv_current = state.sun_current;
+  data.pwm_duty = state.pwm_duty;
+  data.mosfet_overheat_on = state.transistor_overheat_on;
+  PowerBoardError.save_error_code(state.power_board_error_code);
+  data.calibrated = state.device_calibrated;
+  data.generator_on = state.pwm_generator_on;
+  data.solar_kwh = state.sun_meter_kwh;
+  data.pv_ref_voltage = state.ref_voltage;
+  data.pv_ref_current = state.ref_current;
 }
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
-
-/*
-static const PinName TX = PB_10;
-static const PinName RX = PB_11;
-
-static const uint8_t POWER_BOARD_STOP = 0x30;       //'0'
-static const uint8_t POWER_BOARD_START = 0x31;      //'1'
-static const uint8_t GET_DATA = 0x32;               //'2'
-static const uint8_t GET_REF_DATA = 0x33;           //'3'
-static const uint8_t ENTER_SERVICE_MODE = 0x6D;     //'m'
-
-static const uint8_t INCREASE_PWM = 0x2B;           //'+'
-static const uint8_t DECREASE_PWM = 0x2D;           //'-'
-static const uint8_t CLEAR_ERROR = 0x20;            //'SPACE'
-
-Ticker get_data_tick;
-Timeout error_timeout;
-RawSerial power_board_serial(TX, RX);
-
-namespace power_board {
-  volatile bool new_data = false;
-  volatile bool new_ref_data = false;
-  volatile bool error_clearing = false;
-  static const uint8_t num_chars = 128;
-  static const uint8_t num_fields = 12;
-  static uint8_t error_counter = 0;
-  char* power_response[num_fields];
-  char received_chars[num_chars];
-  
-  void Rx_interrupt() {
-    static const char start_marker = '#';
-    static const char end_marker = '$';
-    static const char ref_data_marker = '&';
-    static bool recv_in_progress = false;
-    static uint8_t ndx = 0;
-    
-    char rc;
-    rc = power_board_serial.getc();
-
-    if(recv_in_progress) {
-      if(rc != end_marker) {
-        if(rc == ref_data_marker) {
-          new_ref_data = true;
-        } else {
-          received_chars[ndx] = rc;
-          ndx++;
-          printf("%c", rc);
-        }
-      } else {
-        while(power_board_serial.readable()) {
-          power_board_serial.getc();
-        }
-        ndx = 0;
-        recv_in_progress = false;
-//        hardware::available = true;
-        new_data = true;
-        printf("\r\n");
-      }
-    } else if(rc == start_marker){
-      recv_in_progress = true;
-//      hardware::available = false;
-    }
-  }
-
-  void get_data_ISR() {
-    comms::send_command(GET_DATA);
-  }
-  
-  void error_timeout_handler() {
-    comms::send_command(CLEAR_ERROR);
-    error_clearing = false;
-  }
-  
-  void start() {
-    comms::send_command(POWER_BOARD_START);
-  }
-  
-  void stop() {
-    comms::send_command(POWER_BOARD_STOP);
-  }
-
-  void setup() {
-    static const uint16_t baudrate = 19200;
-    static const float interval = 1.0;
-    
-    power_board_serial.baud(baudrate);
-    comms::send_command(GET_DATA);
-    get_data_tick.attach(&get_data_ISR, interval);
-    power_board_serial.attach(&Rx_interrupt);
-  }
-
-  void loop() {
-    uint8_t message_count;
-    
-    if((data.error != 0x00) & (!error_clearing)) {
-      if(error_counter < 5) {
-        error_clearing = true;
-        comms::print_error(data.error);
-        printf("ERROR COUNTER ++\r\n");
-        error_timeout.attach(&error_timeout_handler, 10.0);
-        error_counter++;
-      } else {
-        comms::send_command(POWER_BOARD_STOP);
-        data.error = RESTART_REQUIRED;
-      }
-    } else if((data.error == 0x00) & (error_counter != 0)) {
-      error_counter = 0;
-      printf("ERROR COUNTER RESET\r\n");
-    }
-    
-  }
-}
-
-*/
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

@@ -3,16 +3,11 @@
 
 #include "NectarStream.h"
 
-namespace power_board {
-  extern nectar_contract::PowerBoardStats stats;
-  extern nectar_contract::PowerBoardGridMeter grid_meter;
-  
+namespace power_board {  
   void setup();
   void loop();
   void start();
   void stop();
-  void send_grid_meter();
-  void enter_test_mode();
 }
 
 class powerStream : public IStreamDelegate {
@@ -28,9 +23,7 @@ public:
   void Rx_interrupt();
 
   virtual void write(uint8_t byte);
-    
-  virtual void received_power_stats(const nectar_contract::PowerBoardStats &stats);
-    
+  virtual void received_power_board_state(const nectar_contract::PowerBoardState &state);
   NectarStream stream;
 
 private:

@@ -25,7 +25,7 @@ struct Data {
   nectar_contract::HeaterMode current_mode;
   nectar_contract::HeaterMode previous_mode;
   
-  const float boiler_power;
+  float boiler_power;
 
   float temp_max;
   float temp_min;
@@ -48,7 +48,7 @@ struct Data {
   float airgap_temp;
   float device_temperature;
   uint8_t mosfet_overheat_on;
-  uint8_t power_board_error;
+  uint32_t power_board_error;
   
   bool calibrated;
   float solar_kwh;
@@ -58,16 +58,13 @@ struct Data {
   uint8_t relay_state;
   bool has_config;
   bool has_internet;
+  bool start;
 };
 
 extern Data data;
-extern nectar_contract::NectarStatus EspDeviceData;
 extern bool line_busy;
+extern nectar_contract::ESPState EspDeviceData;
 
-namespace power_data {
-  extern nectar_contract::PowerBoardStats stats;
-  extern nectar_contract::PowerBoardGridMeter grid_meter;
-}
 
 #endif
 

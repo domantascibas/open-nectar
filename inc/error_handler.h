@@ -23,6 +23,7 @@ struct ErrorHandler {
   public:
     void set_error(ERROR_CODE);
     void get_errors(uint32_t *);
+    uint32_t get_errors();
     void save_error_code(uint32_t);
     void get_last_error(ERROR_CODE *);
     void clear_error();

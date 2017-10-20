@@ -19,6 +19,10 @@ void ErrorHandler::get_errors(uint32_t *err) {
   *err = raised_errors;
 }
 
+uint32_t ErrorHandler::get_errors() {
+  return raised_errors;
+}
+
 void ErrorHandler::save_error_code(uint32_t err) {
   raised_errors = err;
 }

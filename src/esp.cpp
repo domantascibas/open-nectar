@@ -1,26 +1,40 @@
 #include "mbed.h"
 #include "data.h"
 #include "esp.h"
+#include "error_handler.h"
 
-#include "NectarStream.h"
 #include "NectarContract.h"
 
 namespace esp {
+  Ticker get_data_tick;
+
   static const PinName TX = PA_9;   //D8
   static const PinName RX = PA_10;  //D2
   
   mbedStream m_stream(TX, RX);
   
-  void send_stats() {
-    nectar_contract::MainBoardStats stats = {
-      data.pv_power, data.grid_relay_on, data.temp_boiler, data.sun_relay_on,
-      data.pv_voltage, data.pv_current, data.device_temperature, data.mosfet_overheat_on,
-      data.pwm_duty, data.power_board_error, 0, data.solar_kwh, data.grid_kwh
+  void get_data_ISR() {
+    nectar_contract::MainBoardStateForESP mainStateForEsp = {
+      data.pv_power,
+      data.grid_relay_on,
+      data.temp_boiler,
+      data.sun_relay_on,
+      data.pv_voltage,
+      data.pv_current,
+      data.device_temperature,
+      data.mosfet_overheat_on,
+      data.pwm_duty,
+      PowerBoardError.get_errors(),
+      MainBoardError.get_errors(),
+      data.solar_kwh,
+      data.grid_kwh,
+      false,
+      false,
+      false
     };
     
-    
-    m_stream.stream.sendObject(C_MAIN_BOARD_STATS, &stats, sizeof(stats));
-    printf("sent %d bytes\r\n", sizeof(stats));
+    StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
+    m_stream.stream.send_state_to_esp(_mainStateForEsp);
   }
 
   void setup() {
@@ -33,9 +47,12 @@ namespace esp {
  */
 
 void mbedStream::setup() {
+  static const float interval = 15.0;
+  
   m_serial.baud(C_SERIAL_BAUD_RATE);
-  printf("esp_serial setup\r\n");
+  esp::get_data_tick.attach(&esp::get_data_ISR, interval);
   m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
+  printf("esp_serial setup\r\n");
 }
 
 void mbedStream::Rx_interrupt() {
@@ -52,28 +69,8 @@ void mbedStream::write(uint8_t byte) {
   m_serial.putc(byte);
 }
 
-void mbedStream::received_cmd_stats() {
-  esp::send_stats();
-}
-
-void mbedStream::received_time(const nectar_contract::NectarTime &time) {
-  set_time(time.time);
-  
-  char buffer[32];
-  time_t got_time = time.time;
-  
-  strftime(buffer, 32, "%Y/%m/%d %I:%M:%S\r\n", localtime(&got_time));
-  printf("time %s\r\n", buffer);
-}
-
-void mbedStream::received_status(const nectar_contract::NectarStatus &status) {
-  EspDeviceData = status;
-  printf("Received ESP stats\r\n");
-  printf("[CONFIG] %d\r\n", status.isConfigured);
-  printf("[INTERNET] %d\r\n", status.hasInternetConnection);
-  printf("[TEMP MAX] %f\r\n", status.temperature_max);
-  printf("[TEMP] %f\r\n", status.temperature);
-  printf("[BOILER POWER] %f\r\n", status.boilerPower);
+void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
+  EspDeviceData = state;
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

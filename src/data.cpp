@@ -6,9 +6,9 @@
 //default init values
 bool line_busy = false;
 
-const float boiler_power = 0.0;
 nectar_contract::HeaterMode current_mode = nectar_contract::None;
 nectar_contract::HeaterMode previous_mode = nectar_contract::None;
+float boiler_power = 0.0;
 
 float temp_max = 75.0;
 float temp_min = 5.0;
@@ -31,7 +31,7 @@ float pwm_duty = 0.1;
 float airgap_temp = 0.0;
 float device_temperature = 0.0;
 uint8_t mosfet_overheat_on = false;
-uint8_t power_board_error = 0x00;
+uint32_t power_board_error = 0;
 
 bool calibrated = false;
 float solar_kwh = 0.0;
@@ -41,28 +41,25 @@ float grid_kwh = 0.0;
 uint8_t relay_state;
 bool has_config = false;
 bool has_internet = false;
+bool start_power_board = false;
 
 Data data = {
   current_mode, previous_mode, boiler_power, temp_max, temp_min, temp_scheduled, temp_scheduled_night, temp_away, temp_boiler,
   sun_relay_on, grid_relay_on, generator_on,
   pv_power, pv_voltage, pv_current, pv_ref_voltage, pv_ref_current, pwm_duty,
   airgap_temp, device_temperature, mosfet_overheat_on,
-  power_board_error, calibrated, solar_kwh, solar_kwh_today, d_kwh, grid_kwh, relay_state, has_config, has_internet
+  power_board_error, calibrated, solar_kwh, solar_kwh_today, d_kwh, grid_kwh, relay_state, has_config, has_internet,
+  start_power_board
 };
 
-nectar_contract::NectarStatus EspDeviceData = {
-  nectar_contract::None, true, has_internet, temp_scheduled, temp_max, 2.2
+nectar_contract::ESPState EspDeviceData = {
+  current_mode,
+  has_config,
+  has_internet,
+  temp_scheduled,
+  temp_max,
+  boiler_power,
+  0
 };
-
-namespace power_data {
-  nectar_contract::PowerBoardStats stats = {
-    data.pv_power, data.pv_voltage, data.pv_current, data.pwm_duty, data.mosfet_overheat_on, data.power_board_error, data.calibrated, data.generator_on,
-    data.solar_kwh
-  };
-  
-  nectar_contract::PowerBoardGridMeter grid_meter = {
-    data.grid_kwh
-  };
-}
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
