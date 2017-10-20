@@ -3,8 +3,10 @@
 
 ErrorHandler NectarError;
 
-ErrorHandler::ErrorHandler()
-  : has_errors(false), last_error(NONE), raised_errors(0x00000000) {
+ErrorHandler::ErrorHandler() {
+  has_errors = false;
+  last_error = NONE;
+  raised_errors = 0x00000000;
 }
 
 void ErrorHandler::set_error(ERROR_CODE err) {
@@ -16,6 +18,10 @@ void ErrorHandler::set_error(ERROR_CODE err) {
 
 void ErrorHandler::get_errors(uint32_t *err) {
   *err = raised_errors;
+}
+
+uint32_t ErrorHandler::get_errors() {
+  return raised_errors;
 }
 
 void ErrorHandler::save_error_code(uint32_t err) {

@@ -21,7 +21,9 @@ namespace device_modes {
   }
   
   void stop() {
-    data.current_state = STOP;
+    if(data.current_state != IDLE) {
+      data.current_state = STOP;
+    }
   }
   
   void enter_service_mode() {
