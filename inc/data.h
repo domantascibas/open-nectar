@@ -1,7 +1,7 @@
 #ifndef DATA_H
 #define DATA_H
 
-#include "NectarStream.h"
+#include "NectarContract.h"
 
 //Constants
 #define DRIVER_ON                   0
@@ -22,8 +22,8 @@ enum codes {
 };
 
 struct Data {
-  HeaterMode current_mode;
-  HeaterMode previous_mode;
+  nectar_contract::HeaterMode current_mode;
+  nectar_contract::HeaterMode previous_mode;
   
   const float boiler_power;
 

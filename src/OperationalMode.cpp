@@ -29,7 +29,7 @@ float *OperationalMode::getTemperature() {
   else return &EspDeviceData.temperature;
 }
 
-HeaterMode *OperationalMode::getHeaterMode() {
+nectar_contract::HeaterMode *OperationalMode::getHeaterMode() {
   if(!isConfigured) return &data.current_mode;
-  else return (HeaterMode *)EspDeviceData.heater_mode;
+  else return &EspDeviceData.heater_mode;
 }

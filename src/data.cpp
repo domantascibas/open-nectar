@@ -6,9 +6,9 @@
 //default init values
 bool line_busy = false;
 
-HeaterMode current_mode = None;
-HeaterMode previous_mode = None;
 const float boiler_power = 0.0;
+nectar_contract::HeaterMode current_mode = nectar_contract::None;
+nectar_contract::HeaterMode previous_mode = nectar_contract::None;
 
 float temp_max = 75.0;
 float temp_min = 5.0;

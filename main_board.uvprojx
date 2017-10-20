@@ -2155,39 +2155,24 @@
           <GroupName>Fonts</GroupName>
           <Files>
             <File>
-              <FileName>OpenSansLight5pt.h</FileName>
+              <FileName>LargeFont.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Fonts\OpenSansLight5pt.h</FilePath>
+              <FilePath>.\submodules\device_menu\src\Fonts\LargeFont.h</FilePath>
             </File>
             <File>
-              <FileName>OpenSansLight7_5pt.h</FileName>
+              <FileName>MediumFont.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Fonts\OpenSansLight7_5pt.h</FilePath>
+              <FilePath>.\submodules\device_menu\src\Fonts\MediumFont.h</FilePath>
             </File>
             <File>
-              <FileName>OpenSansLight9pt.h</FileName>
+              <FileName>SmallFont.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Fonts\OpenSansLight9pt.h</FilePath>
+              <FilePath>.\submodules\device_menu\src\Fonts\SmallFont.h</FilePath>
             </File>
             <File>
-              <FileName>OpenSansLight10_5pt.h</FileName>
+              <FileName>XLargeFont.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Fonts\OpenSansLight10_5pt.h</FilePath>
-            </File>
-            <File>
-              <FileName>OpenSansLight12pt.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Fonts\OpenSansLight12pt.h</FilePath>
-            </File>
-            <File>
-              <FileName>OpenSansLight16pt.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Fonts\OpenSansLight16pt.h</FilePath>
-            </File>
-            <File>
-              <FileName>OpenSansLight44pt.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Fonts\OpenSansLight44pt.h</FilePath>
+              <FilePath>.\submodules\device_menu\src\Fonts\XLargeFont.h</FilePath>
             </File>
           </Files>
         </Group>
