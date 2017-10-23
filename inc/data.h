@@ -1,3 +1,5 @@
+#include "NectarContract.h"
+
 #ifndef DATA_H
 #define DATA_H
 
@@ -81,6 +83,7 @@ struct StorageData {
 
 extern Data data;
 extern StorageData storage_data;
+extern nectar_contract::PowerBoardState powerState;
 
 #endif
 

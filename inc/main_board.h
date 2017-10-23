@@ -4,7 +4,6 @@
 #include "NectarStream.h"
 
 namespace main_board {
-  extern nectar_contract::PowerBoardState state;  
   void setup();
 }
 

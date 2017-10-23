@@ -27,13 +27,14 @@ void mbedStream::Rx_interrupt() {
   while(m_serial.readable()) {
     __disable_irq();
     char rcv = m_serial.getc();
-    //printf("%c", rcv);
+//    printf("%c", rcv);
     stream.receiveChar(rcv);
     __enable_irq();
   }
 }
 
 void mbedStream::write(uint8_t byte) {
+//  printf("%c", byte);
   m_serial.putc(byte);
 }
 
@@ -45,24 +46,35 @@ void mbedStream::received_main_board_state_for_power(const nectar_contract::Main
   } else {
     device_modes::stop();
   }
+  printf("[IN] %f %d %d\r\n", data.grid_energy_meter_kwh, data.current_state, data.isTestMode);
 }
 
 StreamObject mbedStream::get_power_board_state() {
-  nectar_contract::PowerBoardState powerState = {
-    data.moment_power,
-    data.moment_voltage,
-    data.moment_current,
-    data.pwm_duty,
-    data.mosfet_overheat_on,
-    NectarError.get_errors(),
-    data.calibrated,
-    data.generator_on,
-    data.sun_energy_meter_kwh,
-    data.reference_voltage,
-    data.reference_current
-  };
+  powerState.sun_power = data.moment_power;
+  powerState.sun_voltage = data.moment_voltage;
+  powerState.sun_current = data.moment_current;
+  powerState.pwm_duty = data.pwm_duty;
+  powerState.transistor_overheat_on = data.mosfet_overheat_on;
+  powerState.power_board_error_code = NectarError.get_errors();
+  powerState.device_calibrated = data.calibrated;
+  powerState.pwm_generator_on = data.generator_on;
+  powerState.sun_meter_kwh = data.sun_energy_meter_kwh;
+  powerState.ref_voltage = data.reference_voltage;
+  powerState.ref_current = data.reference_current;
   
   StreamObject _powerState(&powerState, sizeof(powerState));
+  printf("[OUT] %f %f %f %f %d %d %d %d %f %f %f\r\n",
+    powerState.sun_power,
+    powerState.sun_voltage,
+    powerState.sun_current,
+    powerState.pwm_duty,
+    powerState.transistor_overheat_on,
+    powerState.power_board_error_code,
+    powerState.device_calibrated,
+    powerState.pwm_generator_on,
+    powerState.sun_meter_kwh,
+    powerState.ref_voltage,
+    powerState.ref_current);
   return _powerState;
 }
 

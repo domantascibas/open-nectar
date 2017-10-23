@@ -32,4 +32,18 @@ StorageData storage_data = {
   reference_voltage, reference_current, sun_energy_meter_kwh, grid_energy_meter_kwh
 };
 
+nectar_contract::PowerBoardState powerState = {
+  0,
+  0,
+  0,
+  0.1,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+};
+
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
