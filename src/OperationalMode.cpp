@@ -24,12 +24,12 @@ void OperationalMode::endOnboarding() {
   inOnboarding = false;
 }
 
-float *OperationalMode::getTemperature() {
-  if(!isConfigured) return &data.temp_scheduled;
-  else return &EspDeviceData.temperature;
+float OperationalMode::getTemperature() {
+  if(!isConfigured) return data.temp_scheduled;
+  else return EspDeviceData.temperature;
 }
 
-nectar_contract::HeaterMode *OperationalMode::getHeaterMode() {
-  if(!isConfigured) return &data.current_mode;
-  else return &EspDeviceData.heater_mode;
+nectar_contract::HeaterMode OperationalMode::getHeaterMode() {
+  if(!isConfigured) return data.current_mode;
+  else return (nectar_contract::HeaterMode)EspDeviceData.heater_mode;
 }

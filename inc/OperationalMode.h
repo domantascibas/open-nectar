@@ -25,8 +25,8 @@ struct OperationalMode {
   void endOnboarding();
   void setConfigured();
   void setTestMode();
-  float *getTemperature();
-  nectar_contract::HeaterMode *getHeaterMode();
+  float getTemperature();
+  nectar_contract::HeaterMode getHeaterMode();
 };
 
 extern OperationalMode deviceOpMode;

@@ -97,7 +97,7 @@ namespace device_modes {
       stat_counter::increase();
       
       __disable_irq();
-      float *temp = deviceOpMode.getTemperature();
+      float temp = deviceOpMode.getTemperature();
       float temp_boiler = data.temp_boiler;
       float temp_min = data.temp_min;
       float temp_max = data.temp_max;
@@ -116,14 +116,14 @@ namespace device_modes {
           } else {
             response = TURN_ON_SUN;
             if(relay_grid) {
-              if(temp_boiler < (*temp + HIST)) {
+              if(temp_boiler < (temp + HIST)) {
                 response = TURN_ON_GRID;
               } else {
                 response = TURN_ON_SUN;
               }
             }
             if(relay_sun) {
-              if(temp_boiler > (*temp - HIST)) {
+              if(temp_boiler > (temp - HIST)) {
                 response = TURN_ON_SUN;
               } else {
                 response = TURN_ON_GRID;

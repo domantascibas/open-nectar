@@ -77,7 +77,7 @@ namespace power_board {
  */
 
 void powerStream::setup() {
-  static const float interval = 1.0;
+  static const float interval = 2.0;
   
   m_serial.baud(C_SERIAL_BAUD_RATE);
   power_board::get_data_tick.attach(&power_board::get_data_ISR, interval);
@@ -90,18 +90,20 @@ void powerStream::Rx_interrupt() {
   while(m_serial.readable()) {
     __disable_irq();
     char rcv = m_serial.getc();
-    //printf("%c", rcv);
+//    printf("%c", rcv);
     stream.receiveChar(rcv);
     __enable_irq();
   }
 }
 
 void powerStream::write(uint8_t byte) {
-  //while(!m_serial.writeable()) {}
+//  printf("%c", byte);
   m_serial.putc(byte);
 }
 
 void powerStream::received_power_board_state(const nectar_contract::PowerBoardState &state) {
+//  printf("[IN] %d bytes\r\n", sizeof(state));
+  __disable_irq();
   data.pv_power = state.sun_power;
   data.pv_voltage = state.sun_voltage;
   data.pv_current = state.sun_current;
@@ -113,6 +115,19 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
   data.solar_kwh = state.sun_meter_kwh;
   data.pv_ref_voltage = state.ref_voltage;
   data.pv_ref_current = state.ref_current;
+  __enable_irq();
+//  printf("[IN] %f %f %f %f %d %d %d %d %f %f %f\r\n",
+//    data.pv_power,
+//    data.pv_voltage,
+//    data.pv_current,
+//    data.pwm_duty,
+//    data.mosfet_overheat_on,
+//    PowerBoardError.get_errors(),
+//    data.calibrated,
+//    data.generator_on,
+//    data.solar_kwh,
+//    data.pv_ref_voltage,
+//    data.pv_ref_current);
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

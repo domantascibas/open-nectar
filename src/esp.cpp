@@ -2,6 +2,7 @@
 #include "data.h"
 #include "esp.h"
 #include "error_handler.h"
+#include "menu_service.h"
 
 #include "NectarContract.h"
 
@@ -73,6 +74,13 @@ void mbedStream::write(uint8_t byte) {
 
 void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
   EspDeviceData = state;
+  printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", EspDeviceData.heater_mode, EspDeviceData.is_configured, EspDeviceData.has_internet_connection, EspDeviceData.temperature, EspDeviceData.temperature_max, EspDeviceData.boiler_power, EspDeviceData.sync_time);
+  if(EspDeviceData.sync_time != 0) {
+    set_time(EspDeviceData.sync_time);
+    time_t sec = time(NULL);
+    menu_actions::updateTime();
+    printf("Time set from ESP: %s\r\n", ctime(&sec));
+  }
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
