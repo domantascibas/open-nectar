@@ -1,10 +1,7 @@
 #include "mbed.h"
 #include "data.h"
-#include "NectarStream.h"
-#include "NectarContract.h"
 
 //default init values
-bool line_busy = false;
 
 nectar_contract::HeaterMode current_mode = nectar_contract::None;
 nectar_contract::HeaterMode previous_mode = nectar_contract::None;

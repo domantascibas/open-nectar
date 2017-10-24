@@ -45,7 +45,7 @@ int main() {
         break;
       
       case TEST_MODE:
-        if(isFirst && !line_busy) {
+        if(isFirst) {
           isFirst = false;
           power_board::enter_test_mode();
         }

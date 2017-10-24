@@ -62,9 +62,7 @@ struct Data {
 };
 
 extern Data data;
-extern bool line_busy;
 extern nectar_contract::ESPState EspDeviceData;
-
 
 #endif
 

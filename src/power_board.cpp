@@ -8,10 +8,6 @@
 
 bool isFirst = true;
 
-void line_busy_ISR() {
-  line_busy = false;
-}
-
 namespace power_board {
   Ticker get_data_tick;
   Timeout line_busy_timeout;
@@ -34,8 +30,11 @@ namespace power_board {
     
     StreamObject _mainStateForPower(&mainStateForPower, sizeof(mainStateForPower));
     m_stream.stream.send_state_to_power_board(_mainStateForPower);
-//    line_busy = true;
-//    line_busy_timeout.attach(line_busy_ISR, 0.05);
+//    printf("[OUT] %d bytes\r\n", sizeof(mainStateForPower));
+//    printf("[OUT] %f %d %d\r\n",
+//    mainStateForPower.grid_meter_kwh,
+//    mainStateForPower.start,
+//    mainStateForPower.is_test_mode_on);
   }
   
   void start() {
@@ -48,6 +47,10 @@ namespace power_board {
   
   void setup() {
     m_stream.setup();
+  }
+  
+  void enter_test_mode() {
+    deviceOpMode.setTestMode();
   }
   
   void loop() {
@@ -77,8 +80,6 @@ void powerStream::setup() {
   static const float interval = 1.0;
   
   m_serial.baud(C_SERIAL_BAUD_RATE);
-  line_busy = true;
-  power_board::line_busy_timeout.attach(line_busy_ISR, 0.05);
   power_board::get_data_tick.attach(&power_board::get_data_ISR, interval);
   
   m_serial.attach(callback(this, &powerStream::Rx_interrupt));

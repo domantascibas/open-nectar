@@ -91,7 +91,7 @@ namespace device_modes {
   }
 
   void loop() {
-    if(update_mode && !line_busy) {
+    if(update_mode) {
       update_mode = false;
       
       stat_counter::increase();

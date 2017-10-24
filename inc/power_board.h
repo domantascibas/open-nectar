@@ -8,6 +8,7 @@ namespace power_board {
   void loop();
   void start();
   void stop();
+  void enter_test_mode();
 }
 
 class powerStream : public IStreamDelegate {

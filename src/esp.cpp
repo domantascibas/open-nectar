@@ -28,6 +28,7 @@ namespace esp {
       MainBoardError.get_errors(),
       data.solar_kwh,
       data.grid_kwh,
+      time(NULL),
       false,
       false,
       false
@@ -35,6 +36,7 @@ namespace esp {
     
     StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
     m_stream.stream.send_state_to_esp(_mainStateForEsp);
+    printf("[OUT ESP] sent data to ESP %d, %d\r\n", sizeof(mainStateForEsp), sizeof(nectar_contract::MainBoardStateForESP));
   }
 
   void setup() {
@@ -59,7 +61,7 @@ void mbedStream::Rx_interrupt() {
   while(m_serial.readable()) {
     __disable_irq();
     char rcv = m_serial.getc();
-    //printf("%c", rcv);
+//    printf("%c", rcv);
     stream.receiveChar(rcv);
     __enable_irq();
   }
