@@ -40,7 +40,6 @@ int main() {
         break;
       
       case WELCOME:
-        if(data.has_config) deviceOpMode.setConfigured();
         //nothing to do here
         //wait for user to finish onboarding
         break;

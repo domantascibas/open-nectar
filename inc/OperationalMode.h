@@ -26,6 +26,7 @@ struct OperationalMode {
   void setConfigured();
   void setTestMode();
   float getTemperature();
+  float getTemperatureMax();
   nectar_contract::HeaterMode getHeaterMode();
 };
 

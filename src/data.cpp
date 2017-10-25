@@ -9,8 +9,8 @@ float boiler_power = 0.0;
 
 float temp_max = 75.0;
 float temp_min = 5.0;
-float temp_scheduled = 40.0;
-float temp_scheduled_night = 30.0;
+float temp_scheduled = 55.0;
+float temp_scheduled_night = 40.0;
 float temp_away = 10.0;
 float temp_boiler = 0.0;
 

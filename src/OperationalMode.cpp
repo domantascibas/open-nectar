@@ -8,7 +8,6 @@ uint8_t OperationalMode::getCurrentMode() {
 
 void OperationalMode::setConfigured() {
   currentMode = CONFIGURED;
-  inTestMode = false;
   isConfigured = true;
 }
 
