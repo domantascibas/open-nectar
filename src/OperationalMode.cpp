@@ -26,10 +26,15 @@ void OperationalMode::endOnboarding() {
 
 float OperationalMode::getTemperature() {
   if(!isConfigured) return data.temp_scheduled;
-  else return EspDeviceData.temperature;
+  else return espDeviceData.temperature;
+}
+
+float OperationalMode::getTemperatureMax() {
+  if(!isConfigured) return data.temp_max;
+  else return espDeviceData.temperature_max;
 }
 
 nectar_contract::HeaterMode OperationalMode::getHeaterMode() {
   if(!isConfigured) return data.current_mode;
-  else return (nectar_contract::HeaterMode)EspDeviceData.heater_mode;
+  else return (nectar_contract::HeaterMode)espDeviceData.heater_mode;
 }

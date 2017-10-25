@@ -15,6 +15,7 @@ namespace esp {
   mbedStream m_stream(TX, RX);
   
   void get_data_ISR() {
+    time_t rtc = time(NULL);
     nectar_contract::MainBoardStateForESP mainStateForEsp = {
       data.pv_power,
       data.grid_relay_on,
@@ -37,6 +38,7 @@ namespace esp {
     
     StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
     m_stream.stream.send_state_to_esp(_mainStateForEsp);
+    printf("[OUT ESP] current time: %s\r\n", ctime(&rtc));
     printf("[OUT ESP] sent data to ESP %d, %d\r\n", sizeof(mainStateForEsp), sizeof(nectar_contract::MainBoardStateForESP));
   }
 
@@ -73,10 +75,10 @@ void mbedStream::write(uint8_t byte) {
 }
 
 void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
-  EspDeviceData = state;
-  printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", EspDeviceData.heater_mode, EspDeviceData.is_configured, EspDeviceData.has_internet_connection, EspDeviceData.temperature, EspDeviceData.temperature_max, EspDeviceData.boiler_power, EspDeviceData.sync_time);
-  if(EspDeviceData.sync_time != 0) {
-    set_time(EspDeviceData.sync_time);
+  espDeviceData = state;
+  printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", espDeviceData.heater_mode, espDeviceData.is_configured, espDeviceData.has_internet_connection, espDeviceData.temperature, espDeviceData.temperature_max, espDeviceData.boiler_power, espDeviceData.sync_time);
+  if(espDeviceData.sync_time != 0) {
+    set_time(espDeviceData.sync_time);
     time_t sec = time(NULL);
     menu_actions::updateTime();
     printf("Time set from ESP: %s\r\n", ctime(&sec));

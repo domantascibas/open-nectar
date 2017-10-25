@@ -14,7 +14,7 @@ namespace stat_counter {
     if(data.grid_relay_on && !deviceOpMode.inTestMode) {
       float time_passed = stat_timer.read();
       stat_timer.reset();
-      data.grid_kwh += data.boiler_power * time_passed / 3600 / 1000;
+      data.grid_kwh += espDeviceData.boiler_power * time_passed / 3600 / 1000;
     } else {
       stat_timer.reset();
     }

@@ -49,7 +49,7 @@ Data data = {
   start_power_board
 };
 
-nectar_contract::ESPState EspDeviceData = {
+nectar_contract::ESPState espDeviceData = {
   current_mode,
   has_config,
   has_internet,

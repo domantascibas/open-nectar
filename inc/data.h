@@ -62,7 +62,7 @@ struct Data {
 };
 
 extern Data data;
-extern nectar_contract::ESPState EspDeviceData;
+extern nectar_contract::ESPState espDeviceData;
 
 #endif
 
