@@ -11,14 +11,14 @@ struct StoredItem {
   void read(float *);
   void save(float);
 
-  private:
-    const uint16_t lo_address;
-    const uint16_t hi_address;
-  
-    union {
-      float f;
-      uint16_t b[2];
-    } u;
+private:
+  const uint16_t lo_address;
+  const uint16_t hi_address;
+
+  union {
+    float f;
+    uint16_t b[2];
+  } u;
 };
 
 namespace Storage {

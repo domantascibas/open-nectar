@@ -1,12 +1,12 @@
 #include "mbed.h"
-#include "error_handler.h"
+#include "ErrorHandler.h"
 
-ErrorHandler NectarError;
+ErrorHandler nectarError;
 
 ErrorHandler::ErrorHandler() {
   has_errors = false;
   last_error = NONE;
-  raised_errors = 0x00000000;
+  raised_errors = 0x0000000F;
 }
 
 void ErrorHandler::set_error(ERROR_CODE err) {

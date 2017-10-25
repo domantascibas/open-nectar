@@ -6,35 +6,8 @@
 #define LED_ON            0
 #define LED_OFF           1
 
-#define DRIVER_ON         0
-#define DRIVER_OFF        1
-
 const float VOLTAGE_LIMIT = 400.0;
 const float CURRENT_LIMIT = 10.0;
-
-//enum error_codes{
-//  SETUP_ERROR = 0x01,
-//  STARTUP_ERROR,
-//  ADC_ERROR,
-//  ADC_VOLTAGE_ERROR,
-//  ADC_CURRENT_ERROR,
-//  ADC_SETUP_ERROR,
-//  FLASH_ACCESS_ERROR,
-//  FLASH_READ_ERROR,
-//  FLASH_WRITE_ERROR,
-//  NOT_CALIBRATED,
-//  DC_OVER_VOLTAGE,
-//  DC_OVER_CURRENT,
-//  DC_CURRENT_LEAKS,
-//  I2C_ERROR,
-//  PWM_OK,
-//  PWM_ERROR,
-//  BOARD_CONFIG_ERROR,
-//  OVERHEAT,
-//  RADIATOR_OVERHEAT,
-//  AIRGAP_OVERHEAT,
-//  NO_LOAD
-//};
 
 enum codes {
   NS_OK,

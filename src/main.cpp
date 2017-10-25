@@ -1,24 +1,21 @@
 #include "mbed.h"
 #include "device_modes.h"
-#include "pwm.h"
 #include "main_board.h"
-#include "measurements.h"
 #include "data.h"
 #include "service.h"
-#include "error_handler.h"
+#include "ErrorHandler.h"
 
 int main() {
   service::setup();
-  pwm::setup();
+  printf("Starting device modes\r\n");
   device_modes::setup();
-  sensors::setup();
   DEBUG_PRINT("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   main_board::setup();
   printf("SETUP DONE\r\n");
   
   while(1) {
-    if(!NectarError.has_error(CALIBRATION_ERROR)) device_modes::loop();
-    sensors::loop();
+    if(!nectarError.has_error(CALIBRATION_ERROR)) device_modes::loop();
+    device_modes::calibrate_device();
     __WFI();
   }
 }

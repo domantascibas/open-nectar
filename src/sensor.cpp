@@ -1,5 +1,5 @@
 #include "mbed.h"
-#include "sensor.h"
+#include "Sensor.h"
 
 #define REG_ADDR_RESULT         0x00
 #define REG_ADDR_ALERT          0x01
@@ -16,8 +16,9 @@ static const float V_REF = 3.00;
 
 I2C m_i2c(SDA, SCL);
 
-Sensor::Sensor(const uint8_t addr, float *ref) 
-  : address(addr), ready_to_sample(false), reference(ref) {
+Sensor::Sensor(const uint8_t addr) 
+  : address(addr), ready_to_sample(false) {
+    reference = 0.0;
     m_i2c.frequency(400000);
     attach_ticker();
 }
@@ -73,4 +74,18 @@ float Sensor::sample(const uint16_t samples) {
   }
   DEBUG_PRINT("ADC 0x%X %.2f\r\n", address, avg);
   return avg;
+}
+
+void Sensor::calibrate() {
+  detach_ticker();
+  reference = sample(SAMPLE_NUM << 3);
+  attach_ticker();
+}
+
+float Sensor::get_reference() {
+  return reference;
+}
+
+void Sensor::set_reference(float ref) {
+  reference = ref;
 }

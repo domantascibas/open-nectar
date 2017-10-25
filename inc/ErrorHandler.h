@@ -39,6 +39,6 @@ private:
   void print_error(ERROR_CODE *);
 };
 
-extern ErrorHandler NectarError;
+extern ErrorHandler nectarError;
 
 #endif

@@ -1865,19 +1865,9 @@
               <FilePath>.\src\main_board.cpp</FilePath>
             </File>
             <File>
-              <FileName>measurements.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\measurements.cpp</FilePath>
-            </File>
-            <File>
               <FileName>storage.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\storage.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>pwm.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\pwm.cpp</FilePath>
             </File>
             <File>
               <FileName>main.cpp</FileName>
@@ -1890,19 +1880,34 @@
               <FilePath>.\src\service.cpp</FilePath>
             </File>
             <File>
-              <FileName>sensor.cpp</FileName>
+              <FileName>EnergyMeter.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\sensor.cpp</FilePath>
+              <FilePath>.\src\EnergyMeter.cpp</FilePath>
             </File>
             <File>
-              <FileName>sensor_circuit.cpp</FileName>
+              <FileName>Sensor.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\sensor_circuit.cpp</FilePath>
+              <FilePath>.\src\Sensor.cpp</FilePath>
             </File>
             <File>
-              <FileName>error_handler.cpp</FileName>
+              <FileName>ErrorHandler.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\error_handler.cpp</FilePath>
+              <FilePath>.\src\ErrorHandler.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>PwmController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\PwmController.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MpptController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\MpptController.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SensorController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\SensorController.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1930,19 +1935,9 @@
               <FilePath>.\inc\main_board.h</FilePath>
             </File>
             <File>
-              <FileName>measurements.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\measurements.h</FilePath>
-            </File>
-            <File>
               <FileName>storage.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\storage.h</FilePath>
-            </File>
-            <File>
-              <FileName>pwm.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\pwm.h</FilePath>
             </File>
             <File>
               <FileName>mbed_config.h</FileName>
@@ -1955,19 +1950,34 @@
               <FilePath>.\inc\service.h</FilePath>
             </File>
             <File>
-              <FileName>sensor.h</FileName>
+              <FileName>EnergyMeter.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\inc\sensor.h</FilePath>
+              <FilePath>.\inc\EnergyMeter.h</FilePath>
             </File>
             <File>
-              <FileName>sensor_circuit.h</FileName>
+              <FileName>Sensor.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\inc\sensor_circuit.h</FilePath>
+              <FilePath>.\inc\Sensor.h</FilePath>
             </File>
             <File>
-              <FileName>error_handler.h</FileName>
+              <FileName>ErrorHandler.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\inc\error_handler.h</FilePath>
+              <FilePath>.\inc\ErrorHandler.h</FilePath>
+            </File>
+            <File>
+              <FileName>PwmController.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\PwmController.h</FilePath>
+            </File>
+            <File>
+              <FileName>MpptController.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\MpptController.h</FilePath>
+            </File>
+            <File>
+              <FileName>SensorController.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\SensorController.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,10 +1,7 @@
-#include "mbed.h"
 #include "device_modes.h"
-#include "error_handler.h"
+#include "ErrorHandler.h"
 #include "data.h"
 #include "main_board.h"
-#include "NectarStream.h"
-#include "NectarContract.h"
 
 namespace main_board {
   static const PinName TX = PC_10;
@@ -53,14 +50,14 @@ StreamObject mbedStream::get_power_board_state() {
   powerState.sun_power = data.moment_power;
   powerState.sun_voltage = data.moment_voltage;
   powerState.sun_current = data.moment_current;
-  powerState.pwm_duty = data.pwm_duty;
+  powerState.pwm_duty = mppt.get_duty();
   powerState.transistor_overheat_on = data.mosfet_overheat_on;
-  powerState.power_board_error_code = NectarError.get_errors();
+  powerState.power_board_error_code = nectarError.get_errors();
   powerState.device_calibrated = data.calibrated;
-  powerState.pwm_generator_on = data.generator_on;
+  powerState.pwm_generator_on = mppt.is_generator_on();
   powerState.sun_meter_kwh = data.sun_energy_meter_kwh;
-  powerState.ref_voltage = data.reference_voltage;
-  powerState.ref_current = data.reference_current;
+  powerState.ref_voltage = sensors.get_voltage_reference();
+  powerState.ref_current = sensors.get_current_reference();
   
   StreamObject _powerState(&powerState, sizeof(powerState));
   printf("[OUT] %f %f %f %f %d %d %d %d %f %f %f\r\n",
