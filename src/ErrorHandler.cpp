@@ -85,10 +85,6 @@ void ErrorHandler::print_error(ERROR_CODE *err) {
       printf("[ERROR] DEVICE OVERHEAT\r\n");
       break;
     
-    case MOSFET_OVERHEAT:
-      printf("[ERROR] MOSFET OVERHEAT\r\n");
-      break;
-    
     case NO_LOAD:
       printf("[ERROR] NO LOAD\r\n");
       break;

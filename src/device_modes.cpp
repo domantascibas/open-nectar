@@ -73,11 +73,6 @@ namespace device_modes {
   }
   
   void loop() {
-//    if(transistorOverheat && !nectarError.has_error(MOSFET_OVERHEAT)) {
-//      nectarError.set_error(MOSFET_OVERHEAT);
-//    } else if(!transistorOverheat && nectarError.has_error(MOSFET_OVERHEAT)) {
-//      nectarError.clear_error(MOSFET_OVERHEAT);
-//    }
     
     if(!nectarError.has_error(CALIBRATION_ERROR)) {
       sensors.measure();
