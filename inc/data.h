@@ -59,6 +59,9 @@ struct Data {
   bool has_config;
   bool has_internet;
   bool start;
+  
+  bool reset;
+  bool boost_off;
 };
 
 extern Data data;

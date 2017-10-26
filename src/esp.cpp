@@ -3,6 +3,7 @@
 #include "esp.h"
 #include "error_handler.h"
 #include "menu_service.h"
+#include "OperationalMode.h"
 
 #include "NectarContract.h"
 
@@ -31,15 +32,17 @@ namespace esp {
       data.solar_kwh,
       data.grid_kwh,
       time(NULL),
-      false,
-      false,
-      false
+      data.reset,
+      deviceOpMode.isPairing,
+      data.boost_off
     };
     
     StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
     m_stream.stream.send_state_to_esp(_mainStateForEsp);
+    data.reset = false;
     printf("[OUT ESP] current time: %s\r\n", ctime(&rtc));
-    printf("[OUT ESP] sent data to ESP %d, %d\r\n", sizeof(mainStateForEsp), sizeof(nectar_contract::MainBoardStateForESP));
+    printf("[OUT ESP] sent data to ESP\r\n");
+    printf("[OUT ESP] %d %d\r\n", deviceOpMode.isPairing, data.boost_off);
   }
 
   void setup() {
@@ -76,6 +79,7 @@ void mbedStream::write(uint8_t byte) {
 
 void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
   espDeviceData = state;
+  if((nectar_contract::HeaterMode)espDeviceData.heater_mode != nectar_contract::Boost) data.boost_off = false;
   printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", espDeviceData.heater_mode, espDeviceData.is_configured, espDeviceData.has_internet_connection, espDeviceData.temperature, espDeviceData.temperature_max, espDeviceData.boiler_power, espDeviceData.sync_time);
   if(espDeviceData.sync_time != 0) {
     set_time(espDeviceData.sync_time);

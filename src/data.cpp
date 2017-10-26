@@ -40,13 +40,16 @@ bool has_config = false;
 bool has_internet = false;
 bool start_power_board = false;
 
+bool reset = false;
+bool boost_off = false;
+
 Data data = {
   current_mode, previous_mode, boiler_power, temp_max, temp_min, temp_scheduled, temp_scheduled_night, temp_away, temp_boiler,
   sun_relay_on, grid_relay_on, generator_on,
   pv_power, pv_voltage, pv_current, pv_ref_voltage, pv_ref_current, pwm_duty,
   airgap_temp, device_temperature, mosfet_overheat_on,
   power_board_error, calibrated, solar_kwh, solar_kwh_today, d_kwh, grid_kwh, relay_state, has_config, has_internet,
-  start_power_board
+  start_power_board, reset, boost_off
 };
 
 nectar_contract::ESPState espDeviceData = {
