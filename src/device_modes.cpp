@@ -86,7 +86,7 @@ namespace device_modes {
         data.current_state = STOP;
       }
       
-      if(data.generator_on && (data.isTestMode == false)) {
+      if(data.generator_on && !data.isTestMode) {
         float time_passed = stat_timer.read();
         data.sun_energy_meter_kwh += data.moment_power * time_passed / 3600 / 1000;
       }

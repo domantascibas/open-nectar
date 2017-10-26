@@ -53,7 +53,7 @@ StreamObject mbedStream::get_power_board_state() {
   powerState.pwm_duty = mppt.get_duty();
   powerState.transistor_overheat_on = data.mosfet_overheat_on;
   powerState.power_board_error_code = nectarError.get_errors();
-  powerState.device_calibrated = data.calibrated;
+  powerState.device_calibrated = !nectarError.has_error(CALIBRATION_ERROR);
   powerState.pwm_generator_on = mppt.is_generator_on();
   powerState.sun_meter_kwh = data.sun_energy_meter_kwh;
   powerState.ref_voltage = sensors.get_voltage_reference();
