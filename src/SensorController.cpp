@@ -23,14 +23,15 @@ void SensorController::init() {
   }
 
   Storage::init();
-  if(!nectarError.has_errors) {
+  if(!nectarError.has_error(FLASH_ACCESS_ERROR)) {
     Storage::load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
     voltageSensor.set_reference(data.reference_voltage);
     currentSensor.set_reference(data.reference_current);
-    data.calibrated = true;
-  } else {
-    data.calibrated = false;
   }
+  
+  if(get_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
+  if(get_current() < LEAKAGE_CURRENT) nectarError.clear_error(DC_CURRENT_LEAKS);
+  if(get_current() < CURRENT_LIMIT) nectarError.clear_error(DC_OVER_CURRENT);
 }
 
 void SensorController::measure() {
@@ -81,9 +82,7 @@ void SensorController::calibrate() {
   Storage::save_data(voltageSensor.get_reference(), currentSensor.get_reference());
   data.reference_current = currentSensor.get_reference();
   data.reference_voltage = voltageSensor.get_reference();
-  data.calibrated = true;
   printf("[ok] calibrated. v_ref = %fV, i_ref = %fA\r\n", voltageSensor.get_reference(), currentSensor.get_reference());
-  //TODO add error checking
 }
 
 void SensorController::save_meters() {

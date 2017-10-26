@@ -6,7 +6,7 @@ ErrorHandler nectarError;
 ErrorHandler::ErrorHandler() {
   has_errors = false;
   last_error = NONE;
-  raised_errors = 0x0000000F;
+  raised_errors = 0x0000007F;
 }
 
 void ErrorHandler::set_error(ERROR_CODE err) {
