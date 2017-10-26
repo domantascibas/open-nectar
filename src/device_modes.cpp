@@ -4,6 +4,9 @@
 #include "stat_counter.h"
 #include "OperationalMode.h"
 #include "data.h"
+#include "esp.h"
+
+static const float BOOST_TEMP = 70.0;
 
 static const PinName SUN = PB_3;
 static const PinName GRID = PB_4;
@@ -103,8 +106,8 @@ namespace device_modes {
       float temp_max = data.temp_max;
       float temp_away = data.temp_away;
       __enable_irq();
-      
-      switch(data.current_mode) {
+
+      switch(deviceOpMode.getHeaterMode()) {
         default:  //mode is any other value than the ones below
         case None:
           printf("[MODE] DEFAULT\r\n");
@@ -139,10 +142,16 @@ namespace device_modes {
           if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
             response = TURN_OFF_ALL;
             //data.error = BOILER_TEMP_SENSOR_ERROR;
-            if(temp_boiler > temp_max) {
-              printf("Boost finished. Boiler temp %f  > max temp %f\r\n", temp_boiler, temp_max);
-              //return to default mode after reaching temp_max
-              data.current_mode = data.previous_mode;
+            if(temp_boiler > BOOST_TEMP) {
+              printf("Boost finished. Boiler temp %f  > max temp %f\r\n", temp_boiler, BOOST_TEMP);
+              //return to default mode after reaching temp_max in NO_CONFIG
+              if(deviceOpMode.getCurrentMode() != CONFIGURED) {
+                data.current_mode = data.previous_mode;
+              } else {
+                data.boost_off = true;
+                data.current_mode = (nectar_contract::HeaterMode)espDeviceData.heater_mode;
+                esp::get_data_ISR();
+              }
             }
           } else {
             response = TURN_ON_GRID;

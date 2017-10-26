@@ -29,7 +29,7 @@ int main() {
     switch(deviceOpMode.currentMode) {
       default:
       case NOT_CONFIGURED:
-        if(data.has_config) deviceOpMode.setConfigured();
+        if(espDeviceData.is_configured) deviceOpMode.setConfigured();
         device_modes::loop();
         power_board::loop();
         break;
