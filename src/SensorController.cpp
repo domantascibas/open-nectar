@@ -4,6 +4,10 @@
 #include "ErrorHandler.h"
 #include "data.h"
 
+const float VOLTAGE_LIMIT = 400.0;
+const float CURRENT_LIMIT = 10.0;
+const float LEAKAGE_CURRENT = 0.2;
+
 static const uint8_t V_SENSE_ADDR = 0x55 << 1;
 static const uint8_t I_SENSE_ADDR = 0x5A << 1;
 static const float INPUT_VDIV = 4.1/400;
