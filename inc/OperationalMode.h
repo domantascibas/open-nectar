@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "data.h"
+#include "menu_service.h"
 
 enum operationalModes {
   WELCOME,
@@ -28,6 +29,7 @@ struct OperationalMode {
   float getTemperature();
   float getTemperatureMax();
   nectar_contract::HeaterMode getHeaterMode();
+  time_t timeHMtoTime(time_hm);
 };
 
 extern OperationalMode deviceOpMode;

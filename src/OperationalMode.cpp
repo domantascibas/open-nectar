@@ -24,8 +24,22 @@ void OperationalMode::endOnboarding() {
   inOnboarding = false;
 }
 
+time_t OperationalMode::timeHMtoTime(time_hm timeHM) {
+  time_t rtc = time(NULL);
+  
+  return rtc - (rtc % (24 * 60 * 60)) + timeHM.hours * 60 * 60 + timeHM.minutes * 60;
+}
+
 float OperationalMode::getTemperature() {
-  if(!isConfigured) return data.temp_scheduled;
+  if(!isConfigured) {
+    time_hm currentTime = menu_actions::getTime(Current);
+    time_hm dayStartTime = menu_actions::getTime(DayStart);
+    time_hm dayEndTime = menu_actions::getTime(NightStart);
+    
+    if((timeHMtoTime(currentTime) > timeHMtoTime(dayStartTime)) && (timeHMtoTime(currentTime) < timeHMtoTime(dayEndTime)))
+      return data.temp_scheduled;
+    else return data.temp_scheduled_night;
+  }
   else return espDeviceData.temperature;
 }
 
