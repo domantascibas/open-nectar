@@ -103,7 +103,7 @@ namespace device_modes {
       float temp = deviceOpMode.getTemperature();
       float temp_boiler = data.temp_boiler;
       float temp_min = data.temp_min;
-      float temp_max = data.temp_max;
+      float temp_max = deviceOpMode.getTemperatureMax();
       float temp_away = data.temp_away;
       __enable_irq();
 
