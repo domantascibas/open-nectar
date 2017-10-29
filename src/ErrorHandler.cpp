@@ -1,5 +1,5 @@
 #include "mbed.h"
-#include "error_handler.h"
+#include "ErrorHandler.h"
 
 ErrorHandler MainBoardError;
 ErrorHandler PowerBoardError;

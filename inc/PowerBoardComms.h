@@ -1,27 +1,30 @@
-#ifndef ESP_H
-#define ESP_H
+#ifndef POWER_BOARD_COMMS_H
+#define POWER_BOARD_COMMS_H
 
 #include "NectarStream.h"
 
-namespace esp {
+namespace power_board {  
   void setup();
-  void get_data_ISR();
+  void loop();
+  void start();
+  void stop();
+  void enter_test_mode();
 }
 
-class mbedStream : public IStreamDelegate {
+class powerStream : public IStreamDelegate {
 public:
-  mbedStream(PinName transmitPin, PinName receivePin, bool inverse_logic = false,
+  powerStream(PinName transmitPin, PinName receivePin, bool inverse_logic = false,
                 unsigned int buffSize = 64)
       : m_serial(transmitPin, receivePin),
         stream(*this) {}
 
-  ~mbedStream(){};
+  ~powerStream(){};
 
   void setup();
   void Rx_interrupt();
 
   virtual void write(uint8_t byte);
-  virtual void received_esp_state(const nectar_contract::ESPState &state);
+  virtual void received_power_board_state(const nectar_contract::PowerBoardState &state);
   NectarStream stream;
 
 private:

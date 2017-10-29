@@ -1,7 +1,7 @@
 #include "mbed.h"
 #include "data.h"
 #include "service.h"
-#include "power_board.h"
+#include "PowerBoardComms.h"
 
 static const PinName TX = PA_2;
 static const PinName RX = PA_3;

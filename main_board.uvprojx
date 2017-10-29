@@ -395,16 +395,6 @@
               <FilePath>.\src\hardware.cpp</FilePath>
             </File>
             <File>
-              <FileName>esp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\esp.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>power_board.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\power_board.cpp</FilePath>
-            </File>
-            <File>
               <FileName>device_modes.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\device_modes.cpp</FilePath>
@@ -480,11 +470,6 @@
               <FilePath>.\src\button.cpp</FilePath>
             </File>
             <File>
-              <FileName>error_handler.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\error_handler.cpp</FilePath>
-            </File>
-            <File>
               <FileName>OperationalMode.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\OperationalMode.cpp</FilePath>
@@ -508,6 +493,21 @@
               <FileName>RelayController.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\RelayController.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ErrorHandler.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\ErrorHandler.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EspComms.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\EspComms.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>PowerBoardComms.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\PowerBoardComms.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2040,16 +2040,6 @@
               <FilePath>.\inc\hardware.h</FilePath>
             </File>
             <File>
-              <FileName>esp.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\esp.h</FilePath>
-            </File>
-            <File>
-              <FileName>power_board.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\power_board.h</FilePath>
-            </File>
-            <File>
               <FileName>device_modes.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\device_modes.h</FilePath>
@@ -2075,11 +2065,6 @@
               <FilePath>.\inc\button.h</FilePath>
             </File>
             <File>
-              <FileName>error_handler.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\error_handler.h</FilePath>
-            </File>
-            <File>
               <FileName>OperationalMode.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\OperationalMode.h</FilePath>
@@ -2103,6 +2088,21 @@
               <FileName>RelayController.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\RelayController.h</FilePath>
+            </File>
+            <File>
+              <FileName>ErrorHandler.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\ErrorHandler.h</FilePath>
+            </File>
+            <File>
+              <FileName>EspComms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\EspComms.h</FilePath>
+            </File>
+            <File>
+              <FileName>PowerBoardComms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\PowerBoardComms.h</FilePath>
             </File>
           </Files>
         </Group>

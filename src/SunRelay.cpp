@@ -1,5 +1,5 @@
 #include "SunRelay.h"
-#include "power_board.h"
+#include "PowerBoardComms.h"
 
 void SunRelay::init() {
   t.start();

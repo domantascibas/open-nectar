@@ -1,8 +1,8 @@
 #include "mbed.h"
 #include "data.h"
-#include "power_board.h"
+#include "PowerBoardComms.h"
 #include "OperationalMode.h"
-#include "error_handler.h"
+#include "ErrorHandler.h"
 
 #include "NectarContract.h"
 
