@@ -489,6 +489,26 @@
               <FileType>8</FileType>
               <FilePath>.\src\OperationalMode.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Relay.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Relay.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>GridRelay.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\GridRelay.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SunRelay.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\SunRelay.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>RelayController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\RelayController.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2063,6 +2083,26 @@
               <FileName>OperationalMode.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\OperationalMode.h</FilePath>
+            </File>
+            <File>
+              <FileName>Relay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\Relay.h</FilePath>
+            </File>
+            <File>
+              <FileName>GridRelay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\GridRelay.h</FilePath>
+            </File>
+            <File>
+              <FileName>SunRelay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\SunRelay.h</FilePath>
+            </File>
+            <File>
+              <FileName>RelayController.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\RelayController.h</FilePath>
             </File>
           </Files>
         </Group>
