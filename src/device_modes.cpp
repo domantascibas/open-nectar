@@ -80,7 +80,7 @@ namespace device_modes {
                 data.current_mode = data.previous_mode;
               } else {
                 data.boost_off = true;
-                data.current_mode = (nectar_contract::HeaterMode)espDeviceData.heater_mode;
+                data.current_mode = (nectar_contract::HeaterMode)esp::espData.heater_mode;
                 esp::get_data_ISR();
               }
             }

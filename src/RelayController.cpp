@@ -1,4 +1,5 @@
 #include "RelayController.h"
+#include "ErrorHandler.h"
 #include "data.h"
 
 GridRelay gridRelay;
@@ -26,11 +27,11 @@ void RelayController::turnOnGrid() {
 }
 
 void RelayController::turnOnSun() {
-  gridRelay.turnOff();
-  sunRelay.turnOn();
-  data.grid_relay_on = gridRelay.isOn();
-  data.sun_relay_on = sunRelay.isOn();
-  printf("turn on sun\r\n");
+    gridRelay.turnOff();
+    sunRelay.turnOn();
+    data.grid_relay_on = gridRelay.isOn();
+    data.sun_relay_on = sunRelay.isOn();
+    printf("turn on sun\r\n");
 }
 
 bool RelayController::isGridRelayOn() {

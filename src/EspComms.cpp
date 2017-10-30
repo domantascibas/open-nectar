@@ -1,11 +1,9 @@
-#include "mbed.h"
 #include "data.h"
 #include "EspComms.h"
-#include "ErrorHandler.h"
-#include "menu_service.h"
 #include "OperationalMode.h"
-
-#include "NectarContract.h"
+#include "ErrorHandler.h"
+#include "PowerBoardComms.h"
+#include "menu_service.h"
 
 namespace esp {
   Ticker get_data_tick;
@@ -15,21 +13,39 @@ namespace esp {
   
   mbedStream m_stream(TX, RX);
   
+  nectar_contract::HeaterMode current_mode = nectar_contract::None;
+  bool has_config = false;
+  bool has_internet = false;
+  
+  float temp_max = 75.0;
+  float temp_scheduled = 55.0;
+  float boiler_power = 0.0;
+  
+  nectar_contract::ESPState espData = {
+    current_mode,
+    has_config,
+    has_internet,
+    temp_scheduled,
+    temp_max,
+    boiler_power,
+    0
+  };
+  
   void get_data_ISR() {
     time_t rtc = time(NULL);
     nectar_contract::MainBoardStateForESP mainStateForEsp = {
-      data.pv_power,
+      power_board::powerBoardData.sun_power,
       data.grid_relay_on,
       data.temp_boiler,
       data.sun_relay_on,
-      data.pv_voltage,
-      data.pv_current,
+      power_board::powerBoardData.sun_voltage,
+      power_board::powerBoardData.sun_current,
       data.device_temperature,
-      data.mosfet_overheat_on,
-      data.pwm_duty,
       PowerBoardError.get_errors(),
       MainBoardError.get_errors(),
-      data.solar_kwh,
+      power_board::powerBoardData.transistor_overheat_on,
+      power_board::powerBoardData.pwm_duty,
+      power_board::powerBoardData.sun_meter_kwh,
       data.grid_kwh,
       time(NULL),
       data.reset,
@@ -78,11 +94,11 @@ void mbedStream::write(uint8_t byte) {
 }
 
 void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
-  espDeviceData = state;
-  if((nectar_contract::HeaterMode)espDeviceData.heater_mode != nectar_contract::Boost) data.boost_off = false;
-  printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", espDeviceData.heater_mode, espDeviceData.is_configured, espDeviceData.has_internet_connection, espDeviceData.temperature, espDeviceData.temperature_max, espDeviceData.boiler_power, espDeviceData.sync_time);
-  if(espDeviceData.sync_time != 0) {
-    set_time(espDeviceData.sync_time);
+  esp::espData = state;
+  if((nectar_contract::HeaterMode)esp::espData.heater_mode != nectar_contract::Boost) data.boost_off = false;
+  printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", esp::espData.heater_mode, esp::espData.is_configured, esp::espData.has_internet_connection, esp::espData.temperature, esp::espData.temperature_max, esp::espData.boiler_power, esp::espData.sync_time);
+  if(esp::espData.sync_time != 0) {
+    set_time(esp::espData.sync_time);
     time_t sec = time(NULL);
     menu_actions::updateTime();
     printf("Time set from ESP: %s\r\n", ctime(&sec));

@@ -1,5 +1,5 @@
 #include "OperationalMode.h"
-#include "mbed.h"
+#include "EspComms.h"
 
 OperationalMode deviceOpMode;
 
@@ -40,12 +40,12 @@ float OperationalMode::getTemperature() {
       return data.temp_scheduled;
     else return data.temp_scheduled_night;
   }
-  else return espDeviceData.temperature;
+  else return esp::espData.temperature;
 }
 
 float OperationalMode::getTemperatureMax() {
   if(!isConfigured) return data.temp_max;
-  else return espDeviceData.temperature_max;
+  else return esp::espData.temperature_max;
 }
 
 nectar_contract::HeaterMode OperationalMode::getHeaterMode() {
@@ -55,6 +55,6 @@ nectar_contract::HeaterMode OperationalMode::getHeaterMode() {
   }
   else {
     printf("CONFIGURED Heater Mode from ESP\r\n");
-    return (nectar_contract::HeaterMode)espDeviceData.heater_mode;
+    return (nectar_contract::HeaterMode)esp::espData.heater_mode;
   }
 }

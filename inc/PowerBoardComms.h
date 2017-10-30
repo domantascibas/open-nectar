@@ -1,7 +1,9 @@
 #ifndef POWER_BOARD_COMMS_H
 #define POWER_BOARD_COMMS_H
 
+#include "mbed.h"
 #include "NectarStream.h"
+#include "NectarContract.h"
 
 namespace power_board {  
   void setup();
@@ -9,6 +11,7 @@ namespace power_board {
   void start();
   void stop();
   void enter_test_mode();
+  extern nectar_contract::PowerBoardState powerBoardData;
 }
 
 class powerStream : public IStreamDelegate {
