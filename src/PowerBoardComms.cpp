@@ -129,6 +129,7 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
 //  printf("[IN] %d bytes\r\n", sizeof(state));
   __disable_irq();
   power_board::powerBoardData = state;
+  powerBoardError.save_error_code(state.power_board_error_code);
   __enable_irq();
 //  printf("[IN] %f %f %f %f %d %d %d %d %f %f %f\r\n",
 //    data.pv_power,
@@ -136,7 +137,7 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
 //    data.pv_current,
 //    data.pwm_duty,
 //    data.mosfet_overheat_on,
-//    PowerBoardError.get_errors(),
+//    powerBoardError.get_errors(),
 //    data.calibrated,
 //    data.generator_on,
 //    data.solar_kwh,

@@ -1,8 +1,8 @@
 #include "mbed.h"
 #include "ErrorHandler.h"
 
-ErrorHandler MainBoardError;
-ErrorHandler PowerBoardError;
+ErrorHandler mainBoardError;
+ErrorHandler powerBoardError;
 
 ErrorHandler::ErrorHandler()
   : has_errors(false), last_error(NONE), raised_errors(0x00000000) {

@@ -27,11 +27,15 @@ void RelayController::turnOnGrid() {
 }
 
 void RelayController::turnOnSun() {
+  if(!powerBoardError.has_errors) {
     gridRelay.turnOff();
     sunRelay.turnOn();
     data.grid_relay_on = gridRelay.isOn();
     data.sun_relay_on = sunRelay.isOn();
     printf("turn on sun\r\n");
+  } else {
+    turnOffAll();
+  }
 }
 
 bool RelayController::isGridRelayOn() {

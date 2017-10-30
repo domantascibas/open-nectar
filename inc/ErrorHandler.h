@@ -36,7 +36,7 @@ struct ErrorHandler {
     void print_error(ERROR_CODE *);
 };
 
-extern ErrorHandler MainBoardError;
-extern ErrorHandler PowerBoardError;
+extern ErrorHandler mainBoardError;
+extern ErrorHandler powerBoardError;
 
 #endif
