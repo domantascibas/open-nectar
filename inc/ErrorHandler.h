@@ -1,6 +1,8 @@
 #ifndef ERROR_HANDLER_H
 #define ERROR_HANDLER_H
 
+#include "mbed.h"
+
 typedef enum {
   FLASH_ACCESS_ERROR,
   ADC_VOLTAGE_ERROR,

@@ -1,4 +1,3 @@
-#include "mbed.h"
 #include "ErrorHandler.h"
 
 ErrorHandler mainBoardError;
