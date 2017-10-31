@@ -1,19 +1,24 @@
 #include "mbed.h"
-#include "hardware.h"
 #include "EspComms.h"
 #include "PowerBoardComms.h"
 #include "device_modes.h"
 #include "service.h"
 #include "menu_service.h"
 #include "OperationalMode.h"
+#include "ErrorHandler.h"
+#include "TemperatureController.h"
+
+TemperatureController tempController;
+bool inErrorScreen = false;
 
 int main() {
   static bool isFirst = true;
+  mainBoardError.save_error_code(0x300);
   service::setup();
   menu_service::setup();
-  hardware::setup();
-  wait(2.0);
-  hardware::updateTemperature();
+  tempController.init();
+  wait(3.0);
+  tempController.updateTemperatures();
   power_board::setup();
   esp::setup();
   device_modes::setup();
@@ -21,6 +26,13 @@ int main() {
   menu_service::needUpdate = true;
 
   while(1) {
+    if((mainBoardError.has_errors || powerBoardError.has_errors) && !inErrorScreen) {
+      menu_service::needUpdate = true;
+      inErrorScreen = true;
+    } else {
+      inErrorScreen = false;
+    }
+    
     if(menu_service::needUpdate) {
       menu_service::updateScreen();
 //      printf("Available memory = %d\r\n\n", Memory::availableMemory(1) );
@@ -54,7 +66,7 @@ int main() {
         break;
     }
 
-    hardware::updateTemperature();
+    tempController.updateTemperatures();
     __WFI();
   }
 }
