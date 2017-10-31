@@ -5,7 +5,7 @@
 static const PinName BOILER_TEMP_PROBE = PB_8;
 static const PinName DEVICE_TEMP_PROBE = PB_9;
 
-static const float WATER_TEMPERATURE_LIMIT_MIN = 10.0;
+static const float WATER_TEMPERATURE_LIMIT_MIN = 5.0;
 static const float WATER_TEMPERATURE_LIMIT_MAX = 90.0;
 static const float DEVICE_TEMPERATURE_LIMIT_MAX = 95.0;
 

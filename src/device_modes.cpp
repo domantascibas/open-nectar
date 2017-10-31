@@ -5,6 +5,7 @@
 #include "EspComms.h"
 
 static const float BOOST_TEMP = 70.0;
+static const float AWAY_TEMP = 10.0;
 static const float HIST = 2.0;
 
 Ticker update_mode_tick;
@@ -35,7 +36,6 @@ namespace device_modes {
       float temp_boiler = data.temp_boiler;
       float temp_min = data.temp_min;
       float temp_max = deviceOpMode.getTemperatureMax();
-      float temp_away = data.temp_away;
       __enable_irq();
 
       switch(deviceOpMode.getHeaterMode()) {
@@ -97,13 +97,13 @@ namespace device_modes {
             //data.error = BOILER_TEMP_SENSOR_ERROR;
           } else {
             if(relayController.isGridRelayOn()) {
-              if(temp_boiler < (temp_away + HIST)) {
+              if(temp_boiler < (AWAY_TEMP + HIST)) {
                 relayStateNew = TURN_ON_GRID;
               } else {
                 relayStateNew = TURN_ON_SUN;
               }
             } else if(relayController.isSunRelayOn()) {
-              if(temp_boiler > (temp_away - HIST)) {
+              if(temp_boiler > (AWAY_TEMP - HIST)) {
                 relayStateNew = TURN_ON_SUN;
               } else {
                 relayStateNew = TURN_ON_GRID;
