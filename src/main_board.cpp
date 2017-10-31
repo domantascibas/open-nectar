@@ -9,8 +9,11 @@ namespace main_board {
   
   mbedStream m_stream(TX, RX);
   
+  bool isFirst;
+  
   void setup() {
     m_stream.setup();
+    isFirst = true;
   }
 }
 
@@ -36,7 +39,11 @@ void mbedStream::write(uint8_t byte) {
 }
 
 void mbedStream::received_main_board_state_for_power(const nectar_contract::MainBoardStateForPower &state) {
-  data.grid_energy_meter_kwh = state.grid_meter_kwh;
+  if(main_board::isFirst) {
+    main_board::isFirst = false;
+  } else {
+    data.grid_energy_meter_kwh = state.grid_meter_kwh;
+  }
   data.isTestMode = state.is_test_mode_on;
   if(state.start) {
     device_modes::start();
@@ -56,6 +63,7 @@ StreamObject mbedStream::get_power_board_state() {
   powerState.device_calibrated = !nectarError.has_error(CALIBRATION_ERROR);
   powerState.pwm_generator_on = mppt.is_generator_on();
   powerState.sun_meter_kwh = data.sun_energy_meter_kwh;
+  powerState.grid_meter_kwh = data.grid_energy_meter_kwh;
   powerState.ref_voltage = sensors.get_voltage_reference();
   powerState.ref_current = sensors.get_current_reference();
   
