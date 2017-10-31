@@ -4,11 +4,15 @@
 #include "TemperatureSensor.h"
 
 struct TemperatureController {
-  TemperatureController() {};
+  TemperatureController() : boilerTemperature(0.0), deviceTemperature(0.0) {};
   void init();
-  void updateTemperatures();
-  
-  
+  float getBoilerTemperature();
+  float getDeviceTemperature();
+  void updateTemperatures(float*, float*);
+    
+private:
+  float boilerTemperature;
+  float deviceTemperature;
 };
 
 #endif

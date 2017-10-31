@@ -5,7 +5,7 @@
 static const PinName BOILER_TEMP_PROBE = PB_8;
 static const PinName DEVICE_TEMP_PROBE = PB_9;
 
-static const float WATER_TEMPERATURE_LIMIT_MIN = 5.0;
+static const float WATER_TEMPERATURE_LIMIT_MIN = 10.0;
 static const float WATER_TEMPERATURE_LIMIT_MAX = 90.0;
 static const float DEVICE_TEMPERATURE_LIMIT_MAX = 95.0;
 
@@ -25,29 +25,36 @@ void TemperatureController::init() {
   }
 }
 
-void TemperatureController::updateTemperatures() {
+float TemperatureController::getBoilerTemperature() {
   if(boilerTemp.isNewValueAvailable()) {
-    float newValue = boilerTemp.getTemperature();
-    if(newValue > WATER_TEMPERATURE_LIMIT_MAX) {
+    boilerTemperature = boilerTemp.getTemperature();
+    if(boilerTemperature > WATER_TEMPERATURE_LIMIT_MAX) {
       mainBoardError.set_error(MAX_TEMPERATURE);
-    } else if(newValue < WATER_TEMPERATURE_LIMIT_MIN) {
+    } else if(boilerTemperature < WATER_TEMPERATURE_LIMIT_MIN) {
       mainBoardError.set_error(MIN_TEMPERATURE);
     } else {
       if(mainBoardError.has_error(MAX_TEMPERATURE)) mainBoardError.clear_error(MAX_TEMPERATURE);
       if(mainBoardError.has_error(MIN_TEMPERATURE)) mainBoardError.clear_error(MIN_TEMPERATURE);
-      data.temp_boiler = newValue;
-      printf("[TEMPERATURE] boiler %.2f\r\n", data.temp_boiler);
+      printf("[TEMPERATURE] boiler %.2f\r\n", boilerTemperature);
     }
   }
-  
+  return boilerTemperature;
+}
+
+float TemperatureController::getDeviceTemperature() {
   if(deviceTemp.isNewValueAvailable()) {
-    float newValue = deviceTemp.getTemperature();
-    if(newValue > DEVICE_TEMPERATURE_LIMIT_MAX) {
+    deviceTemperature = deviceTemp.getTemperature();
+    if(deviceTemperature > DEVICE_TEMPERATURE_LIMIT_MAX) {
       mainBoardError.set_error(DEVICE_OVERHEAT);
     } else {
       if(mainBoardError.has_error(DEVICE_OVERHEAT)) mainBoardError.clear_error(DEVICE_OVERHEAT);
-      data.device_temperature = newValue;
-      printf("[TEMPERATURE] internal %.2f\r\n", data.device_temperature);
+      printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
     }
   }
+  return deviceTemperature;
+}
+
+void TemperatureController::updateTemperatures(float *ptrBoilerTemp, float *ptrDeviceTemp) {
+  *ptrBoilerTemp = getBoilerTemperature();
+  *ptrDeviceTemp = getDeviceTemperature();
 }

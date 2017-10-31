@@ -18,7 +18,7 @@ int main() {
   menu_service::setup();
   tempController.init();
   wait(3.0);
-  tempController.updateTemperatures();
+  tempController.updateTemperatures(&data.temp_boiler, &data.device_temperature);
   power_board::setup();
   esp::setup();
   device_modes::setup();
@@ -65,8 +65,8 @@ int main() {
         power_board::loop();
         break;
     }
-
-    tempController.updateTemperatures();
+    
+    tempController.updateTemperatures(&data.temp_boiler, &data.device_temperature);
     __WFI();
   }
 }
