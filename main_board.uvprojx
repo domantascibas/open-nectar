@@ -509,6 +509,16 @@
               <FileType>8</FileType>
               <FilePath>.\src\PowerBoardComms.cpp</FilePath>
             </File>
+            <File>
+              <FileName>TemperatureSensor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\TemperatureSensor.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TemperatureController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\TemperatureController.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2103,6 +2113,16 @@
               <FileName>PowerBoardComms.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\PowerBoardComms.h</FilePath>
+            </File>
+            <File>
+              <FileName>TemperatureSensor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\TemperatureSensor.h</FilePath>
+            </File>
+            <File>
+              <FileName>TemperatureController.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\TemperatureController.h</FilePath>
             </File>
           </Files>
         </Group>
