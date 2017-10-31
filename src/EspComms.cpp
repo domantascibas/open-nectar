@@ -3,7 +3,10 @@
 #include "OperationalMode.h"
 #include "ErrorHandler.h"
 #include "PowerBoardComms.h"
+#include "device_modes.h"
 #include "menu_service.h"
+
+extern RelayController relayController;
 
 namespace esp {
   Ticker get_data_tick;
@@ -13,14 +16,14 @@ namespace esp {
   
   mbedStream m_stream(TX, RX);
   
-  nectar_contract::HeaterMode current_mode = nectar_contract::None;
+  uint8_t current_mode = 0;
   bool has_config = false;
   bool has_internet = false;
   
   float temp_max = 75.0;
   float temp_scheduled = 55.0;
   float boiler_power = 0.0;
-  
+    
   nectar_contract::ESPState espData = {
     current_mode,
     has_config,
@@ -35,9 +38,9 @@ namespace esp {
     time_t rtc = time(NULL);
     nectar_contract::MainBoardStateForESP mainStateForEsp = {
       power_board::powerBoardData.sun_power,
-      data.grid_relay_on,
+      relayController.isGridRelayOn(),
       data.temp_boiler,
-      data.sun_relay_on,
+      relayController.isSunRelayOn(),
       power_board::powerBoardData.sun_voltage,
       power_board::powerBoardData.sun_current,
       data.device_temperature,
@@ -94,14 +97,18 @@ void mbedStream::write(uint8_t byte) {
 }
 
 void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
-  esp::espData = state;
-  if((nectar_contract::HeaterMode)esp::espData.heater_mode != nectar_contract::Boost) data.boost_off = false;
-  printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", esp::espData.heater_mode, esp::espData.is_configured, esp::espData.has_internet_connection, esp::espData.temperature, esp::espData.temperature_max, esp::espData.boiler_power, esp::espData.sync_time);
-  if(esp::espData.sync_time != 0) {
-    set_time(esp::espData.sync_time);
-    time_t sec = time(NULL);
-    menu_actions::updateTime();
-    printf("Time set from ESP: %s\r\n", ctime(&sec));
+  if(state.is_configured) {
+    esp::espData = state;
+    if((nectar_contract::HeaterMode)esp::espData.heater_mode != nectar_contract::Boost) data.boost_off = false;
+    printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", esp::espData.heater_mode, esp::espData.is_configured, esp::espData.has_internet_connection, esp::espData.temperature, esp::espData.temperature_max, esp::espData.boiler_power, esp::espData.sync_time);
+    if(esp::espData.sync_time != 0) {
+      set_time(esp::espData.sync_time);
+      time_t sec = time(NULL);
+      menu_actions::updateTime();
+      printf("Time set from ESP: %s\r\n", ctime(&sec));
+    }
+  } else {
+    printf("[IN ESP] not configured, using local params %d %d %d %f %f %f %lld\r\n", esp::espData.heater_mode, esp::espData.is_configured, esp::espData.has_internet_connection, esp::espData.temperature, esp::espData.temperature_max, esp::espData.boiler_power, esp::espData.sync_time);
   }
 }
 

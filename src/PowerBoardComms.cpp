@@ -7,6 +7,7 @@ namespace power_board {
   Ticker get_data_tick;
   Timeout line_busy_timeout;
   Timeout error_timeout;
+  bool isFirst = true;
 
   static const PinName TX = PB_10;
   static const PinName RX = PB_11;
@@ -28,6 +29,7 @@ namespace power_board {
   bool calibrated = false;
   bool generator_on = false;
   float solar_kwh = 0.0;
+  float grid_kwh = 0.0;
   float ref_voltage = 0.0;
   float ref_current = 0.0;
     
@@ -41,13 +43,14 @@ namespace power_board {
     calibrated,
     generator_on,
     solar_kwh,
+    grid_kwh,
     ref_voltage,
     ref_current
   };
   
   void get_data_ISR() {
     nectar_contract::MainBoardStateForPower mainStateForPower = {
-      data.grid_kwh,
+      powerBoardData.grid_meter_kwh,
       isPowerBoardStarted,
       deviceOpMode.inTestMode
     };
@@ -130,6 +133,12 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
   __disable_irq();
   power_board::powerBoardData = state;
   powerBoardError.save_error_code(state.power_board_error_code);
+  
+  if(power_board::isFirst) {
+    power_board::isFirst = false;
+    data.d_kwh = power_board::powerBoardData.sun_meter_kwh;
+  }
+  data.solar_kwh_today = power_board::powerBoardData.sun_meter_kwh - data.d_kwh;
   __enable_irq();
 //  printf("[IN] %f %f %f %f %d %d %d %d %f %f %f\r\n",
 //    data.pv_power,

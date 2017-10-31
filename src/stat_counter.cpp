@@ -16,11 +16,11 @@ namespace stat_counter {
     if(data.grid_relay_on && !deviceOpMode.inTestMode) {
       float time_passed = stat_timer.read();
       stat_timer.reset();
-      data.grid_kwh += esp::espData.boiler_power * time_passed / 3600 / 1000;
+      power_board::powerBoardData.grid_meter_kwh += esp::espData.boiler_power * time_passed / 3600 / 1000;
     } else {
       stat_timer.reset();
     }
-    printf("solar: %.2fkWh grid: %.2fkWh\r\n", power_board::powerBoardData.sun_meter_kwh, data.grid_kwh);
+    printf("solar: %fkWh grid: %fkWh\r\n", power_board::powerBoardData.sun_meter_kwh, power_board::powerBoardData.grid_meter_kwh);
   }
 }
 
