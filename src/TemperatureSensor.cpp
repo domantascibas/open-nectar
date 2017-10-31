@@ -1,14 +1,14 @@
 #include "TemperatureSensor.h"
 
-TemperatureSensor::TemperatureSensor(PinName pin)
-: probe(pin), temperature(0.0), newValueAvailable(false), sensorFound(false) {
+TemperatureSensor::TemperatureSensor(PinName pin, uint8_t refresh)
+: probe(pin), temperature(0.0), newValueAvailable(false), sensorFound(false), refreshRate(refresh) {
 }
 
 void TemperatureSensor::init() {
   if(probe.begin()) {
     sensorFound = true;
     measureTemperature();
-    attachTicker(10);
+    attachTicker(refreshRate);
   }
 }
 

@@ -9,8 +9,8 @@ static const float WATER_TEMPERATURE_LIMIT_MIN = 10.0;
 static const float WATER_TEMPERATURE_LIMIT_MAX = 90.0;
 static const float DEVICE_TEMPERATURE_LIMIT_MAX = 95.0;
 
-TemperatureSensor boilerTemp(BOILER_TEMP_PROBE);
-TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE);
+TemperatureSensor boilerTemp(BOILER_TEMP_PROBE, 20);
+TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE, 10);
 
 void TemperatureController::init() {
   boilerTemp.init();

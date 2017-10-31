@@ -5,7 +5,7 @@
 #include "DS1820.h"
 
 struct TemperatureSensor {
-  TemperatureSensor(PinName);
+  TemperatureSensor(PinName, uint8_t);
   void init();
   bool isSensorFound();
   bool newValueAvailable;
@@ -16,6 +16,7 @@ private:
   DS1820 probe;
   Ticker ticker;
   Timeout timeout;
+  uint8_t refreshRate;
   float temperature;
   bool sensorFound;
   void attachTicker(float);
