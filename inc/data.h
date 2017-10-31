@@ -19,12 +19,10 @@ struct Data {
   float temp_min;
   float temp_scheduled;
   float temp_scheduled_night;
-  float temp_away;
   float temp_boiler;
 
   bool sun_relay_on;
   bool grid_relay_on;
-  float airgap_temp;
   float device_temperature;
 
   float solar_kwh_today;
