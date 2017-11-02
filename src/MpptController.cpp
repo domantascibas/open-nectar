@@ -3,7 +3,8 @@
 #include "PwmController.h"
 #include "data.h"
 
-#define PWM_STEP 0.02
+static const float PWM_STEP = 0.02;
+static const float POWER_THRESHOLD = 50.0;
 
 PwmController pwmGenerator(1.8, 0.1, 0.95);
 
@@ -23,34 +24,38 @@ void MpptController::track() {
   moment_power = data.moment_current * data.moment_voltage;
   data.moment_power = moment_power;
   dP = moment_power - old_power;
-
-  pwmGenerator.start();
-  if(dP != 0) {
-    if(dP > 0) {
-      if(last_increase) {
-        pwmGenerator.increase_duty(PWM_STEP);
-        last_increase = true;
-      } else {
-        pwmGenerator.decrease_duty(PWM_STEP);
-        last_increase = false;
-      }
-    } else {
-      if(last_increase) {
-        pwmGenerator.decrease_duty(PWM_STEP);
-        last_increase = false;
-      } else {
-        pwmGenerator.increase_duty(PWM_STEP);
-        last_increase = true;
-      }
-    }
-    old_power = moment_power;
+  
+  if(moment_power < POWER_THRESHOLD) {
+    reset();
   } else {
-    if(last_increase) {
-      pwmGenerator.increase_duty(PWM_STEP);
-      last_increase = true;
+    pwmGenerator.start();
+    if(dP != 0) {
+      if(dP > 0) {
+        if(last_increase) {
+          pwmGenerator.increase_duty(PWM_STEP);
+          last_increase = true;
+        } else {
+          pwmGenerator.decrease_duty(PWM_STEP);
+          last_increase = false;
+        }
+      } else {
+        if(last_increase) {
+          pwmGenerator.decrease_duty(PWM_STEP);
+          last_increase = false;
+        } else {
+          pwmGenerator.increase_duty(PWM_STEP);
+          last_increase = true;
+        }
+      }
+      old_power = moment_power;
     } else {
-      pwmGenerator.decrease_duty(PWM_STEP);
-      last_increase = false;
+      if(last_increase) {
+        pwmGenerator.increase_duty(PWM_STEP);
+        last_increase = true;
+      } else {
+        pwmGenerator.decrease_duty(PWM_STEP);
+        last_increase = false;
+      }
     }
   }
 }
