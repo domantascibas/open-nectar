@@ -3,13 +3,20 @@
 
 #include "NectarContract.h"
 #include "DeviceMode.h"
+#include "EspComms.h"
 
 namespace DataService {
-  uint8_t getCurrentHeaterMode();
-  uint8_t getPreviousHeaterMode();
+  nectar_contract::HeaterMode getCurrentHeaterMode();
+  nectar_contract::HeaterMode getPreviousHeaterMode();
   
-  void setCurrentHeaterMode(uint8_t);
+  void setCurrentHeaterMode(nectar_contract::HeaterMode);
   void setPreviousHeaterMode();
+  
+  bool isGridRelayOn();
+  bool isSunRelayOn();
+  
+  void calculateSolarKwhDiff(bool);
+  float getSolarKwhToday();
 };
 
 struct TemperatureData {
@@ -20,6 +27,7 @@ struct TemperatureData {
   void setBoilerTemperature(float);
   void setDeviceTemperature(float);
   float getTemperature();
+  float getNightTemperature();
   float getMinTemperature();
   float getMaxTemperature();
   float getBoilerTemperature();
@@ -34,7 +42,7 @@ private:
   float deviceTemperature;
 };
 
-extern TemperatureData temperature;
+extern TemperatureData temperatureData;
 extern nectar_contract::ESPState espData;
 extern nectar_contract::PowerBoardState powerData;
 

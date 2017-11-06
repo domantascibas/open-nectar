@@ -1,10 +1,11 @@
 #include "DataService.h"
+#include "device_modes.h"
 
-TemperatureData temperature;
+TemperatureData temperatureData;
 
 namespace DataService {
-  uint8_t previousHeaterMode = 0;
-  uint8_t currentHeaterMode = 0;
+  nectar_contract::HeaterMode currentHeaterMode = nectar_contract::None;
+  nectar_contract::HeaterMode previousHeaterMode = nectar_contract::None;
   bool hasConfig = false;
   bool hasInternet = false;
   float boiler_power = 0.0;
@@ -20,12 +21,17 @@ namespace DataService {
   bool calibrated = false;
   bool generator_on = false;
   float solar_kwh = 0.0;
+  float solar_kwh_today = 0.0;
+  float solar_kwh_today_diff = 0.0;
   float grid_kwh = 0.0;
   float ref_voltage = 0.0;
   float ref_current = 0.0;
+  
+  bool gridRelayOn = false;
+  bool sunRelayOn = false;
 };
     
-nectar_contract::PowerBoardState powerBoardData = {
+nectar_contract::PowerBoardState powerData = {
   DataService::sun_power,
   DataService::sun_voltage,
   DataService::sun_current,
@@ -44,8 +50,8 @@ nectar_contract::ESPState espData = {
   DataService::currentHeaterMode,
   DataService::hasConfig,
   DataService::hasInternet,
-  temperature.getTemperature(),
-  temperature.getMaxTemperature(),
+  temperatureData.getTemperature(),
+  temperatureData.getMaxTemperature(),
   DataService::boiler_power,
   0
 };
@@ -71,8 +77,11 @@ void TemperatureData::setDeviceTemperature(float temp) {
 }
 
 float TemperatureData::getTemperature() {
-  // return day or night temperature
   return dayTemperature;
+}
+
+float TemperatureData::getNightTemperature() {
+  return nightTemperature;
 }
 
 float TemperatureData::getMinTemperature() {
@@ -92,29 +101,49 @@ float TemperatureData::getDeviceTemperature() {
   return deviceTemperature;
 }
 
-uint8_t DataService::getCurrentHeaterMode() {
+nectar_contract::HeaterMode DataService::getCurrentHeaterMode() {
   if(espData.is_configured) {
-    return espData.heater_mode;
+    printf("esp::CurrentHeaterMode() = %d\r\n", (nectar_contract::HeaterMode)currentHeaterMode);
+    return (nectar_contract::HeaterMode)espData.heater_mode;
   } else {
-    return currentHeaterMode;
+    printf("data::CurrentHeaterMode() = %d\r\n", (nectar_contract::HeaterMode)currentHeaterMode);
+    return (nectar_contract::HeaterMode)currentHeaterMode;
   }
 }
 
-uint8_t DataService::getPreviousHeaterMode() {
-  return previousHeaterMode;
+nectar_contract::HeaterMode DataService::getPreviousHeaterMode() {
+  return (nectar_contract::HeaterMode)previousHeaterMode;
 }
 
-void DataService::setCurrentHeaterMode(uint8_t mode) {
+void DataService::setCurrentHeaterMode(nectar_contract::HeaterMode mode) {
   previousHeaterMode = currentHeaterMode;
   currentHeaterMode = mode;
 }
 
 void DataService::setPreviousHeaterMode() {
-  data.boost_off = true;
+  deviceOpMode.setBoostOff(true);
   esp::get_data_ISR();
   if(espData.is_configured) {
-    currentHeaterMode = espData.heater_mode;
+    currentHeaterMode = (nectar_contract::HeaterMode)espData.heater_mode;
   } else {
     currentHeaterMode = previousHeaterMode;
   }
+}
+
+bool DataService::isGridRelayOn() {
+  return device_modes::isGridRelayOn();
+}
+
+bool DataService::isSunRelayOn() {
+  return device_modes::isSunRelayOn();
+}
+
+void DataService::calculateSolarKwhDiff(bool first) {
+  if(first)
+    solar_kwh_today_diff = powerData.sun_meter_kwh;
+  solar_kwh_today = powerData.sun_meter_kwh - solar_kwh_today_diff;
+}
+
+float DataService::getSolarKwhToday() {
+  return solar_kwh_today;
 }
