@@ -25,7 +25,7 @@ void MpptController::track() {
   data.moment_power = moment_power;
   dP = moment_power - old_power;
   
-  if(moment_power < POWER_THRESHOLD) {
+  if((moment_power < POWER_THRESHOLD) && (pwmGenerator.get_duty() > 0.5 )) {
     reset();
   } else {
     pwmGenerator.start();
