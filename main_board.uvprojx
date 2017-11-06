@@ -385,69 +385,9 @@
               <FilePath>.\src\main.cpp</FilePath>
             </File>
             <File>
-              <FileName>data.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\data.cpp</FilePath>
-            </File>
-            <File>
               <FileName>device_modes.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\device_modes.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>service.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\service.cpp</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>stat_counter.cpp</FileName>
@@ -458,16 +398,6 @@
               <FileName>memory_checker.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\memory_checker.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>button.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\button.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>OperationalMode.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\OperationalMode.cpp</FilePath>
             </File>
             <File>
               <FileName>Relay.cpp</FileName>
@@ -495,16 +425,6 @@
               <FilePath>.\src\ErrorHandler.cpp</FilePath>
             </File>
             <File>
-              <FileName>EspComms.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\EspComms.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>PowerBoardComms.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\PowerBoardComms.cpp</FilePath>
-            </File>
-            <File>
               <FileName>TemperatureSensor.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\TemperatureSensor.cpp</FilePath>
@@ -513,6 +433,26 @@
               <FileName>TemperatureController.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\TemperatureController.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HeaterMode.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\HeaterMode.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>DataService.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\DataService.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EnergyMeter.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\EnergyMeter.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>DeviceMode.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\DeviceMode.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2035,19 +1975,9 @@
               <FilePath>.\inc\mbed_config.h</FilePath>
             </File>
             <File>
-              <FileName>data.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\data.h</FilePath>
-            </File>
-            <File>
               <FileName>device_modes.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\device_modes.h</FilePath>
-            </File>
-            <File>
-              <FileName>service.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\service.h</FilePath>
             </File>
             <File>
               <FileName>stat_counter.h</FileName>
@@ -2058,16 +1988,6 @@
               <FileName>memory_checker.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\memory_checker.h</FilePath>
-            </File>
-            <File>
-              <FileName>button.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\button.h</FilePath>
-            </File>
-            <File>
-              <FileName>OperationalMode.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\OperationalMode.h</FilePath>
             </File>
             <File>
               <FileName>Relay.h</FileName>
@@ -2095,16 +2015,6 @@
               <FilePath>.\inc\ErrorHandler.h</FilePath>
             </File>
             <File>
-              <FileName>EspComms.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\EspComms.h</FilePath>
-            </File>
-            <File>
-              <FileName>PowerBoardComms.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\PowerBoardComms.h</FilePath>
-            </File>
-            <File>
               <FileName>TemperatureSensor.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\TemperatureSensor.h</FilePath>
@@ -2113,6 +2023,26 @@
               <FileName>TemperatureController.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\TemperatureController.h</FilePath>
+            </File>
+            <File>
+              <FileName>HeaterMode.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\HeaterMode.h</FilePath>
+            </File>
+            <File>
+              <FileName>DataService.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\DataService.h</FilePath>
+            </File>
+            <File>
+              <FileName>EnergyMeter.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\EnergyMeter.h</FilePath>
+            </File>
+            <File>
+              <FileName>DeviceMode.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\DeviceMode.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2138,26 +2068,6 @@
               <FileName>OneWire.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\DS1820\OneWire\OneWire.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>nectar_serial</GroupName>
-          <Files>
-            <File>
-              <FileName>NectarContract.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\nectar_serial\src\NectarContract.h</FilePath>
-            </File>
-            <File>
-              <FileName>NectarStream.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\nectar_serial\src\NectarStream.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>NectarStream.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\nectar_serial\src\NectarStream.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2513,6 +2423,46 @@
               <FileName>ErrorScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\welcome\ErrorScreen.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>comms</GroupName>
+          <Files>
+            <File>
+              <FileName>NectarStream.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\nectar_serial\src\NectarStream.h</FilePath>
+            </File>
+            <File>
+              <FileName>NectarStream.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\nectar_serial\src\NectarStream.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>NectarContract.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\nectar_serial\src\NectarContract.h</FilePath>
+            </File>
+            <File>
+              <FileName>PowerBoardComms.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\PowerBoardComms.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>PowerBoardComms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\PowerBoardComms.h</FilePath>
+            </File>
+            <File>
+              <FileName>EspComms.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\EspComms.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EspComms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\EspComms.h</FilePath>
             </File>
           </Files>
         </Group>
