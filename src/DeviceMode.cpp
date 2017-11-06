@@ -39,6 +39,26 @@ bool DeviceMode::isPairing() {
   return pairing;
 }
 
+bool DeviceMode::isReset() {
+  return reset;
+}
+
+bool DeviceMode::isBoostOff() {
+  return boostOff;
+}
+
+void DeviceMode::setPairing(bool input) {
+  pairing = input;
+}
+
+void DeviceMode::setReset(bool input) {
+  reset = input;
+}
+
+void DeviceMode::setBoostOff(bool input) {
+  boostOff = input;
+}
+
 //time_t OperationalMode::timeHMtoTime(time_hm timeHM) {
 //  time_t rtc = time(NULL);
 //  

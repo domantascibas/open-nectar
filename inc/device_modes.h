@@ -6,6 +6,8 @@
 namespace device_modes {
   void setup();
   void loop();
+  bool isGridRelayOn();
+  bool isSunRelayOn();
 }
 
 #endif
