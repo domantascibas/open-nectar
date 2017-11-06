@@ -38,10 +38,10 @@ namespace esp {
     
     StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
     m_stream.stream.send_state_to_esp(_mainStateForEsp);
-    deviceOpMode.setReset(false);
     printf("[OUT ESP] current time: %s\r\n", ctime(&rtc));
     printf("[OUT ESP] sent data to ESP\r\n");
     printf("[OUT ESP] %d %d %d\r\n", deviceOpMode.isPairing(), deviceOpMode.isBoostOff(), deviceOpMode.isReset());
+    if(deviceOpMode.isReset()) deviceOpMode.setReset(false);
   }
 
   void setup() {
@@ -88,7 +88,7 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
       printf("Time set from ESP: %s\r\n", ctime(&sec));
     }
   } else {
-    printf("[IN ESP] not configured, using local params %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
+    printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
   }
 }
 
