@@ -2,23 +2,29 @@
 #include "EspComms.h"
 #include "PowerBoardComms.h"
 #include "device_modes.h"
-#include "service.h"
 #include "menu_service.h"
-#include "OperationalMode.h"
 #include "ErrorHandler.h"
 #include "TemperatureController.h"
+#include "DataService.h"
 
-TemperatureController tempController;
+static const PinName TX = PA_2;
+static const PinName RX = PA_3;
+static const uint32_t SERIAL_BAUDRATE = 115200;
+static bool isFirst = true;
 bool inErrorScreen = false;
 
+RawSerial pc(TX, RX);
+TemperatureController tempController;
+
 int main() {
-  static bool isFirst = true;
+  pc.baud(SERIAL_BAUDRATE);
+  pc.printf("[COMMS] Started\r\n");
   mainBoardError.save_error_code(0x300);
-  service::setup();
+  
   menu_service::setup();
   tempController.init();
   wait(3.0);
-  tempController.updateTemperatures(&data.temp_boiler, &data.device_temperature);
+  tempController.updateTemperatures();
   power_board::setup();
   esp::setup();
   device_modes::setup();
@@ -38,17 +44,15 @@ int main() {
 //      printf("Available memory = %d\r\n\n", Memory::availableMemory(1) );
     }
     
-    switch(deviceOpMode.currentMode) {
+    switch(deviceOpMode.getCurrentMode()) {
       default:
       case NOT_CONFIGURED:
-        if(esp::espData.is_configured) deviceOpMode.setConfigured();
+        if(espData.is_configured) deviceOpMode.setConfigured();
         device_modes::loop();
-        power_board::loop();
         break;
       
       case CONFIGURED:
         device_modes::loop();
-        power_board::loop();
         break;
       
       case WELCOME:
@@ -59,14 +63,13 @@ int main() {
       case TEST_MODE:
         if(isFirst) {
           isFirst = false;
-          power_board::enter_test_mode();
+          deviceOpMode.setTestMode();
         }
         device_modes::loop();
-        power_board::loop();
         break;
     }
     
-    tempController.updateTemperatures(&data.temp_boiler, &data.device_temperature);
+    tempController.updateTemperatures();
     __WFI();
   }
 }
