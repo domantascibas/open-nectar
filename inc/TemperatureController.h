@@ -8,7 +8,7 @@ struct TemperatureController {
   void init();
   float getBoilerTemperature();
   float getDeviceTemperature();
-  void updateTemperatures(float*, float*);
+  void updateTemperatures();
     
 private:
   float boilerTemperature;

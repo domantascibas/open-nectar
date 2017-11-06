@@ -1,6 +1,6 @@
 #include "TemperatureController.h"
 #include "ErrorHandler.h"
-#include "data.h"
+#include "DataService.h"
 
 static const PinName BOILER_TEMP_PROBE = PB_8;
 static const PinName DEVICE_TEMP_PROBE = PB_9;
@@ -54,7 +54,7 @@ float TemperatureController::getDeviceTemperature() {
   return deviceTemperature;
 }
 
-void TemperatureController::updateTemperatures(float *ptrBoilerTemp, float *ptrDeviceTemp) {
-  *ptrBoilerTemp = getBoilerTemperature();
-  *ptrDeviceTemp = getDeviceTemperature();
+void TemperatureController::updateTemperatures() {
+  temperatureData.setBoilerTemperature(getBoilerTemperature());
+  temperatureData.setDeviceTemperature(getDeviceTemperature());
 }
