@@ -11,6 +11,7 @@ RelayController relayController;
 
 namespace device_modes {
   volatile bool update_mode = false;
+  static bool isFirst = true;
   uint8_t relayStateNew = TURN_OFF_ALL;
   
   void update_mode_ISR() {
@@ -30,6 +31,13 @@ namespace device_modes {
     stat_counter::setup();
     relayController.init();
   }
+  
+  void reset() {
+    DataService::resetData();
+    relayStateNew = TURN_OFF_ALL;
+    relayController.setRelays(relayStateNew);
+    isFirst = true;
+  }
 
   void loop() {
     if(update_mode) {
@@ -41,7 +49,7 @@ namespace device_modes {
       float temp_boiler = temperatureData.getBoilerTemperature();
       float temp_min = temperatureData.getMinTemperature();
       float temp_max = temperatureData.getMaxTemperature();
-
+      
       switch(DataService::getCurrentHeaterMode()) {
         default:  //mode is any other value than the ones below
         case nectar_contract::None:
@@ -51,6 +59,13 @@ namespace device_modes {
             printf("temp %f  > max temp %f\r\n", temp_boiler, temp_max);
             relayStateNew = TURN_OFF_ALL;
             //data.error = BOILER_TEMP_SENSOR_ERROR;
+          } else if(isFirst) {
+            isFirst = false;
+            if(temp_boiler < temp) {
+              relayStateNew = TURN_ON_GRID;
+            } else {
+              relayStateNew = TURN_ON_SUN;
+            }
           } else {
             if(relayController.isGridRelayOn()) {
               if(temp_boiler < (temp + HIST)) {
