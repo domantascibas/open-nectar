@@ -1,9 +1,6 @@
 #include "mbed.h"
-#include "data.h"
 #include "stat_counter.h"
-#include "OperationalMode.h"
-#include "EspComms.h"
-#include "PowerBoardComms.h"
+#include "DataService.h"
 
 Timer stat_timer;
 
@@ -13,14 +10,14 @@ namespace stat_counter {
   }
   
   void increase() {
-    if(data.grid_relay_on && !deviceOpMode.inTestMode) {
+    if(DataService::isGridRelayOn() && !deviceOpMode.isInTestMode()) {
       float time_passed = stat_timer.read();
       stat_timer.reset();
-      power_board::powerBoardData.grid_meter_kwh += esp::espData.boiler_power * time_passed / 3600 / 1000;
+      powerData.grid_meter_kwh += espData.boiler_power * time_passed / 3600 / 1000;
     } else {
       stat_timer.reset();
     }
-    printf("solar: %fkWh grid: %fkWh\r\n", power_board::powerBoardData.sun_meter_kwh, power_board::powerBoardData.grid_meter_kwh);
+    printf("solar: %fkWh grid: %fkWh\r\n", powerData.sun_meter_kwh, powerData.grid_meter_kwh);
   }
 }
 
