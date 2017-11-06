@@ -1,10 +1,8 @@
-#include "data.h"
 #include "EspComms.h"
-#include "OperationalMode.h"
-#include "ErrorHandler.h"
-#include "PowerBoardComms.h"
 #include "device_modes.h"
+#include "ErrorHandler.h"
 #include "menu_service.h"
+#include "DataService.h"
 
 extern RelayController relayController;
 
@@ -16,52 +14,34 @@ namespace esp {
   
   mbedStream m_stream(TX, RX);
   
-  uint8_t current_mode = 0;
-  bool has_config = false;
-  bool has_internet = false;
-  
-  float temp_max = 75.0;
-  float temp_scheduled = 55.0;
-  float boiler_power = 0.0;
-    
-  nectar_contract::ESPState espData = {
-    current_mode,
-    has_config,
-    has_internet,
-    temp_scheduled,
-    temp_max,
-    boiler_power,
-    0
-  };
-  
   void get_data_ISR() {
     time_t rtc = time(NULL);
     nectar_contract::MainBoardStateForESP mainStateForEsp = {
-      power_board::powerBoardData.sun_power,
+      powerData.sun_power,
       relayController.isGridRelayOn(),
-      data.temp_boiler,
+      temperatureData.getBoilerTemperature(),
       relayController.isSunRelayOn(),
-      power_board::powerBoardData.sun_voltage,
-      power_board::powerBoardData.sun_current,
-      data.device_temperature,
-      power_board::powerBoardData.transistor_overheat_on,
-      power_board::powerBoardData.pwm_duty,
+      powerData.sun_voltage,
+      powerData.sun_current,
+      temperatureData.getDeviceTemperature(),
+      powerData.transistor_overheat_on,
+      powerData.pwm_duty,
       powerBoardError.get_errors(),
       mainBoardError.get_errors(),
-      power_board::powerBoardData.sun_meter_kwh,
-      data.grid_kwh,
+      powerData.sun_meter_kwh,
+      powerData.grid_meter_kwh,
       time(NULL),
-      data.reset,
-      deviceOpMode.isPairing,
-      data.boost_off
+      deviceOpMode.isReset(),
+      deviceOpMode.isPairing(),
+      deviceOpMode.isBoostOff()
     };
     
     StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
     m_stream.stream.send_state_to_esp(_mainStateForEsp);
-    data.reset = false;
+    deviceOpMode.setReset(false);
     printf("[OUT ESP] current time: %s\r\n", ctime(&rtc));
     printf("[OUT ESP] sent data to ESP\r\n");
-    printf("[OUT ESP] %d %d\r\n", deviceOpMode.isPairing, data.boost_off);
+    printf("[OUT ESP] %d %d %d\r\n", deviceOpMode.isPairing(), deviceOpMode.isBoostOff(), deviceOpMode.isReset());
   }
 
   void setup() {
@@ -98,17 +78,17 @@ void mbedStream::write(uint8_t byte) {
 
 void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
   if(state.is_configured) {
-    esp::espData = state;
-    if((nectar_contract::HeaterMode)esp::espData.heater_mode != nectar_contract::Boost) data.boost_off = false;
-    printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", esp::espData.heater_mode, esp::espData.is_configured, esp::espData.has_internet_connection, esp::espData.temperature, esp::espData.temperature_max, esp::espData.boiler_power, esp::espData.sync_time);
-    if(esp::espData.sync_time != 0) {
-      set_time(esp::espData.sync_time);
+    espData = state;
+    if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost) deviceOpMode.setBoostOff(false);
+    printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
+    if(espData.sync_time != 0) {
+      set_time(espData.sync_time);
       time_t sec = time(NULL);
       menu_actions::updateTime();
       printf("Time set from ESP: %s\r\n", ctime(&sec));
     }
   } else {
-    printf("[IN ESP] not configured, using local params %d %d %d %f %f %f %lld\r\n", esp::espData.heater_mode, esp::espData.is_configured, esp::espData.has_internet_connection, esp::espData.temperature, esp::espData.temperature_max, esp::espData.boiler_power, esp::espData.sync_time);
+    printf("[IN ESP] not configured, using local params %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
   }
 }
 

@@ -7,11 +7,8 @@
 
 namespace power_board {  
   void setup();
-  void loop();
   void start();
   void stop();
-  void enter_test_mode();
-  extern nectar_contract::PowerBoardState powerBoardData;
 }
 
 class powerStream : public IStreamDelegate {

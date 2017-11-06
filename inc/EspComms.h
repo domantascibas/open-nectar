@@ -8,7 +8,6 @@
 namespace esp {
   void setup();
   void get_data_ISR();
-  extern nectar_contract::ESPState espData;
 }
 
 class mbedStream : public IStreamDelegate {
