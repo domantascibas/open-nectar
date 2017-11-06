@@ -16,12 +16,15 @@ struct DeviceMode {
   void endOnboarding();
   void setTestMode();
   void setConfigured();
+  void resetConfiguration();
+    
   bool isInTestMode();
   bool isOnboarding();
   bool isConfigured();
   bool isPairing();
   bool isReset();
   bool isBoostOff();
+    
   void setPairing(bool);
   void setReset(bool);
   void setBoostOff(bool);

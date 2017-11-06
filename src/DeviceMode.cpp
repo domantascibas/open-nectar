@@ -1,4 +1,5 @@
 #include "DeviceMode.h"
+#include "device_modes.h"
 
 DeviceMode deviceOpMode;
 
@@ -9,6 +10,14 @@ uint8_t DeviceMode::getCurrentMode() {
 void DeviceMode::setConfigured() {
   currentMode = CONFIGURED;
   configured = true;
+}
+
+void DeviceMode::resetConfiguration() {
+  currentMode = WELCOME;
+  testMode = false;
+  configured = false;
+  onboarding = true;
+  device_modes::reset();
 }
 
 void DeviceMode::setTestMode() {
