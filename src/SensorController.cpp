@@ -52,7 +52,8 @@ void SensorController::measure() {
 
 float SensorController::get_voltage() {
   float v = (voltageSensor.sample() - voltageSensor.get_reference()) / INPUT_VDIV;
-    
+  
+  if(v < VOLTAGE_LIMIT && nectarError.has_error(DC_OVER_VOLTAGE)) nectarError.clear_error(DC_OVER_VOLTAGE);
   if(v >= VOLTAGE_LIMIT) nectarError.set_error(DC_OVER_VOLTAGE);
   if(v < 0) v = 0;
   return v;
@@ -61,6 +62,7 @@ float SensorController::get_voltage() {
 float SensorController::get_current() {
   float i = (currentSensor.sample() - currentSensor.get_reference()) * 5.000;
 
+  if(i < CURRENT_LIMIT && nectarError.has_error(DC_OVER_CURRENT)) nectarError.clear_error(DC_OVER_CURRENT);
   if(i >= CURRENT_LIMIT) nectarError.set_error(DC_OVER_CURRENT);
   if(i < 0) i = 0;
   return i;
