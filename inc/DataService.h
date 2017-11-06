@@ -9,6 +9,8 @@ namespace DataService {
   nectar_contract::HeaterMode getCurrentHeaterMode();
   nectar_contract::HeaterMode getPreviousHeaterMode();
   
+  void resetData();
+  
   void setCurrentHeaterMode(nectar_contract::HeaterMode);
   void setPreviousHeaterMode();
   

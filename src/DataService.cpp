@@ -103,16 +103,36 @@ float TemperatureData::getDeviceTemperature() {
 
 nectar_contract::HeaterMode DataService::getCurrentHeaterMode() {
   if(espData.is_configured) {
-    printf("esp::CurrentHeaterMode() = %d\r\n", (nectar_contract::HeaterMode)currentHeaterMode);
     return (nectar_contract::HeaterMode)espData.heater_mode;
   } else {
-    printf("data::CurrentHeaterMode() = %d\r\n", (nectar_contract::HeaterMode)currentHeaterMode);
     return (nectar_contract::HeaterMode)currentHeaterMode;
   }
 }
 
 nectar_contract::HeaterMode DataService::getPreviousHeaterMode() {
   return (nectar_contract::HeaterMode)previousHeaterMode;
+}
+
+void DataService::resetData() {
+  currentHeaterMode = nectar_contract::None;
+  previousHeaterMode = nectar_contract::None;
+  
+  hasConfig = false;
+  hasInternet = false;
+  
+  temperatureData.setDayTemperature(55.0);
+  temperatureData.setNightTemperature(40.0);
+  temperatureData.setMaxTemperature(75.0);
+  
+  boiler_power = 0;
+  
+  espData.heater_mode = currentHeaterMode;
+  espData.is_configured = hasConfig;
+  espData.has_internet_connection = hasInternet;
+  espData.temperature = temperatureData.getTemperature();
+  espData.temperature_max = temperatureData.getMaxTemperature();
+  espData.boiler_power = boiler_power;
+  espData.sync_time = 0;
 }
 
 void DataService::setCurrentHeaterMode(nectar_contract::HeaterMode mode) {
