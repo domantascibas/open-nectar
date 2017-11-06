@@ -10,13 +10,13 @@
 static const PinName TX = PA_2;
 static const PinName RX = PA_3;
 static const uint32_t SERIAL_BAUDRATE = 115200;
-static bool isFirst = true;
 bool inErrorScreen = false;
 
 RawSerial pc(TX, RX);
 TemperatureController tempController;
 
 int main() {
+  static bool isFirst = true;
   pc.baud(SERIAL_BAUDRATE);
   pc.printf("[COMMS] Started\r\n");
   mainBoardError.save_error_code(0x300);
@@ -47,11 +47,19 @@ int main() {
     switch(deviceOpMode.getCurrentMode()) {
       default:
       case NOT_CONFIGURED:
-        if(espData.is_configured) deviceOpMode.setConfigured();
+        if(espData.is_configured) {
+          printf("NO CONFIG -> HAS CONFIG\r\n");
+          deviceOpMode.setConfigured();
+          menu_service::needUpdate = true;
+          menu_service::resetScreen = true;
+        }
         device_modes::loop();
         break;
       
       case CONFIGURED:
+        if(!espData.is_configured) {
+          printf("HAS CONFIG -> NO CONFIG\r\n");
+        }
         device_modes::loop();
         break;
       
