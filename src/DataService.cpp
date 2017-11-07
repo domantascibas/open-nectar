@@ -1,5 +1,7 @@
 #include "DataService.h"
 #include "device_modes.h"
+#include "../submodules/device_menu/src/helpers/helpers.h"
+#include "menu_service.h"
 
 TemperatureData temperatureData;
 
@@ -56,6 +58,12 @@ nectar_contract::ESPState espData = {
   0
 };
 
+time_t timeHMtoTime(time_hm timeHM) {
+  time_t rtc = time(NULL);
+  
+  return rtc - (rtc % (24 * 60 * 60)) + timeHM.hours * 60 * 60 + timeHM.minutes * 60;
+}
+
 void TemperatureData::setDayTemperature(float temp) {
   dayTemperature = temp;
 }
@@ -77,7 +85,16 @@ void TemperatureData::setDeviceTemperature(float temp) {
 }
 
 float TemperatureData::getTemperature() {
-  return dayTemperature;
+  if(deviceOpMode.isConfigured()) return espData.temperature;
+  else {
+    time_hm currentTime = menu_actions::getTime(Current);
+    time_hm dayStartTime = menu_actions::getTime(DayStart);
+    time_hm dayEndTime = menu_actions::getTime(NightStart);
+    
+    if((timeHMtoTime(currentTime) > timeHMtoTime(dayStartTime)) && (timeHMtoTime(currentTime) < timeHMtoTime(dayEndTime)))
+      return dayTemperature;
+    else return nightTemperature;
+  }
 }
 
 float TemperatureData::getNightTemperature() {
@@ -89,7 +106,8 @@ float TemperatureData::getMinTemperature() {
 }
 
 float TemperatureData::getMaxTemperature() {
-  return maxTemperature;
+  if(deviceOpMode.isConfigured()) return espData.temperature_max;
+  else return maxTemperature;
 }
 
 float TemperatureData::getBoilerTemperature() {
