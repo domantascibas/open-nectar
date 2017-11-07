@@ -27,7 +27,7 @@ namespace device_modes {
   }
   
   void setup() {
-    update_mode_tick.attach(update_mode_ISR, 1.5);
+//    update_mode_tick.attach(update_mode_ISR, 1.5);
     stat_counter::setup();
     relayController.init();
   }
