@@ -80,6 +80,7 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
   if(state.is_configured) {
     espData = state;
     if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost) deviceOpMode.setBoostOff(false);
+    device_modes::updateHeaterMode = true;
     printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
     if(espData.sync_time != 0) {
       set_time(espData.sync_time);

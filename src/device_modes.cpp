@@ -10,12 +10,12 @@ Ticker update_mode_tick;
 RelayController relayController;
 
 namespace device_modes {
-  volatile bool update_mode = false;
+  bool updateHeaterMode = false;
   static bool isFirst = true;
   uint8_t relayStateNew = TURN_OFF_ALL;
   
   void update_mode_ISR() {
-    update_mode = true;
+    updateHeaterMode = true;
   }
   
   bool isGridRelayOn() {
@@ -40,8 +40,8 @@ namespace device_modes {
   }
 
   void loop() {
-    if(update_mode) {
-      update_mode = false;
+    if(updateHeaterMode) {
+      updateHeaterMode = false;
       
       stat_counter::increase();
       

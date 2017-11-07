@@ -4,6 +4,7 @@
 #include "RelayController.h"
 
 namespace device_modes {
+  extern bool updateHeaterMode;
   void setup();
   void loop();
   void reset();

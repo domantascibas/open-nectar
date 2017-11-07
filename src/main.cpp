@@ -53,14 +53,12 @@ int main() {
           menu_service::needUpdate = true;
           menu_service::resetScreen = true;
         }
-        device_modes::loop();
         break;
       
       case CONFIGURED:
         if(!espData.is_configured) {
           printf("HAS CONFIG -> NO CONFIG\r\n");
         }
-        device_modes::loop();
         break;
       
       case WELCOME:
@@ -73,11 +71,13 @@ int main() {
           isFirst = false;
           deviceOpMode.setTestMode();
         }
-        device_modes::loop();
         break;
     }
     
     tempController.updateTemperatures();
+    if(!deviceOpMode.isOnboarding()) {
+      device_modes::loop();
+    }
     __WFI();
   }
 }
