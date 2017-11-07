@@ -13,7 +13,7 @@ namespace stat_counter {
     if(DataService::isGridRelayOn() && !deviceOpMode.isInTestMode()) {
       float time_passed = stat_timer.read();
       stat_timer.reset();
-      powerData.grid_meter_kwh += espData.boiler_power * time_passed / 3600 / 1000;
+      if(time_passed > 0) powerData.grid_meter_kwh += espData.boiler_power * time_passed / 3600 / 1000;
     } else {
       stat_timer.reset();
     }
