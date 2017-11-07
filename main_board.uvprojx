@@ -2424,6 +2424,16 @@
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\welcome\ErrorScreen.h</FilePath>
             </File>
+            <File>
+              <FileName>WelcomeTimeScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\welcome\WelcomeTimeScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WelcomeTimeScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\welcome\WelcomeTimeScreen.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
