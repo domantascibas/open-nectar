@@ -12,7 +12,6 @@ namespace device_modes {
   
   void start();
   void stop();
-  void enter_service_mode();
 }
 
 extern MpptController mppt;

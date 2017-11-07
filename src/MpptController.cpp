@@ -95,3 +95,27 @@ float MpptController::get_duty() {
 bool MpptController::is_generator_on() {
   return pwmGenerator.is_on();
 }
+
+void MpptController::manualStartPwm() {
+  pwmGenerator.start();
+}
+
+void MpptController::manualStopPwm() {
+  pwmGenerator.stop();
+}
+
+void MpptController::manualIncreaseDuty(bool fineStep) {
+  if(fineStep) {
+    pwmGenerator.increase_duty(0.005);
+  } else {
+    pwmGenerator.increase_duty(PWM_STEP);
+  }
+}
+
+void MpptController::manualDecreaseDuty(bool fineStep) {
+  if(fineStep) {
+    pwmGenerator.decrease_duty(0.005);
+  } else {
+    pwmGenerator.decrease_duty(PWM_STEP);
+  }
+}

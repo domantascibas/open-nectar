@@ -41,7 +41,7 @@ void PwmController::set_duty(float value) {
 }
 
 float PwmController::get_duty() {
-  printf("PWM DUTY: %f\r\n", duty);
+//  printf("PWM DUTY: %f\r\n", duty);
   return duty;
 }
 
@@ -52,6 +52,6 @@ float PwmController::clamp(float input) {
 }
 
 bool PwmController::is_on() {
-  printf("GENERATOR ON: %d\r\n", generator_on);
+//  printf("GENERATOR ON: %d\r\n", generator_on);
   return generator_on;
 }

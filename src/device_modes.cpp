@@ -2,6 +2,8 @@
 #include "device_modes.h"
 #include "ErrorHandler.h"
 
+static const bool RESET_ENERGY_METERS = false;
+
 static const PinName USER_LED = PA_15;
 static const PinName OVERHEAT = PD_2;
 static const PinName CALIBRATION_BTN = PC_12;
@@ -30,23 +32,28 @@ namespace device_modes {
   }
   
   void start() {
-    data.current_state = RUNNING;
+    if(data.current_state != MANUAL) data.current_state = RUNNING;
   }
   
   void stop() {
-    if(data.current_state != IDLE) {
-      data.current_state = STOP;
+    if(data.current_state != MANUAL) {
+      if(data.current_state != IDLE) {
+        data.current_state = STOP;
+      }
     }
   }
   
-  void enter_service_mode() {
-    data.current_state = SERVICE;
-  }
-  
   void no_power_ISR(){
-    if(data.isTestMode == false) {
+    if(RESET_ENERGY_METERS) {
+      data.sun_energy_meter_kwh = 0.00;
+      data.grid_energy_meter_kwh = 0.00;
       sensors.save_meters();
       printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+    } else {
+      if(!data.isTestMode) {
+        sensors.save_meters();
+        printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+      }
     }
   }
   
@@ -82,7 +89,7 @@ namespace device_modes {
     if(update_mode) {      
       update_mode = false;
       
-      if(nectarError.has_errors && (data.current_state != IDLE)) {
+      if(nectarError.has_errors && ((data.current_state != IDLE) || (data.current_state != MANUAL))) {
         data.current_state = STOP;
       }
       
@@ -92,25 +99,31 @@ namespace device_modes {
       }
       stat_timer.reset();
       
-      switch(data.current_state) {
-        default:
-        case STOP:
-          printf("[MODE] stop\r\n");
-          mppt.reset();
-          data.current_state = IDLE;
-          break;
-        
-        case IDLE:
-          printf("[MODE] idle\r\n");
-          //wait for start command
-          //PWM driver OFF
-          break;
-        
-        case RUNNING:
-          printf("[MODE] running\r\n");
-          mppt.track();
-//          mppt.swipe(0.1, 0.95, 0.1);
-          break;
+      if(data.current_state != MANUAL) {
+        switch(data.current_state) {
+          default:
+          case STOP:
+            printf("[MODE] stop\r\n");
+            mppt.reset();
+            data.current_state = IDLE;
+            break;
+          
+          case IDLE:
+            printf("[MODE] idle\r\n");
+            //wait for start command
+            //PWM driver OFF
+            break;
+          
+          case RUNNING:
+            printf("[MODE] running\r\n");
+            mppt.track();
+  //          mppt.swipe(0.1, 0.95, 0.1);
+            break;
+          
+          case MANUAL:
+            printf("[MODE] manual\r\n");
+            break;
+        }
       }
     }
   }

@@ -17,7 +17,7 @@ enum modes {
   IDLE,
   RUNNING,
   STOP,
-  SERVICE
+  MANUAL
 };
 
 struct Data {
