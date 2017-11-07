@@ -102,7 +102,7 @@ float TemperatureData::getDeviceTemperature() {
 }
 
 nectar_contract::HeaterMode DataService::getCurrentHeaterMode() {
-  if(espData.is_configured) {
+  if(espData.is_configured && !deviceOpMode.isInTestMode()) {
     return (nectar_contract::HeaterMode)espData.heater_mode;
   } else {
     return (nectar_contract::HeaterMode)currentHeaterMode;
