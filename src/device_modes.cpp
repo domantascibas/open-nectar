@@ -95,9 +95,9 @@ namespace device_modes {
       
       if(mppt.is_generator_on() && !data.isTestMode) {
         float time_passed = stat_timer.read();
-        data.sun_energy_meter_kwh += data.moment_power * time_passed / 3600 / 1000;
-      }
-      stat_timer.reset();
+        stat_timer.reset();
+        if(time_passed > 0) data.sun_energy_meter_kwh += data.moment_power * time_passed / 3600 / 1000;
+      } else stat_timer.reset();
       
       if(data.current_state != MANUAL) {
         switch(data.current_state) {
