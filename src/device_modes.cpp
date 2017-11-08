@@ -22,6 +22,7 @@ Ticker update_device_mode;
 namespace device_modes {
   static volatile bool update_mode = false;
   volatile bool calibrate_sensors = false;
+  float lastPower = 0.0;
   
   void calibrate_sensors_ISR() {
     calibrate_sensors = true;
@@ -96,8 +97,12 @@ namespace device_modes {
       if(mppt.is_generator_on() && !data.isTestMode) {
         float time_passed = stat_timer.read();
         stat_timer.reset();
-        if(time_passed > 0) data.sun_energy_meter_kwh += data.moment_power * time_passed / 3600 / 1000;
-      } else stat_timer.reset();
+        if(time_passed > 0) data.sun_energy_meter_kwh += ((lastPower + data.moment_power)/2 )* time_passed / 3600 / 1000;
+        lastPower = data.moment_power;
+      } else {
+        stat_timer.reset();
+        lastPower = 0.0;
+      }
       
       if(data.current_state != MANUAL) {
         switch(data.current_state) {
