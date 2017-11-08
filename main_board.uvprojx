@@ -390,11 +390,6 @@
               <FilePath>.\src\device_modes.cpp</FilePath>
             </File>
             <File>
-              <FileName>stat_counter.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\stat_counter.cpp</FilePath>
-            </File>
-            <File>
               <FileName>memory_checker.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\memory_checker.cpp</FilePath>
@@ -1978,11 +1973,6 @@
               <FileName>device_modes.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\device_modes.h</FilePath>
-            </File>
-            <File>
-              <FileName>stat_counter.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\stat_counter.h</FilePath>
             </File>
             <File>
               <FileName>memory_checker.h</FileName>
