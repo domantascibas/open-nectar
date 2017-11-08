@@ -1,5 +1,4 @@
 #include "device_modes.h"
-#include "stat_counter.h"
 #include "DataService.h"
 
 static const float BOOST_TEMP = 70.0;
