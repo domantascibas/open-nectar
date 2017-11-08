@@ -25,7 +25,8 @@ namespace device_modes {
   float lastPower = 0.0;
   
   void calibrate_sensors_ISR() {
-    calibrate_sensors = true;
+    if(data.isInOnboarding) calibrate_sensors = true;
+    else calibrate_sensors = false;
   }
   
   void update_device_mode_ISR() {

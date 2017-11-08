@@ -44,13 +44,14 @@ void mbedStream::received_main_board_state_for_power(const nectar_contract::Main
   } else {
     data.grid_energy_meter_kwh = state.grid_meter_kwh;
   }
+  data.isInOnboarding = state.is_in_onboarding;
   data.isTestMode = state.is_test_mode_on;
   if(state.start) {
     device_modes::start();
   } else {
     device_modes::stop();
   }
-  printf("[IN] %f %d %d\r\n", data.grid_energy_meter_kwh, data.current_state, data.isTestMode);
+  printf("[IN] %f %d %d %d\r\n", data.grid_energy_meter_kwh, data.current_state, data.isTestMode, data.isInOnboarding);
 }
 
 StreamObject mbedStream::get_power_board_state() {
