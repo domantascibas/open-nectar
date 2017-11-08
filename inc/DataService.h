@@ -19,6 +19,7 @@ namespace DataService {
   
   void calculateSolarKwhDiff(bool);
   float getSolarKwhToday();
+  float getBoilerPower();
 };
 
 struct TemperatureData {

@@ -1,6 +1,7 @@
 #include "PowerBoardComms.h"
 #include "ErrorHandler.h"
 #include "DataService.h"
+#include "EnergyMeter.h"
 
 namespace power_board {
   Ticker get_data_tick;
@@ -14,7 +15,7 @@ namespace power_board {
   
   void get_data_ISR() {
     nectar_contract::MainBoardStateForPower mainStateForPower = {
-      powerData.grid_meter_kwh,
+      gridMeter.getMeterReading(),
       startPowerBoard,
       deviceOpMode.isInTestMode()
     };
@@ -76,6 +77,7 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
   powerData = state;
   powerBoardError.save_error_code(state.power_board_error_code);
   
+  if(power_board::isFirst) gridMeter.setMeterReading(powerData.grid_meter_kwh);
   DataService::calculateSolarKwhDiff(power_board::isFirst);
   power_board::isFirst = false;
   __enable_irq();

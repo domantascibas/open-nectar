@@ -1,5 +1,6 @@
 #include "RelayController.h"
 #include "ErrorHandler.h"
+#include "EnergyMeter.h"
 
 GridRelay gridRelay;
 SunRelay sunRelay;
@@ -37,6 +38,7 @@ void RelayController::setRelays(uint8_t state) {
     case TURN_OFF_ALL:
       sunRelay.turnOff();
       gridRelay.turnOff();
+      gridMeter.stopMeter();
       printf("turn off all\r\n");
       break;
     
@@ -44,6 +46,7 @@ void RelayController::setRelays(uint8_t state) {
       if(!powerBoardError.has_errors) {
         gridRelay.turnOff();
         sunRelay.turnOn();
+        gridMeter.stopMeter();
         printf("turn on sun\r\n");
       } else {
         printf("power board error.\r\n");
@@ -54,6 +57,7 @@ void RelayController::setRelays(uint8_t state) {
     case TURN_ON_GRID:
       sunRelay.turnOff();
       gridRelay.turnOn();
+      gridMeter.startMeter();
       printf("turn on grid\r\n");
       break;
   }

@@ -185,3 +185,7 @@ void DataService::calculateSolarKwhDiff(bool first) {
 float DataService::getSolarKwhToday() {
   return solar_kwh_today;
 }
+
+float DataService::getBoilerPower() {
+  return espData.boiler_power;
+}
