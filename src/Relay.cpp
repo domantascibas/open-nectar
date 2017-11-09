@@ -13,3 +13,7 @@ void Relay::relayOff() {
 bool Relay::isOn() {
   return turnedOn;
 }
+
+bool Relay::isSwitching() {
+  return switching;
+}

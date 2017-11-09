@@ -18,6 +18,7 @@ struct RelayController {
   uint8_t getRelayState();
   bool isSunRelayOn();
   bool isGridRelayOn();
+  bool finishedSwitching();
   
   private:
   uint8_t relayState;

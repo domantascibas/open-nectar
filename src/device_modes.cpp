@@ -39,7 +39,7 @@ namespace device_modes {
   }
 
   void loop() {
-    if(updateHeaterMode) {
+    if(updateHeaterMode && relayController.finishedSwitching()) {
       updateHeaterMode = false;
       
       float temp = temperatureData.getTemperature();

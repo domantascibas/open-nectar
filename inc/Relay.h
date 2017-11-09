@@ -4,7 +4,7 @@
 #include "mbed.h"
 
 struct Relay {
-  Relay(PinName pin) : turnedOn(false), relayTurnOn(false), relay(pin) {};  
+  Relay(PinName pin) : relay(pin), turnedOn(false), relayTurnOn(false), switching(false) {};  
   void relayOn();
   void relayOff();
   bool isOn();
@@ -13,6 +13,8 @@ struct Relay {
   virtual void turnOff() = 0;
   bool relayTurnOn;
   Timeout timeout;
+  bool isSwitching();
+  bool switching;
     
   private:
   bool turnedOn;

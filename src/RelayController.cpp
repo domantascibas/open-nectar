@@ -62,3 +62,8 @@ void RelayController::setRelays(uint8_t state) {
       break;
   }
 }
+
+bool RelayController::finishedSwitching() {
+  if(!gridRelay.isSwitching() && !sunRelay.isSwitching()) return true;
+  else return false;
+}

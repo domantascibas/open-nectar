@@ -5,16 +5,19 @@ DigitalIn zeroCross(ZERO_CROSS);
 
 void GridRelay::init() {
   relayTurnOn = false;
+  switching = false;
   printf("Grid relay init\r\n");
 }
 
 void GridRelay::turnOn() {
   relayTurnOn = true;
-  timeout.attach(callback(this, &GridRelay::waitForZeroCross), 2.0);
+  switching = true;
+  timeout.attach(callback(this, &GridRelay::waitForZeroCross), 1.0);
 }
 
 void GridRelay::turnOff() {
   relayTurnOn = false;
+  switching = true;
   timeout.attach_us(callback(this, &GridRelay::waitForZeroCross), 500);
 }
 
@@ -29,4 +32,5 @@ void GridRelay::timeoutIsr() {
   } else {
     relayOff();
   }
+  switching = false;
 }

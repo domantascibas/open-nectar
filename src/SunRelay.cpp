@@ -3,19 +3,22 @@
 
 void SunRelay::init() {
   relayTurnOn = false;
+  switching = false;
   printf("Sun relay init\r\n");
 }
 
 void SunRelay::turnOn() {
   relayTurnOn = true;
-  timeout.attach(callback(this, &SunRelay::timeoutIsr), 2.0);
+  switching = true;
+  timeout.attach(callback(this, &SunRelay::timeoutIsr), 1.0);
   power_board::start();
 }
 
 void SunRelay::turnOff() {
   relayTurnOn = false;
+  switching = true;
   power_board::stop();
-  timeout.attach(callback(this, &SunRelay::timeoutIsr), 1.0);
+  timeout.attach(callback(this, &SunRelay::timeoutIsr), 0.5);
 }
 
 void SunRelay::timeoutIsr() {
@@ -24,4 +27,5 @@ void SunRelay::timeoutIsr() {
   } else {
     relayOff();
   }
+  switching = false;
 }
