@@ -30,7 +30,7 @@ namespace esp {
       mainBoardError.get_errors(),
       powerData.sun_meter_kwh,
       powerData.grid_meter_kwh,
-      time(NULL),
+      rtc,
       deviceOpMode.isReset(),
       deviceOpMode.isPairing(),
       deviceOpMode.isBoostOff()
@@ -38,9 +38,25 @@ namespace esp {
     
     StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
     m_stream.stream.send_state_to_esp(_mainStateForEsp);
-    printf("[OUT ESP] current time: %s\r\n", ctime(&rtc));
-    printf("[OUT ESP] sent data to ESP\r\n");
-    printf("[OUT ESP] %d %d %d\r\n", deviceOpMode.isPairing(), deviceOpMode.isBoostOff(), deviceOpMode.isReset());
+    printf("\r\nCurrent time: %s\r", ctime(&rtc));
+    printf("-> ESP %f %f %f %f %d %d %f %f %d %d %d %f %f %d %d %d\r\n",
+      mainStateForEsp.moment_sun_watt,
+      mainStateForEsp.sun_voltage,
+      mainStateForEsp.sun_current,
+      mainStateForEsp.pwm_duty,
+      mainStateForEsp.sun_relay_on,
+      mainStateForEsp.grid_relay_on,
+      mainStateForEsp.water_temperature,
+      mainStateForEsp.device_temperature,
+      mainStateForEsp.transistor_overheat_on,
+      mainStateForEsp.main_board_error_code,
+      mainStateForEsp.power_board_error_code,
+      mainStateForEsp.sun_meter_kwh,
+      mainStateForEsp.grid_meter_kwh,
+      mainStateForEsp.reset,
+      mainStateForEsp.pair_mode,
+      mainStateForEsp.send_boost_off
+      );
     if(deviceOpMode.isReset()) deviceOpMode.setReset(false);
   }
 
@@ -59,7 +75,7 @@ void mbedStream::setup() {
   m_serial.baud(C_SERIAL_BAUD_RATE);
   esp::get_data_tick.attach(&esp::get_data_ISR, interval);
   m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
-  printf("esp_serial setup\r\n");
+  printf("[ESP] start\r\n");
 }
 
 void mbedStream::Rx_interrupt() {
@@ -81,7 +97,7 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
     espData = state;
     if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost) deviceOpMode.setBoostOff(false);
     device_modes::updateHeaterMode = true;
-    printf("[IN ESP] received %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
+    printf("ESP -> %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
     if(espData.sync_time != 0) {
       set_time(espData.sync_time);
       time_t sec = time(NULL);
