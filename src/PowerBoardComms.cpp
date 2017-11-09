@@ -17,20 +17,22 @@ namespace power_board {
     nectar_contract::MainBoardStateForPower mainStateForPower = {
       gridMeter.getMeterReading(),
       startPowerBoard,
-      deviceOpMode.isInTestMode()
+      deviceOpMode.isInTestMode(),
+      deviceOpMode.isOnboarding()
     };
     
     StreamObject _mainStateForPower(&mainStateForPower, sizeof(mainStateForPower));
     m_stream.stream.send_state_to_power_board(_mainStateForPower);
-//    printf("[OUT] %d bytes\r\n", sizeof(mainStateForPower));
-//    printf("[OUT] %f %d %d\r\n",
-//    mainStateForPower.grid_meter_kwh,
-//    mainStateForPower.start,
-//    mainStateForPower.is_test_mode_on);
+    printf("-> POWER %f %d %d %d\r\n",
+    mainStateForPower.grid_meter_kwh,
+    mainStateForPower.start,
+    mainStateForPower.is_test_mode_on,
+    mainStateForPower.is_in_onboarding);
   }
   
   void start() {
     startPowerBoard = true;
+    printf("[POWER BOARD] start\r\n");
   }
   
   void stop() {
@@ -72,7 +74,6 @@ void powerStream::write(uint8_t byte) {
 }
 
 void powerStream::received_power_board_state(const nectar_contract::PowerBoardState &state) {
-//  printf("[IN] %d bytes\r\n", sizeof(state));
   __disable_irq();
   powerData = state;
   powerBoardError.save_error_code(state.power_board_error_code);
@@ -81,18 +82,21 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
   DataService::calculateSolarKwhDiff(power_board::isFirst);
   power_board::isFirst = false;
   __enable_irq();
-//  printf("[IN] %f %f %f %f %d %d %d %d %f %f %f\r\n",
-//    data.pv_power,
-//    data.pv_voltage,
-//    data.pv_current,
-//    data.pwm_duty,
-//    data.mosfet_overheat_on,
-//    powerBoardError.get_errors(),
-//    data.calibrated,
-//    data.generator_on,
-//    data.solar_kwh,
-//    data.pv_ref_voltage,
-//    data.pv_ref_current);
+  printf("POWER -> %f %f %f %f %f %d %d %d %d %f %f %f %f\r\n",
+    powerData.sun_power,
+    powerData.sun_voltage,
+    powerData.sun_current,
+    powerData.pwm_duty,
+    powerData.device_temperature,
+    powerData.transistor_overheat_on,
+    powerBoardError.get_errors(),
+    powerData.device_calibrated,
+    powerData.pwm_generator_on,
+    powerData.sun_meter_kwh,
+    powerData.grid_meter_kwh,
+    powerData.ref_voltage,
+    powerData.ref_current
+    );
 }
 
 // *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

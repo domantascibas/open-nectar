@@ -4,26 +4,19 @@
 #include "device_modes.h"
 
 static const PinName BOILER_TEMP_PROBE = PB_8;
-static const PinName DEVICE_TEMP_PROBE = PB_9;
 
 static const float WATER_TEMPERATURE_LIMIT_MIN = 5.0;
 static const float WATER_TEMPERATURE_LIMIT_MAX = 90.0;
-static const float DEVICE_TEMPERATURE_LIMIT_MAX = 95.0;
 
-TemperatureSensor boilerTemp(BOILER_TEMP_PROBE, 20);
-TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE, 10);
+TemperatureSensor boilerTemp(BOILER_TEMP_PROBE, 3);
 
 void TemperatureController::init() {
   boilerTemp.init();
-  deviceTemp.init();
   
   if(boilerTemp.isSensorFound()) {
     mainBoardError.clear_error(NO_BOILER_TEMP);
   }
   
-  if(deviceTemp.isSensorFound()) {
-    mainBoardError.clear_error(DEVICE_OVERHEAT);
-  }
 }
 
 float TemperatureController::getBoilerTemperature() {
@@ -40,19 +33,8 @@ float TemperatureController::getBoilerTemperature() {
   return boilerTemperature;
 }
 
-float TemperatureController::getDeviceTemperature() {
-  deviceTemperature = deviceTemp.getTemperature();
-  if(deviceTemperature > DEVICE_TEMPERATURE_LIMIT_MAX) {
-    mainBoardError.set_error(DEVICE_OVERHEAT);
-  } else {
-    if(mainBoardError.has_error(DEVICE_OVERHEAT)) mainBoardError.clear_error(DEVICE_OVERHEAT);
-    printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
-  }
-  return deviceTemperature;
-}
 
 void TemperatureController::updateTemperatures() {
-  if(deviceTemp.isNewValueAvailable()) temperatureData.setDeviceTemperature(getDeviceTemperature());
   if(boilerTemp.isNewValueAvailable()) {
     temperatureData.setBoilerTemperature(getBoilerTemperature());
     device_modes::updateHeaterMode = true;

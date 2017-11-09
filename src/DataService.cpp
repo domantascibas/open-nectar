@@ -38,6 +38,7 @@ nectar_contract::PowerBoardState powerData = {
   DataService::sun_voltage,
   DataService::sun_current,
   DataService::pwm_duty,
+  temperatureData.getDeviceTemperature(),
   DataService::mosfet_overheat_on,
   DataService::power_board_error,
   DataService::calibrated,
@@ -116,7 +117,7 @@ float TemperatureData::getBoilerTemperature() {
 
 
 float TemperatureData::getDeviceTemperature() {
-  return deviceTemperature;
+  return powerData.device_temperature;
 }
 
 nectar_contract::HeaterMode DataService::getCurrentHeaterMode() {
@@ -156,6 +157,7 @@ void DataService::resetData() {
 void DataService::setCurrentHeaterMode(nectar_contract::HeaterMode mode) {
   previousHeaterMode = currentHeaterMode;
   currentHeaterMode = mode;
+  device_modes::updateHeaterMode = true;
 }
 
 void DataService::setPreviousHeaterMode() {
