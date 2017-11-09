@@ -30,6 +30,7 @@ struct TemperatureData {
   void setBoilerTemperature(float);
   void setDeviceTemperature(float);
   float getTemperature();
+  float getDayTemperature();
   float getNightTemperature();
   float getMinTemperature();
   float getMaxTemperature();

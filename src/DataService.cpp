@@ -98,6 +98,10 @@ float TemperatureData::getTemperature() {
   }
 }
 
+float TemperatureData::getDayTemperature() {
+  return dayTemperature;
+}
+
 float TemperatureData::getNightTemperature() {
   return nightTemperature;
 }
