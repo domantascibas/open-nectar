@@ -98,5 +98,3 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
     powerData.ref_current
     );
 }
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

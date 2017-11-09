@@ -1,7 +1,7 @@
 #ifndef DS1820_H_
-    #define DS1820_H_
+#define DS1820_H_
 
-    #include <OneWire.h>
+#include <OneWire.h>
 
 class   DS1820
 {
@@ -22,4 +22,5 @@ public:
     float  read(void);
     uint8_t read(float& temp);
 };
+
 #endif /* DS1820_H_ */

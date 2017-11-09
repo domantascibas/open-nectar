@@ -108,5 +108,3 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
     printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
   }
 }
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

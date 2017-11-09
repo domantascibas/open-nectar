@@ -10,5 +10,4 @@
 // Uncomment this to enable only runtime font scaling, without all the rest of the Abstracts
 #define GFX_SIZEABLE_TEXT
 
-
 #endif

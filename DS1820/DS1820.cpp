@@ -357,5 +357,3 @@ float DS1820::toFloat(uint16_t word) {
     else
         return (float(word) / 256.0f);
 }
-
-
