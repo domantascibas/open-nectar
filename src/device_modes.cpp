@@ -146,7 +146,6 @@ namespace device_modes {
               //data.error = BOILER_TEMP_SENSOR_ERROR;
             } else {
               relayStateNew = TURN_ON_SUN;
-              printf("[NO GRID] TURN ON SUN\r\n");
             }
           break;
         }
