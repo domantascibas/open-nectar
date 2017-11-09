@@ -2375,16 +2375,6 @@
           <GroupName>welcome</GroupName>
           <Files>
             <File>
-              <FileName>WelcomeScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\welcome\WelcomeScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>WelcomeScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\welcome\WelcomeScreen.h</FilePath>
-            </File>
-            <File>
               <FileName>DebugScreen.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\welcome\DebugScreen.cpp</FilePath>
