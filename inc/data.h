@@ -36,7 +36,7 @@ struct Data {
   float sun_energy_meter_kwh;
 
   float pwm_duty;
-  float airgap_temperature;
+  float device_temperature;
 
   bool mosfet_overheat_on;
   bool calibrated;

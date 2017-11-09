@@ -88,6 +88,8 @@ namespace device_modes {
 //      led = !led;
     }
     
+    mppt.updateTemperatures();
+    
     if(update_mode) {      
       update_mode = false;
       

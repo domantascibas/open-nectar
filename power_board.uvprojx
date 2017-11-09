@@ -1909,6 +1909,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\SensorController.cpp</FilePath>
             </File>
+            <File>
+              <FileName>TemperatureSensor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\TemperatureSensor.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1978,6 +1983,11 @@
               <FileName>SensorController.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\SensorController.h</FilePath>
+            </File>
+            <File>
+              <FileName>TemperatureSensor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\TemperatureSensor.h</FilePath>
             </File>
           </Files>
         </Group>

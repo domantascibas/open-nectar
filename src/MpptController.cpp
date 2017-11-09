@@ -1,19 +1,31 @@
 #include "mbed.h"
 #include "MpptController.h"
 #include "PwmController.h"
+#include "ErrorHandler.h"
 #include "data.h"
 
 static const float PWM_STEP = 0.02;
 static const float POWER_THRESHOLD = 50.0;
+static const PinName DEVICE_TEMP_PROBE = PC_7;
+static const float DEVICE_TEMPERATURE_LIMIT_MAX = 95.0;
 
 PwmController pwmGenerator(1.8, 0.1, 0.95);
+TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE, 10);
 
 MpptController::MpptController() {
   last_increase = true;
+  deviceTemperature = 0.0;
 }
 
 void MpptController::init() {
   pwmGenerator.init();
+  deviceTemp.init();
+
+  if(deviceTemp.isSensorFound()) {
+    nectarError.clear_error(DEVICE_OVERHEAT);
+  }
+  
+  nectarError.clear_error(NO_LOAD);
 }
 
 void MpptController::track() {
@@ -94,6 +106,21 @@ float MpptController::get_duty() {
 
 bool MpptController::is_generator_on() {
   return pwmGenerator.is_on();
+}
+
+float MpptController::getDeviceTemperature() {
+  deviceTemperature = deviceTemp.getTemperature();
+  if(deviceTemperature > DEVICE_TEMPERATURE_LIMIT_MAX) {
+    nectarError.set_error(DEVICE_OVERHEAT);
+  } else {
+    if(nectarError.has_error(DEVICE_OVERHEAT)) nectarError.clear_error(DEVICE_OVERHEAT);
+    printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
+  }
+  return deviceTemperature;
+}
+
+void MpptController::updateTemperatures() {
+  if(deviceTemp.isNewValueAvailable()) data.device_temperature = getDeviceTemperature();
 }
 
 void MpptController::manualStartPwm() {

@@ -1,6 +1,8 @@
 #ifndef MPPT_CONTROLLER_H
 #define MPPT_CONTROLLER_H
 
+#include "TemperatureSensor.h"
+
 struct MpptController {
   MpptController();
   
@@ -10,6 +12,8 @@ struct MpptController {
   void swipe(float, float, float);
   float get_duty();
   bool is_generator_on();
+  float getDeviceTemperature();
+  void updateTemperatures();
   
   void manualIncreaseDuty(bool fineStep = true);
   void manualDecreaseDuty(bool fineStep = true);
@@ -19,6 +23,7 @@ struct MpptController {
 private:
   float max_power_point;
   bool last_increase;
+  float deviceTemperature;
 };
 
 #endif
