@@ -5,6 +5,7 @@
 #include "data.h"
 
 const float VOLTAGE_LIMIT = 400.0;
+const float LOW_VOLTAGE_LIMIT = 10.0;
 const float CURRENT_LIMIT = 10.0;
 const float LEAKAGE_CURRENT = 0.3;
 
@@ -33,6 +34,7 @@ void SensorController::init() {
     currentSensor.set_reference(data.reference_current);
   }
   
+  if(get_voltage() > LOW_VOLTAGE_LIMIT) nectarError.clear_error(DC_LOW_VOLTAGE);
   if(get_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
   if(get_current() < LEAKAGE_CURRENT) nectarError.clear_error(DC_CURRENT_LEAKS);
   if(get_current() < CURRENT_LIMIT) nectarError.clear_error(DC_OVER_CURRENT);
