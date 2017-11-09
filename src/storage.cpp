@@ -38,9 +38,7 @@ namespace Storage {
     
     EE_Init();
     EE_ReadVariable(CALIB_ADDRESS, &cal);
-    if(cal == DEVICE_CALIBRATED) {
-      nectarError.clear_error(CALIBRATION_ERROR);
-    }
+    if(cal == DEVICE_CALIBRATED) nectarError.clear_error(CALIBRATION_ERROR);
   }
   
   void load_data(float *voltage, float *current, float *sun, float *grid) {

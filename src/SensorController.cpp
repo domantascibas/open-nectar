@@ -5,7 +5,6 @@
 #include "data.h"
 
 const float VOLTAGE_LIMIT = 400.0;
-const float LOW_VOLTAGE_LIMIT = 10.0;
 const float CURRENT_LIMIT = 10.0;
 const float LEAKAGE_CURRENT = 0.3;
 
@@ -20,24 +19,27 @@ SensorController::SensorController() {}
   
 void SensorController::init() {
   printf("Sensor Controller setup\r\n");
-  if(voltageSensor.ping()) {
-    nectarError.clear_error(ADC_VOLTAGE_ERROR);
-  }
-  if(currentSensor.ping()) {
-    nectarError.clear_error(ADC_CURRENT_ERROR);
-  }
+  if(voltageSensor.ping()) nectarError.clear_error(ADC_VOLTAGE_ERROR);
+  else nectarError.set_error(ADC_VOLTAGE_ERROR);
+  
+  if(currentSensor.ping()) nectarError.clear_error(ADC_CURRENT_ERROR);
+  else nectarError.set_error(ADC_CURRENT_ERROR);
 
   Storage::init();
   if(!nectarError.has_error(FLASH_ACCESS_ERROR)) {
     Storage::load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
     voltageSensor.set_reference(data.reference_voltage);
     currentSensor.set_reference(data.reference_current);
-  }
+  } else nectarError.set_error(FLASH_ACCESS_ERROR);
   
-  if(get_voltage() > LOW_VOLTAGE_LIMIT) nectarError.clear_error(DC_LOW_VOLTAGE);
-  if(get_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
-  if(get_current() < LEAKAGE_CURRENT) nectarError.clear_error(DC_CURRENT_LEAKS);
-  if(get_current() < CURRENT_LIMIT) nectarError.clear_error(DC_OVER_CURRENT);
+  if(!nectarError.has_error(CALIBRATION_ERROR)) {
+    if(get_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
+    else nectarError.set_error(DC_OVER_VOLTAGE);
+    if(get_current() < LEAKAGE_CURRENT) nectarError.clear_error(DC_CURRENT_LEAKS);
+    else nectarError.set_error(DC_CURRENT_LEAKS);
+    if(get_current() < CURRENT_LIMIT) nectarError.clear_error(DC_OVER_CURRENT);
+    else nectarError.set_error(DC_OVER_CURRENT);
+  } else nectarError.set_error(CALIBRATION_ERROR);
 }
 
 void SensorController::measure() {
