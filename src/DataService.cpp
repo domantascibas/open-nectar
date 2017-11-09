@@ -75,6 +75,8 @@ void TemperatureData::setNightTemperature(float temp) {
 
 void TemperatureData::setMaxTemperature(float temp) {
   maxTemperature = temp;
+  if(dayTemperature > maxTemperature) dayTemperature = maxTemperature;
+  if(nightTemperature > maxTemperature) nightTemperature = maxTemperature;
 }
 
 void TemperatureData::setBoilerTemperature(float temp) {
