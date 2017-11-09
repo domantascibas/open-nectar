@@ -11,8 +11,7 @@ struct SunRelay : Relay {
   void turnOff();
     
   private:
-  void delay(float);
-  Timer t;
+  void timeoutIsr();
 };
 
 #endif

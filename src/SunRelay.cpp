@@ -2,23 +2,26 @@
 #include "PowerBoardComms.h"
 
 void SunRelay::init() {
-  t.start();
+  relayTurnOn = false;
+  printf("Sun relay init\r\n");
 }
 
 void SunRelay::turnOn() {
-  delay(1);
-  relayOn();
-  delay(1);
+  relayTurnOn = true;
+  timeout.attach(callback(this, &SunRelay::timeoutIsr), 2.0);
   power_board::start();
 }
 
 void SunRelay::turnOff() {
+  relayTurnOn = false;
   power_board::stop();
-  delay(1);
-  relayOff();
+  timeout.attach(callback(this, &SunRelay::timeoutIsr), 1.0);
 }
 
-void SunRelay::delay(float sec) {
-  t.reset();
-  while(t.read() < sec) {}
+void SunRelay::timeoutIsr() {
+  if(relayTurnOn) {
+    relayOn();
+  } else {
+    relayOff();
+  }
 }

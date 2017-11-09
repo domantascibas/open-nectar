@@ -12,8 +12,9 @@ struct GridRelay : Relay {
   void turnOff();
   
   private:
+  void timeoutIsr();
+  void zeroCrossHigh();
   void waitForZeroCross();
-  void delay(float);
   Timer t;
 };
 

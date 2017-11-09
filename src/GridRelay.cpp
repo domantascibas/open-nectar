@@ -4,27 +4,29 @@ static const PinName ZERO_CROSS = PB_5;
 DigitalIn zeroCross(ZERO_CROSS);
 
 void GridRelay::init() {
-  t.start();
+  relayTurnOn = false;
+  printf("Grid relay init\r\n");
 }
 
 void GridRelay::turnOn() {
-  delay(1);
-  waitForZeroCross();
-  relayOn();
+  relayTurnOn = true;
+  timeout.attach(callback(this, &GridRelay::waitForZeroCross), 2.0);
 }
 
 void GridRelay::turnOff() {
-  waitForZeroCross();
-  relayOff();
+  relayTurnOn = false;
+  timeout.attach_us(callback(this, &GridRelay::waitForZeroCross), 500);
 }
 
 void GridRelay::waitForZeroCross() {
-  t.reset();
-  while(!zeroCross) {}
-  while(t.read_us() < 600) {}
+  while(!zeroCross) {};
+  timeout.attach_us(callback(this, &GridRelay::timeoutIsr), 600);
 }
 
-void GridRelay::delay(float sec) {
-  t.reset();
-  while(t.read() < sec) {}
+void GridRelay::timeoutIsr() {
+  if(relayTurnOn) {
+    relayOn();
+  } else {
+    relayOff();
+  }
 }
