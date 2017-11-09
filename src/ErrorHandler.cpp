@@ -4,7 +4,7 @@ ErrorHandler mainBoardError;
 ErrorHandler powerBoardError;
 
 ErrorHandler::ErrorHandler()
-  : has_errors(false), last_error(NONE), raised_errors(0x00000000) {
+  : has_errors(false), last_error(NONE), raised_errors(0x200) {
 }
 
 void ErrorHandler::set_error(ERROR_CODE err) {

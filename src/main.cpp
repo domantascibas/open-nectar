@@ -19,7 +19,6 @@ int main() {
   static bool isFirst = true;
   pc.baud(SERIAL_BAUDRATE);
   pc.printf("[COMMS] Started\r\n");
-  mainBoardError.save_error_code(0x300);
   
   menu_service::setup();
   tempController.init();
@@ -35,7 +34,8 @@ int main() {
     if((mainBoardError.has_errors || powerBoardError.has_errors) && !inErrorScreen) {
       menu_service::needUpdate = true;
       inErrorScreen = true;
-    } else {
+    } else if((!mainBoardError.has_errors && !powerBoardError.has_errors) && inErrorScreen) {
+      menu_service::needUpdate = true;
       inErrorScreen = false;
     }
     
