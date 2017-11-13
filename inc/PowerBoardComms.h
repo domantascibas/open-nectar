@@ -3,12 +3,12 @@
 
 #include "mbed.h"
 #include "NectarStream.h"
-#include "NectarContract.h"
 
 namespace power_board {  
   void setup();
   void start();
   void stop();
+  bool hasReceivedFirstMessage();
 }
 
 class powerStream : public IStreamDelegate {
@@ -18,7 +18,7 @@ public:
       : m_serial(transmitPin, receivePin),
         stream(*this) {}
 
-  ~powerStream(){};
+  virtual ~powerStream(){};
 
   void setup();
   void Rx_interrupt();

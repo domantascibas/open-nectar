@@ -3,7 +3,6 @@
 
 #include "mbed.h"
 #include "NectarStream.h"
-#include "NectarContract.h"
 
 namespace esp {
   void setup();
@@ -17,7 +16,7 @@ public:
       : m_serial(transmitPin, receivePin),
         stream(*this) {}
 
-  ~mbedStream(){};
+  virtual ~mbedStream(){};
 
   void setup();
   void Rx_interrupt();

@@ -3,8 +3,10 @@
 ErrorHandler mainBoardError;
 ErrorHandler powerBoardError;
 
-ErrorHandler::ErrorHandler()
-  : has_errors(false), last_error(NONE), raised_errors(0x200) {
+ErrorHandler::ErrorHandler() {
+  raised_errors = 0x00000000;
+  has_errors = false;
+  last_error = NONE;
 }
 
 void ErrorHandler::set_error(ERROR_CODE err) {
@@ -19,11 +21,15 @@ void ErrorHandler::get_errors(uint32_t *err) {
 }
 
 uint32_t ErrorHandler::get_errors() {
+//  printf("ERRORS %d\r\n", raised_errors);
   return raised_errors;
 }
 
 void ErrorHandler::save_error_code(uint32_t err) {
   raised_errors = err;
+  if(raised_errors != 0x00000000) has_errors = true;
+  else has_errors = false;
+//  printf("SAVE ERROR %d\r\n", raised_errors);
 }
 
 void ErrorHandler::get_last_error(ERROR_CODE *err) {
@@ -69,6 +75,10 @@ void ErrorHandler::print_error(ERROR_CODE *err) {
     
     case CALIBRATION_ERROR:
       printf("[ERROR] CALIBRATION ERROR\r\n");
+      break;
+    
+    case DC_LOW_VOLTAGE:
+      printf("[ERROR] DC LOW VOLTAGE\r\n");
       break;
     
     case DC_OVER_VOLTAGE:
