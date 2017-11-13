@@ -1,5 +1,11 @@
 #include "Relay.h"
 
+Relay::Relay(PinName pin) : relay(pin) {
+  turnedOn = false;
+  relayTurnOn = false;
+  switching = false;
+}
+
 void Relay::relayOn() {
   turnedOn = true;
   relay = turnedOn;

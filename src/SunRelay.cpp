@@ -2,8 +2,6 @@
 #include "PowerBoardComms.h"
 
 void SunRelay::init() {
-  relayTurnOn = false;
-  switching = false;
   printf("Sun relay init\r\n");
 }
 

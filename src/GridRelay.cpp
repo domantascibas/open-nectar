@@ -4,8 +4,6 @@ static const PinName ZERO_CROSS = PB_5;
 DigitalIn zeroCross(ZERO_CROSS);
 
 void GridRelay::init() {
-  relayTurnOn = false;
-  switching = false;
   printf("Grid relay init\r\n");
 }
 

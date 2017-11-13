@@ -8,8 +8,8 @@ struct GridRelay : Relay {
   GridRelay() : Relay(GRID_PIN) {};
   void init();
     
-  void turnOn();
-  void turnOff();
+  virtual void turnOn();
+  virtual void turnOff();
   
   private:
   void timeoutIsr();

@@ -7,8 +7,8 @@ static const PinName SUN_PIN = PB_3;
 struct SunRelay : Relay {
   SunRelay() : Relay(SUN_PIN) {};
   void init();
-  void turnOn();
-  void turnOff();
+  virtual void turnOn();
+  virtual void turnOff();
     
   private:
   void timeoutIsr();
