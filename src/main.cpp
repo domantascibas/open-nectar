@@ -1,5 +1,4 @@
 #include "mbed.h"
-#include "ServiceComms.h"
 #include "EspComms.h"
 #include "PowerBoardComms.h"
 #include "device_modes.h"
@@ -8,33 +7,46 @@
 #include "TemperatureController.h"
 #include "DataService.h"
 
+static const PinName TX = PA_2;
+static const PinName RX = PA_3;
+static const uint32_t SERIAL_BAUDRATE = 115200;
 bool inErrorScreen = false;
 
+RawSerial pc(TX, RX);
 TemperatureController tempController;
 
 int main() {
   static bool isFirst = true;
-  service::setup();
+  pc.baud(SERIAL_BAUDRATE);
+  pc.printf("[COMMS] Started\r\n");
+  mainBoardError.save_error_code(0x300);
   
   menu_service::setup();
-  wait(1.0);
   tempController.init();
   wait(3.0);
   tempController.updateTemperatures();
   power_board::setup();
   esp::setup();
   device_modes::setup();
-  
-  menu_service::needUpdate = true;
 
   while(1) {
-    if((mainBoardError.has_errors || powerBoardError.has_errors) && !inErrorScreen) {
-      menu_service::needUpdate = true;
-      inErrorScreen = true;
-    } else if((!mainBoardError.has_errors && !powerBoardError.has_errors) && inErrorScreen) {
-      menu_service::needUpdate = true;
-      inErrorScreen = false;
+    while(!power_board::hasReceivedFirstMessage()) {
+      __WFI();
     }
+    
+    if(isFirst) {
+      isFirst = false;
+      menu_service::needUpdate = true;
+    }
+    
+//    if((mainBoardError.has_errors || powerBoardError.has_errors) && !inErrorScreen) {
+//      printf("[ERROR] present\r\n");
+//      menu_service::needUpdate = true;
+//      inErrorScreen = true;
+//    } else if((!mainBoardError.has_errors && !powerBoardError.has_errors) && inErrorScreen) {
+//      menu_service::needUpdate = true;
+//      inErrorScreen = false;
+//    }
     
     if(menu_service::needUpdate) {
       menu_service::updateScreen();
