@@ -93,7 +93,7 @@ bool DS1820::begin(void) {
     delay(0.250);
     if(!oneWire.search(addr)) {
 #if DEBUG
-        serial.printf("No addresses.\r\n");
+        printf("No addresses.\r\n");
 #endif
         oneWire.reset_search();
         delay(0.250);
@@ -101,11 +101,11 @@ bool DS1820::begin(void) {
     }
 
 #if DEBUG
-    serial.printf("ROM =");
+    printf("ROM =");
     for(uint8_t i = 0; i < 8; i++) {
-        serial.printf(" %x", addr[i]);
+        printf(" %x", addr[i]);
     }
-    serial.printf("\r\n");
+    printf("\r\n");
 #endif
 
     if(OneWire::crc8(addr, 7) == addr[7]) {
@@ -116,28 +116,28 @@ bool DS1820::begin(void) {
         case 0x10:
             model_s = true;
 #if DEBUG
-            serial.printf("DS18S20 or old DS1820\r\n");
+            printf("DS18S20 or old DS1820\r\n");
 #endif            
             break;
 
         case 0x28:
             model_s = false;
 #if DEBUG
-            serial.printf("DS18B20\r\n");
+            printf("DS18B20\r\n");
 #endif            
             break;
 
         case 0x22:
             model_s = false;
 #if DEBUG
-            serial.printf("DS1822\r\n");
+            printf("DS1822\r\n");
 #endif            
             break;
 
         default:
             present = false;
 #if DEBUG
-            serial.printf("Device doesn't belong to the DS1820 family\r\n");
+            printf("Device doesn't belong to the DS1820 family\r\n");
 #endif            
             return false;
         }
@@ -145,7 +145,7 @@ bool DS1820::begin(void) {
     }
     else {
 #if DEBUG    
-        serial.printf("Invalid CRC!\r\n");
+        printf("Invalid CRC!\r\n");
 #endif    
         return false;
     }
@@ -232,7 +232,7 @@ float DS1820::read(void) {
         uint16_t*   p_word = reinterpret_cast < uint16_t * > (&data[0]);
 
 #if DEBUG
-        serial.printf("raw = %#x\r\n", *p_word);
+        printf("raw = %#x\r\n", *p_word);
 #endif            
 
         if(model_s) {
@@ -297,7 +297,7 @@ uint8_t DS1820::read(float& temp) {
         uint16_t*   p_word = reinterpret_cast < uint16_t * > (&data[0]);
 
 #if DEBUG
-        serial.printf("raw = %#x\r\n", *p_word);
+        printf("raw = %#x\r\n", *p_word);
 #endif
 
         if(model_s) {

@@ -32,6 +32,10 @@ void DeviceMode::endOnboarding() {
   onboarding = false;
 }
 
+void DeviceMode::setInTestStand() {
+  inTestStand = true;
+}
+
 bool DeviceMode::isInTestMode() {
   return testMode;
 }
@@ -54,6 +58,10 @@ bool DeviceMode::isReset() {
 
 bool DeviceMode::isBoostOff() {
   return boostOff;
+}
+
+bool DeviceMode::isInTestStand() {
+  return inTestStand;
 }
 
 void DeviceMode::setPairing(bool input) {

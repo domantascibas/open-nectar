@@ -1,4 +1,5 @@
 #include "mbed.h"
+#include "ServiceComms.h"
 #include "EspComms.h"
 #include "PowerBoardComms.h"
 #include "device_modes.h"
@@ -7,20 +8,16 @@
 #include "TemperatureController.h"
 #include "DataService.h"
 
-static const PinName TX = PA_2;
-static const PinName RX = PA_3;
-static const uint32_t SERIAL_BAUDRATE = 115200;
 bool inErrorScreen = false;
 
-RawSerial pc(TX, RX);
 TemperatureController tempController;
 
 int main() {
   static bool isFirst = true;
-  pc.baud(SERIAL_BAUDRATE);
-  pc.printf("[COMMS] Started\r\n");
+  service::setup();
   
   menu_service::setup();
+  wait(1.0);
   tempController.init();
   wait(3.0);
   tempController.updateTemperatures();

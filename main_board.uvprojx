@@ -2454,6 +2454,16 @@
               <FileType>5</FileType>
               <FilePath>.\inc\EspComms.h</FilePath>
             </File>
+            <File>
+              <FileName>ServiceComms.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\ServiceComms.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ServiceComms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\ServiceComms.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

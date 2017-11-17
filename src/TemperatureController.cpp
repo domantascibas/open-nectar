@@ -2,6 +2,7 @@
 #include "ErrorHandler.h"
 #include "DataService.h"
 #include "device_modes.h"
+#include "ServiceComms.h"
 
 static const PinName BOILER_TEMP_PROBE = PB_8;
 
@@ -16,7 +17,6 @@ void TemperatureController::init() {
   if(boilerTemp.isSensorFound()) {
     mainBoardError.clear_error(NO_BOILER_TEMP);
   }
-  
 }
 
 float TemperatureController::getBoilerTemperature() {
@@ -35,8 +35,13 @@ float TemperatureController::getBoilerTemperature() {
 
 
 void TemperatureController::updateTemperatures() {
-  if(boilerTemp.isNewValueAvailable()) {
-    temperatureData.setBoilerTemperature(getBoilerTemperature());
+  if(boilerTemp.isNewValueAvailable() || service::isNewValueAvailable()) {
+    if(deviceOpMode.isInTestStand()) {
+      temperatureData.setBoilerTemperature(service::getFakeTemperature());
+      printf("new fake temp\r\n");
+    } else {
+      temperatureData.setBoilerTemperature(getBoilerTemperature());
+    }
     device_modes::updateHeaterMode = true;
   }
 }
