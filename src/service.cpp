@@ -15,6 +15,7 @@ static const uint8_t PWM_GENERATOR_STOP = 0x30;
 
 static const uint8_t MANUAL_MODE = 0x6D;
 static const uint8_t AUTO_MODE = 0x61;
+static const uint8_t CALIBRATE = 0x63;
 
 static const PinName PC_TX = PA_2;
 static const PinName PC_RX = PA_3;
@@ -23,6 +24,11 @@ RawSerial pc(PC_TX, PC_RX);
 
 void parseCommand(uint8_t command) {
   switch(command) {
+    case CALIBRATE:
+      device_modes::testingStandCalibrate();
+      printf("\r\nCALIBRATING POWER BOARD\r\n");
+      break;
+    
     case INCREASE_DUTY:
       if(data.current_state == MANUAL) {
         mppt.manualIncreaseDuty(false);
@@ -90,7 +96,7 @@ void parseCommand(uint8_t command) {
 }
 
 void Rx_interrupt() {
-  if(data.isTestMode) {
+  if(data.isInOnboarding || data.isTestMode) {
     __disable_irq();
     while(pc.readable()) {
       char rcv = pc.getc();
@@ -98,7 +104,7 @@ void Rx_interrupt() {
     }
     __enable_irq();
   } else {
-    printf("[AUTO MODE] for manual control put device in TEST MODE\r\n");
+    printf("[AUTO MODE] for manual control put device in TEST MODE or START ONBOARDING\r\n");
   }
 }
 

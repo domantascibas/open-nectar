@@ -9,6 +9,7 @@ namespace device_modes {
   void setup();  
   void loop();
   void calibrate_device();
+  void testingStandCalibrate();
   
   void start();
   void stop();

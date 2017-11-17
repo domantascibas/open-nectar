@@ -24,6 +24,10 @@ namespace device_modes {
   volatile bool calibrate_sensors = false;
   float lastPower = 0.0;
   
+  void testingStandCalibrate() {
+    calibrate_sensors = true;
+  }
+  
   void calibrate_sensors_ISR() {
     if(data.isInOnboarding) calibrate_sensors = true;
     else calibrate_sensors = false;
