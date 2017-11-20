@@ -4,9 +4,9 @@
 #include "ErrorHandler.h"
 #include "data.h"
 
-const float VOLTAGE_LIMIT = 400.0;
-const float CURRENT_LIMIT = 10.0;
-const float LEAKAGE_CURRENT = 0.3;
+const float VOLTAGE_LIMIT = 350.0;
+const float CURRENT_LIMIT = 9.0;
+const float LEAKAGE_CURRENT = 0.4;
 
 static const uint8_t V_SENSE_ADDR = 0x55 << 1;
 static const uint8_t I_SENSE_ADDR = 0x5A << 1;
@@ -93,6 +93,8 @@ void SensorController::calibrate() {
   data.reference_current = currentSensor.get_reference();
   data.reference_voltage = voltageSensor.get_reference();
   printf("[ok] calibrated. v_ref = %fV, i_ref = %fA\r\n", voltageSensor.get_reference(), currentSensor.get_reference());
+  
+  init();
 }
 
 void SensorController::save_meters() {
