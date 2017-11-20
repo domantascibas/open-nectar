@@ -42,6 +42,10 @@ namespace power_board {
   void setup() {
     m_stream.setup();
   }
+  
+  bool hasReceivedFirstMessage() {
+    return !isFirst;
+  }
 }
 
 /*

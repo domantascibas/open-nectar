@@ -2375,16 +2375,6 @@
           <GroupName>welcome</GroupName>
           <Files>
             <File>
-              <FileName>DebugScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\welcome\DebugScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>DebugScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\welcome\DebugScreen.h</FilePath>
-            </File>
-            <File>
               <FileName>IdleScreen.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\welcome\IdleScreen.cpp</FilePath>
@@ -2393,16 +2383,6 @@
               <FileName>IdleScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\welcome\IdleScreen.h</FilePath>
-            </File>
-            <File>
-              <FileName>ErrorScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\welcome\ErrorScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ErrorScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\welcome\ErrorScreen.h</FilePath>
             </File>
             <File>
               <FileName>WelcomeTimeScreen.cpp</FileName>
@@ -2463,6 +2443,31 @@
               <FileName>ServiceComms.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\ServiceComms.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>error</GroupName>
+          <Files>
+            <File>
+              <FileName>DebugScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\error\DebugScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>DebugScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\error\DebugScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>ErrorScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\error\ErrorScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ErrorScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\error\ErrorScreen.h</FilePath>
             </File>
           </Files>
         </Group>

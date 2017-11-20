@@ -8,12 +8,15 @@
 #include "TemperatureController.h"
 #include "DataService.h"
 
+static const uint16_t VERSION = 100;
+
 bool inErrorScreen = false;
 
 TemperatureController tempController;
 
 int main() {
   static bool isFirst = true;
+  mainBoardError.save_error_code(0x200);
   service::setup();
   
   menu_service::setup();
@@ -24,17 +27,25 @@ int main() {
   power_board::setup();
   esp::setup();
   device_modes::setup();
-  
-  menu_service::needUpdate = true;
 
   while(1) {
-    if((mainBoardError.has_errors || powerBoardError.has_errors) && !inErrorScreen) {
-      menu_service::needUpdate = true;
-      inErrorScreen = true;
-    } else if((!mainBoardError.has_errors && !powerBoardError.has_errors) && inErrorScreen) {
-      menu_service::needUpdate = true;
-      inErrorScreen = false;
+    while(!power_board::hasReceivedFirstMessage()) {
+      __WFI();
     }
+    
+    if(isFirst) {
+      isFirst = false;
+      menu_service::needUpdate = true;
+    }
+    
+//    if((mainBoardError.has_errors || powerBoardError.has_errors) && !inErrorScreen) {
+//      printf("[ERROR] present\r\n");
+//      menu_service::needUpdate = true;
+//      inErrorScreen = true;
+//    } else if((!mainBoardError.has_errors && !powerBoardError.has_errors) && inErrorScreen) {
+//      menu_service::needUpdate = true;
+//      inErrorScreen = false;
+//    }
     
     if(menu_service::needUpdate) {
       menu_service::updateScreen();
