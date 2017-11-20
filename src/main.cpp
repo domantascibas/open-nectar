@@ -8,7 +8,9 @@
 #include "TemperatureController.h"
 #include "DataService.h"
 
-static const uint16_t VERSION = 100;
+#define VERSION_MAJOR         1
+#define VERSION_MINOR         0
+#define VERSION_REVISION      0
 
 bool inErrorScreen = false;
 
