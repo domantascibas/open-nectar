@@ -5,6 +5,8 @@
 #include "service.h"
 #include "ErrorHandler.h"
 
+#define VERSION 100
+
 int main() {
   service::setup();
   printf("Starting device modes\r\n");
