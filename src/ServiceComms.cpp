@@ -20,6 +20,7 @@ RawSerial pc(PC_TX, PC_RX);
 void parseCommand(uint8_t command) {
   switch(command) {
     case ENTER_TEST_MODE:
+      printf("ENTER TEST MODE\r\n");
       if(!deviceOpMode.isInTestStand()) {
         deviceOpMode.setInTestStand();
         service::fakeTemperature = IDLE_ON_TEMPERATURE;
@@ -29,6 +30,7 @@ void parseCommand(uint8_t command) {
       break;
     
     case TURN_ON_GRID:
+      printf("TURN ON GRID\r\n");
       if(deviceOpMode.isInTestStand()) {
         service::fakeTemperature = GRID_ON_TEMPERATURE;
         service::newValueAvailable = true;
@@ -37,6 +39,7 @@ void parseCommand(uint8_t command) {
       break;
     
     case TURN_ON_SUN:
+      printf("TURN ON SUN\r\n");
       if(deviceOpMode.isInTestStand()) {
         service::fakeTemperature = SUN_ON_TEMPERATURE;
         service::newValueAvailable = true;
@@ -45,6 +48,7 @@ void parseCommand(uint8_t command) {
       break;
     
     case TURN_ON_IDLE:
+      printf("TURN ON IDLE\r\n");
       if(deviceOpMode.isInTestStand()) {  
         service::fakeTemperature = IDLE_ON_TEMPERATURE;
         service::newValueAvailable = true;
@@ -59,12 +63,13 @@ void parseCommand(uint8_t command) {
 }
 
 void Rx_interrupt() {
+  while(pc.readable()) {
     __disable_irq();
-    while(pc.readable()) {
-      char rcv = pc.getc();
-      parseCommand(rcv);
-    }
+    char rcv = pc.getc();
+    printf("%c\r\n", rcv);
     __enable_irq();
+    parseCommand(rcv);
+  }
 }
 
 namespace service {
