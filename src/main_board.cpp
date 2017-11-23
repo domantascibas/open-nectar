@@ -34,8 +34,10 @@ void mbedStream::Rx_interrupt() {
 }
 
 void mbedStream::write(uint8_t byte) {
-//  printf("%c", byte);
-  m_serial.putc(byte);
+  if(!data.isCalibrating) {
+  //  printf("%c", byte);
+    m_serial.putc(byte);
+  }
 }
 
 void mbedStream::received_main_board_state_for_power(const nectar_contract::MainBoardStateForPower &state) {

@@ -25,6 +25,7 @@ RawSerial pc(PC_TX, PC_RX);
 void parseCommand(uint8_t command) {
   switch(command) {
     case CALIBRATE:
+      data.isCalibrating = true;
       device_modes::testingStandCalibrate();
       printf("\r\nCALIBRATING POWER BOARD\r\n");
       break;

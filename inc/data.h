@@ -21,6 +21,7 @@ enum modes {
 };
 
 struct Data {
+  bool isCalibrating;
   bool isInOnboarding;
   bool isTestMode;
   uint8_t current_state;

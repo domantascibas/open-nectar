@@ -95,6 +95,7 @@ void SensorController::calibrate() {
   printf("[ok] calibrated. v_ref = %fV, i_ref = %fA\r\n", voltageSensor.get_reference(), currentSensor.get_reference());
   
   init();
+  data.isCalibrating = false;
 }
 
 void SensorController::save_meters() {
