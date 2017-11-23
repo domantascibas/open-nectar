@@ -24,7 +24,7 @@ int main() {
   menu_service::setup();
   wait(1.0);
   tempController.init();
-  wait(3.0);
+  wait(1.0);
   tempController.updateTemperatures();
   power_board::setup();
   esp::setup();

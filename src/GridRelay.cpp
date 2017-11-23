@@ -16,7 +16,7 @@ void GridRelay::turnOn() {
 void GridRelay::turnOff() {
   relayTurnOn = false;
   switching = true;
-  timeout.attach_us(callback(this, &GridRelay::waitForZeroCross), 500);
+  timeout.attach(callback(this, &GridRelay::waitForZeroCross), 0.5);
 }
 
 void GridRelay::waitForZeroCross() {

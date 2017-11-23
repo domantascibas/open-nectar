@@ -27,7 +27,7 @@ namespace device_modes {
   }
   
   void setup() {
-//    update_mode_tick.attach(update_mode_ISR, 1.5);
+    update_mode_tick.attach(update_mode_ISR, 1.5);
     relayController.init();
   }
   
@@ -83,7 +83,11 @@ namespace device_modes {
                   relayStateNew = TURN_ON_GRID;
                 }
               } else {
-                relayStateNew = TURN_ON_SUN;
+                if(temp_boiler < temp) {
+                  relayStateNew = TURN_ON_GRID;
+                } else {
+                  relayStateNew = TURN_ON_SUN;
+                }
               }
             }
           break;
