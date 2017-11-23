@@ -7,7 +7,7 @@
 static const float PWM_STEP = 0.02;
 static const float POWER_THRESHOLD = 50.0;
 static const PinName DEVICE_TEMP_PROBE = PC_7;
-static const float DEVICE_TEMPERATURE_LIMIT_MAX = 95.0;
+static const float DEVICE_TEMPERATURE_LIMIT_MAX = 85.0;
 
 PwmController pwmGenerator(1.8, 0.1, 0.95);
 TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE, 10);
