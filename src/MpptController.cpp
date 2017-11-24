@@ -111,11 +111,12 @@ bool MpptController::is_generator_on() {
 float MpptController::getDeviceTemperature() {
   deviceTemperature = deviceTemp.getTemperature();
   if(deviceTemperature > DEVICE_TEMPERATURE_LIMIT_MAX) {
-    nectarError.set_error(DEVICE_OVERHEAT);
+    if(!nectarError.has_error(DEVICE_OVERHEAT)) nectarError.set_error(DEVICE_OVERHEAT);
+    printf("DEVICE OVERHEAT\r\n");
   } else {
-    if(nectarError.has_error(DEVICE_OVERHEAT)) nectarError.clear_error(DEVICE_OVERHEAT);
-    printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
+    if(nectarError.has_error(DEVICE_OVERHEAT) && (deviceTemperature < (DEVICE_TEMPERATURE_LIMIT_MAX - 5.0))) nectarError.clear_error(DEVICE_OVERHEAT);
   }
+  printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
   return deviceTemperature;
 }
 
