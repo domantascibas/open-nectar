@@ -8,6 +8,7 @@ const float VOLTAGE_LIMIT = 350.0;
 const float CURRENT_LIMIT = 9.0;
 const float LEAKAGE_CURRENT = 0.4;
 
+static const uint8_t FILTER_LENGTH = 5;
 static const uint8_t V_SENSE_ADDR = 0x55 << 1;
 static const uint8_t I_SENSE_ADDR = 0x5A << 1;
 static const float INPUT_VDIV = 4.1/400;
@@ -40,6 +41,9 @@ void SensorController::init() {
     if(get_current() < CURRENT_LIMIT) nectarError.clear_error(DC_OVER_CURRENT);
     else nectarError.set_error(DC_OVER_CURRENT);
   } else nectarError.set_error(CALIBRATION_ERROR);
+  
+//  lowPassFilter[FILTER_LENGTH] = 0;
+//  filterPos = 0;
 }
 
 void SensorController::measure() {
@@ -64,11 +68,24 @@ float SensorController::get_voltage() {
 }
 
 float SensorController::get_current() {
+  //float sum, avg;
   float i = (currentSensor.sample() - currentSensor.get_reference()) * 5.000;
 
   if(i < CURRENT_LIMIT && nectarError.has_error(DC_OVER_CURRENT)) nectarError.clear_error(DC_OVER_CURRENT);
   if(i >= CURRENT_LIMIT) nectarError.set_error(DC_OVER_CURRENT);
   if(i < 0) i = 0;
+  
+//  lowPassFilter[filterPos] = i;  
+//  for(int l=0; l<FILTER_LENGTH; l++) {
+//    sum += lowPassFilter[l];
+//  }  
+//  avg = sum/FILTER_LENGTH;
+
+//  filterPos++;
+//  if(filterPos == FILTER_LENGTH) {
+//    filterPos = 0;
+//  }
+//  return avg;
   return i;
 }
 
