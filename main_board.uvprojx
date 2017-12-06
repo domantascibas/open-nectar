@@ -369,7 +369,7 @@
             <ScatterFile>mbed/TARGET_NUCLEO_F091RC/TOOLCHAIN_ARM_STD/stm32f091rc.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
+            <Misc>--remove</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -2420,16 +2420,6 @@
           <GroupName>u8g2-mbed</GroupName>
           <Files>
             <File>
-              <FileName>delay.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\u8g2-mbed\src\delay.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>delay.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\u8g2-mbed\src\delay.h</FilePath>
-            </File>
-            <File>
               <FileName>u8g2_mbed.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\submodules\device_menu\u8g2-mbed\src\u8g2_mbed.cpp</FilePath>
@@ -2793,16 +2783,6 @@
               <FileName>u8x8_cad.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\submodules\device_menu\u8g2-mbed\u8g2\csrc\u8x8_cad.c</FilePath>
-            </File>
-            <File>
-              <FileName>u8x8_d_ssd1306_96x16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\submodules\device_menu\u8g2-mbed\u8g2\csrc\u8x8_d_ssd1306_96x16.c</FilePath>
-            </File>
-            <File>
-              <FileName>u8x8_d_ssd1306_128x32.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\submodules\device_menu\u8g2-mbed\u8g2\csrc\u8x8_d_ssd1306_128x32.c</FilePath>
             </File>
             <File>
               <FileName>u8x8_d_ssd1306_128x64_noname.c</FileName>
