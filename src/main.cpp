@@ -7,7 +7,7 @@
 
 #define VERSION_MAJOR         1
 #define VERSION_MINOR         0
-#define VERSION_REVISION      1
+#define VERSION_REVISION      2
 
 int main() {
   service::setup();
