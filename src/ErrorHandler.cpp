@@ -101,6 +101,10 @@ void ErrorHandler::print_error(ERROR_CODE *err) {
       printf("[ERROR] REACHED MIN TEMPERATURE\r\n");
       break;
     
+    case PROCESSOR_OVERHEAT:
+      printf("[ERROR] PROCESSOR OVERHEAT\r\n");
+      break;
+    
     default:
       printf("[ERROR] Unspecified error\r\n");
       break;
