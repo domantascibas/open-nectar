@@ -120,8 +120,30 @@ float MpptController::getDeviceTemperature() {
   return deviceTemperature;
 }
 
+
+/* Temperature sensor calibration value address */
+#define TEMP110_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7C2))
+#define TEMP30_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7B8))
+#define VDD_CALIB ((uint16_t) (330))
+#define VDD_APPLI ((uint16_t) (300))
+
+void readInternalTempSensor() {
+  ADC1->CR |= ADC_CR_ADSTART;
+  wait_us(30);
+  int32_t temperature; /* will contain the temperature in degrees Celsius */
+  temperature = (((int32_t) ADC1->DR * VDD_APPLI / VDD_CALIB) - (int32_t) *TEMP30_CAL_ADDR );
+  temperature = temperature * (int32_t)(110 - 30);
+  temperature = temperature / (int32_t)(*TEMP110_CAL_ADDR - *TEMP30_CAL_ADDR);
+  temperature = temperature + 30;
+  
+  printf("processor temp: %d\r\n", temperature);
+}
+
 void MpptController::updateTemperatures() {
-  if(deviceTemp.isNewValueAvailable()) data.device_temperature = getDeviceTemperature();
+  if(deviceTemp.isNewValueAvailable()) {
+    data.device_temperature = getDeviceTemperature();
+    readInternalTempSensor();
+  }
 }
 
 void MpptController::manualStartPwm() {
