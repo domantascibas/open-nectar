@@ -24,6 +24,7 @@ void mbedStream::setup() {
 }
 
 void mbedStream::Rx_interrupt() {
+  data.readingSerial = true;
   while(m_serial.readable()) {
     __disable_irq();
     char rcv = m_serial.getc();
@@ -31,6 +32,7 @@ void mbedStream::Rx_interrupt() {
     stream.receiveChar(rcv);
     __enable_irq();
   }
+  data.readingSerial = false;
 }
 
 void mbedStream::write(uint8_t byte) {

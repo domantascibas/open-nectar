@@ -1,4 +1,5 @@
 #include "TemperatureSensor.h"
+#include "data.h"
 
 TemperatureSensor::TemperatureSensor(PinName pin, uint8_t refresh)
 : probe(pin), temperature(0.0), newValueAvailable(false), sensorFound(false), refreshRate(refresh) {
@@ -41,6 +42,8 @@ void TemperatureSensor::measureTemperature() {
 }
 
 void TemperatureSensor::readTemperatureToStorage() {
-  probe.read(temperature);
-  newValueAvailable = true;
+  if(!data.readingSerial) {
+    probe.read(temperature);
+    newValueAvailable = true;
+  } else timeout.attach(callback(this, &TemperatureSensor::readTemperatureToStorage), 2.0);
 }
