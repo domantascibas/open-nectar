@@ -104,8 +104,8 @@ void Rx_interrupt() {
       parseCommand(rcv);
     }
     __enable_irq();
-  } else {
-    printf("[AUTO MODE] for manual control put device in TEST MODE or START ONBOARDING\r\n");
+//  } else {
+//    printf("[AUTO MODE] for manual control put device in TEST MODE or START ONBOARDING\r\n");
   }
 }
 
