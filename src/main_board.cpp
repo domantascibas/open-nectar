@@ -32,7 +32,6 @@ void mbedStream::Rx_interrupt() {
     stream.receiveChar(rcv);
     __enable_irq();
   }
-  data.readingSerial = false;
 }
 
 void mbedStream::write(uint8_t byte) {
@@ -88,6 +87,8 @@ StreamObject mbedStream::get_power_board_state() {
     powerState.grid_meter_kwh,
     powerState.ref_voltage,
     powerState.ref_current);
+  data.readingSerial = false;
+  data.safeToReadTemp = true;
   return _powerState;
 }
 
