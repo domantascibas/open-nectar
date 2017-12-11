@@ -188,6 +188,7 @@ void DataService::calculateSolarKwhDiff(bool first) {
   if(first)
     solar_kwh_today_diff = powerData.sun_meter_kwh;
   solar_kwh_today = powerData.sun_meter_kwh - solar_kwh_today_diff;
+  if(solar_kwh_today < 0) solar_kwh_today = 0;
 }
 
 float DataService::getSolarKwhToday() {
