@@ -40,6 +40,7 @@ void MpptController::track() {
   
   if((moment_power < POWER_THRESHOLD) && (pwmGenerator.get_duty() > 0.5 )) {
     reset();
+    old_power = moment_power;
   } else {
     pwmGenerator.start();
     if(dP != 0) {
@@ -139,7 +140,7 @@ void readInternalTempSensor() {
   printf("processor temp: %d\r\n", temperature);
   if(temperature > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
     if(!nectarError.has_error(PROCESSOR_OVERHEAT)) nectarError.set_error(PROCESSOR_OVERHEAT);
-    printf("DEVICE OVERHEAT\r\n");
+    printf("PROCESSOR OVERHEAT\r\n");
   } else {
     if(nectarError.has_error(PROCESSOR_OVERHEAT) && (temperature < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) nectarError.clear_error(PROCESSOR_OVERHEAT);
   }
