@@ -25,10 +25,12 @@ bool generator_on = false;
   
 uint32_t power_board_error = 0x00000000;
 bool readingSerial = false;
+bool readingTemperature = false;
+bool safeToReadTemp = false;
   
 Data data = {
   isCalibrating, isInOnboarding, isTestMode, current_state, moment_power, moment_voltage, moment_current, reference_voltage, reference_current, grid_energy_meter_kwh, sun_energy_meter_kwh,
-  pwm_duty, device_temperature, mosfet_overheat_on, calibrated, generator_on, power_board_error, readingSerial
+  pwm_duty, device_temperature, mosfet_overheat_on, calibrated, generator_on, power_board_error, readingSerial, readingTemperature, safeToReadTemp
 };
 
 StorageData storage_data = {

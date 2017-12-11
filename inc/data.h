@@ -45,6 +45,8 @@ struct Data {
   
   uint32_t error;
   bool readingSerial;
+  bool readingTemperature;
+  bool safeToReadTemp;
 };
 
 struct StorageData {
