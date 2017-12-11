@@ -8,7 +8,7 @@ const float VOLTAGE_LIMIT = 350.0;
 const float CURRENT_LIMIT = 9.0;
 const float LEAKAGE_CURRENT = 0.4;
 
-static const uint8_t FILTER_LENGTH = 5;
+//static const uint8_t FILTER_LENGTH = 5;
 static const uint8_t V_SENSE_ADDR = 0x55 << 1;
 static const uint8_t I_SENSE_ADDR = 0x5A << 1;
 static const float INPUT_VDIV = 4.1/400;

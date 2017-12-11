@@ -61,7 +61,7 @@ float Sensor::sample(const uint16_t samples) {
   
   ready_to_sample = false;
   
-  if(!data.readingSerial) {
+//  if(!data.readingSerial) {
     for(i=0; i<samples; i++) {
       cmd[0] = REG_ADDR_RESULT;
       m_i2c.write(address, cmd, 1);
@@ -76,7 +76,7 @@ float Sensor::sample(const uint16_t samples) {
     }
     DEBUG_PRINT("ADC 0x%X %.2f\r\n", address, avg);
     return avg;
-  }
+//  }
 }
 
 void Sensor::calibrate() {
