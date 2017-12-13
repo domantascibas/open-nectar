@@ -449,6 +449,16 @@
               <FileType>8</FileType>
               <FilePath>.\src\DeviceMode.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Storage.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Storage.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\eeprom.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2033,6 +2043,16 @@
               <FileName>DeviceMode.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\DeviceMode.h</FilePath>
+            </File>
+            <File>
+              <FileName>Storage.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\Storage.h</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\eeprom.h</FilePath>
             </File>
           </Files>
         </Group>
