@@ -195,6 +195,12 @@ int main() {
       case WELCOME:
         //nothing to do here
         //wait for user to finish onboarding
+        if(espData.is_configured) {
+          deviceOpMode.endOnboarding();
+          printf("NO CONFIG -> HAS CONFIG\r\n");
+          menu_service::needUpdate = true;
+          menu_service::resetScreen = true;
+        }
         break;
       
       case TEST_MODE:
