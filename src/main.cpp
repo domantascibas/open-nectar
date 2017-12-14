@@ -7,6 +7,7 @@
 #include "ErrorHandler.h"
 #include "TemperatureController.h"
 #include "DataService.h"
+#include "Storage.h"
 
 DigitalOut pa0(PA_0);
 DigitalOut pa1(PA_1);
@@ -102,6 +103,8 @@ void initInternalTempSensor() {
 
 int main() {  
   static bool isFirst = true;
+  Storage::init();
+  
   mainBoardError.save_error_code(0x200);
   service::setup();
   
@@ -123,6 +126,10 @@ int main() {
     
     if(isFirst) {
       isFirst = false;
+      if(Storage::isConfigured()) {
+        Storage::loadConfigData();
+        deviceOpMode.endOnboarding();
+      }
       menu_service::needUpdate = true;
     }
     

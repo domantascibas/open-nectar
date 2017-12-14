@@ -5,7 +5,7 @@
 // day temp, night temp, max temp
 // day starts, night starts
 // language
-// current heating mode
+// current heater mode, previous heater mode
 
 uint16_t StoredItem::load() {
   EE_ReadVariable(lo_address, &storedItem);
@@ -25,6 +25,7 @@ namespace Storage {
   StoredItem nightStartsTime(0x4A55);
   StoredItem selectedLanguage(0x4B55);
   StoredItem selectedHeaterMode(0x4C55);
+  StoredItem previousHeaterMode(0x4D55);
   
   static const uint8_t DEVICE_CONFIGURED = 0xC0;
   static const uint16_t CONFIG_ADDRESS = 0x4555;
@@ -42,10 +43,8 @@ namespace Storage {
   }
   
   bool isConfigured() {
-    if(config == DEVICE_CONFIGURED) {
-      loadConfigData();
-      return true;
-    } else return false;
+    if(config == DEVICE_CONFIGURED) return true;
+    else return false;
   }
   
   void saveConfig() {
@@ -59,7 +58,7 @@ namespace Storage {
     saveTime(menu_actions::getTime(NightStart), NightStart);
     
     saveLanguage(localization::currentLanguage());
-    saveHeaterMode(DataService::getCurrentHeaterMode());
+    saveHeaterMode(DataService::getCurrentHeaterMode(), DataService::getPreviousHeaterMode());
   }
   
   void clearConfig() {
@@ -75,7 +74,7 @@ namespace Storage {
     menu_actions::setTime(loadTime(NightStart), NightStart);
     
     localization::setLanguage((const Language)selectedLanguage.load());
-    DataService::setCurrentHeaterMode((nectar_contract::HeaterMode)selectedHeaterMode.load());
+    DataService::updateHeaterMode((nectar_contract::HeaterMode)selectedHeaterMode.load(), (nectar_contract::HeaterMode)previousHeaterMode.load());
   }
   
   void saveTemp(const TemperatureType &type, const int8_t &t) {
@@ -113,8 +112,17 @@ namespace Storage {
     selectedLanguage.save((uint16_t)language);
   }
   
-  void saveHeaterMode(nectar_contract::HeaterMode mode) {
+  void saveHeaterMode(nectar_contract::HeaterMode currMode, nectar_contract::HeaterMode prevMode) {
+    selectedHeaterMode.save((uint16_t)currMode);
+    previousHeaterMode.save((uint16_t)prevMode);
+  }
+  
+  void saveCurrentHeaterMode(nectar_contract::HeaterMode mode) {
     selectedHeaterMode.save((uint16_t)mode);
+  }
+  
+  void savePreviousHeaterMode(nectar_contract::HeaterMode mode) {
+    previousHeaterMode.save((uint16_t)mode);
   }
   
   time_hm loadTime(const TimeType &type) {

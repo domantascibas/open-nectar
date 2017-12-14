@@ -1,5 +1,6 @@
 #include "DeviceMode.h"
 #include "device_modes.h"
+#include "Storage.h"
 
 DeviceMode deviceOpMode;
 
@@ -18,6 +19,7 @@ void DeviceMode::resetConfiguration() {
   configured = false;
   onboarding = true;
   device_modes::reset();
+  Storage::clearConfig();
 }
 
 void DeviceMode::setTestMode() {
@@ -30,6 +32,7 @@ void DeviceMode::endOnboarding() {
   if(!configured) currentMode = NOT_CONFIGURED;
   else currentMode = CONFIGURED;
   onboarding = false;
+  if(!testMode) Storage::saveConfig();
 }
 
 void DeviceMode::setInTestStand() {

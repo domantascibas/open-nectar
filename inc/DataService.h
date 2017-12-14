@@ -11,6 +11,7 @@ namespace DataService {
   
   void resetData();
   
+  void updateHeaterMode(nectar_contract::HeaterMode, nectar_contract::HeaterMode);
   void setCurrentHeaterMode(nectar_contract::HeaterMode);
   void setPreviousHeaterMode();
   

@@ -30,7 +30,9 @@ namespace Storage {
   void saveTemp(const TemperatureType &, const int8_t &);
   void saveTime(const time_hm &, const TimeType &);
   void saveLanguage(const Language &);
-  void saveHeaterMode(nectar_contract::HeaterMode);
+  void saveHeaterMode(nectar_contract::HeaterMode, nectar_contract::HeaterMode);
+  void saveCurrentHeaterMode(nectar_contract::HeaterMode);
+  void savePreviousHeaterMode(nectar_contract::HeaterMode);
   
   time_hm loadTime(const TimeType &);
 };
