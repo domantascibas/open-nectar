@@ -101,6 +101,29 @@ void initInternalTempSensor() {
   printf("***\r\nInternal temp sensor initialized\r\n***\r\n");
 }
 
+void initIndependentWatchdog() {
+  /* (1) Activate IWDG (not needed if done in option bytes) */
+  /* (2) Enable write access to IWDG registers */
+  /* (3) Set prescaler by 8 */
+  /* (4) Set reload value to have a rollover each 100ms */
+  /* (5) Check if flags are reset */
+  /* (6) Refresh counter */
+  IWDG->KR = 0xCCCC; /* (1) */
+  IWDG->KR = 0x5555; /* (2) */
+  IWDG->PR = IWDG_PR_PR_0; /* (3) */
+  IWDG->RLR = 0xFFF; /* (4) */
+  while (IWDG->SR) /* (5) */
+  {
+  /* add time out here for a robust application */
+  }
+  IWDG->KR = 0xAAAA; /* (6) */
+}
+
+void kickTheDog() {
+  IWDG->KR = 0xAAAA;
+//  printf("kick the dog\r\n");
+}
+
 int main() {  
   static bool isFirst = true;
   Storage::init();
@@ -118,11 +141,16 @@ int main() {
   power_board::setup();
   esp::setup();
   device_modes::setup();
+  
+  initIndependentWatchdog();
 
   while(1) {
     while(!power_board::hasReceivedFirstMessage()) {
+      kickTheDog();
       __WFI();
     }
+    
+    kickTheDog();
     
     if(isFirst) {
       isFirst = false;
