@@ -2,6 +2,7 @@
 #include "device_modes.h"
 #include "../submodules/device_menu/src/helpers/helpers.h"
 #include "menu_service.h"
+#include "Storage.h"
 
 TemperatureData temperatureData;
 
@@ -160,10 +161,16 @@ void DataService::resetData() {
   espData.sync_time = 0;
 }
 
+void DataService::updateHeaterMode(nectar_contract::HeaterMode currMode, nectar_contract::HeaterMode prevMode) {
+  previousHeaterMode = prevMode;
+  currentHeaterMode = currMode;
+}
+
 void DataService::setCurrentHeaterMode(nectar_contract::HeaterMode mode) {
   previousHeaterMode = currentHeaterMode;
   currentHeaterMode = mode;
   device_modes::updateHeaterMode = true;
+  Storage::saveHeaterMode(currentHeaterMode, previousHeaterMode);
 }
 
 void DataService::setPreviousHeaterMode() {
@@ -174,6 +181,7 @@ void DataService::setPreviousHeaterMode() {
   } else {
     currentHeaterMode = previousHeaterMode;
   }
+  Storage::saveHeaterMode(currentHeaterMode, previousHeaterMode);
 }
 
 bool DataService::isGridRelayOn() {
@@ -188,6 +196,7 @@ void DataService::calculateSolarKwhDiff(bool first) {
   if(first)
     solar_kwh_today_diff = powerData.sun_meter_kwh;
   solar_kwh_today = powerData.sun_meter_kwh - solar_kwh_today_diff;
+  if(solar_kwh_today < 0) solar_kwh_today = 0;
 }
 
 float DataService::getSolarKwhToday() {
