@@ -17,10 +17,12 @@ void ErrorHandler::set_error(ERROR_CODE err) {
 }
 
 void ErrorHandler::get_errors(uint32_t *err) {
+  if(raised_errors >= 0x3FFF) raised_errors = 0x0;
   *err = raised_errors;
 }
 
 uint32_t ErrorHandler::get_errors() {
+  if(raised_errors >= 0x3FFF) raised_errors = 0x0;
   return raised_errors;
 }
 
@@ -99,6 +101,10 @@ void ErrorHandler::print_error(ERROR_CODE *err) {
     
     case MIN_TEMPERATURE:
       printf("[ERROR] REACHED MIN TEMPERATURE\r\n");
+      break;
+    
+    case PROCESSOR_OVERHEAT:
+      printf("[ERROR] PROCESSOR OVERHEAT\r\n");
       break;
     
     default:

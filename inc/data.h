@@ -44,6 +44,9 @@ struct Data {
   bool generator_on;
   
   uint32_t error;
+  bool readingSerial;
+  bool readingTemperature;
+  bool safeToReadTemp;
 };
 
 struct StorageData {

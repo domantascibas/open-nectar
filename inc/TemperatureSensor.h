@@ -8,8 +8,12 @@ struct TemperatureSensor {
   TemperatureSensor(PinName, uint8_t);
   void init();
   bool isSensorFound();
-  bool newValueAvailable;
   bool isNewValueAvailable();
+  bool isReadyToRead();
+  bool isReadyToMeasure();
+  void setNewValueNotAvailable();
+  void measureTemperature();
+  void readTemperatureToStorage();
   float getTemperature();
   
 private:
@@ -19,10 +23,13 @@ private:
   uint8_t refreshRate;
   float temperature;
   bool sensorFound;
+  bool newValueAvailable;
+  bool readyToMeasure;
+  bool readyToRead;
   void attachTicker(float);
   void detachTicker();
-  void measureTemperature();
-  void readTemperatureToStorage();
+  void setReadyToRead();
+  void setReadyToMeasure();
 };
 
 #endif

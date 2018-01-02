@@ -8,9 +8,10 @@ static const float PWM_STEP = 0.02;
 static const float POWER_THRESHOLD = 50.0;
 static const PinName DEVICE_TEMP_PROBE = PC_7;
 static const float DEVICE_TEMPERATURE_LIMIT_MAX = 85.0;
+static const int PROCESSOR_INTERNAL_TEMPERATURE_LIMIT = 120;
 
 PwmController pwmGenerator(1.8, 0.1, 0.95);
-TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE, 10);
+TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE, 5);
 
 MpptController::MpptController() {
   last_increase = true;
@@ -39,6 +40,7 @@ void MpptController::track() {
   
   if((moment_power < POWER_THRESHOLD) && (pwmGenerator.get_duty() > 0.5 )) {
     reset();
+    old_power = moment_power;
   } else {
     pwmGenerator.start();
     if(dP != 0) {
@@ -120,8 +122,49 @@ float MpptController::getDeviceTemperature() {
   return deviceTemperature;
 }
 
+/* Temperature sensor calibration value address */
+#define TEMP110_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7C2))
+#define TEMP30_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7B8))
+#define VDD_CALIB ((uint16_t) (330))
+#define VDD_APPLI ((uint16_t) (300))
+
+void readInternalTempSensor() {
+  ADC1->CR |= ADC_CR_ADSTART;
+  wait_us(30);
+  int32_t temperature; /* will contain the temperature in degrees Celsius */
+  temperature = (((int32_t) ADC1->DR * VDD_APPLI / VDD_CALIB) - (int32_t) *TEMP30_CAL_ADDR );
+  temperature = temperature * (int32_t)(110 - 30);
+  temperature = temperature / (int32_t)(*TEMP110_CAL_ADDR - *TEMP30_CAL_ADDR);
+  temperature = temperature + 30;
+  
+  printf("processor temp: %d\r\n", temperature);
+  if(temperature > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
+    if(!nectarError.has_error(PROCESSOR_OVERHEAT)) nectarError.set_error(PROCESSOR_OVERHEAT);
+    printf("PROCESSOR OVERHEAT\r\n");
+  } else {
+    if(nectarError.has_error(PROCESSOR_OVERHEAT) && (temperature < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) nectarError.clear_error(PROCESSOR_OVERHEAT);
+  }
+}
+
 void MpptController::updateTemperatures() {
-  if(deviceTemp.isNewValueAvailable()) data.device_temperature = getDeviceTemperature();
+  if(data.safeToReadTemp) {
+    data.safeToReadTemp = false;
+    
+    if(deviceTemp.isReadyToMeasure()) {
+      deviceTemp.measureTemperature();
+    }
+    
+    if(deviceTemp.isReadyToRead()) {
+      deviceTemp.readTemperatureToStorage();
+    }
+    
+    if(deviceTemp.isNewValueAvailable()) {
+      printf("[MPPT] update device temperature\r\n");
+  //    deviceTemp.setNewValueNotAvailable();
+      data.device_temperature = getDeviceTemperature();
+      readInternalTempSensor();
+    }
+  }
 }
 
 void MpptController::manualStartPwm() {
