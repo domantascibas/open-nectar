@@ -2,6 +2,7 @@
 #include "ErrorHandler.h"
 #include "DataService.h"
 #include "EnergyMeter.h"
+#include "CommsController.h"
 
 namespace power_board {
   Ticker get_data_tick;
@@ -14,20 +15,7 @@ namespace power_board {
   powerStream m_stream(TX, RX);
   
   void get_data_ISR() {
-    nectar_contract::MainBoardStateForPower mainStateForPower = {
-      gridMeter.getMeterReading(),
-      startPowerBoard,
-      deviceOpMode.isInTestMode(),
-      deviceOpMode.isOnboarding()
-    };
-    
-    StreamObject _mainStateForPower(&mainStateForPower, sizeof(mainStateForPower));
-    m_stream.stream.send_state_to_power_board(_mainStateForPower);
-    printf("-> POWER %f %d %d %d\r\n",
-    mainStateForPower.grid_meter_kwh,
-    mainStateForPower.start,
-    mainStateForPower.is_test_mode_on,
-    mainStateForPower.is_in_onboarding);
+    commsController.sendPowerMessage();
   }
   
   void start() {
@@ -45,6 +33,23 @@ namespace power_board {
   
   bool hasReceivedFirstMessage() {
     return !isFirst;
+  }
+  
+  void send_message() {
+    nectar_contract::MainBoardStateForPower mainStateForPower = {
+      gridMeter.getMeterReading(),
+      startPowerBoard,
+      deviceOpMode.isInTestMode(),
+      deviceOpMode.isOnboarding()
+    };
+    
+    StreamObject _mainStateForPower(&mainStateForPower, sizeof(mainStateForPower));
+    m_stream.stream.send_state_to_power_board(_mainStateForPower);
+    printf("-> POWER %f %d %d %d\r\n",
+    mainStateForPower.grid_meter_kwh,
+    mainStateForPower.start,
+    mainStateForPower.is_test_mode_on,
+    mainStateForPower.is_in_onboarding);
   }
 }
 
@@ -78,8 +83,24 @@ void powerStream::write(uint8_t byte) {
 }
 
 void powerStream::received_power_board_state(const nectar_contract::PowerBoardState &state) {
-  if((state.sun_power > 10000) || (state.sun_power < 0) || (state.ref_current < 0) || (state.ref_current > 10000) || (state.ref_voltage < 0) || (state.ref_voltage > 10000)) {
+  if((state.sun_power > 10000) || (state.sun_power < 0) || (state.ref_current < 0) || (state.ref_current > 10000) || (state.ref_voltage < 0) || (state.ref_voltage > 10000) || (state.sun_meter_kwh > 1000000000)) {
     printf("POWER -> RECEIVED CORRUPT MESSAGE\r\n");
+    printf("POWER -> %f %f %f %f %f %d %d %d %d %f %f %f %f\r\n",
+      state.sun_power,
+      state.sun_voltage,
+      state.sun_current,
+      state.pwm_duty,
+      state.device_temperature,
+      state.transistor_overheat_on,
+      powerBoardError.get_errors(),
+      state.device_calibrated,
+      state.pwm_generator_on,
+      state.sun_meter_kwh,
+      state.grid_meter_kwh,
+      state.ref_voltage,
+      state.ref_current
+    );
+    commsController.freeChannel();
     return;
   }
   __disable_irq();
@@ -104,5 +125,6 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
     powerData.grid_meter_kwh,
     powerData.ref_voltage,
     powerData.ref_current
-    );
+  );
+  commsController.freeChannel();
 }

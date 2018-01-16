@@ -3,6 +3,7 @@
 #include "ErrorHandler.h"
 #include "menu_service.h"
 #include "DataService.h"
+#include "CommsController.h"
 
 extern RelayController relayController;
 
@@ -15,6 +16,14 @@ namespace esp {
   mbedStream m_stream(TX, RX);
   
   void get_data_ISR() {
+    commsController.sendEspMessage();
+  }
+
+  void setup() {
+    m_stream.setup();
+  }
+  
+  void send_message() {
     time_t rtc = time(NULL);
     nectar_contract::MainBoardStateForESP mainStateForEsp = {
       powerData.sun_power,
@@ -59,10 +68,6 @@ namespace esp {
       );
     if(deviceOpMode.isReset()) deviceOpMode.setReset(false);
   }
-
-  void setup() {
-    m_stream.setup();
-  }
 }
 
 /*
@@ -73,10 +78,10 @@ void mbedStream::setup() {
   static const float interval = 15.0;
   
   m_serial.baud(C_SERIAL_BAUD_RATE);
-  esp::get_data_ISR();
   esp::get_data_tick.attach(&esp::get_data_ISR, interval);
   m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
   printf("[ESP] start\r\n");
+  esp::send_message();
 }
 
 void mbedStream::Rx_interrupt() {
@@ -114,4 +119,5 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
   } else {
     printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld %d\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin);
   }
+  commsController.freeChannel();
 }

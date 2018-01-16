@@ -6,7 +6,7 @@
 
 namespace esp {
   void setup();
-  void get_data_ISR();
+  void send_message();
 }
 
 class mbedStream : public IStreamDelegate {

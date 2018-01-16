@@ -9,6 +9,7 @@ namespace power_board {
   void start();
   void stop();
   bool hasReceivedFirstMessage();
+  void send_message();
 }
 
 class powerStream : public IStreamDelegate {

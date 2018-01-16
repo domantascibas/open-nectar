@@ -8,6 +8,7 @@
 #include "TemperatureController.h"
 #include "DataService.h"
 #include "Storage.h"
+#include "CommsController.h"
 
 DigitalOut pa0(PA_0);
 DigitalOut pa1(PA_1);
@@ -138,6 +139,7 @@ int main() {
   wait(0.5);
   menu_service::updateScreen();
   esp::setup();
+  wait(1.0);
   power_board::setup();
   wait(0.4);
   menu_service::updateScreen();
@@ -224,6 +226,9 @@ int main() {
     if(!deviceOpMode.isOnboarding()) {
       device_modes::loop();
     }
+    
+    commsController.clearQueue();
+    
     __WFI();
   }
 }

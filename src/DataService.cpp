@@ -3,6 +3,7 @@
 #include "../submodules/device_menu/src/helpers/helpers.h"
 #include "menu_service.h"
 #include "Storage.h"
+#include "CommsController.h"
 
 TemperatureData temperatureData;
 
@@ -177,7 +178,7 @@ void DataService::setCurrentHeaterMode(nectar_contract::HeaterMode mode) {
 
 void DataService::setPreviousHeaterMode() {
   deviceOpMode.setBoostOff(true);
-  esp::get_data_ISR();
+  commsController.sendEspMessage();
   if(espData.is_configured) {
     currentHeaterMode = (nectar_contract::HeaterMode)espData.heater_mode;
   } else {
