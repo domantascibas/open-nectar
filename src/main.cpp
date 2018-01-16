@@ -130,15 +130,22 @@ int main() {
   initInternalTempSensor();
   
   menu_service::setup();
+  menu_service::updateScreen();
   wait(1.0);
   tempController.init();
-  wait(1.0);
+  wait(0.5);
   tempController.updateTemperatures();
-  power_board::setup();
+  wait(0.5);
+  menu_service::updateScreen();
   esp::setup();
+  power_board::setup();
+  wait(0.4);
+  menu_service::updateScreen();
   device_modes::setup();
   
+  
   initIndependentWatchdog();
+  deviceOpMode.endLoading();
 
   while(1) {
     while(!power_board::hasReceivedFirstMessage()) {
