@@ -1975,6 +1975,11 @@
           <GroupName>inc</GroupName>
           <Files>
             <File>
+              <FileName>consts.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\consts.h</FilePath>
+            </File>
+            <File>
               <FileName>mbed_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\mbed_config.h</FilePath>

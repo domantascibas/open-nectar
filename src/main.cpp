@@ -66,10 +66,6 @@ DigitalOut pf0(PF_0);
 DigitalOut pf1(PF_1);
 DigitalOut pf11(PF_11);
 
-#define VERSION_MAJOR         1
-#define VERSION_MINOR         0
-#define VERSION_REVISION      1
-
 bool inErrorScreen = false;
 
 TemperatureController tempController;
