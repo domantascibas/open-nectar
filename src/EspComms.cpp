@@ -95,9 +95,14 @@ void mbedStream::write(uint8_t byte) {
 void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
   if(state.is_configured) {
     espData = state;
-    if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost) deviceOpMode.setBoostOff(false);
+    if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost)
+      deviceOpMode.setBoostOff(false);
+    if(DataService::getCurrentHeaterMode() != (nectar_contract::HeaterMode)espData.heater_mode) {
+      printf("HEATER MODE UPDATED\r\n");
+      DataService::setCurrentHeaterMode((nectar_contract::HeaterMode)espData.heater_mode);
+    }
     device_modes::updateHeaterMode = true;
-    printf("ESP -> %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
+    printf("ESP -> %d %d %d %f %f %f %lld %d\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin);
     if(espData.sync_time != 0) {
       set_time(espData.sync_time);
       time_t sec = time(NULL);
