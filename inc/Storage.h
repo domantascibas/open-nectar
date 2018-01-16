@@ -22,7 +22,9 @@ private:
 
 namespace Storage {
   void init();
+  bool isEspConfigured();
   bool isConfigured();
+  void saveEspConfig();
   void saveConfig();
   void clearConfig();
   void loadConfigData();

@@ -26,10 +26,14 @@ namespace Storage {
   StoredItem selectedLanguage(0x4B55);
   StoredItem selectedHeaterMode(0x4C55);
   StoredItem previousHeaterMode(0x4D55);
-  
+
   static const uint8_t DEVICE_CONFIGURED = 0xC0;
   static const uint16_t CONFIG_ADDRESS = 0x4555;
   uint16_t config;
+  
+  static const uint8_t ESP_CONFIGURED = 0xEC;
+  static const uint16_t ESP_CONFIG_ADDRESS = 0x4E55;
+  uint16_t esp_config;
   
   void init() {
     if(FLASH->CR & (0x1 << 0x7)) {
@@ -40,11 +44,21 @@ namespace Storage {
     
     EE_Init();
     EE_ReadVariable(CONFIG_ADDRESS, &config);
+    EE_ReadVariable(ESP_CONFIG_ADDRESS, &esp_config);
+  }
+  
+  bool isEspConfigured() {
+    if(esp_config == ESP_CONFIGURED) return true;
+    else return false;
   }
   
   bool isConfigured() {
     if(config == DEVICE_CONFIGURED) return true;
     else return false;
+  }
+  
+  void saveEspConfig() {
+    EE_WriteVariable(ESP_CONFIG_ADDRESS, ESP_CONFIGURED);
   }
   
   void saveConfig() {
@@ -63,6 +77,9 @@ namespace Storage {
   
   void clearConfig() {
     EE_WriteVariable(CONFIG_ADDRESS, 0xFF);
+    EE_WriteVariable(ESP_CONFIG_ADDRESS, 0xFF);
+    config = false;
+    esp_config = false;
   }
   
   void loadConfigData() {

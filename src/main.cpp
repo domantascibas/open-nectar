@@ -151,7 +151,12 @@ int main() {
     if(isFirst) {
       isFirst = false;
       if(Storage::isConfigured()) {
+        printf("[CONFIG] loading data from storage\r\n");
         Storage::loadConfigData();
+        if(Storage::isEspConfigured()) {
+          espData.is_configured = true;
+          deviceOpMode.setConfigured();
+        }
         deviceOpMode.endOnboarding();
       }
       menu_service::needUpdate = true;
@@ -173,16 +178,17 @@ int main() {
     
     switch(deviceOpMode.getCurrentMode()) {
       default:
-      case NOT_CONFIGURED:
+      case NOT_CONFIGURED:        // ESP NOT CONFIGURED
         if(espData.is_configured) {
           printf("NO CONFIG -> HAS CONFIG\r\n");
           deviceOpMode.setConfigured();
           menu_service::needUpdate = true;
           menu_service::resetScreen = true;
+          Storage::saveEspConfig();
         }
         break;
       
-      case CONFIGURED:
+      case CONFIGURED:            // ESP CONFIGURED
         if(!espData.is_configured) {
           printf("HAS CONFIG -> NO CONFIG\r\n");
         }
@@ -191,7 +197,7 @@ int main() {
       case WELCOME:
         //nothing to do here
         //wait for user to finish onboarding
-        if(espData.is_configured) {
+        if(espData.is_configured || Storage::isEspConfigured()) {
           deviceOpMode.endOnboarding();
           printf("NO CONFIG -> HAS CONFIG\r\n");
           menu_service::needUpdate = true;
