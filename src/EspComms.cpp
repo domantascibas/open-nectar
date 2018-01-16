@@ -73,6 +73,7 @@ void mbedStream::setup() {
   static const float interval = 15.0;
   
   m_serial.baud(C_SERIAL_BAUD_RATE);
+  esp::get_data_ISR();
   esp::get_data_tick.attach(&esp::get_data_ISR, interval);
   m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
   printf("[ESP] start\r\n");
