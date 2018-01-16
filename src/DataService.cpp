@@ -20,6 +20,7 @@ namespace DataService {
   
   uint8_t mosfet_overheat_on = false;
   uint32_t power_board_error = 0;
+  uint16_t pin = 0;
 
   bool calibrated = false;
   bool generator_on = false;
@@ -57,7 +58,8 @@ nectar_contract::ESPState espData = {
   temperatureData.getTemperature(),
   temperatureData.getMaxTemperature(),
   DataService::boiler_power,
-  0
+  0,
+  DataService::pin
 };
 
 time_t timeHMtoTime(time_hm timeHM) {

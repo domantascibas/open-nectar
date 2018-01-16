@@ -93,6 +93,7 @@ void mbedStream::write(uint8_t byte) {
 }
 
 void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
+  espData.pin = state.pin;
   if(state.is_configured) {
     espData = state;
     if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost)
@@ -110,6 +111,6 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
       printf("Time set from ESP: %s\r\n", ctime(&sec));
     }
   } else {
-    printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
+    printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld %d\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin);
   }
 }
