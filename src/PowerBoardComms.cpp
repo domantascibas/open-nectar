@@ -78,6 +78,10 @@ void powerStream::write(uint8_t byte) {
 }
 
 void powerStream::received_power_board_state(const nectar_contract::PowerBoardState &state) {
+  if((state.sun_power > 10000) || (state.sun_power < 0) || (state.ref_current < 0) || (state.ref_current > 10000) || (state.ref_voltage < 0) || (state.ref_voltage > 10000)) {
+    printf("POWER -> RECEIVED CORRUPT MESSAGE\r\n");
+    return;
+  }
   __disable_irq();
   powerData = state;
   powerBoardError.save_error_code(state.power_board_error_code);
