@@ -35,6 +35,8 @@ namespace Storage {
   static const uint16_t ESP_CONFIG_ADDRESS = 0x4E55;
   uint16_t esp_config;
   
+  bool isLanguageLoaded = false;
+  
   void init() {
     if(FLASH->CR & (0x1 << 0x7)) {
       FLASH->KEYR = 0x45670123; //FLASH KEY 1
@@ -91,6 +93,7 @@ namespace Storage {
     menu_actions::setTime(loadTime(NightStart), NightStart);
     
     localization::setLanguage((const Language)selectedLanguage.load());
+    isLanguageLoaded = true;
     DataService::updateHeaterMode((nectar_contract::HeaterMode)selectedHeaterMode.load(), (nectar_contract::HeaterMode)previousHeaterMode.load());
   }
   
@@ -126,7 +129,17 @@ namespace Storage {
   }
   
   void saveLanguage(const Language &language) {
-    selectedLanguage.save((uint16_t)language);
+    if(isConfigured()) {
+      printf("[LANGUAGE] has config\r\n");
+      if(isLanguageLoaded) {
+        printf("[LANGUAGE] saving new language %d\r\n\n", language);
+        selectedLanguage.save((uint16_t)language);
+      }
+    } else {
+      printf("[LANGUAGE] no config\r\n");
+      printf("[LANGUAGE] saving new language %d\r\n\n", language);
+      selectedLanguage.save((uint16_t)language);
+    }
   }
   
   void saveHeaterMode(nectar_contract::HeaterMode currMode, nectar_contract::HeaterMode prevMode) {
