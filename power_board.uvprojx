@@ -1989,6 +1989,11 @@
               <FileType>5</FileType>
               <FilePath>.\inc\TemperatureSensor.h</FilePath>
             </File>
+            <File>
+              <FileName>consts.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\consts.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
