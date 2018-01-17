@@ -162,6 +162,7 @@ void DataService::resetData() {
   espData.temperature_max = temperatureData.getMaxTemperature();
   espData.boiler_power = boiler_power;
   espData.sync_time = 0;
+  espData.pin = 0;
 }
 
 void DataService::updateHeaterMode(nectar_contract::HeaterMode currMode, nectar_contract::HeaterMode prevMode) {
