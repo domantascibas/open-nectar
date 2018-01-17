@@ -51,6 +51,33 @@ namespace power_board {
     mainStateForPower.is_test_mode_on,
     mainStateForPower.is_in_onboarding);
   }
+  
+  bool is_message_valid(const nectar_contract::PowerBoardState &state) {
+    if((state.grid_meter_kwh > 100000000) ||
+        (state.grid_meter_kwh < 0) ||
+        (state.device_temperature > 1000) ||
+        (state.device_temperature < -1) ||
+        (state.pwm_duty > 1.0) ||
+        (state.pwm_duty < 0) ||
+        (state.ref_current > 1000) ||
+        (state.ref_current < 0) ||
+        (state.ref_voltage > 1000) ||
+        (state.ref_voltage < 0) ||
+        (state.sun_current > 1000) ||
+        (state.sun_current < 0) ||
+        (state.sun_meter_kwh > 100000000) ||
+        (state.sun_meter_kwh < 0) ||
+        (state.sun_power > 1000) ||
+        (state.sun_power < 0) ||
+        (state.sun_voltage > 100000) ||
+        (state.sun_voltage < 0)
+    )
+    {
+      return false;
+    } else {
+      return true;      
+    }
+  }
 }
 
 /*
@@ -83,48 +110,32 @@ void powerStream::write(uint8_t byte) {
 }
 
 void powerStream::received_power_board_state(const nectar_contract::PowerBoardState &state) {
-  if((state.sun_power > 10000) || (state.sun_power < 0) || (state.ref_current < 0) || (state.ref_current > 10000) || (state.ref_voltage < 0) || (state.ref_voltage > 10000) || (state.sun_meter_kwh > 1000000000)) {
-    printf("POWER -> RECEIVED CORRUPT MESSAGE\r\n");
+  if(power_board::is_message_valid(state)) {
+    __disable_irq();
+    powerData = state;
+    powerBoardError.save_error_code(state.power_board_error_code);
+    
+    if(power_board::isFirst) gridMeter.setMeterReading(powerData.grid_meter_kwh);
+    DataService::calculateSolarKwhDiff(power_board::isFirst);
+    power_board::isFirst = false;
+    __enable_irq();
     printf("POWER -> %f %f %f %f %f %d %d %d %d %f %f %f %f\r\n",
-      state.sun_power,
-      state.sun_voltage,
-      state.sun_current,
-      state.pwm_duty,
-      state.device_temperature,
-      state.transistor_overheat_on,
+      powerData.sun_power,
+      powerData.sun_voltage,
+      powerData.sun_current,
+      powerData.pwm_duty,
+      powerData.device_temperature,
+      powerData.transistor_overheat_on,
       powerBoardError.get_errors(),
-      state.device_calibrated,
-      state.pwm_generator_on,
-      state.sun_meter_kwh,
-      state.grid_meter_kwh,
-      state.ref_voltage,
-      state.ref_current
+      powerData.device_calibrated,
+      powerData.pwm_generator_on,
+      powerData.sun_meter_kwh,
+      powerData.grid_meter_kwh,
+      powerData.ref_voltage,
+      powerData.ref_current
     );
-    commsController.freeChannel();
-    return;
+  } else {
+    printf("POWER -> RECEIVDED INVALID DATA IN MESSAGE\r\n");
   }
-  __disable_irq();
-  powerData = state;
-  powerBoardError.save_error_code(state.power_board_error_code);
-  
-  if(power_board::isFirst) gridMeter.setMeterReading(powerData.grid_meter_kwh);
-  DataService::calculateSolarKwhDiff(power_board::isFirst);
-  power_board::isFirst = false;
-  __enable_irq();
-  printf("POWER -> %f %f %f %f %f %d %d %d %d %f %f %f %f\r\n",
-    powerData.sun_power,
-    powerData.sun_voltage,
-    powerData.sun_current,
-    powerData.pwm_duty,
-    powerData.device_temperature,
-    powerData.transistor_overheat_on,
-    powerBoardError.get_errors(),
-    powerData.device_calibrated,
-    powerData.pwm_generator_on,
-    powerData.sun_meter_kwh,
-    powerData.grid_meter_kwh,
-    powerData.ref_voltage,
-    powerData.ref_current
-  );
   commsController.freeChannel();
 }
