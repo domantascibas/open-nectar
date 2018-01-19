@@ -3,6 +3,7 @@
 #include "../submodules/device_menu/src/helpers/helpers.h"
 #include "menu_service.h"
 #include "Storage.h"
+#include "CommsController.h"
 
 TemperatureData temperatureData;
 
@@ -20,6 +21,7 @@ namespace DataService {
   
   uint8_t mosfet_overheat_on = false;
   uint32_t power_board_error = 0;
+  uint16_t pin = 0;
 
   bool calibrated = false;
   bool generator_on = false;
@@ -57,7 +59,8 @@ nectar_contract::ESPState espData = {
   temperatureData.getTemperature(),
   temperatureData.getMaxTemperature(),
   DataService::boiler_power,
-  0
+  0,
+  DataService::pin
 };
 
 time_t timeHMtoTime(time_hm timeHM) {
@@ -128,7 +131,7 @@ float TemperatureData::getDeviceTemperature() {
 }
 
 nectar_contract::HeaterMode DataService::getCurrentHeaterMode() {
-  if(espData.is_configured && !deviceOpMode.isInTestMode()) {
+  if(espData.has_internet_connection && !deviceOpMode.isInTestMode()) {
     return (nectar_contract::HeaterMode)espData.heater_mode;
   } else {
     return (nectar_contract::HeaterMode)currentHeaterMode;
@@ -159,6 +162,7 @@ void DataService::resetData() {
   espData.temperature_max = temperatureData.getMaxTemperature();
   espData.boiler_power = boiler_power;
   espData.sync_time = 0;
+  espData.pin = 0;
 }
 
 void DataService::updateHeaterMode(nectar_contract::HeaterMode currMode, nectar_contract::HeaterMode prevMode) {
@@ -175,7 +179,7 @@ void DataService::setCurrentHeaterMode(nectar_contract::HeaterMode mode) {
 
 void DataService::setPreviousHeaterMode() {
   deviceOpMode.setBoostOff(true);
-  esp::get_data_ISR();
+  commsController.sendEspMessage();
   if(espData.is_configured) {
     currentHeaterMode = (nectar_contract::HeaterMode)espData.heater_mode;
   } else {

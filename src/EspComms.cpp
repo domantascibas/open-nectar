@@ -3,6 +3,7 @@
 #include "ErrorHandler.h"
 #include "menu_service.h"
 #include "DataService.h"
+#include "CommsController.h"
 
 extern RelayController relayController;
 
@@ -15,6 +16,14 @@ namespace esp {
   mbedStream m_stream(TX, RX);
   
   void get_data_ISR() {
+    commsController.sendEspMessage();
+  }
+
+  void setup() {
+    m_stream.setup();
+  }
+  
+  void send_message() {
     time_t rtc = time(NULL);
     nectar_contract::MainBoardStateForESP mainStateForEsp = {
       powerData.sun_power,
@@ -59,9 +68,22 @@ namespace esp {
       );
     if(deviceOpMode.isReset()) deviceOpMode.setReset(false);
   }
-
-  void setup() {
-    m_stream.setup();
+  
+  bool is_message_valid(const nectar_contract::ESPState &state) {
+    if((state.boiler_power > 3000) ||
+        (state.boiler_power < 0) ||
+        (state.pin >= 10000) ||
+        (state.pin < 1000) ||
+        (state.temperature > 1000) ||
+        (state.temperature < 0) ||
+        (state.temperature_max > 100) ||
+        (state.temperature_max <= 10)
+    )
+    {
+      return false;
+    } else {
+      return true;
+    }
   }
 }
 
@@ -76,6 +98,7 @@ void mbedStream::setup() {
   esp::get_data_tick.attach(&esp::get_data_ISR, interval);
   m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
   printf("[ESP] start\r\n");
+  esp::send_message();
 }
 
 void mbedStream::Rx_interrupt() {
@@ -93,18 +116,31 @@ void mbedStream::write(uint8_t byte) {
 }
 
 void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
-  if(state.is_configured) {
-    espData = state;
-    if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost) deviceOpMode.setBoostOff(false);
-    device_modes::updateHeaterMode = true;
-    printf("ESP -> %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
-    if(espData.sync_time != 0) {
-      set_time(espData.sync_time);
-      time_t sec = time(NULL);
-      menu_actions::updateTime();
-      printf("Time set from ESP: %s\r\n", ctime(&sec));
+  if(esp::is_message_valid(state)) {
+    __disable_irq();
+    espData.pin = state.pin;
+    if(state.is_configured) {
+      espData = state;
+      if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost)
+        deviceOpMode.setBoostOff(false);
+      if(DataService::getCurrentHeaterMode() != (nectar_contract::HeaterMode)espData.heater_mode) {
+        printf("HEATER MODE UPDATED\r\n");
+        DataService::setCurrentHeaterMode((nectar_contract::HeaterMode)espData.heater_mode);
+      }
+      device_modes::updateHeaterMode = true;
+      printf("ESP -> %d %d %d %f %f %f %lld %d\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin);
+      if(espData.sync_time != 0) {
+        set_time(espData.sync_time);
+        time_t sec = time(NULL);
+        menu_actions::updateTime();
+        printf("Time set from ESP: %s\r\n", ctime(&sec));
+      }
+      __enable_irq();
+    } else {
+      printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld %d\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin);
     }
   } else {
-    printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time);
+    printf("ESP -> RECEIVED INVALID DATA IN MESSAGE\r\n");
   }
+  commsController.freeChannel();
 }

@@ -9,6 +9,8 @@ namespace power_board {
   void start();
   void stop();
   bool hasReceivedFirstMessage();
+  void send_message();
+  bool is_message_valid(const nectar_contract::PowerBoardState &state);
 }
 
 class powerStream : public IStreamDelegate {

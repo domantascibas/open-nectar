@@ -67,6 +67,14 @@ bool DeviceMode::isInTestStand() {
   return inTestStand;
 }
 
+bool DeviceMode::isLoading() {
+  return loading;
+}
+
+void DeviceMode::endLoading() {
+  loading = false;
+}
+
 void DeviceMode::setPairing(bool input) {
   pairing = input;
 }

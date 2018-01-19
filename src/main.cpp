@@ -8,6 +8,7 @@
 #include "TemperatureController.h"
 #include "DataService.h"
 #include "Storage.h"
+#include "CommsController.h"
 
 DigitalOut pa0(PA_0);
 DigitalOut pa1(PA_1);
@@ -65,10 +66,6 @@ DigitalOut pc15(PC_15);
 DigitalOut pf0(PF_0);
 DigitalOut pf1(PF_1);
 DigitalOut pf11(PF_11);
-
-#define VERSION_MAJOR         1
-#define VERSION_MINOR         0
-#define VERSION_REVISION      1
 
 bool inErrorScreen = false;
 
@@ -134,15 +131,23 @@ int main() {
   initInternalTempSensor();
   
   menu_service::setup();
+  menu_service::updateScreen();
   wait(1.0);
   tempController.init();
-  wait(1.0);
+  wait(0.5);
   tempController.updateTemperatures();
-  power_board::setup();
+  wait(0.5);
+  menu_service::updateScreen();
   esp::setup();
+  wait(1.0);
+  power_board::setup();
+  wait(0.4);
+  menu_service::updateScreen();
   device_modes::setup();
   
+  
   initIndependentWatchdog();
+  deviceOpMode.endLoading();
 
   while(1) {
     while(!power_board::hasReceivedFirstMessage()) {
@@ -155,7 +160,12 @@ int main() {
     if(isFirst) {
       isFirst = false;
       if(Storage::isConfigured()) {
+        printf("[CONFIG] loading data from storage\r\n");
         Storage::loadConfigData();
+        if(Storage::isEspConfigured()) {
+          espData.is_configured = true;
+          deviceOpMode.setConfigured();
+        }
         deviceOpMode.endOnboarding();
       }
       menu_service::needUpdate = true;
@@ -177,16 +187,17 @@ int main() {
     
     switch(deviceOpMode.getCurrentMode()) {
       default:
-      case NOT_CONFIGURED:
+      case NOT_CONFIGURED:        // ESP NOT CONFIGURED
         if(espData.is_configured) {
           printf("NO CONFIG -> HAS CONFIG\r\n");
           deviceOpMode.setConfigured();
           menu_service::needUpdate = true;
           menu_service::resetScreen = true;
+          Storage::saveEspConfig();
         }
         break;
       
-      case CONFIGURED:
+      case CONFIGURED:            // ESP CONFIGURED
         if(!espData.is_configured) {
           printf("HAS CONFIG -> NO CONFIG\r\n");
         }
@@ -195,7 +206,7 @@ int main() {
       case WELCOME:
         //nothing to do here
         //wait for user to finish onboarding
-        if(espData.is_configured) {
+        if(espData.is_configured || Storage::isEspConfigured()) {
           deviceOpMode.endOnboarding();
           printf("NO CONFIG -> HAS CONFIG\r\n");
           menu_service::needUpdate = true;
@@ -215,6 +226,9 @@ int main() {
     if(!deviceOpMode.isOnboarding()) {
       device_modes::loop();
     }
+    
+    commsController.clearQueue();
+    
     __WFI();
   }
 }

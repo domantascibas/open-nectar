@@ -459,6 +459,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\eeprom.c</FilePath>
             </File>
+            <File>
+              <FileName>CommsController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\CommsController.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1975,6 +1980,11 @@
           <GroupName>inc</GroupName>
           <Files>
             <File>
+              <FileName>consts.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\consts.h</FilePath>
+            </File>
+            <File>
               <FileName>mbed_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\mbed_config.h</FilePath>
@@ -2053,6 +2063,11 @@
               <FileName>eeprom.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\eeprom.h</FilePath>
+            </File>
+            <File>
+              <FileName>CommsController.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\CommsController.h</FilePath>
             </File>
           </Files>
         </Group>

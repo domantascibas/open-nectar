@@ -11,7 +11,7 @@ enum opModes {
 };
 
 struct DeviceMode {
-  DeviceMode() : currentMode(WELCOME), testMode(false), onboarding(true), configured(false), pairing(true), reset(false), boostOff(false), inTestStand(false) {};
+  DeviceMode() : currentMode(WELCOME), testMode(false), onboarding(true), configured(false), pairing(true), reset(false), boostOff(false), inTestStand(false), loading(true) {};
   uint8_t getCurrentMode();
   void endOnboarding();
   void setTestMode();
@@ -26,7 +26,9 @@ struct DeviceMode {
   bool isReset();
   bool isBoostOff();
   bool isInTestStand();
+  bool isLoading();
     
+  void endLoading();
   void setPairing(bool);
   void setReset(bool);
   void setBoostOff(bool);
@@ -40,6 +42,7 @@ private:
   bool reset;
   bool boostOff;
   bool inTestStand;
+  bool loading;
 };
 
 extern DeviceMode deviceOpMode;
