@@ -148,7 +148,7 @@ int main() {
   
   initIndependentWatchdog();
   deviceOpMode.endLoading();
-
+  
   while(1) {
     while(!power_board::hasReceivedFirstMessage()) {
       kickTheDog();
@@ -170,15 +170,6 @@ int main() {
       }
       menu_service::needUpdate = true;
     }
-    
-//    if((mainBoardError.has_errors || powerBoardError.has_errors) && !inErrorScreen) {
-//      printf("[ERROR] present\r\n");
-//      menu_service::needUpdate = true;
-//      inErrorScreen = true;
-//    } else if((!mainBoardError.has_errors && !powerBoardError.has_errors) && inErrorScreen) {
-//      menu_service::needUpdate = true;
-//      inErrorScreen = false;
-//    }
     
     if(menu_service::needUpdate) {
       menu_service::updateScreen();
