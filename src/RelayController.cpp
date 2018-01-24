@@ -29,7 +29,7 @@ uint8_t RelayController::getRelayState() {
 
 void RelayController::setRelays(uint8_t state) {
   relayState = state;
-  if(mainBoardError.has_error(DEVICE_OVERHEAT) || mainBoardError.has_error(MIN_TEMPERATURE) || mainBoardError.has_error(MAX_TEMPERATURE)) {
+  if(mainBoardError.has_error(NO_BOILER_TEMP) ||mainBoardError.has_error(DEVICE_OVERHEAT) || mainBoardError.has_error(MIN_TEMPERATURE) || mainBoardError.has_error(MAX_TEMPERATURE)) {
     relayState = TURN_OFF_ALL;
     printf("overheat/temperature-related errors\r\n");
   }
