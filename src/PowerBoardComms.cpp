@@ -70,7 +70,8 @@ namespace power_board {
         (state.sun_power > 1000) ||
         (state.sun_power < 0) ||
         (state.sun_voltage > 100000) ||
-        (state.sun_voltage < 0)
+        (state.sun_voltage < 0) ||
+        (state.power_board_error_code > 8191)
     )
     {
       return false;

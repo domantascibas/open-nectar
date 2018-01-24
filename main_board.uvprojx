@@ -2440,6 +2440,16 @@
               <FilePath>.\submodules\device_menu\src\Screens\error\DebugScreen.h</FilePath>
             </File>
             <File>
+              <FileName>DebugErrorScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\error\DebugErrorScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>DebugErrorScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\error\DebugErrorScreen.h</FilePath>
+            </File>
+            <File>
               <FileName>ErrorScreen.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\error\ErrorScreen.cpp</FilePath>
