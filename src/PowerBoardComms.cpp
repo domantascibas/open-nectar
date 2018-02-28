@@ -67,7 +67,7 @@ namespace power_board {
         (state.sun_current < 0) ||
         (state.sun_meter_kwh > 100000000) ||
         (state.sun_meter_kwh < 0) ||
-        (state.sun_power > 1000) ||
+        (state.sun_power > 100000) ||
         (state.sun_power < 0) ||
         (state.sun_voltage > 100000) ||
         (state.sun_voltage < 0) ||
