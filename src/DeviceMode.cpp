@@ -1,6 +1,7 @@
 #include "DeviceMode.h"
 #include "device_modes.h"
 #include "Storage.h"
+#include "ErrorHandler.h"
 
 DeviceMode deviceOpMode;
 
@@ -37,6 +38,7 @@ void DeviceMode::endOnboarding() {
 
 void DeviceMode::setInTestStand() {
   inTestStand = true;
+	mainBoardError.clear_error(NO_BOILER_TEMP);
 }
 
 bool DeviceMode::isInTestMode() {
