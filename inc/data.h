@@ -47,6 +47,7 @@ struct Data {
   bool readingSerial;
   bool readingTemperature;
   bool safeToReadTemp;
+	bool startCalibration;
 };
 
 struct StorageData {
