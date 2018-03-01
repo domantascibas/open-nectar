@@ -49,6 +49,7 @@ void mbedStream::received_main_board_state_for_power(const nectar_contract::Main
   }
   data.isInOnboarding = state.is_in_onboarding;
   data.isTestMode = state.is_test_mode_on;
+	data.startCalibration = state.calibrate;
   if(state.start) {
     device_modes::start();
   } else {
