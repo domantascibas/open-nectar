@@ -2428,7 +2428,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>error</GroupName>
+          <GroupName>engineering menu</GroupName>
           <Files>
             <File>
               <FileName>DebugScreen.cpp</FileName>
@@ -2459,6 +2459,16 @@
               <FileName>ErrorScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\error\ErrorScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>CalibrateScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\engineering_menu\CalibrateScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CalibrateScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\engineering_menu\CalibrateScreen.h</FilePath>
             </File>
           </Files>
         </Group>
