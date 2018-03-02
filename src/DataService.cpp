@@ -34,6 +34,8 @@ namespace DataService {
   
   bool gridRelayOn = false;
   bool sunRelayOn = false;
+	
+	bool calibrate_power_board = false;
 };
     
 nectar_contract::PowerBoardState powerData = {
@@ -209,4 +211,12 @@ float DataService::getSolarKwhToday() {
 
 float DataService::getBoilerPower() {
   return espData.boiler_power;
+}
+
+void DataService::setCalibrate(bool calibrate) {
+	calibrate_power_board = calibrate;
+}
+
+bool DataService::getCalibrate() {
+	return calibrate_power_board;
 }

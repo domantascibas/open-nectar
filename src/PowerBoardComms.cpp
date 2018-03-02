@@ -40,16 +40,22 @@ namespace power_board {
       gridMeter.getMeterReading(),
       startPowerBoard,
       deviceOpMode.isInTestMode(),
-      deviceOpMode.isOnboarding()
+      deviceOpMode.isOnboarding(),
+			DataService::getCalibrate()
     };
     
     StreamObject _mainStateForPower(&mainStateForPower, sizeof(mainStateForPower));
     m_stream.stream.send_state_to_power_board(_mainStateForPower);
-    printf("-> POWER %f %d %d %d\r\n",
+    printf("-> POWER %f %d %d %d %d\r\n",
     mainStateForPower.grid_meter_kwh,
     mainStateForPower.start,
     mainStateForPower.is_test_mode_on,
-    mainStateForPower.is_in_onboarding);
+    mainStateForPower.is_in_onboarding,
+		mainStateForPower.calibrate);
+		
+		if(DataService::getCalibrate()) {
+			DataService::setCalibrate(false);
+		}
   }
   
   bool is_message_valid(const nectar_contract::PowerBoardState &state) {
