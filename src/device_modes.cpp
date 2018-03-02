@@ -77,16 +77,23 @@ namespace device_modes {
     printf("[ok] interval %.2fs\r\n\n", update_interval);
     stat_timer.start();
   }
+	
+	void runCalibration() {
+		data.startCalibration = false;
+		calibrate_sensors = false;
+		sensors.calibrate();      
+		data.sun_energy_meter_kwh = 0.00;
+		data.grid_energy_meter_kwh = 0.00;
+		sensors.save_meters();
+		printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+	}
   
   void calibrate_device() {
+		if(data.startCalibration) {
+			runCalibration();
+		}
     if(calibrate_sensors) {
-      calibrate_sensors = false;
-      sensors.calibrate();
-      
-      data.sun_energy_meter_kwh = 0.00;
-      data.grid_energy_meter_kwh = 0.00;
-      sensors.save_meters();
-      printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+			runCalibration();
     }
   }
   
