@@ -4,6 +4,7 @@
 #include "menu_service.h"
 #include "DataService.h"
 #include "localization.h"
+#include "eeprom.h"
 
 //data stored in memory address 0x0802E000
 
@@ -28,6 +29,9 @@ namespace Storage {
   void saveConfig();
   void clearConfig();
   void loadConfigData();
+	
+	uint16_t saveData();
+	bool readData();
   
   void saveTemp(const TemperatureType &, const int8_t &);
   void saveTime(const time_hm &, const TimeType &);
