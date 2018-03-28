@@ -209,11 +209,45 @@
 #define NB_OF_VAR             ((uint8_t)0x09)
 
 /* Exported types ------------------------------------------------------------*/
+struct EE_TimeConfigHeaterDatastruct {
+	uint8_t device_config;
+	uint8_t esp_config;
+	uint8_t selected_heater_mode;
+	uint8_t previous_heater_mode;
+	
+	uint16_t day_starts_time;
+	uint16_t night_starts_time;
+};
+
+struct EE_LanguageTemperatureDatastruct {
+	uint16_t language;
+	uint16_t day_temperature;
+	uint16_t night_temperature;
+	uint16_t max_temperature;
+};
+
+struct EE_SettingsDatastruct {
+	uint8_t device_config;
+	uint8_t esp_config;
+	uint8_t selected_heater_mode;
+	uint8_t previous_heater_mode;
+	
+	uint16_t day_starts_time;
+	uint16_t night_starts_time;
+	
+	/* these variables could be reduced to uint8_t if need space */
+	uint16_t language;
+	uint16_t day_temperature;
+	uint16_t night_temperature;
+	uint16_t max_temperature;
+};
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 uint16_t EE_Init(void);
 uint16_t EE_ReadVariable(uint16_t VirtAddress, uint16_t* Data);
 uint16_t EE_WriteVariable(uint16_t VirtAddress, uint16_t Data);
+uint16_t EE_ReadDatastruct(EE_SettingsDatastruct* Data);
+uint16_t EE_WriteDatastruct(EE_SettingsDatastruct* Data);
 
 #endif /* __EEPROM_H */
 
