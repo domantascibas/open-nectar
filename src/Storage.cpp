@@ -1,5 +1,4 @@
 #include "storage.h"
-#include "eeprom.h"
 #include "ErrorHandler.h"
 
 // day temp, night temp, max temp
@@ -7,36 +6,30 @@
 // language
 // current heater mode, previous heater mode
 
-uint16_t StoredItem::load() {
-  EE_ReadVariable(lo_address, &storedItem);
-  return storedItem;
-}
-
-void StoredItem::save(uint16_t item) {
-  storedItem = item;
-  EE_WriteVariable(lo_address, storedItem);
-}
-
-namespace Storage {
-  StoredItem dayTemperature(0x4655);
-  StoredItem nightTemperature(0x4755);
-  StoredItem maxTemperature(0x4855);
-  StoredItem dayStartsTime(0x4955);
-  StoredItem nightStartsTime(0x4A55);
-  StoredItem selectedLanguage(0x4B55);
-  StoredItem selectedHeaterMode(0x4C55);
-  StoredItem previousHeaterMode(0x4D55);
-
+namespace Storage {	
   static const uint8_t DEVICE_CONFIGURED = 0xC0;
-  static const uint16_t CONFIG_ADDRESS = 0x4555;
-  uint16_t config;
+  uint8_t config = 0xFA;
   
   static const uint8_t ESP_CONFIGURED = 0xEC;
-  static const uint16_t ESP_CONFIG_ADDRESS = 0x4E55;
-  uint16_t esp_config;
+  uint8_t esp_config = 0xFA;
   
   bool isLanguageLoaded = false;
-  
+	bool emptyStorage = true;
+	bool batchSaving = false;
+
+	EE_SettingsDatastruct sDataStruct = {
+		config,
+		esp_config,
+		(uint8_t)DataService::getCurrentHeaterMode(),
+		(uint8_t)DataService::getPreviousHeaterMode(),
+		(menu_actions::getTime(DayStart).hours*100 + menu_actions::getTime(DayStart).minutes),
+		(menu_actions::getTime(NightStart).hours*100 + menu_actions::getTime(NightStart).minutes),
+		localization::currentLanguage(),
+		(uint16_t)menu_actions::temperature(TemperatureDay),
+		(uint16_t)menu_actions::temperature(TemperatureNight),
+		(uint16_t)menu_actions::temperature(TemperatureMax)
+	};
+
   void init() {
     __disable_irq();
     if(FLASH->CR & (0x1 << 0x7)) {
@@ -46,33 +39,52 @@ namespace Storage {
     }
     
     EE_Init();
-    EE_ReadVariable(CONFIG_ADDRESS, &config);
-    EE_ReadVariable(ESP_CONFIG_ADDRESS, &esp_config);
-    __enable_irq();
+		readData();
+		__enable_irq();
   }
+	
+	uint16_t saveData() {
+		if(!batchSaving) {
+			uint16_t pagestatus = EE_WriteDatastruct(&sDataStruct);
+			return pagestatus;
+		}
+	}
+	
+	bool readData() {
+		bool emptyStorage = true;
+		EE_SettingsDatastruct rDataStruct;
+		emptyStorage = EE_ReadDatastruct(&rDataStruct);
+		
+		if(emptyStorage) {
+			sDataStruct.device_config = 0xFA;
+			sDataStruct.esp_config = 0xFA;
+		} else {
+			sDataStruct = rDataStruct;
+		}
+		
+		return emptyStorage;
+	}
   
   bool isEspConfigured() {
-    if(esp_config == ESP_CONFIGURED) return true;
+    if(sDataStruct.esp_config == ESP_CONFIGURED) return true;
     else return false;
   }
   
   bool isConfigured() {
-    if(config == DEVICE_CONFIGURED) return true;
+    if(sDataStruct.device_config == DEVICE_CONFIGURED) return true;
     else return false;
   }
   
   void saveEspConfig() {
     __disable_irq();
-    EE_WriteVariable(ESP_CONFIG_ADDRESS, ESP_CONFIGURED);
+    sDataStruct.esp_config = ESP_CONFIGURED;
+		saveData();
     __enable_irq();
   }
   
   void saveConfig() {
-    __disable_irq();
-    EE_WriteVariable(CONFIG_ADDRESS, DEVICE_CONFIGURED);
-    __enable_irq();
-    
-    saveTemp(TemperatureDay, menu_actions::temperature(TemperatureDay));
+		batchSaving = true;
+		saveTemp(TemperatureDay, menu_actions::temperature(TemperatureDay));
     saveTemp(TemperatureNight, menu_actions::temperature(TemperatureNight));
     saveTemp(TemperatureMax, menu_actions::temperature(TemperatureMax));
     
@@ -81,29 +93,36 @@ namespace Storage {
     
     saveLanguage(localization::currentLanguage());
     saveHeaterMode(DataService::getCurrentHeaterMode(), DataService::getPreviousHeaterMode());
+		
+		batchSaving = false;
+		__disable_irq();
+		sDataStruct.device_config = DEVICE_CONFIGURED;
+    saveData();
+    __enable_irq();
   }
   
   void clearConfig() {
     __disable_irq();
-    EE_WriteVariable(CONFIG_ADDRESS, 0xFF);
-    EE_WriteVariable(ESP_CONFIG_ADDRESS, 0xFF);
-    config = false;
-    esp_config = false;
+		sDataStruct.device_config = 0xFA;
+		sDataStruct.esp_config = 0xFA;
+		saveData();
     __enable_irq();
   }
   
   void loadConfigData() {
     __disable_irq();
-    menu_actions::setTemperature(TemperatureDay, dayTemperature.load());
-    menu_actions::setTemperature(TemperatureNight, nightTemperature.load());
-    menu_actions::setTemperature(TemperatureMax, maxTemperature.load());
+//		readData();
+		
+    menu_actions::setTemperature(TemperatureDay, sDataStruct.day_temperature);
+    menu_actions::setTemperature(TemperatureNight, sDataStruct.night_temperature);
+    menu_actions::setTemperature(TemperatureMax, sDataStruct.max_temperature);
     
     menu_actions::setTime(loadTime(DayStart), DayStart);
     menu_actions::setTime(loadTime(NightStart), NightStart);
     
-    localization::setLanguage((const Language)selectedLanguage.load());
+    localization::setLanguage((const Language)sDataStruct.language);
     isLanguageLoaded = true;
-    DataService::updateHeaterMode((nectar_contract::HeaterMode)selectedHeaterMode.load(), (nectar_contract::HeaterMode)previousHeaterMode.load());
+    DataService::updateHeaterMode((nectar_contract::HeaterMode)sDataStruct.selected_heater_mode, (nectar_contract::HeaterMode)sDataStruct.previous_heater_mode);
     __enable_irq();
   }
   
@@ -111,17 +130,18 @@ namespace Storage {
     __disable_irq();
     switch(type) {
       case TemperatureDay:
-        dayTemperature.save((uint16_t)t);
+				sDataStruct.day_temperature = (uint16_t)t;
         break;
       
       case TemperatureNight:
-        nightTemperature.save((uint16_t)t);
+        sDataStruct.night_temperature = (uint16_t)t;
         break;
       
       case TemperatureMax:
-        maxTemperature.save((uint16_t)t);
+        sDataStruct.max_temperature = (uint16_t)t;
         break;
     }
+		saveData();
     __enable_irq();
   }
   
@@ -129,16 +149,17 @@ namespace Storage {
     __disable_irq();
     switch(type) {
       case DayStart:
-        dayStartsTime.save(timeItem.hours*100 + timeItem.minutes);
+				sDataStruct.day_starts_time = timeItem.hours*100 + timeItem.minutes;
         break;
       
       case NightStart:
-        nightStartsTime.save(timeItem.hours*100 + timeItem.minutes);
+				sDataStruct.night_starts_time = timeItem.hours*100 + timeItem.minutes;
         break;
       
       case Current:
         break;
     }
+		saveData();
     __enable_irq();
   }
   
@@ -148,32 +169,36 @@ namespace Storage {
       printf("[LANGUAGE] has config\r\n");
       if(isLanguageLoaded) {
         printf("[LANGUAGE] saving new language %d\r\n\n", language);
-        selectedLanguage.save((uint16_t)language);
+				sDataStruct.language = (uint16_t)language;
       }
     } else {
       printf("[LANGUAGE] no config\r\n");
       printf("[LANGUAGE] saving new language %d\r\n\n", language);
-      selectedLanguage.save((uint16_t)language);
+			sDataStruct.language = (uint16_t)language;
     }
+		saveData();
     __enable_irq();
   }
   
   void saveHeaterMode(nectar_contract::HeaterMode currMode, nectar_contract::HeaterMode prevMode) {
     __disable_irq();
-    selectedHeaterMode.save((uint16_t)currMode);
-    previousHeaterMode.save((uint16_t)prevMode);
+		sDataStruct.selected_heater_mode = (uint16_t)currMode;
+		sDataStruct.previous_heater_mode = (uint16_t)prevMode;
+		saveData();
     __enable_irq();
   }
   
   void saveCurrentHeaterMode(nectar_contract::HeaterMode mode) {
     __disable_irq();
-    selectedHeaterMode.save((uint16_t)mode);
+    sDataStruct.selected_heater_mode = (uint16_t)mode;
+		saveData();
     __enable_irq();
   }
   
   void savePreviousHeaterMode(nectar_contract::HeaterMode mode) {
     __disable_irq();
-    previousHeaterMode.save((uint16_t)mode);
+    sDataStruct.previous_heater_mode = (uint16_t)mode;
+		saveData();
     __enable_irq();
   }
   
@@ -183,11 +208,11 @@ namespace Storage {
     
     switch(type) {
       case DayStart:
-        loadedTime = dayStartsTime.load();
+        loadedTime = sDataStruct.day_starts_time;
         break;
       
       case NightStart:
-        loadedTime = nightStartsTime.load();
+        loadedTime = sDataStruct.night_starts_time;
         break;
       
       case Current:
