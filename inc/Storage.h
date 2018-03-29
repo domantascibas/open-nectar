@@ -30,4 +30,4 @@ namespace Storage {
 
 #endif
 
-// *******************************Nectar Sun Copyright ɠNectar Sun 2017*************************************   
+// *******************************Nectar Sun Copyright (C) Nectar Sun 2017*************************************   
