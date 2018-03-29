@@ -855,7 +855,7 @@ static uint16_t EE_PageTransferDatastruct(EE_TimeConfigHeaterDatastruct* DataChu
   HAL_StatusTypeDef flashstatus = HAL_OK;
   uint32_t newpageaddress = EEPROM_START_ADDRESS;
   uint32_t oldpageid = 0;
-  uint16_t validpage = PAGE0, varidx = 0;
+  uint16_t validpage = PAGE0;
   uint16_t eepromstatus = 0, readstatus = 0;
   uint32_t page_error = 0;
   FLASH_EraseInitTypeDef s_eraseinit;
@@ -920,8 +920,6 @@ static uint16_t EE_PageTransferDatastruct(EE_TimeConfigHeaterDatastruct* DataChu
     return flashstatus;
   }
   
-  
-
   /* Return last operation flash status */
   return flashstatus;
 }
