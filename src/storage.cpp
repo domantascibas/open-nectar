@@ -86,5 +86,3 @@ namespace Storage {
 		}
   }
 };
-
-// *******************************Nectar Sun Copyright � Nectar Sun 2017*************************************   

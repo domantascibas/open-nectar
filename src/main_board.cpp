@@ -95,4 +95,4 @@ StreamObject mbedStream::get_power_board_state() {
   return _powerState;
 }
 
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
+// ******************************* (C) Copyright Nectar Sun 2017*************************************   
