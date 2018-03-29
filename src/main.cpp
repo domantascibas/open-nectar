@@ -1,4 +1,5 @@
 #include "mbed.h"
+#include "storage.h"
 #include "device_modes.h"
 #include "main_board.h"
 #include "data.h"
@@ -118,6 +119,7 @@ void kickTheDog() {
 
 int main() {
   service::setup();
+	Storage::init();
   initInternalTempSensor();
   
   printf("Starting device modes\r\n");
