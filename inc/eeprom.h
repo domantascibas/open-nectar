@@ -177,18 +177,18 @@
 #define PAGE_SIZE               (uint32_t)FLASH_PAGE_SIZE  /* Page size */
 
 /* EEPROM start address in Flash */
-#define EEPROM_START_ADDRESS  ((uint32_t)ADDR_FLASH_PAGE_92) /* EEPROM emulation start address */
+#define EEPROM_START_ADDRESS  ((uint32_t)ADDR_FLASH_PAGE_126) /* EEPROM emulation start address */
 
 /* Pages 0 and 1 base and end addresses */
 #define PAGE0_BASE_ADDRESS    ((uint32_t)(EEPROM_START_ADDRESS + 0x0000))
 #define PAGE0_END_ADDRESS     ((uint32_t)(EEPROM_START_ADDRESS + (PAGE_SIZE - 1)))
 
-#define PAGE1_BASE_ADDRESS    ((uint32_t)(ADDR_FLASH_PAGE_112))
-#define PAGE1_END_ADDRESS     ((uint32_t)(ADDR_FLASH_PAGE_112 + PAGE_SIZE - 1))
+#define PAGE1_BASE_ADDRESS    ((uint32_t)(ADDR_FLASH_PAGE_127))
+#define PAGE1_END_ADDRESS     ((uint32_t)(ADDR_FLASH_PAGE_127 + PAGE_SIZE - 1))
 
 /* Used Flash pages for EEPROM emulation */
 #define PAGE0                 ((uint16_t)0x0000)
-#define PAGE1                 ((uint16_t)32) /* Page nb between PAGE0_BASE_ADDRESS & PAGE1_BASE_ADDRESS*/
+#define PAGE1                 ((uint16_t)1) /* Page nb between PAGE0_BASE_ADDRESS & PAGE1_BASE_ADDRESS*/
 
 /* No valid page define */
 #define NO_VALID_PAGE         ((uint16_t)0x00AB)
@@ -209,11 +209,43 @@
 #define NB_OF_VAR             ((uint8_t)0x09)
 
 /* Exported types ------------------------------------------------------------*/
+struct EE_SettingsDatastruct {
+  uint8_t device_calibrated;
+  uint8_t extra_property;       // currently not used
+	uint8_t extra_property2;			// currently not used
+	uint8_t extra_property3;			// currently not used
+
+  float ref_voltage;
+  float ref_current;
+
+  float sun_meter;
+  float grid_meter;
+};
+
+struct EE_PropertiesDatastruct {
+  uint8_t device_calibrated;
+  uint8_t extra_property;       // currently not used
+	uint8_t extra_property2;			// currently not used
+	uint8_t extra_property3;			// currently not used
+};
+
+struct EE_CalibrationDatastruct {
+  float ref_voltage;
+  float ref_current;
+};
+
+struct EE_MeterDatastruct {
+  float sun_meter;
+  float grid_meter;
+};
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 uint16_t EE_Init(void);
 uint16_t EE_ReadVariable(uint16_t VirtAddress, uint16_t* Data);
 uint16_t EE_WriteVariable(uint16_t VirtAddress, uint16_t Data);
+uint16_t EE_ReadDatastruct(EE_SettingsDatastruct* Data);
+uint16_t EE_WriteDatastruct(EE_SettingsDatastruct* Data);
 
 #endif /* __EEPROM_H */
 
