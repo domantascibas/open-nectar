@@ -26,7 +26,6 @@ void SensorController::init() {
   if(currentSensor.ping()) nectarError.clear_error(ADC_CURRENT_ERROR);
   else nectarError.set_error(ADC_CURRENT_ERROR);
 
-  Storage::init();
   if(!nectarError.has_error(FLASH_ACCESS_ERROR)) {
     Storage::load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
     voltageSensor.set_reference(data.reference_voltage);
