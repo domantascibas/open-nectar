@@ -4,21 +4,7 @@
 #include "menu_service.h"
 #include "DataService.h"
 #include "localization.h"
-
-//data stored in memory address 0x0802E000
-
-struct StoredItem {
-  StoredItem(const uint16_t address) 
-    : lo_address(address), hi_address(address + 0x100) {};
-  void save(uint16_t);
-  uint16_t load();
-  
-private:
-  const uint16_t lo_address;
-  const uint16_t hi_address;
-  
-  uint16_t storedItem;
-};
+#include "eeprom.h"
 
 namespace Storage {
   void init();
@@ -28,6 +14,9 @@ namespace Storage {
   void saveConfig();
   void clearConfig();
   void loadConfigData();
+	
+	uint16_t saveData();
+	bool readData();
   
   void saveTemp(const TemperatureType &, const int8_t &);
   void saveTime(const time_hm &, const TimeType &);
@@ -41,4 +30,4 @@ namespace Storage {
 
 #endif
 
-// *******************************Nectar Sun Copyright ɠNectar Sun 2017*************************************   
+// *******************************Nectar Sun Copyright (C) Nectar Sun 2017*************************************   
