@@ -2,22 +2,6 @@
 #include "eeprom.h"
 #include "ErrorHandler.h"
 
-void StoredItem::load(float *item) {
-  EE_ReadVariable(lo_address, &u.b[1]);
-  EE_ReadVariable(hi_address, &u.b[0]);
-  *item =  u.f;
-}
-  
-void StoredItem::save(float item) {
-  u.f = item;
-  EE_WriteVariable(lo_address, u.b[1]);
-  EE_WriteVariable(hi_address, u.b[0]);
-}
-  
-void StoredItem::read(float *item) {
-  *item = u.f;
-}
-
 namespace Storage {
   static const uint8_t DEVICE_CALIBRATED = 0xCA;
   uint8_t calibrated = 0xFA;
@@ -103,4 +87,4 @@ namespace Storage {
   }
 };
 
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
+// *******************************Nectar Sun Copyright ï¿½ Nectar Sun 2017*************************************   
