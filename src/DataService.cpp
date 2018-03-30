@@ -99,10 +99,20 @@ float TemperatureData::getTemperature() {
     time_hm currentTime = menu_actions::getTime(Current);
     time_hm dayStartTime = menu_actions::getTime(DayStart);
     time_hm dayEndTime = menu_actions::getTime(NightStart);
-    
-    if((timeHMtoTime(currentTime) > timeHMtoTime(dayStartTime)) && (timeHMtoTime(currentTime) < timeHMtoTime(dayEndTime)))
-      return dayTemperature;
-    else return nightTemperature;
+
+    if (timeHMtoTime(dayStartTime) < timeHMtoTime(dayEndTime)) {
+      if ((timeHMtoTime(currentTime) > timeHMtoTime(dayStartTime)) && (timeHMtoTime(currentTime) < timeHMtoTime(dayEndTime))) {
+        return dayTemperature;
+      } else {
+        return nightTemperature;
+      }
+    } else {
+      if ((timeHMtoTime(currentTime) < timeHMtoTime(dayStartTime)) && (timeHMtoTime(currentTime) > timeHMtoTime(dayEndTime))) {
+        return nightTemperature;
+      } else {
+        return dayTemperature;
+      }
+    }
   }
 }
 
