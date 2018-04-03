@@ -1,4 +1,5 @@
 #include "mbed.h"
+#include "storage.h"
 #include "device_modes.h"
 #include "main_board.h"
 #include "data.h"
@@ -62,10 +63,6 @@ DigitalOut pf0(PF_0);
 DigitalOut pf1(PF_1);
 DigitalOut pf11(PF_11);
 
-#define VERSION_MAJOR         1
-#define VERSION_MINOR         0
-#define VERSION_REVISION      2
-
 void initInternalTempSensor() {
   /* This code selects the HSI14 as clock source. */
   /* (1) Enable the peripheral clock of the ADC */
@@ -118,6 +115,7 @@ void kickTheDog() {
 
 int main() {
   service::setup();
+	Storage::init();
   initInternalTempSensor();
   
   printf("Starting device modes\r\n");
@@ -134,8 +132,6 @@ int main() {
     device_modes::calibrate_device();
     __WFI();
   }
-  
-  printf("Reached end of program\r\n");
 }
 
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
+// *******************************(C) Copyright Nectar Sun 2017*************************************   
