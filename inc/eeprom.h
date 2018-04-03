@@ -177,18 +177,18 @@
 #define PAGE_SIZE               (uint32_t)FLASH_PAGE_SIZE  /* Page size */
 
 /* EEPROM start address in Flash */
-#define EEPROM_START_ADDRESS  ((uint32_t)ADDR_FLASH_PAGE_127) /* EEPROM emulation start address */
+#define EEPROM_START_ADDRESS  ((uint32_t)ADDR_FLASH_PAGE_126) /* EEPROM emulation start address */
 
 /* Pages 0 and 1 base and end addresses */
 #define PAGE0_BASE_ADDRESS    ((uint32_t)(EEPROM_START_ADDRESS + 0x0000))
 #define PAGE0_END_ADDRESS     ((uint32_t)(EEPROM_START_ADDRESS + (PAGE_SIZE - 1)))
 
-#define PAGE1_BASE_ADDRESS    ((uint32_t)(ADDR_FLASH_PAGE_112))
-#define PAGE1_END_ADDRESS     ((uint32_t)(ADDR_FLASH_PAGE_112 + PAGE_SIZE - 1))
+#define PAGE1_BASE_ADDRESS    ((uint32_t)(ADDR_FLASH_PAGE_127))
+#define PAGE1_END_ADDRESS     ((uint32_t)(ADDR_FLASH_PAGE_127 + PAGE_SIZE - 1))
 
 /* Used Flash pages for EEPROM emulation */
 #define PAGE0                 ((uint16_t)0x0000)
-#define PAGE1                 ((uint16_t)32) /* Page nb between PAGE0_BASE_ADDRESS & PAGE1_BASE_ADDRESS*/
+#define PAGE1                 ((uint16_t)1) /* Page nb between PAGE0_BASE_ADDRESS & PAGE1_BASE_ADDRESS*/
 
 /* No valid page define */
 #define NO_VALID_PAGE         ((uint16_t)0x00AB)
@@ -209,11 +209,45 @@
 #define NB_OF_VAR             ((uint8_t)0x09)
 
 /* Exported types ------------------------------------------------------------*/
+struct EE_TimeConfigHeaterDatastruct {
+	uint8_t device_config;
+	uint8_t esp_config;
+	uint8_t selected_heater_mode;
+	uint8_t previous_heater_mode;
+	
+	uint16_t day_starts_time;
+	uint16_t night_starts_time;
+};
+
+struct EE_LanguageTemperatureDatastruct {
+	uint16_t language;
+	uint16_t day_temperature;
+	uint16_t night_temperature;
+	uint16_t max_temperature;
+};
+
+struct EE_SettingsDatastruct {
+	uint8_t device_config;
+	uint8_t esp_config;
+	uint8_t selected_heater_mode;
+	uint8_t previous_heater_mode;
+	
+	uint16_t day_starts_time;
+	uint16_t night_starts_time;
+	
+	/* these variables could be reduced to uint8_t if need space */
+	uint16_t language;
+	uint16_t day_temperature;
+	uint16_t night_temperature;
+	uint16_t max_temperature;
+};
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 uint16_t EE_Init(void);
 uint16_t EE_ReadVariable(uint16_t VirtAddress, uint16_t* Data);
 uint16_t EE_WriteVariable(uint16_t VirtAddress, uint16_t Data);
+uint16_t EE_ReadDatastruct(EE_SettingsDatastruct* Data);
+uint16_t EE_WriteDatastruct(EE_SettingsDatastruct* Data);
 
 #endif /* __EEPROM_H */
 
