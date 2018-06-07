@@ -4,6 +4,7 @@
 #include "menu_service.h"
 #include "DataService.h"
 #include "CommsController.h"
+#include "consts.h"
 
 extern RelayController relayController;
 
@@ -42,7 +43,10 @@ namespace esp {
       rtc,
       deviceOpMode.isReset(),
       deviceOpMode.isPairing(),
-      deviceOpMode.isBoostOff()
+      deviceOpMode.isBoostOff(),
+			powerData.ref_voltage,
+			powerData.ref_current,
+			(uint16_t)NECTAR_MAIN_BOARD_VERSION
     };
     
     StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
