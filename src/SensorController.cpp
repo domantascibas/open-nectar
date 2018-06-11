@@ -5,6 +5,7 @@
 #include "data.h"
 
 const float VOLTAGE_LIMIT = 350.0;
+// const float VOLTAGE_LIMIT = 440.0; // vido config
 const float CURRENT_LIMIT = 9.0;
 const float LEAKAGE_CURRENT = 0.4;
 
