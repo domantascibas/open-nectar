@@ -25,6 +25,12 @@ namespace device_modes {
   bool isSunRelayOn() {
     return relayController.isSunRelayOn();
   }
+	
+	bool turnOffRelays() {
+		relayStateNew = TURN_OFF_ALL;
+    relayController.setRelays(relayStateNew);
+		return true;
+	}
   
   void setup() {
     update_mode_tick.attach(update_mode_ISR, 1.5);
@@ -39,7 +45,7 @@ namespace device_modes {
   }
 
   void loop() {
-    if(updateHeaterMode && relayController.finishedSwitching()) {
+    if(updateHeaterMode && relayController.finishedSwitching() && !DataService::getCalibrate()) {
       updateHeaterMode = false;
       
       float temp = temperatureData.getTemperature();
