@@ -465,6 +465,16 @@
               <FileType>8</FileType>
               <FilePath>.\src\CommsController.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Sanitizer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Sanitizer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BoostTimeout.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\BoostTimeout.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2069,6 +2079,16 @@
               <FileName>CommsController.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\CommsController.h</FilePath>
+            </File>
+            <File>
+              <FileName>Sanitizer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\Sanitizer.h</FilePath>
+            </File>
+            <File>
+              <FileName>BoostTimeout.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\BoostTimeout.h</FilePath>
             </File>
           </Files>
         </Group>
