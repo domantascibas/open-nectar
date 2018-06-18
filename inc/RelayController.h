@@ -7,7 +7,8 @@
 enum RelayStates {
   TURN_OFF_ALL,
   TURN_ON_SUN,
-  TURN_ON_GRID
+  TURN_ON_GRID,
+	TURN_OFF_SUN
 };
 
 struct RelayController {

@@ -8,6 +8,7 @@ namespace esp {
   void setup();
   void send_message();
   bool is_message_valid(const nectar_contract::ESPState &state);
+  bool receivedFirstMessage();
 }
 
 class mbedStream : public IStreamDelegate {

@@ -8,7 +8,7 @@ namespace power_board {
   void setup();
   void start();
   void stop();
-  bool hasReceivedFirstMessage();
+  bool receivedFirstMessage();
   void send_message();
   bool is_message_valid(const nectar_contract::PowerBoardState &state);
 }

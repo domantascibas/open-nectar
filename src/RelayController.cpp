@@ -29,10 +29,7 @@ uint8_t RelayController::getRelayState() {
 
 void RelayController::setRelays(uint8_t state) {
   relayState = state;
-  if(mainBoardError.has_error(NO_BOILER_TEMP) ||mainBoardError.has_error(DEVICE_OVERHEAT) || mainBoardError.has_error(MIN_TEMPERATURE) || mainBoardError.has_error(MAX_TEMPERATURE)) {
-    relayState = TURN_OFF_ALL;
-    printf("overheat/temperature-related errors\r\n");
-  }
+	
   switch(relayState) {
     default:
     case TURN_OFF_ALL:
@@ -41,17 +38,17 @@ void RelayController::setRelays(uint8_t state) {
       gridMeter.stopMeter();
       printf("turn off all\r\n");
       break;
+		
+		case TURN_OFF_SUN:
+			sunRelay.turnOff();
+			printf("turn on sun\r\n");
+			break;
     
     case TURN_ON_SUN:
-      if(!powerBoardError.has_errors) {
-        gridRelay.turnOff();
-        sunRelay.turnOn();
-        gridMeter.stopMeter();
-        printf("turn on sun\r\n");
-      } else {
-        printf("power board error.\r\n");
-        setRelays(TURN_OFF_ALL);
-      }
+			gridRelay.turnOff();
+			sunRelay.turnOn();
+			gridMeter.stopMeter();
+			printf("turn on sun\r\n");
       break;
     
     case TURN_ON_GRID:

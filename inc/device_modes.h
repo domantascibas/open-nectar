@@ -10,6 +10,7 @@ namespace device_modes {
   void reset();
   bool isGridRelayOn();
   bool isSunRelayOn();
+	bool turnOffRelays();
 }
 
 #endif
