@@ -38,6 +38,7 @@ namespace DataService {
 	bool calibrate_power_board = false;
 	float esp_version = 0;
 	float power_version = 0;
+	bool day_time = false;
 };
     
 nectar_contract::PowerBoardState powerData = {
@@ -100,23 +101,11 @@ void TemperatureData::setDeviceTemperature(float temp) {
 float TemperatureData::getTemperature() {
   if(deviceOpMode.isConfigured()) return espData.temperature;
   else {
-    time_hm currentTime = menu_actions::getTime(Current);
-    time_hm dayStartTime = menu_actions::getTime(DayStart);
-    time_hm dayEndTime = menu_actions::getTime(NightStart);
-
-    if (timeHMtoTime(dayStartTime) <= timeHMtoTime(dayEndTime)) {
-      if ((timeHMtoTime(currentTime) >= timeHMtoTime(dayStartTime)) && (timeHMtoTime(currentTime) < timeHMtoTime(dayEndTime))) {
-        return dayTemperature;
-      } else {
-        return nightTemperature;
-      }
-    } else {
-      if ((timeHMtoTime(currentTime) < timeHMtoTime(dayStartTime)) && (timeHMtoTime(currentTime) >= timeHMtoTime(dayEndTime))) {
-        return nightTemperature;
-      } else {
-        return dayTemperature;
-      }
-    }
+		if(DataService::isDayTime()) {
+			return dayTemperature;
+		} else {
+			return nightTemperature;
+		}
   }
 }
 
@@ -233,4 +222,25 @@ void DataService::setCalibrate(bool calibrate) {
 
 bool DataService::getCalibrate() {
 	return calibrate_power_board;
+}
+
+bool DataService::isDayTime(void) {
+	time_hm currentTime = menu_actions::getTime(Current);
+	time_hm dayStartTime = menu_actions::getTime(DayStart);
+	time_hm dayEndTime = menu_actions::getTime(NightStart);
+	
+	if (timeHMtoTime(dayStartTime) <= timeHMtoTime(dayEndTime)) {
+		if ((timeHMtoTime(currentTime) >= timeHMtoTime(dayStartTime)) && (timeHMtoTime(currentTime) < timeHMtoTime(dayEndTime))) {
+			day_time = true;
+		} else {
+			day_time = false;
+		}
+	} else {
+		if ((timeHMtoTime(currentTime) < timeHMtoTime(dayStartTime)) && (timeHMtoTime(currentTime) >= timeHMtoTime(dayEndTime))) {
+			day_time = false;
+		} else {
+			day_time = true;
+		}
+	}
+	return day_time;
 }

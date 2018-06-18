@@ -23,7 +23,8 @@ namespace DataService {
   float getBoilerPower();
 	
 	void setCalibrate(bool);
-	bool getCalibrate();
+	bool getCalibrate(void);
+	bool isDayTime(void);
 };
 
 struct TemperatureData {
