@@ -29,22 +29,22 @@ namespace esp {
     time_t rtc = time(NULL);
     nectar_contract::MainBoardStateForESP mainStateForEsp = {
       powerData.sun_power,
-      relayController.isGridRelayOn(),
+      (relayController.isGridRelayOn() ? 0xAC : 0xFA),
       temperatureData.getBoilerTemperature(),
-      relayController.isSunRelayOn(),
+      (relayController.isSunRelayOn() ? 0xAC : 0xFA),
       powerData.sun_voltage,
       powerData.sun_current,
       temperatureData.getDeviceTemperature(),
-      powerData.transistor_overheat_on,
+      (powerData.transistor_overheat_on ? 0xAC : 0xFA),
       powerData.pwm_duty,
       powerBoardError.get_errors(),
       mainBoardError.get_errors(),
       powerData.sun_meter_kwh,
       powerData.grid_meter_kwh,
       rtc,
-      deviceOpMode.isReset(),
-      deviceOpMode.isPairing(),
-      deviceOpMode.isBoostOff(),
+      (deviceOpMode.isReset() ? 0xAC : 0xFA),
+      (deviceOpMode.isPairing() ? 0xAC : 0xFA),
+      (deviceOpMode.isBoostOff() ? 0xAC : 0xFA),
 			powerData.ref_voltage,
 			powerData.ref_current,
 			(uint16_t)NECTAR_MAIN_BOARD_VERSION
@@ -58,18 +58,18 @@ namespace esp {
       mainStateForEsp.sun_voltage,
       mainStateForEsp.sun_current,
       mainStateForEsp.pwm_duty,
-      mainStateForEsp.sun_relay_on,
-      mainStateForEsp.grid_relay_on,
+			(mainStateForEsp.sun_relay_on == 0xAC ? true : false),
+      (mainStateForEsp.grid_relay_on == 0xAC ? true : false),
       mainStateForEsp.water_temperature,
       mainStateForEsp.device_temperature,
-      mainStateForEsp.transistor_overheat_on,
+      (mainStateForEsp.transistor_overheat_on == 0xAC ? true : false),
       mainStateForEsp.main_board_error_code,
       mainStateForEsp.power_board_error_code,
       mainStateForEsp.sun_meter_kwh,
       mainStateForEsp.grid_meter_kwh,
-      mainStateForEsp.reset,
-      mainStateForEsp.pair_mode,
-      mainStateForEsp.send_boost_off
+      (mainStateForEsp.reset == 0xAC ? true : false),
+      (mainStateForEsp.pair_mode == 0xAC ? true : false),
+      (mainStateForEsp.send_boost_off == 0xAC ? true : false)
       );
     if(deviceOpMode.isReset()) deviceOpMode.setReset(false);
   }
@@ -128,8 +128,18 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
   if(esp::is_message_valid(state)) {
     __disable_irq();
     espData.pin = state.pin;
-    if(state.is_configured) {
-      espData = state;
+		espData.esp_version = state.esp_version;
+    if(state.is_configured == 0xAC) {
+//      espData = state;
+			espData.heater_mode = state.heater_mode;
+			espData.is_configured = (state.is_configured == 0xAC ? true : false);
+			espData.has_internet_connection = (state.has_internet_connection == 0xAC ? true : false);
+			espData.temperature = state.temperature;
+			espData.temperature_max = state.temperature_max;
+			espData.boiler_power = state.boiler_power;
+			espData.sync_time = state.sync_time;
+			espData.pin = state.pin;
+	float esp_version;
       if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost)
         deviceOpMode.setBoostOff(false);
       if(DataService::getCurrentHeaterMode() != (nectar_contract::HeaterMode)espData.heater_mode) {
@@ -137,7 +147,7 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
         DataService::setCurrentHeaterMode((nectar_contract::HeaterMode)espData.heater_mode);
       }
       device_modes::updateHeaterMode = true;
-      printf("ESP -> %d %d %d %f %f %f %lld %d\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin);
+      printf("ESP -> %d %d %d %f %f %f %lld %d %1.2f\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin, espData.esp_version/100);
       if(espData.sync_time != 0) {
         set_time(espData.sync_time);
         time_t sec = time(NULL);
@@ -146,8 +156,9 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
       }
       __enable_irq();
     } else {
-      printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld %d\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin);
+      printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld %d %1.2f\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin, espData.esp_version/100);
     }
+    if(!esp::received_first_msg) esp::received_first_msg = true;
   } else {
     printf("ESP -> RECEIVED INVALID DATA IN MESSAGE\r\n");
   }
