@@ -46,17 +46,17 @@ void RelayController::setRelays(uint8_t state) {
       gridMeter.stopMeter();
       printf("turn off all\r\n");
       break;
+		
+		case TURN_OFF_SUN:
+			sunRelay.turnOff();
+			printf("turn on sun\r\n");
+			break;
     
     case TURN_ON_SUN:
-      if(!powerBoardError.has_errors) {
-        gridRelay.turnOff();
-        sunRelay.turnOn();
-        gridMeter.stopMeter();
-        printf("turn on sun\r\n");
-      } else {
-        printf("power board error.\r\n");
-        setRelays(TURN_OFF_ALL);
-      }
+			gridRelay.turnOff();
+			sunRelay.turnOn();
+			gridMeter.stopMeter();
+			printf("turn on sun\r\n");
       break;
     
     case TURN_ON_GRID:
