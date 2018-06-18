@@ -42,7 +42,14 @@ namespace Storage {
 			sDataStruct = rDataStruct;
 		}
 		
-    if(sDataStruct.device_calibrated == DEVICE_CALIBRATED) nectarError.clear_error(CALIBRATION_ERROR);
+    if(sDataStruct.device_calibrated == DEVICE_CALIBRATED) {
+			nectarError.clear_error(CALIBRATION_ERROR);
+			if(((sDataStruct.ref_voltage < 0.002) && (sDataStruct.ref_voltage > 0.001)) && ((sDataStruct.ref_current < 2.2) && (sDataStruct.ref_current > 1.8))) {
+				nectarError.clear_error(CALIBRATION_ERROR);
+			} else {
+				nectarError.set_error(CALIBRATION_ERROR);
+			}
+		}
   }
   
   void load_data(float *voltage, float *current, float *sun, float *grid) {
