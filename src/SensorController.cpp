@@ -98,19 +98,39 @@ float SensorController::get_current_reference() {
 }
 
 void SensorController::calibrate() {
-  if(nectarError.has_error(CALIBRATION_ERROR)) {
-    nectarError.clear_error(CALIBRATION_ERROR);
-  }
   printf("Calibrating\r\n");
   
   voltageSensor.calibrate();
   currentSensor.calibrate();
   
-  Storage::save_data(voltageSensor.get_reference(), currentSensor.get_reference());
-  data.reference_current = currentSensor.get_reference();
-  data.reference_voltage = voltageSensor.get_reference();
-  printf("[ok] calibrated. v_ref = %fV, i_ref = %fA\r\n", voltageSensor.get_reference(), currentSensor.get_reference());
-  
+	float c_voltage = voltageSensor.get_reference();
+	float c_current = currentSensor.get_reference();
+	
+	if(((c_voltage < 0.002) && (c_voltage > 0.001)) && ((c_current < 2.2) && (c_current > 1.8))) {
+		if(nectarError.has_error(CALIBRATION_ERROR)) {
+			nectarError.clear_error(CALIBRATION_ERROR);
+		}
+		Storage::save_data(c_voltage, c_current);
+		data.reference_voltage = c_voltage;	
+		data.reference_current = c_current;
+		printf("\r\n");
+		printf("[ok] calibrated. v_ref = %fV, i_ref = %fA\r\n", c_voltage, c_current);
+		printf("\r\n");
+	} else {
+//		nectarError.set_error(CALIBRATION_ERROR);
+//		data.reference_voltage = c_voltage;
+//		data.reference_current = c_current;
+		printf("\r\n");
+		printf("[warn] bad calibration. v_ref = %fV, i_ref = %fA\r\n", c_voltage, c_current);
+		printf("*** Please recalibrate with DC+/- inputs shorted ***\r\n");
+		if(!nectarError.has_error(CALIBRATION_ERROR)) {
+			Storage::load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
+			printf("[warn] loaded last calibration data from memory\r\n");
+			printf("[warn] v_ref = %fV, i_ref = %fA\r\n", data.reference_voltage, data.reference_current);
+		}
+		printf("\r\n");
+	}
+
   init();
   data.isCalibrating = false;
 }
