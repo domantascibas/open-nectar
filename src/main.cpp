@@ -100,7 +100,7 @@ void initIndependentWatchdog() {
   IWDG->KR = 0xCCCC; /* (1) */
   IWDG->KR = 0x5555; /* (2) */
   IWDG->PR = IWDG_PR_PR_0; /* (3) */
-  IWDG->RLR = 0xFFF; /* (4) */
+  IWDG->RLR = 0xFFFF; /* (4) */
   while (IWDG->SR) /* (5) */
   {
   /* add time out here for a robust application */
