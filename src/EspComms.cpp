@@ -10,6 +10,7 @@ extern RelayController relayController;
 
 namespace esp {
   Ticker get_data_tick;
+  bool received_first_msg = false;
 
   static const PinName TX = PA_9;   //D8
   static const PinName RX = PA_10;  //D2
@@ -88,6 +89,10 @@ namespace esp {
     } else {
       return true;
     }
+  }
+
+  bool receivedFirstMessage() {
+    return received_first_msg;
   }
 }
 

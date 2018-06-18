@@ -10,6 +10,9 @@
 #include "Storage.h"
 #include "CommsController.h"
 
+static const float POWER_INIT_TIMEOUT = 5;
+static const float ESP_INIT_TIMEOUT = 20;
+
 DigitalOut pa0(PA_0);
 DigitalOut pa1(PA_1);
 //DigitalOut pa2(PA_2);
@@ -70,6 +73,7 @@ DigitalOut pf11(PF_11);
 bool inErrorScreen = false;
 
 TemperatureController tempController;
+Timer comms_timeout;
 
 void initInternalTempSensor() {
   /* This code selects the HSI14 as clock source. */
@@ -121,7 +125,8 @@ void kickTheDog() {
 //  printf("kick the dog\r\n");
 }
 
-int main() {  
+int main() {
+	float current_s;
   static bool isFirst = true;
   Storage::init();
   
@@ -137,24 +142,46 @@ int main() {
   wait(0.5);
   tempController.updateTemperatures();
   wait(0.5);
-  menu_service::updateScreen();
-  esp::setup();
-  wait(1.0);
-  power_board::setup();
-  wait(0.4);
-  menu_service::updateScreen();
-  device_modes::setup();
+
+	menu_service::updateScreen();
+	wait(0.5);
+	esp::setup();
+	wait(0.5);
+	power_board::setup();
+	
+	comms_timeout.start();
+  current_s = comms_timeout.read();
+	while((!power_board::receivedFirstMessage() || (powerData.power_version == 0.00)) && (current_s < POWER_INIT_TIMEOUT)) {
+		__WFI();
+		current_s = comms_timeout.read();
+	}
+	comms_timeout.stop();
+	comms_timeout.reset();
+//  wait(1.0);
+	menu_service::updateScreen();
+  wait(1.5);
+	
+	menu_service::updateScreen();
+	comms_timeout.start();
+	current_s = comms_timeout.read();
+  while((!esp::receivedFirstMessage() || (espData.esp_version == 0.00)) && (current_s < ESP_INIT_TIMEOUT)) {
+		__WFI();
+		current_s = comms_timeout.read();
+	}
+	comms_timeout.stop();
+	comms_timeout.reset();
+//	wait(1.0);
+	menu_service::updateScreen();
+  wait(1.5);
   
-  
-  initIndependentWatchdog();
+	menu_service::updateScreen();
+	device_modes::setup();
+  wait(2);
+	
+	initIndependentWatchdog();
   deviceOpMode.endLoading();
   
   while(1) {
-    while(!power_board::hasReceivedFirstMessage()) {
-      kickTheDog();
-      __WFI();
-    }
-    
     kickTheDog();
     
     if(isFirst) {

@@ -36,6 +36,8 @@ namespace DataService {
   bool sunRelayOn = false;
 	
 	bool calibrate_power_board = false;
+	float esp_version = 0;
+	float power_version = 0;
 };
     
 nectar_contract::PowerBoardState powerData = {
@@ -51,7 +53,8 @@ nectar_contract::PowerBoardState powerData = {
   DataService::solar_kwh,
   DataService::grid_kwh,
   DataService::ref_voltage,
-  DataService::ref_current
+  DataService::ref_current,
+	DataService::power_version
 };
 
 nectar_contract::ESPState espData = {
@@ -62,7 +65,8 @@ nectar_contract::ESPState espData = {
   temperatureData.getMaxTemperature(),
   DataService::boiler_power,
   0,
-  DataService::pin
+  DataService::pin,
+	DataService::esp_version
 };
 
 time_t timeHMtoTime(time_hm timeHM) {

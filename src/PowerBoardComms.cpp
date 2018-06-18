@@ -6,7 +6,7 @@
 
 namespace power_board {
   Ticker get_data_tick;
-  bool isFirst = true;
+  bool received_first_msg = false;
 
   static bool startPowerBoard = false;
   static const PinName TX = PB_10;
@@ -31,8 +31,8 @@ namespace power_board {
     m_stream.setup();
   }
   
-  bool hasReceivedFirstMessage() {
-    return !isFirst;
+  bool receivedFirstMessage() {
+    return received_first_msg;
   }
   
   void send_message() {
