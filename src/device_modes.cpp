@@ -135,14 +135,9 @@ namespace device_modes {
       }
 			
 			if(powerData.sun_voltage < 10.0){
-				if(deviceOpMode.isConfigured()) {
+				if(!DataService::isDayTime()) {
 					if(((relayController.getRelayState() == TURN_ON_SUN) && (relayStateNew == TURN_ON_SUN)) || ((relayController.getRelayState() == TURN_OFF_SUN) && (relayStateNew == TURN_ON_SUN)))
 						relayStateNew = TURN_OFF_SUN;
-				} else {
-					if(!DataService::isDayTime()) {
-						if(((relayController.getRelayState() == TURN_ON_SUN) && (relayStateNew == TURN_ON_SUN)) || ((relayController.getRelayState() == TURN_OFF_SUN) && (relayStateNew == TURN_ON_SUN)))
-							relayStateNew = TURN_OFF_SUN;
-					}
 				}
 			}
 			
