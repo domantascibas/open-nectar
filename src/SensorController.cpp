@@ -4,7 +4,7 @@
 #include "ErrorHandler.h"
 #include "data.h"
 
-const float VOLTAGE_LIMIT = 350.0;
+const float VOLTAGE_LIMIT = 385.0;
 //const float VOLTAGE_LIMIT = 25.0;
 // const float VOLTAGE_LIMIT = 440.0; // vido config
 const float CURRENT_LIMIT = 10.0;
