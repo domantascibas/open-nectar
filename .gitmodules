@@ -1,6 +1,3 @@
-[submodule "submodules"]
-	path = submodules
-	url = git@bitbucket.org:nectarsun/nectar_serial.git 
 [submodule "submodules/nectar_serial"]
 	path = submodules/nectar_serial
 	url = git@bitbucket.org:nectarsun/nectar_serial.git
