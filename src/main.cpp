@@ -120,7 +120,7 @@ int main() {
   
   printf("Starting device modes\r\n");
   device_modes::setup();
-  DEBUG_PRINT("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+  printf("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   main_board::setup();
   printf("SETUP DONE\r\n");
   

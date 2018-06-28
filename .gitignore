@@ -1,8 +1,15 @@
-*.paplaukias
-*.uvoptx
+# ignore .vscode
+.vscode/
+
+# ignore mbed-os lib
+mbed-os/
+mbed/
+.temp/
+
+# ignore build folder
 BUILD/
-*.scvd
-*.TMP
-*.doman
-*.dbgconf
-*.bin
+
+# ignore .py and .pyc files
+.mbed
+*.py
+*.pyc
