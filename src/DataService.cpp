@@ -39,6 +39,7 @@ namespace DataService {
 	float esp_version = 0;
 	float power_version = 0;
 	bool day_time = false;
+	bool mode_selected = false;
 };
     
 nectar_contract::PowerBoardState powerData = {
@@ -168,6 +169,7 @@ void DataService::resetData(void) {
   espData.boiler_power = boiler_power;
   espData.sync_time = 0;
   espData.pin = 0;
+	mode_selected = false;
 }
 
 void DataService::updateHeaterMode(nectar_contract::HeaterMode currMode, nectar_contract::HeaterMode prevMode) {
@@ -244,3 +246,11 @@ bool DataService::isDayTime(void) {
 	}
 	return day_time;
 }
+
+void DataService::modeSelected(void) {
+	mode_selected = true;
+}
+
+bool DataService::isModeSelected(void) {
+	return mode_selected;
+}	

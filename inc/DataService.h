@@ -25,6 +25,8 @@ namespace DataService {
 	void setCalibrate(bool);
 	bool getCalibrate(void);
 	bool isDayTime(void);
+	void modeSelected(void);
+	bool isModeSelected(void);
 };
 
 struct TemperatureData {
