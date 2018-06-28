@@ -8,6 +8,7 @@ struct MpptController {
   
   void init();
   void track();
+	void stop();
   void reset();
   void swipe(float, float, float);
   float get_duty();

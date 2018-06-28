@@ -60,7 +60,7 @@ void parseCommand(uint8_t command) {
     
     case RESET_DUTY:
       if(data.current_state == MANUAL) {
-        mppt.reset();
+        mppt.stop();
         printf("\r\nPWM DUTY RESET %f\r\n\n", mppt.get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
