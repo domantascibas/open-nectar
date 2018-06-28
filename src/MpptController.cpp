@@ -5,7 +5,7 @@
 #include "data.h"
 
 static const float PWM_STEP = 0.02;
-static const float POWER_THRESHOLD = 50.0;
+static const float CURRENT_THRESHOLD = 0.075;
 static const PinName DEVICE_TEMP_PROBE = PC_7;
 static const float DEVICE_TEMPERATURE_LIMIT_MAX = 85.0;
 static const int PROCESSOR_INTERNAL_TEMPERATURE_LIMIT = 120;
@@ -38,7 +38,8 @@ void MpptController::track() {
   data.moment_power = moment_power;
   dP = moment_power - old_power;
   
-  if((moment_power < POWER_THRESHOLD) && (pwmGenerator.get_duty() > 0.5 )) {
+//  if((data.moment_current < CURRENT_THRESHOLD) && (pwmGenerator.get_duty() >= 0.94 )) {
+	if(data.moment_current < CURRENT_THRESHOLD) {
     reset();
     old_power = moment_power;
   } else {
@@ -74,11 +75,19 @@ void MpptController::track() {
   }
 }
 
+void MpptController::stop() {
+  last_increase = true;
+  pwmGenerator.stop();
+  pwmGenerator.set_duty(0.1);
+  data.moment_power = 0;	
+}
+
 void MpptController::reset() {
   last_increase = true;
   pwmGenerator.stop();
   pwmGenerator.set_duty(0.1);
   data.moment_power = 0;
+	pwmGenerator.start();
 }
 
 void MpptController::swipe(float min, float max, float step) {
@@ -118,7 +127,7 @@ float MpptController::getDeviceTemperature() {
   } else {
     if(nectarError.has_error(DEVICE_OVERHEAT) && (deviceTemperature < (DEVICE_TEMPERATURE_LIMIT_MAX - 5.0))) nectarError.clear_error(DEVICE_OVERHEAT);
   }
-  printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
+//  printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
   return deviceTemperature;
 }
 
@@ -159,7 +168,7 @@ void MpptController::updateTemperatures() {
     }
     
     if(deviceTemp.isNewValueAvailable()) {
-      printf("[MPPT] update device temperature\r\n");
+//      printf("[MPPT] 	 device temperature\r\n");
   //    deviceTemp.setNewValueNotAvailable();
       data.device_temperature = getDeviceTemperature();
       readInternalTempSensor();
