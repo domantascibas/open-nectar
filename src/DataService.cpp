@@ -39,6 +39,7 @@ namespace DataService {
 	float esp_version = 0;
 	float power_version = 0;
 	bool day_time = false;
+	bool mode_selected = false;
 };
     
 nectar_contract::PowerBoardState powerData = {
@@ -98,7 +99,7 @@ void TemperatureData::setDeviceTemperature(float temp) {
   deviceTemperature = temp;
 }
 
-float TemperatureData::getTemperature() {
+float TemperatureData::getTemperature(void) {
   if(deviceOpMode.isConfigured()) return espData.temperature;
   else {
 		if(DataService::isDayTime()) {
@@ -109,33 +110,33 @@ float TemperatureData::getTemperature() {
   }
 }
 
-float TemperatureData::getDayTemperature() {
+float TemperatureData::getDayTemperature(void) {
   return dayTemperature;
 }
 
-float TemperatureData::getNightTemperature() {
+float TemperatureData::getNightTemperature(void) {
   return nightTemperature;
 }
 
-float TemperatureData::getMinTemperature() {
+float TemperatureData::getMinTemperature(void) {
   return minTemperature;
 }
 
-float TemperatureData::getMaxTemperature() {
+float TemperatureData::getMaxTemperature(void) {
   if(deviceOpMode.isConfigured()) return espData.temperature_max;
   else return maxTemperature;
 }
 
-float TemperatureData::getBoilerTemperature() {
+float TemperatureData::getBoilerTemperature(void) {
   return boilerTemperature;
 }
 
 
-float TemperatureData::getDeviceTemperature() {
+float TemperatureData::getDeviceTemperature(void) {
   return powerData.device_temperature;
 }
 
-nectar_contract::HeaterMode DataService::getCurrentHeaterMode() {
+nectar_contract::HeaterMode DataService::getCurrentHeaterMode(void) {
   if(espData.has_internet_connection && !deviceOpMode.isInTestMode()) {
     return (nectar_contract::HeaterMode)espData.heater_mode;
   } else {
@@ -143,11 +144,11 @@ nectar_contract::HeaterMode DataService::getCurrentHeaterMode() {
   }
 }
 
-nectar_contract::HeaterMode DataService::getPreviousHeaterMode() {
+nectar_contract::HeaterMode DataService::getPreviousHeaterMode(void) {
   return (nectar_contract::HeaterMode)previousHeaterMode;
 }
 
-void DataService::resetData() {
+void DataService::resetData(void) {
   currentHeaterMode = nectar_contract::None;
   previousHeaterMode = nectar_contract::None;
   
@@ -168,6 +169,7 @@ void DataService::resetData() {
   espData.boiler_power = boiler_power;
   espData.sync_time = 0;
   espData.pin = 0;
+	mode_selected = false;
 }
 
 void DataService::updateHeaterMode(nectar_contract::HeaterMode currMode, nectar_contract::HeaterMode prevMode) {
@@ -182,7 +184,7 @@ void DataService::setCurrentHeaterMode(nectar_contract::HeaterMode mode) {
   Storage::saveHeaterMode(currentHeaterMode, previousHeaterMode);
 }
 
-void DataService::setPreviousHeaterMode() {
+void DataService::setPreviousHeaterMode(void) {
   deviceOpMode.setBoostOff(true);
   commsController.sendEspMessage();
   if(espData.is_configured) {
@@ -193,11 +195,11 @@ void DataService::setPreviousHeaterMode() {
   Storage::saveHeaterMode(currentHeaterMode, previousHeaterMode);
 }
 
-bool DataService::isGridRelayOn() {
+bool DataService::isGridRelayOn(void) {
   return device_modes::isGridRelayOn();
 }
 
-bool DataService::isSunRelayOn() {
+bool DataService::isSunRelayOn(void) {
   return device_modes::isSunRelayOn();
 }
 
@@ -208,11 +210,11 @@ void DataService::calculateSolarKwhDiff(bool first) {
   if(solar_kwh_today < 0) solar_kwh_today = 0;
 }
 
-float DataService::getSolarKwhToday() {
+float DataService::getSolarKwhToday(void) {
   return solar_kwh_today;
 }
 
-float DataService::getBoilerPower() {
+float DataService::getBoilerPower(void) {
   return espData.boiler_power;
 }
 
@@ -220,7 +222,7 @@ void DataService::setCalibrate(bool calibrate) {
 	calibrate_power_board = calibrate;
 }
 
-bool DataService::getCalibrate() {
+bool DataService::getCalibrate(void) {
 	return calibrate_power_board;
 }
 
@@ -244,3 +246,11 @@ bool DataService::isDayTime(void) {
 	}
 	return day_time;
 }
+
+void DataService::modeSelected(void) {
+	mode_selected = true;
+}
+
+bool DataService::isModeSelected(void) {
+	return mode_selected;
+}	

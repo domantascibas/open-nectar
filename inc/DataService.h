@@ -6,25 +6,27 @@
 #include "EspComms.h"
 
 namespace DataService {
-  nectar_contract::HeaterMode getCurrentHeaterMode();
-  nectar_contract::HeaterMode getPreviousHeaterMode();
+  nectar_contract::HeaterMode getCurrentHeaterMode(void);
+  nectar_contract::HeaterMode getPreviousHeaterMode(void);
   
-  void resetData();
+  void resetData(void);
   
   void updateHeaterMode(nectar_contract::HeaterMode, nectar_contract::HeaterMode);
   void setCurrentHeaterMode(nectar_contract::HeaterMode);
-  void setPreviousHeaterMode();
+  void setPreviousHeaterMode(void);
   
-  bool isGridRelayOn();
-  bool isSunRelayOn();
+  bool isGridRelayOn(void);
+  bool isSunRelayOn(void);
   
   void calculateSolarKwhDiff(bool);
-  float getSolarKwhToday();
-  float getBoilerPower();
+  float getSolarKwhToday(void);
+  float getBoilerPower(void);
 	
 	void setCalibrate(bool);
 	bool getCalibrate(void);
 	bool isDayTime(void);
+	void modeSelected(void);
+	bool isModeSelected(void);
 };
 
 struct TemperatureData {
@@ -34,13 +36,13 @@ struct TemperatureData {
   void setMaxTemperature(float);
   void setBoilerTemperature(float);
   void setDeviceTemperature(float);
-  float getTemperature();
-  float getDayTemperature();
-  float getNightTemperature();
-  float getMinTemperature();
-  float getMaxTemperature();
-  float getBoilerTemperature();
-  float getDeviceTemperature();
+  float getTemperature(void);
+  float getDayTemperature(void);
+  float getNightTemperature(void);
+  float getMinTemperature(void);
+  float getMaxTemperature(void);
+  float getBoilerTemperature(void);
+  float getDeviceTemperature(void);
   
 private:
   float dayTemperature;
