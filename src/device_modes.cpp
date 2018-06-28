@@ -164,6 +164,10 @@ namespace device_modes {
 				//data.error = BOILER_TEMP_SENSOR_ERROR;
 			}
 			
+			if((deviceOpMode.getCurrentMode() == TEST_MODE) && !DataService::isModeSelected()) {
+				relayStateNew = TURN_OFF_ALL;
+			}
+			
       if(relayStateNew != relayController.getRelayState()) {
         relayController.setRelays(relayStateNew);
       }
