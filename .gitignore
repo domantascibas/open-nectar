@@ -1,6 +1,7 @@
 *.paplaukias
 *.uvoptx
 BUILD/
+bin/
 *.scvd
 *.TMP
 *.doman

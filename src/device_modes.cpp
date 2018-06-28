@@ -134,17 +134,12 @@ namespace device_modes {
         }
       }
 			
-			if(powerData.sun_voltage < 10.0){
-				if(deviceOpMode.isConfigured()) {
-					if(((relayController.getRelayState() == TURN_ON_SUN) && (relayStateNew == TURN_ON_SUN)) || ((relayController.getRelayState() == TURN_OFF_SUN) && (relayStateNew == TURN_ON_SUN)))
-						relayStateNew = TURN_OFF_SUN;
-				} else {
-					if(!DataService::isDayTime()) {
-						if(((relayController.getRelayState() == TURN_ON_SUN) && (relayStateNew == TURN_ON_SUN)) || ((relayController.getRelayState() == TURN_OFF_SUN) && (relayStateNew == TURN_ON_SUN)))
-							relayStateNew = TURN_OFF_SUN;
-					}
-				}
-			}
+//			if(powerData.sun_voltage < 10.0){
+//				if(!DataService::isDayTime()) {
+//					if(((relayController.getRelayState() == TURN_ON_SUN) && (relayStateNew == TURN_ON_SUN)) || ((relayController.getRelayState() == TURN_OFF_SUN) && (relayStateNew == TURN_ON_SUN)))
+//						relayStateNew = TURN_OFF_SUN;
+//				}
+//			}
 			
 			if(mainBoardError.has_error(NO_BOILER_TEMP)
 				|| mainBoardError.has_error(DEVICE_OVERHEAT)
@@ -167,6 +162,10 @@ namespace device_modes {
 				}
 				relayStateNew = TURN_OFF_ALL;
 				//data.error = BOILER_TEMP_SENSOR_ERROR;
+			}
+			
+			if((deviceOpMode.getCurrentMode() == TEST_MODE) && !DataService::isModeSelected()) {
+				relayStateNew = TURN_OFF_ALL;
 			}
 			
       if(relayStateNew != relayController.getRelayState()) {
