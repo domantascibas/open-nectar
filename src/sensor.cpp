@@ -74,7 +74,7 @@ float Sensor::sample(const uint16_t samples) {
     if(avg < 0) {
       avg = 0;
     }
-    DEBUG_PRINT("ADC 0x%X %.2f\r\n", address, avg);
+    printf("ADC 0x%X %.2f\r\n", address, avg);
     return avg;
 //  }
 }
