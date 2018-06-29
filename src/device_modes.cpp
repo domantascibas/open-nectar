@@ -127,19 +127,19 @@ namespace device_modes {
         switch(data.current_state) {
           default:
           case STOP:
-//            printf("[MODE] stop\r\n");
+            printf("[MODE] stop\r\n");
             mppt.stop();
             data.current_state = IDLE;
             break;
           
           case IDLE:
-//            printf("[MODE] idle\r\n");
+            printf("[MODE] idle\r\n");
             //wait for start command
             //PWM driver OFF
             break;
           
           case RUNNING:
-//            printf("[MODE] running\r\n");
+            printf("[MODE] running\r\n");
   //          mppt.swipe(0.1, 0.95, 0.1);
             break;
           
@@ -152,4 +152,4 @@ namespace device_modes {
   }
 }
 
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
+// *******************************Nectar Sun Copyright ï¿½ Nectar Sun 2017*************************************   

@@ -35,7 +35,7 @@ void TemperatureSensor::setNewValueNotAvailable() {
 }
 
 float TemperatureSensor::getTemperature() {
-  printf("[TEMP PROBE] returning temp\r\n");
+//  printf("[TEMP PROBE] returning temp\r\n");
   newValueAvailable = false;
   return temperature;
 }
@@ -67,16 +67,16 @@ bool TemperatureSensor::isReadyToRead() {
 
 void TemperatureSensor::measureTemperature() {
   readyToMeasure = false;
-  printf("[TEMP PROBE] started conversion\r\n");
+//  printf("[TEMP PROBE] started conversion\r\n");
   probe.startConversion();
   timeout.attach(callback(this, &TemperatureSensor::setReadyToRead), TIMEOUT_TO_TEMP_READ);
-  printf("[TEMP PROBE] conversion end\r\n");
+//  printf("[TEMP PROBE] conversion end\r\n");
 }
 
 void TemperatureSensor::readTemperatureToStorage() {
   readyToRead = false;
-  printf("[TEMP PROBE] reading temp to storage\r\n");
+//  printf("[TEMP PROBE] reading temp to storage\r\n");
   temperature = probe.read();
   newValueAvailable = true;
-  printf("[TEMP PROBE] new temp available\r\n");
+//  printf("[TEMP PROBE] new temp available\r\n");
 }
