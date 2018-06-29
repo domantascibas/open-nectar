@@ -8,8 +8,14 @@ mbed/
 
 # ignore build folder
 BUILD/
+DebugConfig/
+bin/
 
 # ignore .py and .pyc files
 .mbed
 *.py
 *.pyc
+
+# ignore other files
+*.doman
+*.uvoptx
