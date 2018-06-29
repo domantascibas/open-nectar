@@ -140,6 +140,7 @@ namespace device_modes {
           
           case RUNNING:
             printf("[MODE] running\r\n");
+            mppt.track();
   //          mppt.swipe(0.1, 0.95, 0.1);
             break;
           
