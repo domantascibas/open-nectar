@@ -10,11 +10,11 @@ namespace main_board {
   
   mbedStream m_stream(TX, RX);
   
-  bool isFirst;
+  // bool isFirst;
   
   void setup() {
     m_stream.setup();
-    isFirst = true;
+    // isFirst = true;
   }
 }
 
@@ -43,11 +43,16 @@ void mbedStream::write(uint8_t byte) {
 }
 
 void mbedStream::received_main_board_state_for_power(const nectar_contract::MainBoardStateForPower &state) {
-  if(main_board::isFirst) {
-    main_board::isFirst = false;
-  } else {
+  // if(main_board::isFirst) {
+  //   main_board::isFirst = false;
+  // } else {
+  //   data.grid_energy_meter_kwh = state.grid_meter_kwh;
+  // }
+
+  if((state.grid_meter_kwh != 0) && (state.grid_meter_kwh > data.grid_energy_meter_kwh)) {
     data.grid_energy_meter_kwh = state.grid_meter_kwh;
   }
+
   data.isInOnboarding = (state.is_in_onboarding == 0xAC ? true : false);
   data.isTestMode = (state.is_test_mode_on == 0xAC ? true : false);
 	data.startCalibration = (state.calibrate == 0xAC ? true : false);
