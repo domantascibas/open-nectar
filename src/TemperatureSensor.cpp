@@ -36,7 +36,7 @@ void TemperatureSensor::detachTicker() {
 
 void TemperatureSensor::measureTemperature() {
   probe.startConversion();
-  timeout.attach(callback(this, &TemperatureSensor::readTemperatureToStorage), 2.0);
+  timeout.attach(callback(this, &TemperatureSensor::readTemperatureToStorage), 0.75);
 }
 
 void TemperatureSensor::readTemperatureToStorage() {
