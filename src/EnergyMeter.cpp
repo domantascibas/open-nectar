@@ -15,9 +15,9 @@ void EnergyMeter::startMeter() {
   }
 }
 
-void EnergyMeter::stopMeter() {
+void EnergyMeter::stopMeter(bool increase) {
   ticker.detach();
-  increaseMeter();
+  if(increase) increaseMeter();
 }
 
 void EnergyMeter::increaseMeter() {

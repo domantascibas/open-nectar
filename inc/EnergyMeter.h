@@ -6,7 +6,7 @@
 struct EnergyMeter {
   EnergyMeter(float (*getPower)()) : getPower(getPower), meterSet(false), reading(0.0) {};
   void startMeter();
-  void stopMeter();
+  void stopMeter(bool);
   void setMeterReading(float);
   float getMeterReading();
   bool isMeterSet();
