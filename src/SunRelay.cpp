@@ -8,22 +8,31 @@ void SunRelay::init() {
 void SunRelay::turnOn() {
   relayTurnOn = true;
   switching = true;
-  timeout.attach(callback(this, &SunRelay::timeoutIsr), 1.0);
-  power_board::start();
+  timeout.attach(callback(this, &SunRelay::timeoutIsr), 3.0);
 }
 
 void SunRelay::turnOff() {
   relayTurnOn = false;
   switching = true;
-  power_board::stop();
-  timeout.attach(callback(this, &SunRelay::timeoutIsr), 0.5);
+  timeout.attach(callback(this, &SunRelay::timeoutSd), 0.5);
+}
+
+void SunRelay::timeoutSd() {
+	if(relayTurnOn) {
+		power_board::start();
+		switching = false;
+  } else {
+		power_board::stop();
+    timeout.attach(callback(this, &SunRelay::timeoutIsr), 3.0);
+  }
 }
 
 void SunRelay::timeoutIsr() {
   if(relayTurnOn) {
-    relayOn();
+		relayOn();
+		timeout.attach(callback(this, &SunRelay::timeoutSd), 1.0);
   } else {
     relayOff();
+		switching = false;
   }
-  switching = false;
 }
