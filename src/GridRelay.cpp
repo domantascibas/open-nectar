@@ -10,13 +10,13 @@ void GridRelay::init() {
 void GridRelay::turnOn() {
   relayTurnOn = true;
   switching = true;
-  timeout.attach(callback(this, &GridRelay::waitForZeroCross), 1.0);
+  timeout.attach(callback(this, &GridRelay::waitForZeroCross), 5.0);
 }
 
 void GridRelay::turnOff() {
   relayTurnOn = false;
   switching = true;
-  timeout.attach(callback(this, &GridRelay::waitForZeroCross), 0.5);
+  timeout.attach(callback(this, &GridRelay::waitForZeroCross), 1.0);
 }
 
 void GridRelay::waitForZeroCross() {
