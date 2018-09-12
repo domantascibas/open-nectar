@@ -37,8 +37,9 @@ void SensorController::init() {
   if(!nectarError.has_error(CALIBRATION_ERROR)) {
     if(get_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
     else nectarError.set_error(DC_OVER_VOLTAGE);
-    if(get_current() < LEAKAGE_CURRENT) nectarError.clear_error(DC_CURRENT_LEAKS);
-    else nectarError.set_error(DC_CURRENT_LEAKS);
+//    if(get_current() < LEAKAGE_CURRENT) nectarError.clear_error(DC_CURRENT_LEAKS);
+//    else nectarError.set_error(DC_CURRENT_LEAKS);
+		nectarError.clear_error(DC_CURRENT_LEAKS);
     if(get_current() < CURRENT_LIMIT) nectarError.clear_error(DC_OVER_CURRENT);
     else nectarError.set_error(DC_OVER_CURRENT);
   } else nectarError.set_error(CALIBRATION_ERROR);
