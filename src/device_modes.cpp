@@ -131,6 +131,11 @@ namespace device_modes {
             printf("[MODE] NO GRID\r\n");
 						relayStateNew = TURN_ON_SUN;
           break;
+					
+					case nectar_contract::Alloff:
+						printf("[MODE] ALL OFF\r\n");
+						relayStateNew = TURN_OFF_ALL;
+					break;
         }
       }
 			
