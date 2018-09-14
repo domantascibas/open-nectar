@@ -8,22 +8,22 @@ static const float INTERVAL = 5.0;
 
 void EnergyMeter::startMeter() {
   if(meterSet) {
-    lastMomentPower = getPower();
+//    lastMomentPower = getPower();
     ticker.attach(callback(this, &EnergyMeter::increaseMeter), INTERVAL);
   } else {
     printf("energy meter not set\r\n");
   }
 }
 
-void EnergyMeter::stopMeter() {
+void EnergyMeter::stopMeter(bool increase) {
   ticker.detach();
-  increaseMeter();
+  if(increase) increaseMeter();
 }
 
 void EnergyMeter::increaseMeter() {
-  float momentPower = getPower();
-  reading += ((momentPower + lastMomentPower) / 2) * INTERVAL / 3600 / 1000;
-  lastMomentPower = momentPower;
+//  float momentPower = ;
+  reading += getPower() * INTERVAL / 3600 / 1000;
+//  lastMomentPower = momentPower;
   printf("[ENERGY] grid: %fkWh\r\n", reading);
 }
 

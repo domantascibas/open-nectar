@@ -137,7 +137,7 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
 		
     powerBoardError.save_error_code(state.power_board_error_code);
     
-    if(!power_board::received_first_msg) gridMeter.setMeterReading(powerData.grid_meter_kwh);
+    if(!power_board::received_first_msg || !gridMeter.isMeterSet() || (powerData.grid_meter_kwh > gridMeter.getMeterReading())) gridMeter.setMeterReading(powerData.grid_meter_kwh);
     DataService::calculateSolarKwhDiff(!power_board::received_first_msg);
     __enable_irq();
     printf("POWER -> %f %f %f %f %f %d %d %d %d %f %f %f %f %1.2f\r\n",

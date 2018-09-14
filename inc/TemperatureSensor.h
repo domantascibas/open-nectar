@@ -16,6 +16,7 @@ private:
   DS1820 probe;
   Ticker ticker;
   Timeout timeout;
+	uint8_t errorCounter;
   uint8_t refreshRate;
   float temperature;
   bool sensorFound;

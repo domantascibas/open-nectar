@@ -25,6 +25,7 @@ void parseCommand(uint8_t command) {
         deviceOpMode.setInTestStand();
         service::fakeTemperature = IDLE_ON_TEMPERATURE;
         service::newValueAvailable = true;
+		menu_actions::modeSelected();
         menu_service::enterTestScreen();
       }
       break;
