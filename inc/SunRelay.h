@@ -12,6 +12,7 @@ struct SunRelay : Relay {
     
   private:
   void timeoutIsr();
+	void timeoutSd();
 };
 
 #endif
