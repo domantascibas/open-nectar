@@ -41,5 +41,7 @@ void TemperatureSensor::measureTemperature() {
 
 void TemperatureSensor::readTemperatureToStorage() {
   probe.read(temperature);
-  newValueAvailable = true;
+	if(temperature != 85.00)
+		newValueAvailable = true;
+	else measureTemperature();
 }
