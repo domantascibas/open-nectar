@@ -1,10 +1,13 @@
 #include "TemperatureSensor.h"
+#include "ErrorHandler.h"
 
 TemperatureSensor::TemperatureSensor(PinName pin, uint8_t refresh)
-: probe(pin), temperature(0.0), newValueAvailable(false), sensorFound(false), refreshRate(refresh) {
+: probe(pin), newValueAvailable(false), sensorFound(false), refreshRate(refresh) {
 }
 
 void TemperatureSensor::init() {
+	temperature = 0.0;
+	errorCounter = 0;
   if(probe.begin()) {
     sensorFound = true;
     measureTemperature();
@@ -41,7 +44,19 @@ void TemperatureSensor::measureTemperature() {
 
 void TemperatureSensor::readTemperatureToStorage() {
   probe.read(temperature);
-	if(temperature != 85.00)
+	if(temperature != 85.00) {
+		if(mainBoardError.has_error(NO_BOILER_TEMP)) {
+			mainBoardError.clear_error(NO_BOILER_TEMP);
+		}
+		errorCounter = 0;
 		newValueAvailable = true;
-	else measureTemperature();
+	} else {
+		errorCounter++;
+	}
+	
+	if(errorCounter >= 10) {
+		errorCounter = 10;
+		temperature = 0.0;
+		mainBoardError.set_error(NO_BOILER_TEMP);
+	}
 }
