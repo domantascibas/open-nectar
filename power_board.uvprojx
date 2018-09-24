@@ -378,31 +378,6 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>DS1820</GroupName>
-          <Files>
-            <File>
-              <FileName>DS1820.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>./DS1820/DS1820.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>DS1820.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>./DS1820/DS1820.h</FilePath>
-            </File>
-            <File>
-              <FileName>OneWire.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>./DS1820/OneWire/OneWire.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>OneWire.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>./DS1820/OneWire/OneWire.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>inc</GroupName>
           <Files>
             <File>
