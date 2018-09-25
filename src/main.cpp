@@ -6,6 +6,8 @@
 #include "service.h"
 #include "ErrorHandler.h"
 
+// adding a useless comment
+
 DigitalOut pa0(PA_0);
 DigitalOut pa1(PA_1);
 DigitalOut pa2(PA_2);
