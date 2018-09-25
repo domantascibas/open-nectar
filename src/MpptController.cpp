@@ -6,8 +6,8 @@
 
 static const float PWM_STEP = 0.02;
 static const float CURRENT_THRESHOLD = 0.1;
-static const PinName DEVICE_TEMP_PROBE = PC_7;
-static const float DEVICE_TEMPERATURE_LIMIT_MAX = 85.0;
+//static const PinName DEVICE_TEMP_PROBE = PC_7;
+//static const float DEVICE_TEMPERATURE_LIMIT_MAX = 85.0;
 static const int PROCESSOR_INTERNAL_TEMPERATURE_LIMIT = 120;
 
 PwmController pwmGenerator(1.8, 0.1, 0.95);
@@ -127,7 +127,7 @@ float MpptController::getDeviceTemperature() {
 //  } else {
 //    if(nectarError.has_error(DEVICE_OVERHEAT) && (deviceTemperature < (DEVICE_TEMPERATURE_LIMIT_MAX - 5.0))) nectarError.clear_error(DEVICE_OVERHEAT);
 //  }
-////  printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
+// //  printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
   return deviceTemperature;
 }
 
@@ -158,17 +158,17 @@ void readInternalTempSensor() {
 void MpptController::updateTemperatures() {
 //  if(data.safeToReadTemp) {
 //    data.safeToReadTemp = false;
-//    
+   
 //    if(deviceTemp.isReadyToMeasure()) {
 //      deviceTemp.measureTemperature();
 //    }
-//    
+   
 //    if(deviceTemp.isReadyToRead()) {
 //      deviceTemp.readTemperatureToStorage();
 //    }
-//    
+   
 //    if(deviceTemp.isNewValueAvailable()) {
-////      printf("[MPPT] 	 device temperature\r\n");
+// //      printf("[MPPT] 	 device temperature\r\n");
 //  //    deviceTemp.setNewValueNotAvailable();
 //      data.device_temperature = getDeviceTemperature();
 //      readInternalTempSensor();

@@ -1,7 +1,7 @@
 #ifndef MPPT_CONTROLLER_H
 #define MPPT_CONTROLLER_H
 
-#include "TemperatureSensor.h"
+// #include "TemperatureSensor.h"
 
 struct MpptController {
   MpptController();

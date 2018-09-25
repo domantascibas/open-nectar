@@ -8,7 +8,7 @@ const float VOLTAGE_LIMIT = 385.0;
 //const float VOLTAGE_LIMIT = 25.0;
 // const float VOLTAGE_LIMIT = 440.0; // vido config
 const float CURRENT_LIMIT = 10.0;
-const float LEAKAGE_CURRENT = 0.4;
+//const float LEAKAGE_CURRENT = 0.4;
 
 //static const uint8_t FILTER_LENGTH = 5;
 static const uint8_t V_SENSE_ADDR = 0x55 << 1;
