@@ -20,4 +20,4 @@ extern SensorController sensors;
 
 #endif
 
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   
+// *******************************Nectar Sun Copyright ï¿½ Nectar Sun 2017*************************************   

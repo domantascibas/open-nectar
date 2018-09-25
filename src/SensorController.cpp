@@ -8,7 +8,7 @@ const float VOLTAGE_LIMIT = 385.0;
 //const float VOLTAGE_LIMIT = 25.0;
 // const float VOLTAGE_LIMIT = 440.0; // vido config
 const float CURRENT_LIMIT = 10.0;
-const float LEAKAGE_CURRENT = 0.4;
+//const float LEAKAGE_CURRENT = 0.4;
 
 //static const uint8_t FILTER_LENGTH = 5;
 static const uint8_t V_SENSE_ADDR = 0x55 << 1;
@@ -108,7 +108,7 @@ void SensorController::calibrate() {
 	float c_voltage = voltageSensor.get_reference();
 	float c_current = currentSensor.get_reference();
 	
-	if(((c_voltage < 0.002) && (c_voltage > 0.001)) && ((c_current < 2.2) && (c_current > 1.8))) {
+	if(((c_voltage < 0.04) && (c_voltage > 0.001)) && ((c_current < 2.2) && (c_current > 1.8))) {
 		if(nectarError.has_error(CALIBRATION_ERROR)) {
 			nectarError.clear_error(CALIBRATION_ERROR);
 		}

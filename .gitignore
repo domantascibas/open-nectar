@@ -12,10 +12,13 @@ DebugConfig/
 bin/
 
 # ignore .py and .pyc files
-.mbed
 *.py
 *.pyc
 
 # ignore other files
 *.doman
 *.uvoptx
+*.uvprojx
+
+mbed_config.h
+GettingStarted.html
