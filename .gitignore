@@ -12,7 +12,6 @@ DebugConfig/
 bin/
 
 # ignore .py and .pyc files
-*.py
 *.pyc
 
 # ignore other files
