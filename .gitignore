@@ -12,8 +12,6 @@ DebugConfig/
 bin/
 
 # ignore .py and .pyc files
-.mbed
-*.py
 *.pyc
 
 # ignore other files
