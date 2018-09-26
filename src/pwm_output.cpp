@@ -9,45 +9,45 @@ static bool generator_on = false;
 PwmOut pwmOut(PWM_PIN);
 DigitalOut shutdown(SD_PIN);
 
-void pwm_generator_init(void) {
+void pwm_output_init(void) {
   duty = PWM_DUTY_MIN;
   pwmOut.period_us(1000/PWM_FREQUENCY);
   pwmOut.write(duty);
-  pwm_generator_stop();
+  pwm_output_stop();
 
   printf("pwm controller setup\r\n");
 }
 
-void pwm_generator_start(void) {
+void pwm_output_start(void) {
   generator_on = true;
   shutdown = DRIVER_ON;
 }
 
-void pwm_generator_stop(void) {
+void pwm_output_stop(void) {
   generator_on = false;
   shutdown = DRIVER_OFF;
 }
 
-void pwm_generator_increase_duty(void) {
+void pwm_output_increase_duty(void) {
   duty = clamp(duty + PWM_STEP);
   pwmOut.write(duty);
 }
 
-void pwm_generator_decrease_duty(void) {
+void pwm_output_decrease_duty(void) {
   duty = clamp(duty - PWM_STEP);
   pwmOut.write(duty);
 }
 
-void pwm_generator_set_duty(float value) {
+void pwm_output_set_duty(float value) {
   duty = clamp(value);
   pwmOut.write(duty);
 }
 
-float pwm_generator_get_duty(void) {
+float pwm_output_get_duty(void) {
   return duty;
 }
 
-bool pwm_generator_is_on(void) {
+bool pwm_output_is_on(void) {
   return generator_on;
 }
 

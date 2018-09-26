@@ -1,15 +1,15 @@
 #ifndef _NS_PWM_OUTPUT_H
 #define _NS_PWM_OUTPUT_H
 
-void pwm_generator_init(void);
-void pwm_generator_start(void);
-void pwm_generator_stop(void);
-void pwm_generator_increase_duty(void);
-void pwm_generator_decrease_duty(void);
-void pwm_generator_set_duty(float value);
+void pwm_output_init(void);
+void pwm_output_start(void);
+void pwm_output_stop(void);
+void pwm_output_increase_duty(void);
+void pwm_output_decrease_duty(void);
+void pwm_output_set_duty(float value);
 
-float pwm_generator_get_duty(void);
-bool pwm_generator_is_on(void);
+float pwm_output_get_duty(void);
+bool pwm_output_is_on(void);
 
 // struct PwmController {
 //   PwmController(float freq, float min, float max): frequency(freq), duty_min(min), duty_max(max), generator_on(false) {};
