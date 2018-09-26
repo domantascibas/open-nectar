@@ -1,5 +1,5 @@
-#ifndef CONSTS_H
-#define CONSTS_H
+#ifndef _NS_CONSTS_H
+#define _NS_CONSTS_H
 
 #include "mbed.h"
 
