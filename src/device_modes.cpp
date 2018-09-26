@@ -147,5 +147,3 @@ namespace device_modes {
     }
   }
 }
-
-// *******************************Nectar Sun Copyright � Nectar Sun 2017*************************************   

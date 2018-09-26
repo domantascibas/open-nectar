@@ -99,5 +99,3 @@ StreamObject mbedStream::get_power_board_state() {
   data.safeToReadTemp = true;
   return _powerState;
 }
-
-// ******************************* (C) Copyright Nectar Sun 2017*************************************   

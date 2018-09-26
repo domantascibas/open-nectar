@@ -1,5 +1,5 @@
-#ifndef DEVICE_MODES_H
-#define DEVICE_MODES_H
+#ifndef _NS_DEVICE_MODES_H
+#define _NS_DEVICE_MODES_H
 
 #include "MpptController.h"
 #include "SensorController.h"
@@ -18,5 +18,3 @@ extern MpptController mppt;
 extern SensorController sensors;
 
 #endif
-
-// *******************************Nectar Sun Copyright � Nectar Sun 2017*************************************   

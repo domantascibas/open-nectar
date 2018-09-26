@@ -1,5 +1,5 @@
-#ifndef MPPT_CONTROLLER_H
-#define MPPT_CONTROLLER_H
+#ifndef _NS_MPPT_CONTROLLER_H
+#define _NS_MPPT_CONTROLLER_H
 
 struct MpptController {
   MpptController();

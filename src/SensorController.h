@@ -1,5 +1,5 @@
-#ifndef SENSOR_CONTROLLER_H
-#define SENSOR_CONTROLLER_H
+#ifndef _NS_SENSOR_CONTROLLER_H
+#define _NS_SENSOR_CONTROLLER_H
 
 #include "Sensor.h"
 
