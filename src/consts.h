@@ -26,6 +26,7 @@ static const float PWM_FREQUENCY = 1.8;
 static const float PWM_DUTY_MIN = 0.1;
 static const float PWM_DUTY_MAX = 0.95;
 static const float PWM_STEP = 0.02;
+static const float PWM_STEP_FINE = 0.005;
 
 // Temperature Limits
 static const int PROCESSOR_INTERNAL_TEMPERATURE_LIMIT = 120;

@@ -38,6 +38,16 @@ void pwm_output_decrease_duty(void) {
   pwmOut.write(duty);
 }
 
+void pwm_output_increase_duty_fine(void) {
+  duty = clamp(duty + PWM_STEP_FINE);
+  pwmOut.write(duty);
+}
+
+void pwm_output_decrease_duty_fine(void) {
+  duty = clamp(duty - PWM_STEP_FINE);
+  pwmOut.write(duty);
+}
+
 void pwm_output_set_duty(float value) {
   duty = clamp(value);
   pwmOut.write(duty);
