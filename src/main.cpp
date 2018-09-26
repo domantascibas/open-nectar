@@ -1,10 +1,11 @@
-#include "mbed.h"
+#include "consts.h"
 #include "storage.h"
 #include "device_modes.h"
 #include "main_board.h"
 #include "data.h"
 #include "service.h"
 #include "ErrorHandler.h"
+#include "internal_temperature.h"
 
 // DigitalOut pa0(PA_0);
 // DigitalOut pa1(PA_1);
@@ -92,6 +93,7 @@ int main() {
   // initInternalTempSensor();
   
   printf("Starting device modes\r\n");
+  internal_temperature_init();
   device_modes::setup();
   printf("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   main_board::setup();
@@ -101,6 +103,17 @@ int main() {
   
   while(1) {
     kickTheDog();
+    
+    float internal_temp = internal_temperature_measure();
+    data.device_temperature = internal_temp;
+    printf("processor temp: %d\r\n", internal_temp);
+    if(internal_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
+      if(!nectarError.has_error(PROCESSOR_OVERHEAT)) nectarError.set_error(PROCESSOR_OVERHEAT);
+      printf("PROCESSOR OVERHEAT\r\n");
+    } else {
+      if(nectarError.has_error(PROCESSOR_OVERHEAT) && (internal_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) nectarError.clear_error(PROCESSOR_OVERHEAT);
+    }
+    
     if(!nectarError.has_error(CALIBRATION_ERROR)) device_modes::loop();
     device_modes::calibrate_device();
     __WFI();
