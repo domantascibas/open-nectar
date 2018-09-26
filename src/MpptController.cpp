@@ -1,11 +1,10 @@
 #include "consts.h"
 #include "MpptController.h"
-#include "PwmController.h"
+#include "pwm_output.h"
 #include "ErrorHandler.h"
 #include "data.h"
 
 PwmController pwmGenerator(1.8, 0.1, 0.95);
-//TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE, 5);
 
 MpptController::MpptController() {
   last_increase = true;
@@ -14,12 +13,8 @@ MpptController::MpptController() {
 
 void MpptController::init() {
   pwmGenerator.init();
-//  deviceTemp.init();
-
-//  if(deviceTemp.isSensorFound()) {
-    nectarError.clear_error(DEVICE_OVERHEAT);
-//  }
   
+  nectarError.clear_error(DEVICE_OVERHEAT);
   nectarError.clear_error(NO_LOAD);
 }
 
@@ -32,7 +27,6 @@ void MpptController::track() {
   data.moment_power = moment_power;
   dP = moment_power - old_power;
   
-//  if((data.moment_current < CURRENT_THRESHOLD) && (pwmGenerator.get_duty() >= 0.94 )) {
 	if(data.moment_current < CURRENT_THRESHOLD) {
     reset();
     old_power = moment_power;
@@ -114,14 +108,6 @@ bool MpptController::is_generator_on() {
 }
 
 float MpptController::getDeviceTemperature() {
-//  deviceTemperature = deviceTemp.getTemperature();
-//  if(deviceTemperature > DEVICE_TEMPERATURE_LIMIT_MAX) {
-//    if(!nectarError.has_error(DEVICE_OVERHEAT)) nectarError.set_error(DEVICE_OVERHEAT);
-//    printf("DEVICE OVERHEAT\r\n");
-//  } else {
-//    if(nectarError.has_error(DEVICE_OVERHEAT) && (deviceTemperature < (DEVICE_TEMPERATURE_LIMIT_MAX - 5.0))) nectarError.clear_error(DEVICE_OVERHEAT);
-//  }
-// //  printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
   return deviceTemperature;
 }
 
