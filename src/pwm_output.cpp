@@ -1,6 +1,4 @@
-#include "mbed.h"
 #include "consts.h"
-#include "pinout.h"
 #include "pwm_output.h"
 
 float clamp(float);
