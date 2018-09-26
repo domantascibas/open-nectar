@@ -9,19 +9,4 @@ void sensor_controller_save_meters(void);
 float sensor_controller_get_voltage_ref(void);
 float sensor_controller_get_current_ref(void);
 
-// struct SensorController {
-//   SensorController();
-  
-//   void init();
-//   void measure();
-//   void calibrate();
-//   float get_voltage_reference();
-//   float get_current_reference();
-//   void save_meters();
-  
-// private:
-//   float get_voltage();
-//   float get_current();
-// };
-
 #endif

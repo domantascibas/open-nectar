@@ -11,6 +11,4 @@ namespace device_modes {
   void stop();
 }
 
-extern SensorController sensors;
-
 #endif

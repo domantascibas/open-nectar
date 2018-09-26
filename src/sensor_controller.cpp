@@ -26,10 +26,10 @@ void sensor_controller_init(void) {
   } else nectarError.set_error(FLASH_ACCESS_ERROR);
   
   if(!nectarError.has_error(CALIBRATION_ERROR)) {
-    if(get_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
+    if(measure_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
     else nectarError.set_error(DC_OVER_VOLTAGE);
 		nectarError.clear_error(DC_CURRENT_LEAKS);
-    if(get_current() < CURRENT_LIMIT) nectarError.clear_error(DC_OVER_CURRENT);
+    if(measure_current() < CURRENT_LIMIT) nectarError.clear_error(DC_OVER_CURRENT);
     else nectarError.set_error(DC_OVER_CURRENT);
   } else nectarError.set_error(CALIBRATION_ERROR);
 }
@@ -79,7 +79,7 @@ void sensor_controller_calibrate(void) {
   data.isCalibrating = false;
 }
 
-void sensor_controller_saver_meters(void) {
+void sensor_controller_save_meters(void) {
   Storage::save_meters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
 }
 
