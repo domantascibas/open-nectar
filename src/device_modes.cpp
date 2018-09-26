@@ -107,7 +107,7 @@ namespace device_modes {
 
       float internal_temp = internal_temperature_measure();
       data.device_temperature = internal_temp;
-      printf("processor temp: %f\r\n", internal_temp);
+      // printf("processor temp: %f\r\n", internal_temp);
       if(internal_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
         if(!nectarError.has_error(PROCESSOR_OVERHEAT)) nectarError.set_error(PROCESSOR_OVERHEAT);
         printf("PROCESSOR OVERHEAT\r\n");
