@@ -1,7 +1,7 @@
 #include "consts.h"
 #include "data.h"
 #include "service.h"
-#include "MpptController.h"
+#include "power_controller.h"
 #include "device_modes.h"
 
 static const uint8_t INCREASE_DUTY = 0x2A;
@@ -29,36 +29,36 @@ void parseCommand(uint8_t command) {
     
     case INCREASE_DUTY:
       if(data.current_state == MANUAL) {
-        mppt.manualIncreaseDuty(false);
-        printf("\r\nPWM DUTY INCREASED %f\r\n\n", mppt.get_duty());
+        power_controller_manual_increase_duty(false);
+        printf("\r\nPWM DUTY INCREASED %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
     
     case DECREASE_DUTY:
       if(data.current_state == MANUAL) {
-        mppt.manualDecreaseDuty(false);
-        printf("\r\nPWM DUTY DECREASED %f\r\n\n", mppt.get_duty());
+        power_controller_manual_decrease_duty(false);
+        printf("\r\nPWM DUTY DECREASED %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
       
     case INCREASE_DUTY_FINE:
       if(data.current_state == MANUAL) {
-        mppt.manualIncreaseDuty();
-        printf("\r\nPWM DUTY INCREASED %f\r\n\n", mppt.get_duty());
+        power_controller_manual_increase_duty();
+        printf("\r\nPWM DUTY INCREASED %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
       
     case DECREASE_DUTY_FINE:
       if(data.current_state == MANUAL) {
-        mppt.manualDecreaseDuty();
-        printf("\r\nPWM DUTY DECREASED %f\r\n\n", mppt.get_duty());
+        power_controller_manual_decrease_duty();
+        printf("\r\nPWM DUTY DECREASED %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
     
     case RESET_DUTY:
       if(data.current_state == MANUAL) {
-        mppt.stop();
-        printf("\r\nPWM DUTY RESET %f\r\n\n", mppt.get_duty());
+        power_controller_mppt_stop();
+        printf("\r\nPWM DUTY RESET %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
     
@@ -74,14 +74,14 @@ void parseCommand(uint8_t command) {
     
     case PWM_GENERATOR_START:
       if(data.current_state == MANUAL) {
-        mppt.manualStartPwm();
+        power_controller_manual_output_on();
         printf("\r\nPWM GENERATOR STARTED\r\n\n");
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
     
     case PWM_GENERATOR_STOP:
       if(data.current_state == MANUAL) {
-        mppt.manualStopPwm();
+        power_controller_manual_output_off();
         printf("\r\nPWM GENERATOR STOPPED\r\n\n");
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
