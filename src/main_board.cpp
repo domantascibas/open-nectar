@@ -4,6 +4,7 @@
 #include "ErrorHandler.h"
 #include "data.h"
 #include "main_board.h"
+#include "sensor_controller.h"
 
 namespace main_board {
   mbedStream m_stream(NS_TX, NS_RX);
@@ -77,8 +78,8 @@ StreamObject mbedStream::get_power_board_state() {
   powerState.pwm_generator_on = (power_controller_is_generator_on() ? 0xAC : 0xFA);
   powerState.sun_meter_kwh = data.sun_energy_meter_kwh;
   powerState.grid_meter_kwh = data.grid_energy_meter_kwh;
-  powerState.ref_voltage = sensors.get_voltage_reference();
-  powerState.ref_current = sensors.get_current_reference();
+  powerState.ref_voltage = sensor_controller_get_voltage_ref();
+  powerState.ref_current = sensor_controller_get_current_ref();
 	powerState.power_version = NECTAR_POWER_BOARD_VERSION;
   
   StreamObject _powerState(&powerState, sizeof(powerState));
