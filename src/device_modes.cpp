@@ -74,6 +74,7 @@ namespace device_modes {
     update_device_mode.attach(&update_device_mode_ISR, update_interval);
     printf("[ok] interval %.2fs\r\n\n", update_interval);
     stat_timer.start();
+    printf("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   }
 	
 	void runCalibration() {
