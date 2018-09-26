@@ -56,23 +56,23 @@ void readInternalTempSensor() {
   }
 }
 
-void MpptController::updateTemperatures() {
-//  if(data.safeToReadTemp) {
-//    data.safeToReadTemp = false;
+// void MpptController::updateTemperatures() {
+// //  if(data.safeToReadTemp) {
+// //    data.safeToReadTemp = false;
    
-//    if(deviceTemp.isReadyToMeasure()) {
-//      deviceTemp.measureTemperature();
-//    }
+// //    if(deviceTemp.isReadyToMeasure()) {
+// //      deviceTemp.measureTemperature();
+// //    }
    
-//    if(deviceTemp.isReadyToRead()) {
-//      deviceTemp.readTemperatureToStorage();
-//    }
+// //    if(deviceTemp.isReadyToRead()) {
+// //      deviceTemp.readTemperatureToStorage();
+// //    }
    
-//    if(deviceTemp.isNewValueAvailable()) {
-// //      printf("[MPPT] 	 device temperature\r\n");
-//  //    deviceTemp.setNewValueNotAvailable();
-//      data.device_temperature = getDeviceTemperature();
-//      readInternalTempSensor();
-//    }
-//  }
-}
+// //    if(deviceTemp.isNewValueAvailable()) {
+// // //      printf("[MPPT] 	 device temperature\r\n");
+// //  //    deviceTemp.setNewValueNotAvailable();
+// //      data.device_temperature = getDeviceTemperature();
+// //      readInternalTempSensor();
+// //    }
+// //  }
+// }
