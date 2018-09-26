@@ -80,14 +80,14 @@ void power_controller_swipe() {
   
   generator_on();
   if(!reverse) {
-    if(pwm_controller_get_duty() >= max) {
+    if(pwm_controller_get_duty() >= PWM_DUTY_MAX) {
       reverse = true;
     } else {
       pwm_controller_increase_duty(PWM_STEP);
       reverse = false;
     }
   } else {
-    if(pwm_controller_get_duty() <= min) {
+    if(pwm_controller_get_duty() <= PWM_DUTY_MIN) {
       reverse = false;
     } else {
       pwm_controller_decrease_duty(PWM_STEP);
