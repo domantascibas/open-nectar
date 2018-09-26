@@ -1,5 +1,6 @@
 #include "consts.h"
 #include "device_modes.h"
+#include "power_controller.h"
 #include "ErrorHandler.h"
 #include "data.h"
 #include "main_board.h"
@@ -68,12 +69,12 @@ StreamObject mbedStream::get_power_board_state() {
   powerState.sun_power = data.moment_power;
   powerState.sun_voltage = data.moment_voltage;
   powerState.sun_current = data.moment_current;
-  powerState.pwm_duty = mppt.get_duty();
+  powerState.pwm_duty = power_controller_get_duty();
   powerState.device_temperature = data.device_temperature;
   powerState.transistor_overheat_on = (data.mosfet_overheat_on ? 0xAC : 0xFA);
   powerState.power_board_error_code = nectarError.get_errors();
   powerState.device_calibrated = (!nectarError.has_error(CALIBRATION_ERROR) ? 0xAC : 0xFA);
-  powerState.pwm_generator_on = (mppt.is_generator_on() ? 0xAC : 0xFA);
+  powerState.pwm_generator_on = (power_controller_is_generator_on() ? 0xAC : 0xFA);
   powerState.sun_meter_kwh = data.sun_energy_meter_kwh;
   powerState.grid_meter_kwh = data.grid_energy_meter_kwh;
   powerState.ref_voltage = sensors.get_voltage_reference();
