@@ -1,10 +1,11 @@
-#include "mbed.h"
+#include "consts.h"
 #include "storage.h"
 #include "device_modes.h"
 #include "main_board.h"
 #include "data.h"
 #include "service.h"
 #include "ErrorHandler.h"
+#include "watchdog_timer.h"
 
 // DigitalOut pa0(PA_0);
 // DigitalOut pa1(PA_1);
@@ -63,33 +64,9 @@
 // DigitalOut pf1(PF_1);
 // DigitalOut pf11(PF_11);
 
-void initIndependentWatchdog() {
-  /* (1) Activate IWDG (not needed if done in option bytes) */
-  /* (2) Enable write access to IWDG registers */
-  /* (3) Set prescaler by 8 */
-  /* (4) Set reload value to have a rollover each 100ms */
-  /* (5) Check if flags are reset */
-  /* (6) Refresh counter */
-  IWDG->KR = 0xCCCC; /* (1) */
-  IWDG->KR = 0x5555; /* (2) */
-  IWDG->PR = IWDG_PR_PR_0; /* (3) */
-  IWDG->RLR = 0xFFFF; /* (4) */
-  while (IWDG->SR) /* (5) */
-  {
-  /* add time out here for a robust application */
-  }
-  IWDG->KR = 0xAAAA; /* (6) */
-}
-
-void kickTheDog() {
-  IWDG->KR = 0xAAAA;
-//  printf("kick the dog\r\n");
-}
-
 int main() {
   service::setup();
 	Storage::init();
-  // initInternalTempSensor();
   
   printf("Starting device modes\r\n");
   device_modes::setup();
@@ -97,11 +74,11 @@ int main() {
   main_board::setup();
   printf("SETUP DONE\r\n");
   
-  initIndependentWatchdog();
+  watchdog_timer_init();
   
   while(1) {
-    kickTheDog();
-    if(!nectarError.has_error(CALIBRATION_ERROR)) device_modes::loop();
+    watchdog_timer_update();
+    device_modes::loop();
     device_modes::calibrate_device();
     __WFI();
   }
