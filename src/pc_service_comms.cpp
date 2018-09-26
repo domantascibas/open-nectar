@@ -21,7 +21,7 @@ static const uint8_t CALIBRATE = 0x63;
 
 RawSerial pc(PC_TX, PC_RX);
 
-void pc_comms_init(void) {
+void pc_service_comms_init(void) {
   pc.baud(PC_BAUD);
   pc.attach(&Rx_interrupt);
   pc.printf("\r\n[START]\r\n");

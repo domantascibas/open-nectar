@@ -65,7 +65,7 @@
 // DigitalOut pf11(PF_11);
 
 int main() {
-  pc_service_init();
+  pc_service_comms_init();
 	Storage::init();
   
   printf("Starting device modes\r\n");
