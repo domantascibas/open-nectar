@@ -4,6 +4,7 @@
 #include "ErrorHandler.h"
 #include "power_controller.h"
 #include "pwm_controller.h"
+#include "internal_temperature.h"
 
 DigitalOut led(USER_LED);
 DigitalIn transistorOverheat(OVERHEAT);
@@ -65,6 +66,7 @@ namespace device_modes {
     no_power.fall(&no_power_ISR);
     calibration_button.fall(&calibrate_sensors_ISR);
     
+    internal_temperature_init();
     sensors.init();
     power_controller_init();
     pwm_controller_init();
@@ -98,11 +100,17 @@ namespace device_modes {
     
     if(!nectarError.has_error(CALIBRATION_ERROR)) {
       sensors.measure();
-//      led = !led;
     }
     
-    // mppt.updateTemperatures();
-    
+    float internal_temp = internal_temperature_measure();
+    printf("processor temp: %d\r\n", internal_temp);
+    if(internal_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
+      if(!nectarError.has_error(PROCESSOR_OVERHEAT)) nectarError.set_error(PROCESSOR_OVERHEAT);
+      printf("PROCESSOR OVERHEAT\r\n");
+    } else {
+      if(nectarError.has_error(PROCESSOR_OVERHEAT) && (internal_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) nectarError.clear_error(PROCESSOR_OVERHEAT);
+    }
+
     if(update_mode) {      
       update_mode = false;
       
