@@ -1,5 +1,5 @@
 #include "consts.h"
-#include "storage.h"
+#include "flash_storage.h"
 #include "device_modes.h"
 #include "main_board_comms.h"
 #include "data.h"
@@ -66,7 +66,7 @@
 
 int main() {
   pc_service_comms_init();
-	Storage::init();
+	flash_storage_init();
   
   printf("Starting device modes\r\n");
   device_modes::setup();
