@@ -1,7 +1,7 @@
-#include "NectarContract.h"
+#ifndef _NS_DATA_H
+#define _NS_DATA_H
 
-#ifndef DATA_H
-#define DATA_H
+#include "NectarContract.h"
 
 #define LED_ON            0
 #define LED_OFF           1
@@ -62,5 +62,3 @@ extern StorageData storage_data;
 extern nectar_contract::PowerBoardState powerState;
 
 #endif
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

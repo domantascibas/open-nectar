@@ -1,5 +1,5 @@
-#ifndef SERVICE_H
-#define SERVICE_H
+#ifndef _NS_SERVICE_H
+#define _NS_SERVICE_H
 
 namespace service {
   void setup();

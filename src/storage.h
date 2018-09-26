@@ -1,5 +1,6 @@
-#ifndef STORAGE_H
-#define STORAGE_H
+#ifndef _NS_STORAGE_H
+#define _NS_STORAGE_H
+
 #include <stdint.h>
 #include "data.h"
 #include "eeprom.h"
@@ -12,5 +13,3 @@ namespace Storage {
 };
 
 #endif
-
-// *******************************(C) Copyright Nectar Sun 2017*************************************   

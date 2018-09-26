@@ -1,5 +1,5 @@
-#ifndef MAIN_BOARD_H
-#define MAIN_BOARD_H
+#ifndef _NS_MAIN_BOARD_H
+#define _NS_MAIN_BOARD_H
 
 #include "mbed.h"
 #include "NectarStream.h"
@@ -31,5 +31,3 @@ private:
 };
 
 #endif
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

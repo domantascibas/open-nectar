@@ -2,13 +2,14 @@
 #include "data.h"
 #include "device_modes.h"
 #include "ErrorHandler.h"
+#include "power_controller.h"
+#include "pwm_controller.h"
 
 DigitalOut led(USER_LED);
 DigitalIn transistorOverheat(OVERHEAT);
 InterruptIn calibration_button(CALIBRATION_BTN);
 InterruptIn no_power(LOW_VOLTAGE_MONITOR); //PC_9 voltage monitor. RESET active - low. normal operation - 1, when <8.5V - 0.
 
-MpptController mppt;
 SensorController sensors;
 
 Timer stat_timer;
@@ -65,7 +66,8 @@ namespace device_modes {
     calibration_button.fall(&calibrate_sensors_ISR);
     
     sensors.init();
-    mppt.init();
+    power_controller_init();
+    pwm_controller_init();
     
     printf("[DEVICE MODES]\r\n");
     update_device_mode.attach(&update_device_mode_ISR, update_interval);
@@ -99,7 +101,7 @@ namespace device_modes {
 //      led = !led;
     }
     
-    mppt.updateTemperatures();
+    // mppt.updateTemperatures();
     
     if(update_mode) {      
       update_mode = false;
@@ -108,7 +110,7 @@ namespace device_modes {
         data.current_state = STOP;
       }
       
-      if(mppt.is_generator_on() && !data.isTestMode) {
+      if(power_controller_is_generator_on() && !data.isTestMode) {
         float time_passed = stat_timer.read();
         stat_timer.reset();
         if(time_passed > 0) data.sun_energy_meter_kwh += ((lastPower + data.moment_power)/2 )* time_passed / 3600 / 1000;
@@ -123,7 +125,7 @@ namespace device_modes {
           default:
           case STOP:
             printf("[MODE] stop\r\n");
-            mppt.stop();
+            power_controller_mppt_stop();
             data.current_state = IDLE;
             break;
           
@@ -135,8 +137,8 @@ namespace device_modes {
           
           case RUNNING:
             printf("[MODE] running\r\n");
-            mppt.track();
-  //          mppt.swipe(0.1, 0.95, 0.1);
+            power_controller_mppt_start();
+  //          power_controller_mppt_swipe();
             break;
           
           case MANUAL:
@@ -147,5 +149,3 @@ namespace device_modes {
     }
   }
 }
-
-// *******************************Nectar Sun Copyright � Nectar Sun 2017*************************************   

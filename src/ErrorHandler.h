@@ -1,7 +1,7 @@
-#include <stdint.h>
+#ifndef _NS_ERROR_HANDLER_H
+#define _NS_ERROR_HANDLER_H
 
-#ifndef ERROR_HANDLER_H
-#define ERROR_HANDLER_H
+#include <stdint.h>
 
 typedef enum {
   FLASH_ACCESS_ERROR,

@@ -1,5 +1,5 @@
-#ifndef SENSOR_CONTROLLER_H
-#define SENSOR_CONTROLLER_H
+#ifndef _NS_SENSOR_CONTROLLER_H
+#define _NS_SENSOR_CONTROLLER_H
 
 #include "Sensor.h"
 
@@ -14,8 +14,6 @@ struct SensorController {
   void save_meters();
   
 private:
-//  uint8_t filterPos;
-//  float lowPassFilter[];
   float get_voltage();
   float get_current();
 };

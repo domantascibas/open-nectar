@@ -1,5 +1,5 @@
-#ifndef SENSOR_H
-#define SENSOR_H
+#ifndef _NS_SENSOR_H
+#define _NS_SENSOR_H
 
 static const uint16_t SAMPLE_NUM = 128; //for calibration SAMPLES << 3
 
