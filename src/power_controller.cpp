@@ -16,7 +16,6 @@ void power_controller_init(void) {
   generator_off();
   nectarError.clear_error(DEVICE_OVERHEAT);
   nectarError.clear_error(NO_LOAD);
-  // pwm_controller_init();
 }
 
 void power_controller_mppt_stop(void) {
