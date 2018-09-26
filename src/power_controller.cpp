@@ -1,16 +1,33 @@
 #include "consts.h"
-#include "pwm_output.h"
-#include "MpptController.h"
+#include "pwm_controller.h"
+#include "power_controller.h"
 #include "ErrorHandler.h"
 #include "data.h"
+
+static bool generator_on = false;
+
+DigitalOut shutdown(SD_PIN);
+
+
+
+void pwm_controller_start(void) {
+  generator_on = true;
+  shutdown = DRIVER_ON;
+}
+
+void pwm_controller_stop(void) {
+  generator_on = false;
+  shutdown = DRIVER_OFF;
+}
 
 MpptController::MpptController() {
   last_increase = true;
   deviceTemperature = 0.0;
+  pwm_controller_stop();
 }
 
 void MpptController::init() {
-  pwm_output_init();
+  pwm_controller_init();
   nectarError.clear_error(DEVICE_OVERHEAT);
   nectarError.clear_error(NO_LOAD);
 }
@@ -28,32 +45,32 @@ void MpptController::track() {
     reset();
     old_power = moment_power;
   } else {
-    pwm_output_start();
+    pwm_controller_start();
     if(dP != 0) {
       if(dP > 0) {
         if(last_increase) {
-          pwm_output_increase_duty();
+          pwm_controller_increase_duty(PWM_STEP);
           last_increase = true;
         } else {
-          pwm_output_decrease_duty();
+          pwm_controller_decrease_duty(PWM_STEP);
           last_increase = false;
         }
       } else {
         if(last_increase) {
-          pwm_output_decrease_duty();
+          pwm_controller_decrease_duty(PWM_STEP);
           last_increase = false;
         } else {
-          pwm_output_increase_duty();
+          pwm_controller_increase_duty(PWM_STEP);
           last_increase = true;
         }
       }
       old_power = moment_power;
     } else {
       if(last_increase) {
-        pwm_output_increase_duty();
+        pwm_controller_increase_duty(PWM_STEP);
         last_increase = true;
       } else {
-        pwm_output_decrease_duty();
+        pwm_controller_decrease_duty(PWM_STEP);
         last_increase = false;
       }
     }
@@ -62,46 +79,46 @@ void MpptController::track() {
 
 void MpptController::stop() {
   last_increase = true;
-  pwm_output_stop();
-  pwm_output_set_duty(PWM_DUTY_MIN);
+  pwm_controller_stop();
+  pwm_controller_set_duty(PWM_DUTY_MIN);
   data.moment_power = 0;	
 }
 
 void MpptController::reset() {
   last_increase = true;
-  pwm_output_stop();
-  pwm_output_set_duty(PWM_DUTY_MIN);
+  pwm_controller_stop();
+  pwm_controller_set_duty(PWM_DUTY_MIN);
   data.moment_power = 0;
-  pwm_output_start();
+  pwm_controller_start();
 }
 
-void MpptController::swipe(float min, float max, float step) {
+void MpptController::swipe() {
   static bool reverse = false;
   
-  pwm_output_start();
+  pwm_controller_start();
   if(!reverse) {
-    if(pwm_output_get_duty() >= max) {
+    if(pwm_controller_get_duty() >= max) {
       reverse = true;
     } else {
-      pwm_output_increase_duty();
+      pwm_controller_increase_duty(PWM_STEP);
       reverse = false;
     }
   } else {
-    if(pwm_output_get_duty() <= min) {
+    if(pwm_controller_get_duty() <= min) {
       reverse = false;
     } else {
-      pwm_output_decrease_duty();
+      pwm_controller_decrease_duty(PWM_STEP);
       reverse = true;
     }
   }
 }
 
 float MpptController::get_duty() {
-  return pwm_output_get_duty();
+  return pwm_controller_get_duty();
 }
 
 bool MpptController::is_generator_on() {
-  return pwm_output_is_on();
+  return pwm_controller_is_on();
 }
 
 float MpptController::getDeviceTemperature() {
@@ -154,25 +171,25 @@ void MpptController::updateTemperatures() {
 }
 
 void MpptController::manualStartPwm() {
-  pwm_output_start();
+  pwm_controller_start();
 }
 
 void MpptController::manualStopPwm() {
-  pwm_output_stop();
+  pwm_controller_stop();
 }
 
 void MpptController::manualIncreaseDuty(bool fineStep) {
   if(fineStep) {
-    pwm_output_increase_duty_fine();
+    pwm_controller_increase_duty(PWM_STEP_FINE);
   } else {
-    pwm_output_increase_duty();
+    pwm_controller_increase_duty(PWM_STEP);
   }
 }
 
 void MpptController::manualDecreaseDuty(bool fineStep) {
   if(fineStep) {
-    pwm_output_decrease_duty_fine();
+    pwm_controller_decrease_duty(PWM_STEP_FINE);
   } else {
-    pwm_output_decrease_duty();
+    pwm_controller_decrease_duty(PWM_STEP);
   }
 }

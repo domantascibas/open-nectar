@@ -1,5 +1,14 @@
-#ifndef _NS_MPPT_CONTROLLER_H
-#define _NS_MPPT_CONTROLLER_H
+#ifndef _NS_POWER_CONTROLLER_H
+#define _NS_POWER_CONTROLLER_H
+
+void power_controller_init(void);
+void power_controller_track(void);
+void power_controller_stop(void);
+void power_controller_reset(void);
+void power_controller_swipe(void);
+
+float power_controller_get_duty(void);
+bool power_controller_is_generator_on(void);
 
 struct MpptController {
   MpptController();
