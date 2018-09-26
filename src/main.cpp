@@ -3,7 +3,7 @@
 #include "device_modes.h"
 #include "main_board.h"
 #include "data.h"
-#include "service.h"
+#include "pc_service_comms.h"
 #include "ErrorHandler.h"
 #include "watchdog_timer.h"
 
@@ -65,7 +65,7 @@
 // DigitalOut pf11(PF_11);
 
 int main() {
-  service::setup();
+  pc_service_init();
 	Storage::init();
   
   printf("Starting device modes\r\n");
