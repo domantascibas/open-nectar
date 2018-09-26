@@ -5,6 +5,7 @@
 #include "device_modes.h"
 
 void parse_command(uint8_t command);
+void Rx_interrupt(void);
 
 static const uint8_t INCREASE_DUTY = 0x2A;
 static const uint8_t DECREASE_DUTY = 0x2F;
@@ -103,7 +104,7 @@ void parse_command(uint8_t command) {
   }
 }
 
-void Rx_interrupt() {
+void Rx_interrupt(void) {
   if(data.isInOnboarding || data.isTestMode) {
     __disable_irq();
     while(pc.readable()) {
