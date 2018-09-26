@@ -6,10 +6,11 @@
 static const float NECTAR_POWER_BOARD_VERSION = 108;
 
 // Voltage & Current Sensor I/O
-static const PinName SDA = PB_14;
-static const PinName SCL = PB_13;
+static const PinName I2C_SDA_PIN = PB_14;
+static const PinName I2C_SCL_PIN = PB_13;
 static const uint8_t V_SENSE_ADDR = 0x55 << 1;
 static const uint8_t I_SENSE_ADDR = 0x5A << 1;
+static const uint32_t I2C_FREQUENCY = 400000;
 static const float V_REF = 3.00;
 static const float INPUT_VDIV = 4.1/400;
 static const float CURRENT_LIMIT = 10.0;

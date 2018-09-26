@@ -11,12 +11,12 @@
 #define REG_ADDR_CONVL          0x06
 #define REG_ADDR_CONVH          0x07
 
-I2C m_i2c(SDA, SCL);
+I2C m_i2c(I2C_SDA_PIN, I2C_SCL_PIN);
 
 Sensor::Sensor(const uint8_t addr) 
   : address(addr), ready_to_sample(false) {
     reference = 0.0;
-    m_i2c.frequency(400000);
+    m_i2c.frequency(I2C_FREQUENCY);
     attach_ticker();
 }
   
