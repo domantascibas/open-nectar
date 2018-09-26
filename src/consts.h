@@ -3,7 +3,7 @@
 
 #include "mbed.h"
 
-static const float NECTAR_POWER_BOARD_VERSION = 107;
+static const float NECTAR_POWER_BOARD_VERSION = 108;
 
 // Voltage & Current Sensor I/O
 static const PinName SDA = PB_14;
