@@ -2,8 +2,8 @@
 .vscode/*
 
 # ignore mbed-os lib
-./mbed-os/*
-./mbed/*
+mbed-os/*
+mbed/*
 .temp/*
 
 # ignore build folder

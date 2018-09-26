@@ -1,14 +1,11 @@
+#include "consts.h"
 #include "device_modes.h"
 #include "ErrorHandler.h"
 #include "data.h"
 #include "main_board.h"
-#include "consts.h"
 
 namespace main_board {
-  static const PinName TX = PC_10;
-  static const PinName RX = PC_11;
-  
-  mbedStream m_stream(TX, RX);
+  mbedStream m_stream(NS_TX, NS_RX);
   
   // bool isFirst;
   

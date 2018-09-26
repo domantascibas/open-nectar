@@ -1,11 +1,8 @@
-#include "mbed.h"
+#include "consts.h"
 #include "PwmController.h"
 
-static const PinName PWM = PB_1;
-static const PinName SD = PB_0;
-
-PwmOut pwmOut(PWM);
-DigitalOut shutdown(SD);
+PwmOut pwmOut(PWM_PIN);
+DigitalOut shutdown(SD_PIN);
 
 void PwmController::init() {
   duty = 0.1;

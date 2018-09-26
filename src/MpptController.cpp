@@ -1,14 +1,8 @@
-#include "mbed.h"
+#include "consts.h"
 #include "MpptController.h"
 #include "PwmController.h"
 #include "ErrorHandler.h"
 #include "data.h"
-
-static const float PWM_STEP = 0.02;
-static const float CURRENT_THRESHOLD = 0.1;
-//static const PinName DEVICE_TEMP_PROBE = PC_7;
-//static const float DEVICE_TEMPERATURE_LIMIT_MAX = 85.0;
-static const int PROCESSOR_INTERNAL_TEMPERATURE_LIMIT = 120;
 
 PwmController pwmGenerator(1.8, 0.1, 0.95);
 //TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE, 5);

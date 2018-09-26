@@ -1,4 +1,4 @@
-#include "mbed.h"
+#include "consts.h"
 #include "Sensor.h"
 #include "data.h"
 
@@ -10,10 +10,6 @@
 #define REG_ADDR_HYST           0x05
 #define REG_ADDR_CONVL          0x06
 #define REG_ADDR_CONVH          0x07
-
-static const PinName SDA = PB_14;
-static const PinName SCL = PB_13;
-static const float V_REF = 3.00;
 
 I2C m_i2c(SDA, SCL);
 

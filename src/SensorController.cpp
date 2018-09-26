@@ -1,19 +1,8 @@
-#include "mbed.h"
+#include "consts.h"
 #include "SensorController.h"
 #include "storage.h"
 #include "ErrorHandler.h"
 #include "data.h"
-
-const float VOLTAGE_LIMIT = 385.0;
-//const float VOLTAGE_LIMIT = 25.0;
-// const float VOLTAGE_LIMIT = 440.0; // vido config
-const float CURRENT_LIMIT = 10.0;
-//const float LEAKAGE_CURRENT = 0.4;
-
-//static const uint8_t FILTER_LENGTH = 5;
-static const uint8_t V_SENSE_ADDR = 0x55 << 1;
-static const uint8_t I_SENSE_ADDR = 0x5A << 1;
-static const float INPUT_VDIV = 4.1/400;
 
 Sensor voltageSensor(V_SENSE_ADDR);
 Sensor currentSensor(I_SENSE_ADDR);

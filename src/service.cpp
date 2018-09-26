@@ -1,4 +1,4 @@
-#include "mbed.h"
+#include "consts.h"
 #include "data.h"
 #include "service.h"
 #include "MpptController.h"
@@ -16,9 +16,6 @@ static const uint8_t PWM_GENERATOR_STOP = 0x30;
 static const uint8_t MANUAL_MODE = 0x6D;
 static const uint8_t AUTO_MODE = 0x61;
 static const uint8_t CALIBRATE = 0x63;
-
-static const PinName PC_TX = PA_2;
-static const PinName PC_RX = PA_3;
 
 RawSerial pc(PC_TX, PC_RX);
 
@@ -111,12 +108,10 @@ void Rx_interrupt() {
 
 namespace service {
   void setup() {
-    static const uint32_t pc_baud = 115200;
-    
-    pc.baud(pc_baud);
+    pc.baud(PC_BAUD);
     pc.attach(&Rx_interrupt);
-    printf("\r\n[START]\r\n");
-    printf("[COMMS PC]\r\n");
-    printf("[ok] baud %d\r\n\n", pc_baud);
+    pc.printf("\r\n[START]\r\n");
+    pc.printf("[COMMS PC]\r\n");
+    pc.printf("[ok] baud %d\r\n\n", PC_BAUD);
   }
 }

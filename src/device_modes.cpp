@@ -1,17 +1,14 @@
+#include "consts.h"
 #include "data.h"
 #include "device_modes.h"
 #include "ErrorHandler.h"
 
 static const bool RESET_ENERGY_METERS = false;
 
-static const PinName USER_LED = PA_15;
-static const PinName OVERHEAT = PD_2;
-static const PinName CALIBRATION_BTN = PC_12;
-
 DigitalOut led(USER_LED);
 DigitalIn transistorOverheat(OVERHEAT);
 InterruptIn calibration_button(CALIBRATION_BTN);
-InterruptIn no_power(PC_9); //PC_9 voltage monitor. RESET active - low. normal operation - 1, when <8.5V - 0.
+InterruptIn no_power(LOW_VOLTAGE_MONITOR); //PC_9 voltage monitor. RESET active - low. normal operation - 1, when <8.5V - 0.
 
 MpptController mppt;
 SensorController sensors;
