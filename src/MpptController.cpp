@@ -1,11 +1,8 @@
 #include "consts.h"
+#include "pwm_output.h"
 #include "MpptController.h"
-#include "PwmController.h"
 #include "ErrorHandler.h"
 #include "data.h"
-
-PwmController pwmGenerator(1.8, 0.1, 0.95);
-//TemperatureSensor deviceTemp(DEVICE_TEMP_PROBE, 5);
 
 MpptController::MpptController() {
   last_increase = true;
@@ -13,13 +10,8 @@ MpptController::MpptController() {
 }
 
 void MpptController::init() {
-  pwmGenerator.init();
-//  deviceTemp.init();
-
-//  if(deviceTemp.isSensorFound()) {
-    nectarError.clear_error(DEVICE_OVERHEAT);
-//  }
-  
+  pwm_output_init();
+  nectarError.clear_error(DEVICE_OVERHEAT);
   nectarError.clear_error(NO_LOAD);
 }
 
@@ -32,37 +24,36 @@ void MpptController::track() {
   data.moment_power = moment_power;
   dP = moment_power - old_power;
   
-//  if((data.moment_current < CURRENT_THRESHOLD) && (pwmGenerator.get_duty() >= 0.94 )) {
 	if(data.moment_current < CURRENT_THRESHOLD) {
     reset();
     old_power = moment_power;
   } else {
-    pwmGenerator.start();
+    pwm_output_start();
     if(dP != 0) {
       if(dP > 0) {
         if(last_increase) {
-          pwmGenerator.increase_duty(PWM_STEP);
+          pwm_output_increase_duty();
           last_increase = true;
         } else {
-          pwmGenerator.decrease_duty(PWM_STEP);
+          pwm_output_decrease_duty();
           last_increase = false;
         }
       } else {
         if(last_increase) {
-          pwmGenerator.decrease_duty(PWM_STEP);
+          pwm_output_decrease_duty();
           last_increase = false;
         } else {
-          pwmGenerator.increase_duty(PWM_STEP);
+          pwm_output_increase_duty();
           last_increase = true;
         }
       }
       old_power = moment_power;
     } else {
       if(last_increase) {
-        pwmGenerator.increase_duty(PWM_STEP);
+        pwm_output_increase_duty();
         last_increase = true;
       } else {
-        pwmGenerator.decrease_duty(PWM_STEP);
+        pwm_output_decrease_duty();
         last_increase = false;
       }
     }
@@ -71,57 +62,49 @@ void MpptController::track() {
 
 void MpptController::stop() {
   last_increase = true;
-  pwmGenerator.stop();
-  pwmGenerator.set_duty(0.1);
+  pwm_output_stop();
+  pwm_output_set_duty(PWM_DUTY_MIN);
   data.moment_power = 0;	
 }
 
 void MpptController::reset() {
   last_increase = true;
-  pwmGenerator.stop();
-  pwmGenerator.set_duty(0.1);
+  pwm_output_stop();
+  pwm_output_set_duty(PWM_DUTY_MIN);
   data.moment_power = 0;
-	pwmGenerator.start();
+  pwm_output_start();
 }
 
 void MpptController::swipe(float min, float max, float step) {
   static bool reverse = false;
   
-  pwmGenerator.start();
+  pwm_output_start();
   if(!reverse) {
-    if(pwmGenerator.get_duty() >= max) {
+    if(pwm_output_get_duty() >= max) {
       reverse = true;
     } else {
-      pwmGenerator.increase_duty(PWM_STEP);
+      pwm_output_increase_duty();
       reverse = false;
     }
   } else {
-    if(pwmGenerator.get_duty() <= min) {
+    if(pwm_output_get_duty() <= min) {
       reverse = false;
     } else {
-      pwmGenerator.decrease_duty(PWM_STEP);
+      pwm_output_decrease_duty();
       reverse = true;
     }
   }
 }
 
 float MpptController::get_duty() {
-  return pwmGenerator.get_duty();
+  return pwm_output_get_duty();
 }
 
 bool MpptController::is_generator_on() {
-  return pwmGenerator.is_on();
+  return pwm_output_is_on();
 }
 
 float MpptController::getDeviceTemperature() {
-//  deviceTemperature = deviceTemp.getTemperature();
-//  if(deviceTemperature > DEVICE_TEMPERATURE_LIMIT_MAX) {
-//    if(!nectarError.has_error(DEVICE_OVERHEAT)) nectarError.set_error(DEVICE_OVERHEAT);
-//    printf("DEVICE OVERHEAT\r\n");
-//  } else {
-//    if(nectarError.has_error(DEVICE_OVERHEAT) && (deviceTemperature < (DEVICE_TEMPERATURE_LIMIT_MAX - 5.0))) nectarError.clear_error(DEVICE_OVERHEAT);
-//  }
-// //  printf("[TEMPERATURE] internal %.2f\r\n", deviceTemperature);
   return deviceTemperature;
 }
 
@@ -171,25 +154,25 @@ void MpptController::updateTemperatures() {
 }
 
 void MpptController::manualStartPwm() {
-  pwmGenerator.start();
+  pwm_output_start();
 }
 
 void MpptController::manualStopPwm() {
-  pwmGenerator.stop();
+  pwm_output_stop();
 }
 
 void MpptController::manualIncreaseDuty(bool fineStep) {
   if(fineStep) {
-    pwmGenerator.increase_duty(0.005);
+    pwm_output_increase_duty_fine();
   } else {
-    pwmGenerator.increase_duty(PWM_STEP);
+    pwm_output_increase_duty();
   }
 }
 
 void MpptController::manualDecreaseDuty(bool fineStep) {
   if(fineStep) {
-    pwmGenerator.decrease_duty(0.005);
+    pwm_output_decrease_duty_fine();
   } else {
-    pwmGenerator.decrease_duty(PWM_STEP);
+    pwm_output_decrease_duty();
   }
 }
