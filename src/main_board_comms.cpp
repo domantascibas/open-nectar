@@ -3,18 +3,13 @@
 #include "power_controller.h"
 #include "ErrorHandler.h"
 #include "data.h"
-#include "main_board.h"
+#include "main_board_comms.h"
 #include "sensor_controller.h"
 
-namespace main_board {
-  mbedStream m_stream(NS_TX, NS_RX);
-  
-  // bool isFirst;
-  
-  void setup() {
-    m_stream.setup();
-    // isFirst = true;
-  }
+mbedStream m_stream(NS_TX, NS_RX);
+
+void main_board_comms_init(void) {
+  m_stream.setup();
 }
 
 void mbedStream::setup() {
@@ -28,7 +23,6 @@ void mbedStream::Rx_interrupt() {
   while(m_serial.readable()) {
     __disable_irq();
     char rcv = m_serial.getc();
-//    printf("%c", rcv);
     stream.receiveChar(rcv);
     __enable_irq();
   }
@@ -36,18 +30,11 @@ void mbedStream::Rx_interrupt() {
 
 void mbedStream::write(uint8_t byte) {
   if(!data.isCalibrating) {
-  //  printf("%c", byte);
     m_serial.putc(byte);
   }
 }
 
 void mbedStream::received_main_board_state_for_power(const nectar_contract::MainBoardStateForPower &state) {
-  // if(main_board::isFirst) {
-  //   main_board::isFirst = false;
-  // } else {
-  //   data.grid_energy_meter_kwh = state.grid_meter_kwh;
-  // }
-
   if((state.grid_meter_kwh != 0) && (state.grid_meter_kwh > data.grid_energy_meter_kwh)) {
     data.grid_energy_meter_kwh = state.grid_meter_kwh;
   }

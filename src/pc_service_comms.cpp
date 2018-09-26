@@ -1,8 +1,11 @@
 #include "consts.h"
 #include "data.h"
-#include "service.h"
+#include "pc_service_comms.h"
 #include "power_controller.h"
 #include "device_modes.h"
+
+void parse_command(uint8_t command);
+void Rx_interrupt(void);
 
 static const uint8_t INCREASE_DUTY = 0x2A;
 static const uint8_t DECREASE_DUTY = 0x2F;
@@ -19,7 +22,15 @@ static const uint8_t CALIBRATE = 0x63;
 
 RawSerial pc(PC_TX, PC_RX);
 
-void parseCommand(uint8_t command) {
+void pc_service_comms_init(void) {
+  pc.baud(PC_BAUD);
+  pc.attach(&Rx_interrupt);
+  pc.printf("\r\n[START]\r\n");
+  pc.printf("[COMMS PC]\r\n");
+  pc.printf("[ok] baud %d\r\n\n", PC_BAUD);
+}
+
+void parse_command(uint8_t command) {
   switch(command) {
     case CALIBRATE:
       data.isCalibrating = true;
@@ -93,25 +104,15 @@ void parseCommand(uint8_t command) {
   }
 }
 
-void Rx_interrupt() {
+void Rx_interrupt(void) {
   if(data.isInOnboarding || data.isTestMode) {
     __disable_irq();
     while(pc.readable()) {
       char rcv = pc.getc();
-      parseCommand(rcv);
+      parse_command(rcv);
     }
     __enable_irq();
 //  } else {
 //    printf("[AUTO MODE] for manual control put device in TEST MODE or START ONBOARDING\r\n");
-  }
-}
-
-namespace service {
-  void setup() {
-    pc.baud(PC_BAUD);
-    pc.attach(&Rx_interrupt);
-    pc.printf("\r\n[START]\r\n");
-    pc.printf("[COMMS PC]\r\n");
-    pc.printf("[ok] baud %d\r\n\n", PC_BAUD);
   }
 }

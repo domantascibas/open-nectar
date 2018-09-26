@@ -1,9 +1,9 @@
 #include "consts.h"
 #include "storage.h"
 #include "device_modes.h"
-#include "main_board.h"
+#include "main_board_comms.h"
 #include "data.h"
-#include "service.h"
+#include "pc_service_comms.h"
 #include "ErrorHandler.h"
 #include "watchdog_timer.h"
 
@@ -65,13 +65,13 @@
 // DigitalOut pf11(PF_11);
 
 int main() {
-  service::setup();
+  pc_service_comms_init();
 	Storage::init();
   
   printf("Starting device modes\r\n");
   device_modes::setup();
   printf("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
-  main_board::setup();
+  main_board_comms_init();
   printf("SETUP DONE\r\n");
   
   watchdog_timer_init();
