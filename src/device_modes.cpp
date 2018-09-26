@@ -3,8 +3,6 @@
 #include "device_modes.h"
 #include "ErrorHandler.h"
 
-static const bool RESET_ENERGY_METERS = false;
-
 DigitalOut led(USER_LED);
 DigitalIn transistorOverheat(OVERHEAT);
 InterruptIn calibration_button(CALIBRATION_BTN);
