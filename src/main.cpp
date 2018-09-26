@@ -1,10 +1,8 @@
 #include "consts.h"
-#include "storage.h"
+#include "flash_storage.h"
 #include "device_modes.h"
 #include "main_board_comms.h"
-#include "data.h"
 #include "pc_service_comms.h"
-#include "ErrorHandler.h"
 #include "watchdog_timer.h"
 
 // DigitalOut pa0(PA_0);
@@ -66,11 +64,10 @@
 
 int main() {
   pc_service_comms_init();
-	Storage::init();
+	flash_storage_init();
   
   printf("Starting device modes\r\n");
   device_modes::setup();
-  printf("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   main_board_comms_init();
   printf("SETUP DONE\r\n");
   

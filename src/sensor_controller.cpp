@@ -1,7 +1,7 @@
 #include "consts.h"
 #include "sensor_controller.h"
 #include "Sensor.h"
-#include "storage.h"
+#include "flash_storage.h"
 #include "ErrorHandler.h"
 #include "data.h"
 
@@ -20,7 +20,7 @@ void sensor_controller_init(void) {
   else nectarError.set_error(ADC_CURRENT_ERROR);
 
   if(!nectarError.has_error(FLASH_ACCESS_ERROR)) {
-    Storage::load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
+    flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
     voltageSensor.set_reference(data.reference_voltage);
     currentSensor.set_reference(data.reference_current);
   } else nectarError.set_error(FLASH_ACCESS_ERROR);
@@ -57,7 +57,7 @@ void sensor_controller_calibrate(void) {
 		if(nectarError.has_error(CALIBRATION_ERROR)) {
 			nectarError.clear_error(CALIBRATION_ERROR);
 		}
-		Storage::save_data(c_voltage, c_current);
+		flash_storage_save_data(c_voltage, c_current);
 		data.reference_voltage = c_voltage;	
 		data.reference_current = c_current;
 		printf("\r\n");
@@ -68,7 +68,7 @@ void sensor_controller_calibrate(void) {
 		printf("[warn] bad calibration. v_ref = %fV, i_ref = %fA\r\n", c_voltage, c_current);
 		printf("*** Please recalibrate with DC+/- inputs shorted ***\r\n");
 		if(!nectarError.has_error(CALIBRATION_ERROR)) {
-			Storage::load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
+			flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
 			printf("[warn] loaded last calibration data from memory\r\n");
 			printf("[warn] v_ref = %fV, i_ref = %fA\r\n", data.reference_voltage, data.reference_current);
 		}
@@ -80,7 +80,7 @@ void sensor_controller_calibrate(void) {
 }
 
 void sensor_controller_save_meters(void) {
-  Storage::save_meters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+  flash_storage_save_meters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
 }
 
 float sensor_controller_get_voltage_ref(void) {
