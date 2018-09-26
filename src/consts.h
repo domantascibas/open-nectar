@@ -5,6 +5,8 @@
 
 static const float NECTAR_POWER_BOARD_VERSION = 108;
 
+static const uint8_t DEVICE_CALIBRATED = 0xCA;
+
 // Voltage & Current Sensor I/O
 static const PinName I2C_SDA_PIN = PB_14;
 static const PinName I2C_SCL_PIN = PB_13;
