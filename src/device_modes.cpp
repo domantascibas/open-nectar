@@ -3,7 +3,7 @@
 #include "device_modes.h"
 #include "ErrorHandler.h"
 #include "power_controller.h"
-#include "pwm_output.h"
+#include "pwm_controller.h"
 
 DigitalOut led(USER_LED);
 DigitalIn transistorOverheat(OVERHEAT);
