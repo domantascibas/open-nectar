@@ -26,26 +26,19 @@ void SensorController::init() {
   if(!nectarError.has_error(CALIBRATION_ERROR)) {
     if(get_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
     else nectarError.set_error(DC_OVER_VOLTAGE);
-//    if(get_current() < LEAKAGE_CURRENT) nectarError.clear_error(DC_CURRENT_LEAKS);
-//    else nectarError.set_error(DC_CURRENT_LEAKS);
 		nectarError.clear_error(DC_CURRENT_LEAKS);
     if(get_current() < CURRENT_LIMIT) nectarError.clear_error(DC_OVER_CURRENT);
     else nectarError.set_error(DC_OVER_CURRENT);
   } else nectarError.set_error(CALIBRATION_ERROR);
-  
-//  lowPassFilter[FILTER_LENGTH] = 0;
-//  filterPos = 0;
 }
 
 void SensorController::measure() {
   if(voltageSensor.ready_to_sample) {
     data.moment_voltage = get_voltage();
-//    printf("%fV, ", data.moment_voltage);
   }
   
   if(currentSensor.ready_to_sample) {
     data.moment_current = get_current();
-//    printf("%fA\r\n", data.moment_current);
   }
 }
 
@@ -59,24 +52,12 @@ float SensorController::get_voltage() {
 }
 
 float SensorController::get_current() {
-  //float sum, avg;
   float i = (currentSensor.sample() - currentSensor.get_reference()) * 5.000;
 
   if(i < CURRENT_LIMIT && nectarError.has_error(DC_OVER_CURRENT)) nectarError.clear_error(DC_OVER_CURRENT);
   if(i >= CURRENT_LIMIT) nectarError.set_error(DC_OVER_CURRENT);
   if(i < 0) i = 0;
   
-//  lowPassFilter[filterPos] = i;  
-//  for(int l=0; l<FILTER_LENGTH; l++) {
-//    sum += lowPassFilter[l];
-//  }  
-//  avg = sum/FILTER_LENGTH;
-
-//  filterPos++;
-//  if(filterPos == FILTER_LENGTH) {
-//    filterPos = 0;
-//  }
-//  return avg;
   return i;
 }
 
@@ -108,9 +89,6 @@ void SensorController::calibrate() {
 		printf("[ok] calibrated. v_ref = %fV, i_ref = %fA\r\n", c_voltage, c_current);
 		printf("\r\n");
 	} else {
-//		nectarError.set_error(CALIBRATION_ERROR);
-//		data.reference_voltage = c_voltage;
-//		data.reference_current = c_current;
 		printf("\r\n");
 		printf("[warn] bad calibration. v_ref = %fV, i_ref = %fA\r\n", c_voltage, c_current);
 		printf("*** Please recalibrate with DC+/- inputs shorted ***\r\n");

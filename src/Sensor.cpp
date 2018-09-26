@@ -57,22 +57,19 @@ float Sensor::sample(const uint16_t samples) {
   
   ready_to_sample = false;
   
-//  if(!data.readingSerial) {
-    for(i=0; i<samples; i++) {
-      cmd[0] = REG_ADDR_RESULT;
-      m_i2c.write(address, cmd, 1);
-      m_i2c.read(address, cmd, 2);
-      raw = ((cmd[0] & 0x0F) << 8) | cmd[1];
-      sum += (raw * V_REF) / 2048; //raw * VREF * 2 / 4096
-    }
-    
-    avg = sum / samples;
-    if(avg < 0) {
-      avg = 0;
-    }
-//    printf("ADC 0x%X %.2f\r\n", address, avg);
-    return avg;
-//  }
+  for(i=0; i<samples; i++) {
+    cmd[0] = REG_ADDR_RESULT;
+    m_i2c.write(address, cmd, 1);
+    m_i2c.read(address, cmd, 2);
+    raw = ((cmd[0] & 0x0F) << 8) | cmd[1];
+    sum += (raw * V_REF) / 2048; //raw * VREF * 2 / 4096
+  }
+  
+  avg = sum / samples;
+  if(avg < 0) {
+    avg = 0;
+  }
+  return avg;
 }
 
 void Sensor::calibrate() {

@@ -14,8 +14,6 @@ struct SensorController {
   void save_meters();
   
 private:
-//  uint8_t filterPos;
-//  float lowPassFilter[];
   float get_voltage();
   float get_current();
 };
