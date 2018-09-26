@@ -5,13 +5,12 @@
 #include "power_controller.h"
 #include "pwm_controller.h"
 #include "internal_temperature.h"
+#include "sensor_controller.h"
 
 DigitalOut led(USER_LED);
 DigitalIn transistorOverheat(OVERHEAT);
 InterruptIn calibration_button(CALIBRATION_BTN);
 InterruptIn no_power(LOW_VOLTAGE_MONITOR); //PC_9 voltage monitor. RESET active - low. normal operation - 1, when <8.5V - 0.
-
-SensorController sensors;
 
 Timer stat_timer;
 Ticker update_device_mode;
@@ -50,11 +49,11 @@ namespace device_modes {
     if(RESET_ENERGY_METERS) {
       data.sun_energy_meter_kwh = 0.00;
       data.grid_energy_meter_kwh = 0.00;
-      sensors.save_meters();
+      sensor_controller_save_meters();
       printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
     } else {
       if(!data.isTestMode) {
-        sensors.save_meters();
+        sensor_controller_save_meters();
         printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
       }
     }
@@ -67,7 +66,7 @@ namespace device_modes {
     calibration_button.fall(&calibrate_sensors_ISR);
     
     internal_temperature_init();
-    sensors.init();
+    sensor_controller_init();
     power_controller_init();
     pwm_controller_init();
     
@@ -80,10 +79,10 @@ namespace device_modes {
 	void runCalibration() {
 		data.startCalibration = false;
 		calibrate_sensors = false;
-		sensors.calibrate();      
+		sensor_controller_calibrate();      
 		data.sun_energy_meter_kwh = 0.00;
 		data.grid_energy_meter_kwh = 0.00;
-		sensors.save_meters();
+		sensor_controller_save_meters();
 		printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
 	}
   
@@ -99,7 +98,7 @@ namespace device_modes {
   void loop() {
     
     if(!nectarError.has_error(CALIBRATION_ERROR)) {
-      sensors.measure();
+      sensor_controller_measure();
     }
 
     if(update_mode) {      
