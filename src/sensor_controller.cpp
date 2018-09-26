@@ -1,15 +1,17 @@
 #include "consts.h"
-#include "SensorController.h"
+#include "sensor_controller.h"
+#include "Sensor.h"
 #include "storage.h"
 #include "ErrorHandler.h"
 #include "data.h"
 
+float measure_voltage(void);
+float measure_current(void);
+
 Sensor voltageSensor(V_SENSE_ADDR);
 Sensor currentSensor(I_SENSE_ADDR);
 
-SensorController::SensorController() {}
-  
-void SensorController::init() {
+void sensor_controller_init(void) {
   printf("Sensor Controller setup\r\n");
   if(voltageSensor.ping()) nectarError.clear_error(ADC_VOLTAGE_ERROR);
   else nectarError.set_error(ADC_VOLTAGE_ERROR);
@@ -32,44 +34,17 @@ void SensorController::init() {
   } else nectarError.set_error(CALIBRATION_ERROR);
 }
 
-void SensorController::measure() {
+void sensor_controller_measure(void) {
   if(voltageSensor.ready_to_sample) {
-    data.moment_voltage = get_voltage();
+    data.moment_voltage = measure_voltage();
   }
   
   if(currentSensor.ready_to_sample) {
-    data.moment_current = get_current();
+    data.moment_current = measure_current();
   }
 }
 
-float SensorController::get_voltage() {
-  float v = (voltageSensor.sample() - voltageSensor.get_reference()) / INPUT_VDIV;
-  
-  if(v < VOLTAGE_LIMIT && nectarError.has_error(DC_OVER_VOLTAGE)) nectarError.clear_error(DC_OVER_VOLTAGE);
-  if(v >= VOLTAGE_LIMIT) nectarError.set_error(DC_OVER_VOLTAGE);
-  if(v < 0) v = 0;
-  return v;
-}
-
-float SensorController::get_current() {
-  float i = (currentSensor.sample() - currentSensor.get_reference()) * 5.000;
-
-  if(i < CURRENT_LIMIT && nectarError.has_error(DC_OVER_CURRENT)) nectarError.clear_error(DC_OVER_CURRENT);
-  if(i >= CURRENT_LIMIT) nectarError.set_error(DC_OVER_CURRENT);
-  if(i < 0) i = 0;
-  
-  return i;
-}
-
-float SensorController::get_voltage_reference() {
-  return voltageSensor.get_reference();
-}
-
-float SensorController::get_current_reference() {
-  return currentSensor.get_reference();
-}
-
-void SensorController::calibrate() {
+void sensor_controller_calibrate(void) {
   printf("Calibrating\r\n");
   
   voltageSensor.calibrate();
@@ -100,10 +75,34 @@ void SensorController::calibrate() {
 		printf("\r\n");
 	}
 
-  init();
+  sensor_controller_init();
   data.isCalibrating = false;
 }
 
-void SensorController::save_meters() {
+void sensor_controller_saver_meters(void) {
   Storage::save_meters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+}
+
+float sensor_controller_get_voltage_ref(void) {
+  return voltageSensor.get_reference();
+}
+
+float sensor_controller_get_current_ref(void) {
+  return currentSensor.get_reference();
+}
+
+float measure_voltage(void) {
+  float v = (voltageSensor.sample() - voltageSensor.get_reference()) / INPUT_VDIV;
+  if(v < VOLTAGE_LIMIT && nectarError.has_error(DC_OVER_VOLTAGE)) nectarError.clear_error(DC_OVER_VOLTAGE);
+  if(v >= VOLTAGE_LIMIT) nectarError.set_error(DC_OVER_VOLTAGE);
+  if(v < 0) v = 0;
+  return v;
+}
+
+float measure_current(void) {
+  float i = (currentSensor.sample() - currentSensor.get_reference()) * 5.000;
+  if(i < CURRENT_LIMIT && nectarError.has_error(DC_OVER_CURRENT)) nectarError.clear_error(DC_OVER_CURRENT);
+  if(i >= CURRENT_LIMIT) nectarError.set_error(DC_OVER_CURRENT);
+  if(i < 0) i = 0;
+  return i;
 }
