@@ -20,11 +20,15 @@ void sensor_controller_init(void) {
   else nectarError.set_error(ADC_CURRENT_ERROR);
 
   if(!nectarError.has_error(FLASH_ACCESS_ERROR)) {
-    flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
+    data.calibrated = flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
     voltageSensor.set_reference(data.reference_voltage);
     currentSensor.set_reference(data.reference_current);
   } else nectarError.set_error(FLASH_ACCESS_ERROR);
   
+  if(data.calibrated) {
+    nectarError.clear_error(CALIBRATION_ERROR);
+  }
+
   if(!nectarError.has_error(CALIBRATION_ERROR)) {
     if(measure_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
     else nectarError.set_error(DC_OVER_VOLTAGE);
@@ -53,7 +57,7 @@ void sensor_controller_calibrate(void) {
 	float c_voltage = voltageSensor.get_reference();
 	float c_current = currentSensor.get_reference();
 	
-	if(((c_voltage < 0.04) && (c_voltage > 0.001)) && ((c_current < 2.2) && (c_current > 1.8))) {
+	if(((c_voltage < CALIBRATION_VOLTAGE_MAX) && (c_voltage > CALIBRATION_VOLTAGE_MIN)) && ((c_current < CALIBRATION_CURRENT_MAX) && (c_current > CALIBRATION_CURRENT_MIN))) {
 		if(nectarError.has_error(CALIBRATION_ERROR)) {
 			nectarError.clear_error(CALIBRATION_ERROR);
 		}
