@@ -1,4 +1,4 @@
-#include "consts.h"
+#include "mbed.h"
 #include "internal_temperature.h"
 
 void internal_temperature_init(void) {
