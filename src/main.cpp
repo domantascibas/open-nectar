@@ -62,12 +62,12 @@
 // DigitalOut pf1(PF_1);
 // DigitalOut pf11(PF_11);
 
-int main() {
+int main(void) {
   pc_service_comms_init();
 	flash_storage_init();
   
   printf("Starting device modes\r\n");
-  device_modes::setup();
+  device_modes_init();
   main_board_comms_init();
   printf("SETUP DONE\r\n");
   
@@ -75,8 +75,8 @@ int main() {
   
   while(1) {
     watchdog_timer_update();
-    device_modes::loop();
-    device_modes::calibrate_device();
+    device_modes_loop();
+    device_modes_calibrate();
     __WFI();
   }
 }

@@ -46,9 +46,9 @@ void mbedStream::received_main_board_state_for_power(const nectar_contract::Main
 		data.isCalibrating = true;
 	
   if(state.start == 0xAC) {
-    device_modes::start();
+    device_modes_set_state_running();
   } else {
-    device_modes::stop();
+    device_modes_set_state_stop();
   }
   printf("MAIN -> %f %d %d %d %d %d\r\n", data.grid_energy_meter_kwh, data.current_state, data.isTestMode, data.isInOnboarding, data.startCalibration, (state.start == 0xAC ? true : false));
 }
