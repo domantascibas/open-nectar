@@ -1,14 +1,12 @@
 #ifndef _NS_DEVICE_MODES_H
 #define _NS_DEVICE_MODES_H
 
-namespace device_modes {
-  void setup();  
-  void loop();
-  void calibrate_device();
+void device_modes_init(void);
+void device_modes_loop(void);
+void device_modes_calibrate(void);
   void testingStandCalibrate();
-  
-  void start();
-  void stop();
-}
+
+void device_modes_set_state_running(void);
+void device_modes_set_state_stop(void);
 
 #endif
