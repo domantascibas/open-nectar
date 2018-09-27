@@ -49,6 +49,5 @@ static const PinName USER_LED = PA_15;
 static const PinName OVERHEAT = PD_2;
 static const PinName CALIBRATION_BTN = PC_12;
 static const PinName LOW_VOLTAGE_MONITOR = PC_9;
-static const bool RESET_ENERGY_METERS = false;
 
 #endif

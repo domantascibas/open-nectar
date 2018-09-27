@@ -131,12 +131,6 @@ void update_mode_ISR(void) {
 }
 
 void shutdown_ISR(void) {
-  if(RESET_ENERGY_METERS) {
-    data.sun_energy_meter_kwh = 0.00;
-    data.grid_energy_meter_kwh = 0.00;
-    sensor_controller_save_meters();
-    printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
-  } else {
     if(!data.isTestMode) {
       sensor_controller_save_meters();
       printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
