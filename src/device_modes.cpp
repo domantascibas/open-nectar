@@ -26,7 +26,7 @@ InterruptIn no_power(LOW_VOLTAGE_MONITOR); //PC_9 voltage monitor. RESET active 
 void device_modes_init(void) {
   no_power.fall(&shutdown_ISR);
   // calibration_button.fall(&calibrate_ISR);
-  
+
   internal_temperature_init();
   sensor_controller_init();
   power_controller_init();

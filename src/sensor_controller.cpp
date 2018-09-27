@@ -20,11 +20,15 @@ void sensor_controller_init(void) {
   else nectarError.set_error(ADC_CURRENT_ERROR);
 
   if(!nectarError.has_error(FLASH_ACCESS_ERROR)) {
-    flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
+    data.calibrated = flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
     voltageSensor.set_reference(data.reference_voltage);
     currentSensor.set_reference(data.reference_current);
   } else nectarError.set_error(FLASH_ACCESS_ERROR);
   
+  if(data.calibrated) {
+    nectarError.clear_error(CALIBRATION_ERROR);
+  }
+
   if(!nectarError.has_error(CALIBRATION_ERROR)) {
     if(measure_voltage() < VOLTAGE_LIMIT) nectarError.clear_error(DC_OVER_VOLTAGE);
     else nectarError.set_error(DC_OVER_VOLTAGE);

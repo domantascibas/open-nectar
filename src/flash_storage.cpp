@@ -21,7 +21,7 @@ EE_SettingsDatastruct sDataStruct = {
 };
 
 void flash_storage_init(void) {
-  bool emptyStorage = true;
+  // bool emptyStorage = true;
   
   if(FLASH->CR & (0x1 << 0x7)) {
     FLASH->KEYR = 0x45670123; //FLASH KEY 1
@@ -30,45 +30,38 @@ void flash_storage_init(void) {
   }
   
   EE_Init();
-  EE_SettingsDatastruct rDataStruct;
-  emptyStorage = EE_ReadDatastruct(&rDataStruct);
+  // EE_SettingsDatastruct rDataStruct;
+  // emptyStorage = EE_ReadDatastruct(&rDataStruct);
   
-  if(emptyStorage) {
-    printf("[STORAGE] empty\r\n");
-    sDataStruct.device_calibrated = 0xFA;
-  } else {
-    printf("[STORAGE] not empty\r\n");
-    printf("[STORAGE] %d %d %f %f\r\n", rDataStruct.device_calibrated, rDataStruct.extra_property, rDataStruct.ref_voltage, rDataStruct.ref_current);
-    sDataStruct = rDataStruct;
-    printf("[STORAGE] %d %d %f %f\r\n", sDataStruct.device_calibrated, sDataStruct.extra_property, sDataStruct.ref_voltage, sDataStruct.ref_current);
-  }
-  
-  if(sDataStruct.device_calibrated == DEVICE_CALIBRATED) {
-    nectarError.clear_error(CALIBRATION_ERROR);
-    // if(((sDataStruct.ref_voltage < 0.002) && (sDataStruct.ref_voltage > 0.001)) && ((sDataStruct.ref_current < 2.2) && (sDataStruct.ref_current > 1.8))) {
-    //   nectarError.clear_error(CALIBRATION_ERROR);
-    // } else {
-    //   nectarError.set_error(CALIBRATION_ERROR);
-    // }
-  }
+  // if(emptyStorage) {
+  //   sDataStruct.device_calibrated = EMPTY_VALUE;
+  // } else {
+  //   sDataStruct = rDataStruct;
+  //   data.calibrated = sDataStruct.device_calibrated;
+  // }
 }
 
-void flash_storage_load_data(float *voltage, float *current, float *sun, float *grid) {
-  bool emptyStorage = true;
+bool flash_storage_load_data(float *voltage, float *current, float *sun, float *grid) {
+  bool load_error = true;
   
   EE_SettingsDatastruct rDataStruct;
-  emptyStorage = EE_ReadDatastruct(&rDataStruct);
+  load_error = EE_ReadDatastruct(&rDataStruct);
   
-  if(emptyStorage) {
-    sDataStruct.device_calibrated = 0xFA;
+  if(load_error) {
+    printf("[STORAGE] empty\r\n");
+    sDataStruct.device_calibrated = EMPTY_VALUE;
   } else {
+    printf("[STORAGE] not empty\r\n");
     sDataStruct = rDataStruct;			
     *voltage = sDataStruct.ref_voltage;
     *current = sDataStruct.ref_current;
 
     *sun = sDataStruct.sun_meter;
     *grid = sDataStruct.grid_meter;
+    printf("[STORAGE] %d %d %f %f\r\n", sDataStruct.device_calibrated, sDataStruct.extra_property, sDataStruct.ref_voltage, sDataStruct.ref_current);
   }
+
+  return (sDataStruct.device_calibrated == DEVICE_CALIBRATED);
 }
 
 void flash_storage_save_data(float voltage, float current) {
