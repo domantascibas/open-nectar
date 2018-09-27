@@ -65,7 +65,7 @@
 int main(void) {
   pc_service_comms_init();
 	flash_storage_init();
-  
+
   printf("Starting device modes\r\n");
   device_modes_init();
   main_board_comms_init();
