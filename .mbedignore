@@ -5,4 +5,26 @@ submodules/nectar_serial/.gitignore
 submodules/nectar_serial/library.properties
 submodules/nectar_serial/README.md
 
+mbed-os/rtos/*
+mbed-os/features/cellular/*
+mbed-os/features/cryptocell/*
+mbed-os/features/FEATURE_BLE/*
+mbed-os/features/FEATURE_CLIENT/*
+mbed-os/features/FEATURE_COMMON_PAL/*
+mbed-os/features/FEATURE_UVISOR/*
+mbed-os/features/frameworks/*
+mbed-os/features/net/*
+mbed-os/features/mbedtls/*
+mbed-os/features/nanostack/*
+mbed-os/features/netsocket/*
+mbed-os/features/nvstore/*
+mbed-os/features/nfc/*
+mbed-os/features/storage/*
+mbed-os/features/device_key/*
+mbed-os/features/lorawan/*
+mbed-os/events/*
+mbed-os/features/lwipstack/*
+mbed-os/components/*
+
 tmp/*
+TESTS/
