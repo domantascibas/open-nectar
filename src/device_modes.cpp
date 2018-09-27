@@ -7,10 +7,12 @@
 #include "internal_temperature.h"
 #include "sensor_controller.h"
 
-void calibrate_ISR(void);
+void calibrate(void);
+// void calibrate_ISR(void);
 void update_mode_ISR(void);
 void shutdown_ISR(void);
 
+// static volatile bool button_pressed = false;
 static volatile bool update_mode = false;
 static float lastPower = 0.0;
 
@@ -18,12 +20,12 @@ Timer stat_timer;
 Ticker update_device_mode;
 DigitalOut led(USER_LED);
 DigitalIn transistorOverheat(OVERHEAT);
-InterruptIn calibration_button(CALIBRATION_BTN);
+// InterruptIn calibration_button(CALIBRATION_BTN);
 InterruptIn no_power(LOW_VOLTAGE_MONITOR); //PC_9 voltage monitor. RESET active - low. normal operation - 1, when <8.5V - 0.
 
 void device_modes_init(void) {
   no_power.fall(&shutdown_ISR);
-  calibration_button.fall(&calibrate_ISR);
+  // calibration_button.fall(&calibrate_ISR);
   
   internal_temperature_init();
   sensor_controller_init();
@@ -38,6 +40,16 @@ void device_modes_init(void) {
 }
 
 void device_modes_loop(void) {
+  // if(button_pressed) {
+  //   button_pressed = false;
+  //   printf("!! calibration button pressed !!\r\n");
+  // }
+
+  if(data.startCalibration) {
+    data.startCalibration = false;
+    calibrate();
+  }
+
   if(!nectarError.has_error(CALIBRATION_ERROR)) {
     sensor_controller_measure();
   }
@@ -98,17 +110,6 @@ void device_modes_loop(void) {
   }
 }
 
-void device_modes_calibrate(void) {
-  if(data.startCalibration) {
-    data.startCalibration = false;
-    sensor_controller_calibrate();      
-    data.sun_energy_meter_kwh = 0.00;
-    data.grid_energy_meter_kwh = 0.00;
-    sensor_controller_save_meters();
-    printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
-  }
-}
-
 void device_modes_set_state_running(void) {
   if(data.current_state != MANUAL) data.current_state = RUNNING;
 }
@@ -121,19 +122,27 @@ void device_modes_set_state_stop(void) {
   }
 }
 
-void calibrate_ISR(void) {
-  if(data.isInOnboarding) data.startCalibration = true;
-  else data.startCalibration = false;
+void calibrate(void) {
+  sensor_controller_calibrate();      
+  data.sun_energy_meter_kwh = 0.00;
+  data.grid_energy_meter_kwh = 0.00;
+  sensor_controller_save_meters();
+  printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
 }
+
+// void calibrate_ISR(void) {
+//   // button_pressed = true;
+//   if(data.isInOnboarding | data.isTestMode) data.startCalibration = true;
+//   else data.startCalibration = false;
+// }
 
 void update_mode_ISR(void) {
   update_mode = true;
 }
 
 void shutdown_ISR(void) {
-    if(!data.isTestMode) {
-      sensor_controller_save_meters();
-      printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
-    }
+  if(!data.isTestMode) {
+    sensor_controller_save_meters();
+    printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   }
 }
