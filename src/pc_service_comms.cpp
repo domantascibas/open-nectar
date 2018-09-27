@@ -34,7 +34,7 @@ void parse_command(uint8_t command) {
   switch(command) {
     case CALIBRATE:
       data.isCalibrating = true;
-      device_modes::testingStandCalibrate();
+      data.startCalibration = true;
       printf("\r\nCALIBRATING POWER BOARD\r\n");
       break;
     
