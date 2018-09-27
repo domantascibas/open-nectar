@@ -4,10 +4,15 @@
 #include "mbed.h"
 
 static const float NECTAR_POWER_BOARD_VERSION = 108;
+static const float DEVICE_MODE_UPDATE_INTERVAL = 0.5;
 
+// Calibration settings
 static const uint8_t DEVICE_CALIBRATED = 0xCA;
 static const uint8_t EMPTY_VALUE = 0xFA;
-static const float DEVICE_MODE_UPDATE_INTERVAL = 0.5;
+static const float CALIBRATION_VOLTAGE_MAX = 0.04;
+static const float CALIBRATION_VOLTAGE_MIN = 0.001;
+static const float CALIBRATION_CURRENT_MAX = 2.2;
+static const float CALIBRATION_CURRENT_MIN = 1.8;
 
 // Voltage & Current Sensor I/O
 static const PinName I2C_SDA_PIN = PB_14;

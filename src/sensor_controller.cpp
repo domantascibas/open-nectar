@@ -57,7 +57,7 @@ void sensor_controller_calibrate(void) {
 	float c_voltage = voltageSensor.get_reference();
 	float c_current = currentSensor.get_reference();
 	
-	if(((c_voltage < 0.04) && (c_voltage > 0.001)) && ((c_current < 2.2) && (c_current > 1.8))) {
+	if(((c_voltage < CALIBRATION_VOLTAGE_MAX) && (c_voltage > CALIBRATION_VOLTAGE_MIN)) && ((c_current < CALIBRATION_CURRENT_MAX) && (c_current > CALIBRATION_CURRENT_MIN))) {
 		if(nectarError.has_error(CALIBRATION_ERROR)) {
 			nectarError.clear_error(CALIBRATION_ERROR);
 		}
