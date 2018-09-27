@@ -76,7 +76,6 @@ int main(void) {
   while(1) {
     watchdog_timer_update();
     device_modes_loop();
-    device_modes_calibrate();
     __WFI();
   }
 }

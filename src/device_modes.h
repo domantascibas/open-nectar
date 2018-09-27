@@ -3,7 +3,6 @@
 
 void device_modes_init(void);
 void device_modes_loop(void);
-void device_modes_calibrate(void);
 
 void device_modes_set_state_running(void);
 void device_modes_set_state_stop(void);
