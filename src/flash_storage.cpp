@@ -4,10 +4,10 @@
 #include "eeprom.h"
 #include "ErrorHandler.h"
 
-static uint8_t calibrated = 0xFA;
-static uint8_t extra_property = 0xFA;
-static uint8_t extra_property2 = 0xFA;
-static uint8_t extra_property3 = 0xFA;
+static uint8_t calibrated = EMPTY_VALUE;
+static uint8_t extra_property = EMPTY_VALUE;
+static uint8_t extra_property2 = EMPTY_VALUE;
+static uint8_t extra_property3 = EMPTY_VALUE;
 
 EE_SettingsDatastruct sDataStruct = {
   calibrated,

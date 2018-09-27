@@ -6,6 +6,7 @@
 static const float NECTAR_POWER_BOARD_VERSION = 108;
 
 static const uint8_t DEVICE_CALIBRATED = 0xCA;
+static const uint8_t EMPTY_VALUE = 0xFA;
 static const float DEVICE_MODE_UPDATE_INTERVAL = 0.5;
 
 // Voltage & Current Sensor I/O
