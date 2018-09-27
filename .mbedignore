@@ -5,6 +5,11 @@ submodules/nectar_serial/.gitignore
 submodules/nectar_serial/library.properties
 submodules/nectar_serial/README.md
 
+submodules/nucleo_helpers/TESTS/*
+submodules/nucleo_helpers/.mbed
+submodules/nucleo_helpers/.mbedignore
+submodules/nucleo_helpers/mbed_settings.py
+
 mbed-os/rtos/*
 mbed-os/features/cellular/*
 mbed-os/features/cryptocell/*
