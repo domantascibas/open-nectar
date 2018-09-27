@@ -71,8 +71,8 @@ namespace device_modes {
     pwm_controller_init();
     
     printf("[DEVICE MODES]\r\n");
-    update_device_mode.attach(&update_device_mode_ISR, update_interval);
-    printf("[ok] interval %.2fs\r\n\n", update_interval);
+  update_device_mode.attach(&update_mode_ISR, DEVICE_MODE_UPDATE_INTERVAL);
+  printf("[ok] interval %.2fs\r\n\n", DEVICE_MODE_UPDATE_INTERVAL);
     stat_timer.start();
     printf("Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   }
