@@ -21,8 +21,6 @@ EE_SettingsDatastruct sDataStruct = {
 };
 
 void flash_storage_init(void) {
-  // bool emptyStorage = true;
-  
   if(FLASH->CR & (0x1 << 0x7)) {
     FLASH->KEYR = 0x45670123; //FLASH KEY 1
     FLASH->KEYR = 0xCDEF89AB; //FLASH KEY 2
@@ -30,15 +28,6 @@ void flash_storage_init(void) {
   }
   
   EE_Init();
-  // EE_SettingsDatastruct rDataStruct;
-  // emptyStorage = EE_ReadDatastruct(&rDataStruct);
-  
-  // if(emptyStorage) {
-  //   sDataStruct.device_calibrated = EMPTY_VALUE;
-  // } else {
-  //   sDataStruct = rDataStruct;
-  //   data.calibrated = sDataStruct.device_calibrated;
-  // }
 }
 
 bool flash_storage_load_data(float *voltage, float *current, float *sun, float *grid) {
