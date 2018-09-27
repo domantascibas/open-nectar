@@ -6,9 +6,10 @@ submodules/nectar_serial/library.properties
 submodules/nectar_serial/README.md
 
 submodules/nucleo_helpers/TESTS/*
-submodules/nucleo_helpers/.mbed
-submodules/nucleo_helpers/.mbedignore
+submodules/nucleo_helpers/mbed-os/*
+submodules/nucleo_helpers/mbed-os.lib
 submodules/nucleo_helpers/mbed_settings.py
+submodules/nucleo_helpers/.mbed
 
 mbed-os/rtos/*
 mbed-os/features/cellular/*
