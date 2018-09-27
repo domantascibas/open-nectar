@@ -38,17 +38,18 @@ void flash_storage_init(void) {
     sDataStruct.device_calibrated = 0xFA;
   } else {
     printf("[STORAGE] not empty\r\n");
-    printf("[STORAGE] %d %d %f %f\r\n", sDataStruct.device_calibrated, sDataStruct.extra_property, sDataStruct.ref_voltage, sDataStruct.ref_current);
+    printf("[STORAGE] %d %d %f %f\r\n", rDataStruct.device_calibrated, rDataStruct.extra_property, rDataStruct.ref_voltage, rDataStruct.ref_current);
     sDataStruct = rDataStruct;
+    printf("[STORAGE] %d %d %f %f\r\n", sDataStruct.device_calibrated, sDataStruct.extra_property, sDataStruct.ref_voltage, sDataStruct.ref_current);
   }
   
   if(sDataStruct.device_calibrated == DEVICE_CALIBRATED) {
     nectarError.clear_error(CALIBRATION_ERROR);
-    if(((sDataStruct.ref_voltage < 0.002) && (sDataStruct.ref_voltage > 0.001)) && ((sDataStruct.ref_current < 2.2) && (sDataStruct.ref_current > 1.8))) {
-      nectarError.clear_error(CALIBRATION_ERROR);
-    } else {
-      nectarError.set_error(CALIBRATION_ERROR);
-    }
+    // if(((sDataStruct.ref_voltage < 0.002) && (sDataStruct.ref_voltage > 0.001)) && ((sDataStruct.ref_current < 2.2) && (sDataStruct.ref_current > 1.8))) {
+    //   nectarError.clear_error(CALIBRATION_ERROR);
+    // } else {
+    //   nectarError.set_error(CALIBRATION_ERROR);
+    // }
   }
 }
 
