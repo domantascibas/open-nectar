@@ -24,10 +24,10 @@ void flash_storage_init(void) {
   if(FLASH->CR & (0x1 << 0x7)) {
     FLASH->KEYR = 0x45670123; //FLASH KEY 1
     FLASH->KEYR = 0xCDEF89AB; //FLASH KEY 2
-    nectarError.clear_error(FLASH_ACCESS_ERROR);
   }
   
-  EE_Init();
+  uint16_t result = EE_Init();
+  if(result == HAL_OK) nectarError.clear_error(FLASH_ACCESS_ERROR);
 }
 
 bool flash_storage_load_data(float *voltage, float *current, float *sun, float *grid) {
