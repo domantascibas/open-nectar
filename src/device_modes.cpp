@@ -56,7 +56,7 @@ namespace device_modes {
       float temp_min = temperatureData.getMinTemperature();
       float temp_max = temperatureData.getMaxTemperature();
       
-      if(reachedMaxTemp && ((temp_boiler - 5.0) < temp_max)) reachedMaxTemp = false;
+      if(reachedMaxTemp && ((temp_boiler + HIST) < temp_max)) reachedMaxTemp = false;
       if(reachedMaxTemp) {
         relayStateNew = TURN_OFF_ALL;
       } else {
