@@ -39,6 +39,8 @@ static const float PWM_STEP = 0.02;
 static const float PWM_STEP_FINE = 0.005;
 
 // Temperature Limits
+static const PinName INTERNAL_TEMPERATURE_PIN = PC_7;
+static const float DEVICE_TEMPERATURE_LIMIT_MAX = 85.0;
 static const int PROCESSOR_INTERNAL_TEMPERATURE_LIMIT = 120;
 
 // PC Serial comms
