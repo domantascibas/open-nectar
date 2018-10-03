@@ -391,16 +391,6 @@
               <FilePath>.\src\BoostTimeout.h</FilePath>
             </File>
             <File>
-              <FileName>CommsController.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\CommsController.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>CommsController.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\CommsController.h</FilePath>
-            </File>
-            <File>
               <FileName>consts.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\consts.h</FilePath>
@@ -2183,8 +2173,38 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>00</GroupName>
+          <GroupName>screens</GroupName>
           <Files>
+            <File>
+              <FileName>ActiveStatusScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\ActiveStatusScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ActiveStatusScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\ActiveStatusScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>ActiveTotalScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\ActiveTotalScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ActiveTotalScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\ActiveTotalScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>BackScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\BackScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BackScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\BackScreen.h</FilePath>
+            </File>
             <File>
               <FileName>ConfirmationScreen.cpp</FileName>
               <FileType>8</FileType>
@@ -2194,6 +2214,56 @@
               <FileName>ConfirmationScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\00\ConfirmationScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>DeviceModeScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\DeviceModeScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>DeviceModeScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\01\DeviceModeScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>LanguageScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\LanguageScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LanguageScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\LanguageScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>PairingScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\PairingScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>PairingScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\PairingScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>ResetScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\ResetScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ResetScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\02\ResetScreen.h</FilePath>
+            </File>
+            <File>
+              <FileName>SetDeviceModeScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\00\SetDeviceModeScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SetDeviceModeScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\00\SetDeviceModeScreen.h</FilePath>
             </File>
             <File>
               <FileName>SetLanguageScreen.cpp</FileName>
@@ -2226,51 +2296,6 @@
               <FilePath>.\submodules\device_menu\src\Screens\00\SetTimeScreen.h</FilePath>
             </File>
             <File>
-              <FileName>SetDeviceModeScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\00\SetDeviceModeScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>SetDeviceModeScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\00\SetDeviceModeScreen.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>01</GroupName>
-          <Files>
-            <File>
-              <FileName>DeviceModeScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\01\DeviceModeScreen.h</FilePath>
-            </File>
-            <File>
-              <FileName>DeviceModeScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\01\DeviceModeScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ActiveStatusScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\01\ActiveStatusScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ActiveStatusScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\01\ActiveStatusScreen.h</FilePath>
-            </File>
-            <File>
-              <FileName>ActiveTotalScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\01\ActiveTotalScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ActiveTotalScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\01\ActiveTotalScreen.h</FilePath>
-            </File>
-            <File>
               <FileName>SettingsScreen.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\01\SettingsScreen.cpp</FilePath>
@@ -2279,41 +2304,6 @@
               <FileName>SettingsScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\01\SettingsScreen.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>02</GroupName>
-          <Files>
-            <File>
-              <FileName>BackScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\BackScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>BackScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\BackScreen.h</FilePath>
-            </File>
-            <File>
-              <FileName>LanguageScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\LanguageScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LanguageScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\LanguageScreen.h</FilePath>
-            </File>
-            <File>
-              <FileName>ResetScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\ResetScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ResetScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\ResetScreen.h</FilePath>
             </File>
             <File>
               <FileName>TemperatureScreen.cpp</FileName>
@@ -2334,16 +2324,6 @@
               <FileName>TimeScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\02\TimeScreen.h</FilePath>
-            </File>
-            <File>
-              <FileName>PairingScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\PairingScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>PairingScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\02\PairingScreen.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2386,14 +2366,34 @@
           <GroupName>comms</GroupName>
           <Files>
             <File>
-              <FileName>NectarStream.h</FileName>
+              <FileName>CommsController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\CommsController.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CommsController.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\submodules\nectar_serial\src\NectarStream.h</FilePath>
+              <FilePath>.\src\CommsController.h</FilePath>
+            </File>
+            <File>
+              <FileName>EspComms.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\EspComms.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EspComms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\EspComms.h</FilePath>
             </File>
             <File>
               <FileName>NectarStream.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\submodules\nectar_serial\src\NectarStream.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>NectarStream.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\nectar_serial\src\NectarStream.h</FilePath>
             </File>
             <File>
               <FileName>NectarContract.h</FileName>
@@ -2408,17 +2408,7 @@
             <File>
               <FileName>PowerBoardComms.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\inc\PowerBoardComms.h</FilePath>
-            </File>
-            <File>
-              <FileName>EspComms.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\EspComms.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EspComms.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\EspComms.h</FilePath>
+              <FilePath>.\src\PowerBoardComms.h</FilePath>
             </File>
             <File>
               <FileName>ServiceComms.cpp</FileName>
@@ -2428,22 +2418,22 @@
             <File>
               <FileName>ServiceComms.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\inc\ServiceComms.h</FilePath>
+              <FilePath>.\src\ServiceComms.h</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>engineering menu</GroupName>
+          <GroupName>engineering screens</GroupName>
           <Files>
             <File>
-              <FileName>DebugScreen.cpp</FileName>
+              <FileName>CalibrateScreen.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\error\DebugScreen.cpp</FilePath>
+              <FilePath>.\submodules\device_menu\src\Screens\engineering_menu\CalibrateScreen.cpp</FilePath>
             </File>
             <File>
-              <FileName>DebugScreen.h</FileName>
+              <FileName>CalibrateScreen.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\error\DebugScreen.h</FilePath>
+              <FilePath>.\submodules\device_menu\src\Screens\engineering_menu\CalibrateScreen.h</FilePath>
             </File>
             <File>
               <FileName>DebugErrorScreen.cpp</FileName>
@@ -2456,6 +2446,16 @@
               <FilePath>.\submodules\device_menu\src\Screens\error\DebugErrorScreen.h</FilePath>
             </File>
             <File>
+              <FileName>DebugScreen.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\error\DebugScreen.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>DebugScreen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\Screens\error\DebugScreen.h</FilePath>
+            </File>
+            <File>
               <FileName>ErrorScreen.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\error\ErrorScreen.cpp</FilePath>
@@ -2464,16 +2464,6 @@
               <FileName>ErrorScreen.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Screens\error\ErrorScreen.h</FilePath>
-            </File>
-            <File>
-              <FileName>CalibrateScreen.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\engineering_menu\CalibrateScreen.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>CalibrateScreen.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\Screens\engineering_menu\CalibrateScreen.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2490,11 +2480,6 @@
         <Group>
           <GroupName>fonts</GroupName>
           <Files>
-            <File>
-              <FileName>XSmallFont.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\submodules\device_menu\u8g2-mbed\fonts\XSmallFont.c</FilePath>
-            </File>
             <File>
               <FileName>Large.c</FileName>
               <FileType>1</FileType>
@@ -2514,6 +2499,11 @@
               <FileName>XLarge.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\submodules\device_menu\u8g2-mbed\fonts\XLarge.c</FilePath>
+            </File>
+            <File>
+              <FileName>XSmallFont.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\submodules\device_menu\u8g2-mbed\fonts\XSmallFont.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2701,16 +2691,6 @@
           <GroupName>helpers</GroupName>
           <Files>
             <File>
-              <FileName>watchdog_timer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\submodules\nucleo_helpers\src\watchdog_timer.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>watchdog_timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\nucleo_helpers\src\watchdog_timer.h</FilePath>
-            </File>
-            <File>
               <FileName>processor_temperature.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\submodules\nucleo_helpers\src\processor_temperature.cpp</FilePath>
@@ -2719,6 +2699,16 @@
               <FileName>processor_temperature.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\nucleo_helpers\src\processor_temperature.h</FilePath>
+            </File>
+            <File>
+              <FileName>watchdog_timer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\submodules\nucleo_helpers\src\watchdog_timer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>watchdog_timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\nucleo_helpers\src\watchdog_timer.h</FilePath>
             </File>
           </Files>
         </Group>
