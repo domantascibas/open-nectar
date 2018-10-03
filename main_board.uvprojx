@@ -466,16 +466,6 @@
               <FilePath>.\src\GridRelay.h</FilePath>
             </File>
             <File>
-              <FileName>HeaterMode.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\HeaterMode.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>HeaterMode.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\HeaterMode.h</FilePath>
-            </File>
-            <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\main.cpp</FilePath>
