@@ -1,3 +1,7 @@
 [submodule "submodules/nectar_serial"]
 	path = submodules/nectar_serial
 	url = git@gitlab.com:nectarsun/nectarsun-s/nectar_serial.git
+
+[submodule "submodules/nucleo_helpers"]
+	path = submodules/nucleo_helpers
+	url = git@gitlab.com:nectarsun-public/nucleo-f091rc-helpers.git

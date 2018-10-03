@@ -1,4 +1,4 @@
-#include "mbed.h"
+#include "consts.h"
 #include "Sensor.h"
 #include "data.h"
 
@@ -11,16 +11,12 @@
 #define REG_ADDR_CONVL          0x06
 #define REG_ADDR_CONVH          0x07
 
-static const PinName SDA = PB_14;
-static const PinName SCL = PB_13;
-static const float V_REF = 3.00;
+I2C m_i2c(I2C_SDA_PIN, I2C_SCL_PIN);
 
-I2C m_i2c(SDA, SCL);
-
-Sensor::Sensor(const uint8_t addr) 
-  : address(addr), ready_to_sample(false) {
+Sensor::Sensor(const uint8_t addr) : address(addr) {
+    ready_to_sample = false;
     reference = 0.0;
-    m_i2c.frequency(400000);
+    m_i2c.frequency(I2C_FREQUENCY);
     attach_ticker();
 }
   
@@ -61,22 +57,19 @@ float Sensor::sample(const uint16_t samples) {
   
   ready_to_sample = false;
   
-//  if(!data.readingSerial) {
-    for(i=0; i<samples; i++) {
-      cmd[0] = REG_ADDR_RESULT;
-      m_i2c.write(address, cmd, 1);
-      m_i2c.read(address, cmd, 2);
-      raw = ((cmd[0] & 0x0F) << 8) | cmd[1];
-      sum += (raw * V_REF) / 2048; //raw * VREF * 2 / 4096
-    }
-    
-    avg = sum / samples;
-    if(avg < 0) {
-      avg = 0;
-    }
-//    printf("ADC 0x%X %.2f\r\n", address, avg);
-    return avg;
-//  }
+  for(i=0; i<samples; i++) {
+    cmd[0] = REG_ADDR_RESULT;
+    m_i2c.write(address, cmd, 1);
+    m_i2c.read(address, cmd, 2);
+    raw = ((cmd[0] & 0x0F) << 8) | cmd[1];
+    sum += (raw * V_REF) / 2048; //raw * VREF * 2 / 4096
+  }
+  
+  avg = sum / samples;
+  if(avg < 0) {
+    avg = 0;
+  }
+  return avg;
 }
 
 void Sensor::calibrate() {

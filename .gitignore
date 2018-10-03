@@ -1,21 +1,23 @@
 # ignore .vscode
-.vscode/
+.vscode/*
 
 # ignore mbed-os lib
-mbed-os/
-mbed/
-.temp/
+mbed-os/*
+mbed/*
+.temp/*
 
 # ignore build folder
-BUILD/
-DebugConfig/
-bin/
+BUILD/*
+DebugConfig/*
+bin/*
 
 # ignore .py and .pyc files
-.mbed
-*.py
 *.pyc
 
 # ignore other files
 *.doman
 *.uvoptx
+*.uvprojx
+
+mbed_config.h
+GettingStarted.html

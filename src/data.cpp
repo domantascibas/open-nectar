@@ -51,5 +51,3 @@ nectar_contract::PowerBoardState powerState = {
   0,
   0
 };
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

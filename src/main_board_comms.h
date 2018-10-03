@@ -1,12 +1,10 @@
-#ifndef MAIN_BOARD_H
-#define MAIN_BOARD_H
+#ifndef _NS_MAIN_BOARD_COMMS_H
+#define _NS_MAIN_BOARD_COMMS_H
 
 #include "mbed.h"
 #include "NectarStream.h"
 
-namespace main_board {
-  void setup();
-}
+void main_board_comms_init(void);
 
 class mbedStream : public IStreamDelegate {
 public:
@@ -31,5 +29,3 @@ private:
 };
 
 #endif
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

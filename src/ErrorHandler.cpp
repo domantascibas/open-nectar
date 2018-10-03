@@ -49,7 +49,7 @@ void ErrorHandler::clear_error(ERROR_CODE err) {
     has_errors = false;
     printf("[OK] All errors cleared!\r\n");
   } else {
-    printf("[WARNING] Errors pending: 0x%X\r\n", raised_errors);
+    printf("[WARNING] Errors pending: 0x%lX\r\n", raised_errors);
   }
 }
 

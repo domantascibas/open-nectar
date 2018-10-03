@@ -1,8 +1,11 @@
-#include "mbed.h"
+#include "consts.h"
 #include "data.h"
-#include "service.h"
-#include "MpptController.h"
+#include "pc_service_comms.h"
+#include "power_controller.h"
 #include "device_modes.h"
+
+void parse_command(uint8_t command);
+void Rx_interrupt(void);
 
 static const uint8_t INCREASE_DUTY = 0x2A;
 static const uint8_t DECREASE_DUTY = 0x2F;
@@ -17,51 +20,56 @@ static const uint8_t MANUAL_MODE = 0x6D;
 static const uint8_t AUTO_MODE = 0x61;
 static const uint8_t CALIBRATE = 0x63;
 
-static const PinName PC_TX = PA_2;
-static const PinName PC_RX = PA_3;
-
 RawSerial pc(PC_TX, PC_RX);
 
-void parseCommand(uint8_t command) {
+void pc_service_comms_init(void) {
+  pc.baud(PC_BAUD);
+  pc.attach(&Rx_interrupt);
+  pc.printf("\r\n[START]\r\n");
+  pc.printf("[COMMS PC]\r\n");
+  pc.printf("[ok] baud %d\r\n\n", PC_BAUD);
+}
+
+void parse_command(uint8_t command) {
   switch(command) {
     case CALIBRATE:
       data.isCalibrating = true;
-      device_modes::testingStandCalibrate();
+      data.startCalibration = true;
       printf("\r\nCALIBRATING POWER BOARD\r\n");
       break;
     
     case INCREASE_DUTY:
       if(data.current_state == MANUAL) {
-        mppt.manualIncreaseDuty(false);
-        printf("\r\nPWM DUTY INCREASED %f\r\n\n", mppt.get_duty());
+        power_controller_manual_increase_duty(false);
+        printf("\r\nPWM DUTY INCREASED %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
     
     case DECREASE_DUTY:
       if(data.current_state == MANUAL) {
-        mppt.manualDecreaseDuty(false);
-        printf("\r\nPWM DUTY DECREASED %f\r\n\n", mppt.get_duty());
+        power_controller_manual_decrease_duty(false);
+        printf("\r\nPWM DUTY DECREASED %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
       
     case INCREASE_DUTY_FINE:
       if(data.current_state == MANUAL) {
-        mppt.manualIncreaseDuty();
-        printf("\r\nPWM DUTY INCREASED %f\r\n\n", mppt.get_duty());
+        power_controller_manual_increase_duty();
+        printf("\r\nPWM DUTY INCREASED %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
       
     case DECREASE_DUTY_FINE:
       if(data.current_state == MANUAL) {
-        mppt.manualDecreaseDuty();
-        printf("\r\nPWM DUTY DECREASED %f\r\n\n", mppt.get_duty());
+        power_controller_manual_decrease_duty();
+        printf("\r\nPWM DUTY DECREASED %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
     
     case RESET_DUTY:
       if(data.current_state == MANUAL) {
-        mppt.stop();
-        printf("\r\nPWM DUTY RESET %f\r\n\n", mppt.get_duty());
+        power_controller_mppt_stop();
+        printf("\r\nPWM DUTY RESET %f\r\n\n", power_controller_get_duty());
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
     
@@ -77,14 +85,14 @@ void parseCommand(uint8_t command) {
     
     case PWM_GENERATOR_START:
       if(data.current_state == MANUAL) {
-        mppt.manualStartPwm();
+        power_controller_manual_output_on();
         printf("\r\nPWM GENERATOR STARTED\r\n\n");
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
     
     case PWM_GENERATOR_STOP:
       if(data.current_state == MANUAL) {
-        mppt.manualStopPwm();
+        power_controller_manual_output_off();
         printf("\r\nPWM GENERATOR STOPPED\r\n\n");
       } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
       break;
@@ -96,27 +104,15 @@ void parseCommand(uint8_t command) {
   }
 }
 
-void Rx_interrupt() {
+void Rx_interrupt(void) {
   if(data.isInOnboarding || data.isTestMode) {
     __disable_irq();
     while(pc.readable()) {
       char rcv = pc.getc();
-      parseCommand(rcv);
+      parse_command(rcv);
     }
     __enable_irq();
 //  } else {
 //    printf("[AUTO MODE] for manual control put device in TEST MODE or START ONBOARDING\r\n");
-  }
-}
-
-namespace service {
-  void setup() {
-    static const uint32_t pc_baud = 115200;
-    
-    pc.baud(pc_baud);
-    pc.attach(&Rx_interrupt);
-    printf("\r\n[START]\r\n");
-    printf("[COMMS PC]\r\n");
-    printf("[ok] baud %d\r\n\n", pc_baud);
   }
 }
