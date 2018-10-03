@@ -3,6 +3,8 @@
 #include "DataService.h"
 #include "device_modes.h"
 #include "ServiceComms.h"
+#include "processor_temperature.h"
+#include "consts.h"
 
 static const PinName BOILER_TEMP_PROBE = PB_8;
 
@@ -12,6 +14,7 @@ static const float WATER_TEMPERATURE_LIMIT_MAX = 90.0;
 TemperatureSensor boilerTemp(BOILER_TEMP_PROBE, 3);
 
 void TemperatureController::init() {
+	processor_temperature_init();
   boilerTemp.init();
   
   if(boilerTemp.isSensorFound()) {
@@ -33,27 +36,18 @@ float TemperatureController::getBoilerTemperature() {
   return boilerTemperature;
 }
 
-/* Temperature sensor calibration value address */
-#define TEMP110_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7C2))
-#define TEMP30_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7B8))
-#define VDD_CALIB ((uint16_t) (330))
-#define VDD_APPLI ((uint16_t) (300))
-
-void readInternalTempSensor() {
-  ADC1->CR |= ADC_CR_ADSTART;
-  wait_us(30);
-  int32_t temperature; /* will contain the temperature in degrees Celsius */
-  temperature = (((int32_t) ADC1->DR * VDD_APPLI / VDD_CALIB) - (int32_t) *TEMP30_CAL_ADDR );
-  temperature = temperature * (int32_t)(110 - 30);
-  temperature = temperature / (int32_t)(*TEMP110_CAL_ADDR - *TEMP30_CAL_ADDR);
-  temperature = temperature + 30;
-  
-  printf("processor temp: %d\r\n", temperature);
-}
-
 void TemperatureController::updateTemperatures() {
   if(boilerTemp.isNewValueAvailable() || service::isNewValueAvailable()) {
-    readInternalTempSensor();
+		
+		float processor_temp = processor_temperature_measure();
+		// printf("processor temp: %f\r\n", internal_temp);
+		if(processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
+			if(!mainBoardError.has_error(PROCESSOR_OVERHEAT)) mainBoardError.set_error(PROCESSOR_OVERHEAT);
+			printf("PROCESSOR OVERHEAT\r\n");
+		} else {
+			if(mainBoardError.has_error(PROCESSOR_OVERHEAT) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) mainBoardError.clear_error(PROCESSOR_OVERHEAT);
+		}
+		
     if(deviceOpMode.isInTestStand()) {
       temperatureData.setBoilerTemperature(service::getFakeTemperature());
       printf("new fake temp\r\n");
