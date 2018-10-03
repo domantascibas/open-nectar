@@ -2136,11 +2136,6 @@
               <FilePath>.\submodules\device_menu\src\helpers\helpers.h</FilePath>
             </File>
             <File>
-              <FileName>string.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\submodules\device_menu\src\helpers\string.h</FilePath>
-            </File>
-            <File>
               <FileName>time_hm.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\helpers\time_hm.h</FilePath>
@@ -2194,6 +2189,11 @@
               <FileName>ru.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\submodules\device_menu\src\Localizations\ru.h</FilePath>
+            </File>
+            <File>
+              <FileName>ns_string.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\submodules\device_menu\src\helpers\ns_string.h</FilePath>
             </File>
           </Files>
         </Group>
