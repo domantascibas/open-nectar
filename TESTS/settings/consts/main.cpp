@@ -29,6 +29,7 @@ void check_calibration_limits(void) {
 }
 
 void check_temperature_limits(void) {
+  TEST_ASSERT_EQUAL_FLOAT_MESSAGE(REL_DEVICE_TEMPERATURE_LIMIT_MAX, DEVICE_TEMPERATURE_LIMIT_MAX, "wrong device internal temperature limit");
   TEST_ASSERT_EQUAL_FLOAT_MESSAGE(REL_PROCESSOR_INTERNAL_TEMPERATURE_LIMIT, PROCESSOR_INTERNAL_TEMPERATURE_LIMIT, "wrong processor internal temperature limit");
 }
 
@@ -43,6 +44,7 @@ void check_pwm_limits(void) {
 
 void check_other_limits(void) {
   TEST_ASSERT_EQUAL_FLOAT_MESSAGE(REL_CURRENT_THRESHOLD, CURRENT_THRESHOLD, "wrong current threshold");
+  TEST_ASSERT_EQUAL_UINT32_MESSAGE(REL_PC_BAUD, PC_BAUD, "wrong PC serial baud");
 }
 
 // Test cases
