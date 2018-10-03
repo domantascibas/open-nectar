@@ -1,6 +1,6 @@
 [submodule "submodules/nectar_serial"]
 	path = submodules/nectar_serial
-	url = git@bitbucket.org:nectarsun/nectar_serial.git 
+	url = git@gitlab.com:nectarsun/nectarsun-s/nectar_serial.git
 [submodule "submodules/device_menu"]
 	path = submodules/device_menu
-	url = git@bitbucket.org:nectarsun/device_menu.git 
+	url = git@gitlab.com:nectarsun/nectarsun-s/device_menu.git
