@@ -1,5 +1,5 @@
 #include "TemperatureSensor.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 
 TemperatureSensor::TemperatureSensor(PinName pin, uint8_t refresh)
 : probe(pin), newValueAvailable(false), sensorFound(false), refreshRate(refresh) {

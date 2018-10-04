@@ -1,5 +1,5 @@
 #include "PowerBoardComms.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "DataService.h"
 #include "EnergyMeter.h"
 #include "CommsController.h"

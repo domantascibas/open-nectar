@@ -1,6 +1,6 @@
 #include "consts.h"
 #include "TemperatureController.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "DataService.h"
 #include "device_modes.h"
 #include "ServiceComms.h"

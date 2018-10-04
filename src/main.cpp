@@ -4,7 +4,7 @@
 #include "PowerBoardComms.h"
 #include "device_modes.h"
 #include "menu_service.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "TemperatureController.h"
 #include "DataService.h"
 #include "Storage.h"
@@ -19,9 +19,9 @@ Timer comms_timeout;
 int main() {
 	float current_s;
   static bool isFirst = true;
+	error_controller_init();
   Storage::init();
   
-  mainBoardError.save_error_code(0x200);
   service::setup();
   
   menu_service::setup();

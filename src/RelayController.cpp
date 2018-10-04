@@ -1,5 +1,5 @@
 #include "RelayController.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "EnergyMeter.h"
 
 GridRelay gridRelay;

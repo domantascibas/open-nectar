@@ -1,7 +1,7 @@
 #include "consts.h"
 #include "device_modes.h"
 #include "DataService.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "Sanitizer.h"
 #include "BoostTimeout.h"
 
