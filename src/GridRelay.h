@@ -1,11 +1,11 @@
 #ifndef GRID_RELAY_H
 #define GRID_RELAY_H
 
+#include "consts.h"
 #include "Relay.h"
-static const PinName GRID_PIN = PB_4;
 
 struct GridRelay : Relay {
-  GridRelay() : Relay(GRID_PIN) {};
+  GridRelay() : Relay(GRID_RELAY_PIN) {};
   void init();
     
   virtual void turnOn();
