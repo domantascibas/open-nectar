@@ -4,8 +4,10 @@
 #include "main_board_comms.h"
 #include "pc_service_comms.h"
 #include "watchdog_timer.h"
+#include "error_controller.h"
 
 int main(void) {
+  error_controller_init();
   pc_service_comms_init();
 	flash_storage_init();
 
