@@ -40,6 +40,4 @@ private:
   void print_error(ERROR_CODE *);
 };
 
-extern ErrorHandler nectarError;
-
 #endif

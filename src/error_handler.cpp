@@ -1,7 +1,5 @@
 #include "mbed.h"
-#include "ErrorHandler.h"
-
-ErrorHandler nectarError;
+#include "error_handler.h"
 
 ErrorHandler::ErrorHandler() {
   has_errors = false;
