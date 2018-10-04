@@ -2,7 +2,7 @@
 #include "data.h"
 #include "flash_storage.h"
 #include "eeprom.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 
 static uint8_t calibrated = EMPTY_VALUE;
 static uint8_t extra_property = EMPTY_VALUE;

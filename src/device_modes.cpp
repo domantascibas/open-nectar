@@ -1,7 +1,7 @@
 #include "consts.h"
 #include "data.h"
 #include "device_modes.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "power_controller.h"
 #include "pwm_controller.h"
 #include "temperature_controller.h"

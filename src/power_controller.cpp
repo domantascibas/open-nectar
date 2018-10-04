@@ -1,7 +1,7 @@
 #include "consts.h"
 #include "pwm_controller.h"
 #include "power_controller.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "data.h"
 
 void generator_on(void);

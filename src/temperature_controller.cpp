@@ -2,7 +2,7 @@
 #include "temperature_controller.h"
 #include "processor_temperature.h"
 #include "temperature_sensor.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "data.h"
 
 TemperatureSensor deviceTemp(INTERNAL_TEMPERATURE_PIN, 5);
