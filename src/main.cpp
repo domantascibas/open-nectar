@@ -1,4 +1,4 @@
-#include "mbed.h"
+#include "consts.h"
 #include "ServiceComms.h"
 #include "EspComms.h"
 #include "PowerBoardComms.h"
@@ -10,9 +10,6 @@
 #include "Storage.h"
 #include "CommsController.h"
 #include "watchdog_timer.h"
-
-static const float POWER_INIT_TIMEOUT = 5;
-static const float ESP_INIT_TIMEOUT = 20;
 
 //DigitalOut pa0(PA_0);
 //DigitalOut pa1(PA_1);

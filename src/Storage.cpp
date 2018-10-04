@@ -1,3 +1,4 @@
+#include "consts.h"
 #include "Storage.h"
 #include "ErrorHandler.h"
 
@@ -7,11 +8,8 @@
 // current heater mode, previous heater mode
 
 namespace Storage {	
-  static const uint8_t DEVICE_CONFIGURED = 0xC0;
-  uint8_t config = 0xFA;
-  
-  static const uint8_t ESP_CONFIGURED = 0xEC;
-  uint8_t esp_config = 0xFA;
+  uint8_t config = EMPTY_VALUE;
+  uint8_t esp_config = EMPTY_VALUE;
   
   bool isLanguageLoaded = false;
 	bool emptyStorage = true;
@@ -56,8 +54,8 @@ namespace Storage {
 		emptyStorage = EE_ReadDatastruct(&rDataStruct);
 		
 		if(emptyStorage) {
-			sDataStruct.device_config = 0xFA;
-			sDataStruct.esp_config = 0xFA;
+			sDataStruct.device_config = EMPTY_VALUE;
+			sDataStruct.esp_config = EMPTY_VALUE;
 		} else {
 			sDataStruct = rDataStruct;
 		}
@@ -103,8 +101,8 @@ namespace Storage {
   
   void clearConfig() {
     __disable_irq();
-		sDataStruct.device_config = 0xFA;
-		sDataStruct.esp_config = 0xFA;
+		sDataStruct.device_config = EMPTY_VALUE;
+		sDataStruct.esp_config = EMPTY_VALUE;
 		saveData();
     __enable_irq();
   }
@@ -225,5 +223,3 @@ namespace Storage {
     return new_time;
   }
 };
-
-// *******************************Nectar Sun Copyright (C) Nectar Sun 2017*************************************   

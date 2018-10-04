@@ -1,17 +1,12 @@
+#include "consts.h"
 #include "TemperatureController.h"
 #include "ErrorHandler.h"
 #include "DataService.h"
 #include "device_modes.h"
 #include "ServiceComms.h"
 #include "processor_temperature.h"
-#include "consts.h"
 
-static const PinName BOILER_TEMP_PROBE = PB_8;
-
-static const float WATER_TEMPERATURE_LIMIT_MIN = 5.0;
-static const float WATER_TEMPERATURE_LIMIT_MAX = 90.0;
-
-TemperatureSensor boilerTemp(BOILER_TEMP_PROBE, 3);
+TemperatureSensor boilerTemp(BOILER_TEMP_PIN, 3);
 
 void TemperatureController::init() {
 	processor_temperature_init();

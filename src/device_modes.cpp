@@ -1,12 +1,9 @@
+#include "consts.h"
 #include "device_modes.h"
 #include "DataService.h"
 #include "ErrorHandler.h"
 #include "Sanitizer.h"
 #include "BoostTimeout.h"
-
-static const float BOOST_TEMP = 70.0;
-static const float AWAY_TEMP = 10.0;
-static const float HIST = 2.0;
 
 Ticker update_mode_tick;
 RelayController relayController;

@@ -29,5 +29,3 @@ namespace Storage {
 };
 
 #endif
-
-// *******************************Nectar Sun Copyright (C) Nectar Sun 2017*************************************   
