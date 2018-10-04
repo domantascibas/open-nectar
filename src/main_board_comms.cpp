@@ -39,13 +39,13 @@ void mbedStream::received_main_board_state_for_power(const nectar_contract::Main
     data.grid_energy_meter_kwh = state.grid_meter_kwh;
   }
 
-  data.isInOnboarding = (state.is_in_onboarding == 0xAC ? true : false);
-  data.isTestMode = (state.is_test_mode_on == 0xAC ? true : false);
-	data.startCalibration = (state.calibrate == 0xAC ? true : false);
-	if(state.calibrate == 0xAC)
+  data.isInOnboarding = (state.is_in_onboarding == COMMS_TRUE_VALUE ? true : false);
+  data.isTestMode = (state.is_test_mode_on == COMMS_TRUE_VALUE ? true : false);
+	data.startCalibration = (state.calibrate == COMMS_TRUE_VALUE ? true : false);
+	if(state.calibrate == COMMS_TRUE_VALUE)
 		data.isCalibrating = true;
 	
-  if(state.start == 0xAC) {
+  if(state.start == COMMS_TRUE_VALUE) {
     device_modes_set_state_running();
   } else {
     device_modes_set_state_stop();
@@ -53,7 +53,7 @@ void mbedStream::received_main_board_state_for_power(const nectar_contract::Main
   if(data.isTestMode) {
     printf("[TEST MODE]\r\n");
   }
-  printf("MAIN -> %f %d %d %d %d %d\r\n", data.grid_energy_meter_kwh, data.current_state, data.isTestMode, data.isInOnboarding, data.startCalibration, (state.start == 0xAC ? true : false));
+  printf("MAIN -> %f %d %d %d %d %d\r\n", data.grid_energy_meter_kwh, data.current_state, data.isTestMode, data.isInOnboarding, data.startCalibration, (state.start == COMMS_TRUE_VALUE ? true : false));
 }
 
 StreamObject mbedStream::get_power_board_state() {
@@ -62,10 +62,10 @@ StreamObject mbedStream::get_power_board_state() {
   powerState.sun_current = data.moment_current;
   powerState.pwm_duty = power_controller_get_duty();
   powerState.device_temperature = data.device_temperature;
-  powerState.transistor_overheat_on = (data.mosfet_overheat_on ? 0xAC : 0xFA);
+  powerState.transistor_overheat_on = (data.mosfet_overheat_on ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
   powerState.power_board_error_code = nectarError.get_errors();
-  powerState.device_calibrated = (!nectarError.has_error(CALIBRATION_ERROR) ? 0xAC : 0xFA);
-  powerState.pwm_generator_on = (power_controller_is_generator_on() ? 0xAC : 0xFA);
+  powerState.device_calibrated = (!nectarError.has_error(CALIBRATION_ERROR) ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
+  powerState.pwm_generator_on = (power_controller_is_generator_on() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
   powerState.sun_meter_kwh = data.sun_energy_meter_kwh;
   powerState.grid_meter_kwh = data.grid_energy_meter_kwh;
   powerState.ref_voltage = sensor_controller_get_voltage_ref();
@@ -79,10 +79,10 @@ StreamObject mbedStream::get_power_board_state() {
     powerState.sun_current,
     powerState.pwm_duty,
     powerState.device_temperature,
-    (powerState.transistor_overheat_on == 0xAC ? true : false),
+    (powerState.transistor_overheat_on == COMMS_TRUE_VALUE ? true : false),
     powerState.power_board_error_code,
-    (powerState.device_calibrated == 0xAC ? true : false),
-    (powerState.pwm_generator_on == 0xAC ? true : false),
+    (powerState.device_calibrated == COMMS_TRUE_VALUE ? true : false),
+    (powerState.pwm_generator_on == COMMS_TRUE_VALUE ? true : false),
     powerState.sun_meter_kwh,
     powerState.grid_meter_kwh,
     powerState.ref_voltage,
