@@ -1,5 +1,5 @@
-#ifndef DEVICE_MODES_H
-#define DEVICE_MODES_H
+#ifndef _NS_DEVICE_MODES_H
+#define _NS_DEVICE_MODES_H
 
 #include "RelayController.h"
 
@@ -14,5 +14,3 @@ namespace device_modes {
 }
 
 #endif
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

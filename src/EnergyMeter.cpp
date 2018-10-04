@@ -3,11 +3,9 @@
 #include "DataService.h"
 
 EnergyMeter gridMeter(DataService::getBoilerPower);
-//EnergyMeter sunMeter(DataService::getBoilerPower);
 
 void EnergyMeter::startMeter() {
   if(meterSet) {
-//    lastMomentPower = getPower();
     ticker.attach(callback(this, &EnergyMeter::increaseMeter), ENERGY_METER_UPDATE_INTERVAL);
   } else {
     printf("energy meter not set\r\n");
@@ -20,9 +18,7 @@ void EnergyMeter::stopMeter(bool increase) {
 }
 
 void EnergyMeter::increaseMeter() {
-//  float momentPower = ;
   reading += getPower() * ENERGY_METER_UPDATE_INTERVAL / 3600 / 1000;
-//  lastMomentPower = momentPower;
   printf("[ENERGY] grid: %fkWh\r\n", reading);
 }
 

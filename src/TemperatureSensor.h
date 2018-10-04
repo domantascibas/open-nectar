@@ -1,5 +1,5 @@
-#ifndef TEMPERATURE_SENSOR_H
-#define TEMPERATURE_SENSOR_H
+#ifndef _NS_TEMPERATURE_SENSOR_H
+#define _NS_TEMPERATURE_SENSOR_H
 
 #include "mbed.h"
 #include "DS1820.h"

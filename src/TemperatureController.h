@@ -1,5 +1,5 @@
-#ifndef TEMPERATURE_CONTROLLER_H
-#define TEMPERATURE_CONTROLLER_H
+#ifndef _NS_TEMPERATURE_CONTROLLER_H
+#define _NS_TEMPERATURE_CONTROLLER_H
 
 #include "TemperatureSensor.h"
 

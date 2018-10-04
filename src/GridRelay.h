@@ -1,5 +1,5 @@
-#ifndef GRID_RELAY_H
-#define GRID_RELAY_H
+#ifndef _NS_GRID_RELAY_H
+#define _NS_GRID_RELAY_H
 
 #include "consts.h"
 #include "Relay.h"

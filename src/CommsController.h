@@ -1,5 +1,5 @@
-#ifndef COMMS_CONTROLLER_H
-#define COMMS_CONTROLLER_H
+#ifndef _NS_COMMS_CONTROLLER_H
+#define _NS_COMMS_CONTROLLER_H
 
 #include "mbed.h"
 

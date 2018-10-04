@@ -1,5 +1,5 @@
-#ifndef RELAY_CONTROLLER_H
-#define RELAY_CONTROLLER_H
+#ifndef _NS_RELAY_CONTROLLER_H
+#define _NS_RELAY_CONTROLLER_H
 
 #include "GridRelay.h"
 #include "SunRelay.h"

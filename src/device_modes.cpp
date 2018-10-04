@@ -136,13 +136,6 @@ namespace device_modes {
         }
       }
 			
-//			if(powerData.sun_voltage < 10.0){
-//				if(!DataService::isDayTime()) {
-//					if(((relayController.getRelayState() == TURN_ON_SUN) && (relayStateNew == TURN_ON_SUN)) || ((relayController.getRelayState() == TURN_OFF_SUN) && (relayStateNew == TURN_ON_SUN)))
-//						relayStateNew = TURN_OFF_SUN;
-//				}
-//			}
-			
 			if(mainBoardError.has_error(NO_BOILER_TEMP)
 				|| mainBoardError.has_error(DEVICE_OVERHEAT)
 				|| mainBoardError.has_error(MIN_TEMPERATURE)
@@ -176,5 +169,3 @@ namespace device_modes {
     }
   }
 }
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

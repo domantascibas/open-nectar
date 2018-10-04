@@ -1,5 +1,5 @@
-#ifndef ERROR_HANDLER_H
-#define ERROR_HANDLER_H
+#ifndef _NS_ERROR_HANDLER_H
+#define _NS_ERROR_HANDLER_H
 
 #include "mbed.h"
 

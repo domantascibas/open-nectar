@@ -1,7 +1,7 @@
-#ifndef POWER_BOARD_COMMS_H
-#define POWER_BOARD_COMMS_H
+#ifndef _NS_POWER_BOARD_COMMS_H
+#define _NS_POWER_BOARD_COMMS_H
 
-#include "mbed.h"
+#include "consts.h"
 #include "NectarStream.h"
 
 namespace power_board {  

@@ -1,57 +1,45 @@
-#include "mbed.h"
+#include "consts.h"
 #include "ServiceComms.h"
 #include "DeviceMode.h"
 #include "menu_service.h"
 
-static const float GRID_ON_TEMPERATURE = 30.0;
-static const float SUN_ON_TEMPERATURE = 60.0;
-static const float IDLE_ON_TEMPERATURE = 80.0;
-
-static const uint8_t TURN_ON_GRID = 0x67;
-static const uint8_t TURN_ON_SUN = 0x73;
-static const uint8_t TURN_ON_IDLE = 0x69;
-static const uint8_t ENTER_TEST_MODE = 0x74;
-
-static const PinName PC_TX = PA_2;
-static const PinName PC_RX = PA_3;
-
-RawSerial pc(PC_TX, PC_RX);
+RawSerial pc(SERVICE_COMMS_TX_PIN, SERVICE_COMMS_RX_PIN);
 
 void parseCommand(uint8_t command) {
   switch(command) {
-    case ENTER_TEST_MODE:
+    case TEST_MODE_ENTER_TEST_MODE_CMD:
       printf("ENTER TEST MODE\r\n");
       if(!deviceOpMode.isInTestStand()) {
         deviceOpMode.setInTestStand();
-        service::fakeTemperature = IDLE_ON_TEMPERATURE;
+        service::fakeTemperature = TEST_MODE_IDLE_ON_TEMPERATURE;
         service::newValueAvailable = true;
 		menu_actions::modeSelected();
         menu_service::enterTestScreen();
       }
       break;
     
-    case TURN_ON_GRID:
+    case TEST_MODE_TURN_ON_GRID_CMD:
       printf("TURN ON GRID\r\n");
       if(deviceOpMode.isInTestStand()) {
-        service::fakeTemperature = GRID_ON_TEMPERATURE;
+        service::fakeTemperature = TEST_MODE_GRID_ON_TEMPERATURE;
         service::newValueAvailable = true;
         menu_service::needUpdate = true;
       }
       break;
     
-    case TURN_ON_SUN:
+    case TEST_MODE_TURN_ON_SUN_CMD:
       printf("TURN ON SUN\r\n");
       if(deviceOpMode.isInTestStand()) {
-        service::fakeTemperature = SUN_ON_TEMPERATURE;
+        service::fakeTemperature = TEST_MODE_SUN_ON_TEMPERATURE;
         service::newValueAvailable = true;
         menu_service::needUpdate = true;
       }
       break;
     
-    case TURN_ON_IDLE:
+    case TEST_MODE_TURN_ON_IDLE_CMD:
       printf("TURN ON IDLE\r\n");
       if(deviceOpMode.isInTestStand()) {  
-        service::fakeTemperature = IDLE_ON_TEMPERATURE;
+        service::fakeTemperature = TEST_MODE_IDLE_ON_TEMPERATURE;
         service::newValueAvailable = true;
         menu_service::needUpdate = true;
       }
@@ -74,11 +62,11 @@ void Rx_interrupt() {
 }
 
 namespace service {
-  float fakeTemperature = IDLE_ON_TEMPERATURE;
+  float fakeTemperature = TEST_MODE_IDLE_ON_TEMPERATURE;
   bool newValueAvailable = false;
   
   void setup() {
-    static const uint32_t pc_baud = 115200;
+    static const uint32_t pc_baud = SERVICE_COMMS_BAUD_RATE;
     
     pc.baud(pc_baud);
     pc.attach(&Rx_interrupt);

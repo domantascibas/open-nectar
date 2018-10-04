@@ -1,5 +1,5 @@
-#ifndef _BOOST_TIMEOUT_H
-#define _BOOST_TIMEOUT_H
+#ifndef _NS_BOOST_TIMEOUT_H
+#define _NS_BOOST_TIMEOUT_H
 
 void boostTimeoutIncreaseCounter(void);
 bool boostTimeoutReached(void);

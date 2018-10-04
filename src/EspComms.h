@@ -1,7 +1,7 @@
-#ifndef ESP_COMMS_H
-#define ESP_COMMS_H
+#ifndef _NS_ESP_COMMS_H
+#define _NS_ESP_COMMS_H
 
-#include "mbed.h"
+#include "consts.h"
 #include "NectarStream.h"
 
 namespace esp {

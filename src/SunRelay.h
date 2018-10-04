@@ -1,5 +1,5 @@
-#ifndef SUN_RELAY_H
-#define SUN_RELAY_H
+#ifndef _NS_SUN_RELAY_H
+#define _NS_SUN_RELAY_H
 
 #include "consts.h"
 #include "Relay.h"

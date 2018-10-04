@@ -11,11 +11,8 @@ extern RelayController relayController;
 namespace esp {
   Ticker get_data_tick;
   bool received_first_msg = false;
-
-  static const PinName TX = PA_9;   //D8
-  static const PinName RX = PA_10;  //D2
   
-  mbedStream m_stream(TX, RX);
+  mbedStream m_stream(ESP_COMMS_TX_PIN, ESP_COMMS_RX_PIN);
   
   void get_data_ISR() {
     commsController.sendEspMessage();
@@ -29,22 +26,22 @@ namespace esp {
     time_t rtc = time(NULL);
     nectar_contract::MainBoardStateForESP mainStateForEsp = {
       powerData.sun_power,
-      (relayController.isGridRelayOn() ? 0xAC : 0xFA),
+      (relayController.isGridRelayOn() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
       temperatureData.getBoilerTemperature(),
-      (relayController.isSunRelayOn() ? 0xAC : 0xFA),
+      (relayController.isSunRelayOn() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
       powerData.sun_voltage,
       powerData.sun_current,
       temperatureData.getDeviceTemperature(),
-      (powerData.transistor_overheat_on ? 0xAC : 0xFA),
+      (powerData.transistor_overheat_on ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
       powerData.pwm_duty,
       powerBoardError.get_errors(),
       mainBoardError.get_errors(),
       powerData.sun_meter_kwh,
       powerData.grid_meter_kwh,
       rtc,
-      (deviceOpMode.isReset() ? 0xAC : 0xFA),
-      (deviceOpMode.isPairing() ? 0xAC : 0xFA),
-      (deviceOpMode.isBoostOff() ? 0xAC : 0xFA),
+      (deviceOpMode.isReset() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
+      (deviceOpMode.isPairing() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
+      (deviceOpMode.isBoostOff() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
 			powerData.ref_voltage,
 			powerData.ref_current,
 			(uint16_t)NECTAR_MAIN_BOARD_VERSION
@@ -58,18 +55,18 @@ namespace esp {
       mainStateForEsp.sun_voltage,
       mainStateForEsp.sun_current,
       mainStateForEsp.pwm_duty,
-			(mainStateForEsp.sun_relay_on == 0xAC ? true : false),
-      (mainStateForEsp.grid_relay_on == 0xAC ? true : false),
+			(mainStateForEsp.sun_relay_on == COMMS_TRUE_VALUE ? true : false),
+      (mainStateForEsp.grid_relay_on == COMMS_TRUE_VALUE ? true : false),
       mainStateForEsp.water_temperature,
       mainStateForEsp.device_temperature,
-      (mainStateForEsp.transistor_overheat_on == 0xAC ? true : false),
+      (mainStateForEsp.transistor_overheat_on == COMMS_TRUE_VALUE ? true : false),
       mainStateForEsp.main_board_error_code,
       mainStateForEsp.power_board_error_code,
       mainStateForEsp.sun_meter_kwh,
       mainStateForEsp.grid_meter_kwh,
-      (mainStateForEsp.reset == 0xAC ? true : false),
-      (mainStateForEsp.pair_mode == 0xAC ? true : false),
-      (mainStateForEsp.send_boost_off == 0xAC ? true : false)
+      (mainStateForEsp.reset == COMMS_TRUE_VALUE ? true : false),
+      (mainStateForEsp.pair_mode == COMMS_TRUE_VALUE ? true : false),
+      (mainStateForEsp.send_boost_off == COMMS_TRUE_VALUE ? true : false)
       );
     if(deviceOpMode.isReset()) deviceOpMode.setReset(false);
   }
@@ -101,10 +98,8 @@ namespace esp {
  */
 
 void mbedStream::setup() {
-  static const float interval = 15.0;
-  
   m_serial.baud(C_SERIAL_BAUD_RATE);
-  esp::get_data_tick.attach(&esp::get_data_ISR, interval);
+  esp::get_data_tick.attach(&esp::get_data_ISR, ESP_COMMS_PING_INTERVAL);
   m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
   printf("[ESP] start\r\n");
   esp::send_message();
@@ -129,11 +124,10 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
     __disable_irq();
     espData.pin = state.pin;
 		espData.esp_version = state.esp_version;
-    if(state.is_configured == 0xAC) {
-//      espData = state;
+    if(state.is_configured == COMMS_TRUE_VALUE) {
 			espData.heater_mode = state.heater_mode;
-			espData.is_configured = (state.is_configured == 0xAC ? true : false);
-			espData.has_internet_connection = (state.has_internet_connection == 0xAC ? true : false);
+			espData.is_configured = (state.is_configured == COMMS_TRUE_VALUE ? true : false);
+			espData.has_internet_connection = (state.has_internet_connection == COMMS_TRUE_VALUE ? true : false);
 			espData.temperature = state.temperature;
 			espData.temperature_max = state.temperature_max;
 			espData.boiler_power = state.boiler_power;

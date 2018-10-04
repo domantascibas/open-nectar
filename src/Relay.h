@@ -1,5 +1,5 @@
-#ifndef RELAY_H
-#define RELAY_H
+#ifndef _NS_RELAY_H
+#define _NS_RELAY_H
 
 #include "mbed.h"
 

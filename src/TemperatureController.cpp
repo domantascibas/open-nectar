@@ -35,7 +35,6 @@ void TemperatureController::updateTemperatures() {
   if(boilerTemp.isNewValueAvailable() || service::isNewValueAvailable()) {
 		
 		float processor_temp = processor_temperature_measure();
-		// printf("processor temp: %f\r\n", internal_temp);
 		if(processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
 			if(!mainBoardError.has_error(PROCESSOR_OVERHEAT)) mainBoardError.set_error(PROCESSOR_OVERHEAT);
 			printf("PROCESSOR OVERHEAT\r\n");
