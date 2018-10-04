@@ -3,6 +3,8 @@
 
 #include "error_handler.h"
 
+void error_controller_init(void);
+
 extern ErrorHandler nectarError;
 
 #endif
