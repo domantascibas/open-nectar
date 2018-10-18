@@ -59,5 +59,6 @@ void TemperatureSensor::readTemperatureToStorage() {
 		errorCounter = 10;
 		temperature = 0.0;
 		mainBoardError.set_error(NO_BOILER_TEMP);
+    newValueAvailable = true;
 	}
 }
