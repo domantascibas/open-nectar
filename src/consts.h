@@ -37,7 +37,7 @@ static const uint8_t EMPTY_VALUE = 0xFA;
 // Power board comms
 static const PinName POWER_COMMS_TX_PIN = PB_10;
 static const PinName POWER_COMMS_RX_PIN = PB_11;
-static const float POWER_COMMS_PING_INTERVAL = 2.0;
+static const float POWER_COMMS_PING_INTERVAL = 1.0;
 
 // ESP comms
 static const PinName ESP_COMMS_TX_PIN = PA_9;   //D8
