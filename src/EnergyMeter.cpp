@@ -8,7 +8,7 @@ void EnergyMeter::startMeter() {
   if(meterSet) {
     ticker.attach(callback(this, &EnergyMeter::increaseMeter), ENERGY_METER_UPDATE_INTERVAL);
   } else {
-    printf("energy meter not set\r\n");
+    printf("[INFO] energy meter not set\n");
   }
 }
 
@@ -19,7 +19,7 @@ void EnergyMeter::stopMeter(bool increase) {
 
 void EnergyMeter::increaseMeter() {
   reading += getPower() * ENERGY_METER_UPDATE_INTERVAL / 3600 / 1000;
-  printf("[ENERGY] grid: %fkWh\r\n", reading);
+  printf("ENERGY GRID %f\n", reading);
 }
 
 void EnergyMeter::setMeterReading(float value) {

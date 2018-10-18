@@ -17,7 +17,7 @@ namespace power_board {
   
   void start() {
     startPowerBoard = true;
-    printf("[POWER BOARD] start\r\n");
+    // printf("[POWER BOARD] start\r\n");
   }
   
   void stop() {
@@ -43,12 +43,13 @@ namespace power_board {
     
     StreamObject _mainStateForPower(&mainStateForPower, sizeof(mainStateForPower));
     m_stream.stream.send_state_to_power_board(_mainStateForPower);
-    printf("-> POWER %f %d %d %d %d\r\n",
-    mainStateForPower.grid_meter_kwh,
-    (mainStateForPower.start == COMMS_TRUE_VALUE ? true : false),
-    (mainStateForPower.is_test_mode_on == COMMS_TRUE_VALUE ? true : false),
-    (mainStateForPower.is_in_onboarding == COMMS_TRUE_VALUE ? true : false),
-		(mainStateForPower.calibrate == COMMS_TRUE_VALUE ? true : false));
+    printf("POWER COMMAND %f %d %d %d %d\r\n",
+      mainStateForPower.grid_meter_kwh,
+      (mainStateForPower.start == COMMS_TRUE_VALUE ? true : false),
+      (mainStateForPower.is_test_mode_on == COMMS_TRUE_VALUE ? true : false),
+      (mainStateForPower.is_in_onboarding == COMMS_TRUE_VALUE ? true : false),
+      (mainStateForPower.calibrate == COMMS_TRUE_VALUE ? true : false)
+    );
 		
 		if(DataService::getCalibrate()) {
 			DataService::setCalibrate(false);
@@ -93,7 +94,7 @@ void powerStream::setup() {
   power_board::get_data_tick.attach(&power_board::get_data_ISR, POWER_COMMS_PING_INTERVAL);
   
   m_serial.attach(callback(this, &powerStream::Rx_interrupt));
-  printf("power_serial setup\r\n");
+  printf("POWER START\n");
 }
 
 void powerStream::Rx_interrupt() {
@@ -121,7 +122,6 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
 		powerData.pwm_duty = state.pwm_duty;
 		powerData.device_temperature = state.device_temperature;
 		powerData.transistor_overheat_on = (state.transistor_overheat_on == COMMS_TRUE_VALUE ? true : false);
-		powerData.power_board_error_code = state.power_board_error_code;
 		powerData.device_calibrated = (state.device_calibrated == COMMS_TRUE_VALUE ? true : false);
 		powerData.pwm_generator_on = (state.pwm_generator_on == COMMS_TRUE_VALUE ? true : false);
 		powerData.sun_meter_kwh = state.sun_meter_kwh;
@@ -130,30 +130,31 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
 		powerData.ref_current = state.ref_current;
 		powerData.power_version = state.power_version;
 		
+		powerData.power_board_error_code = state.power_board_error_code;
     powerBoardError.save_error_code(state.power_board_error_code);
     
     if(!power_board::received_first_msg || !gridMeter.isMeterSet() || (powerData.grid_meter_kwh > gridMeter.getMeterReading())) gridMeter.setMeterReading(powerData.grid_meter_kwh);
     DataService::calculateSolarKwhDiff(!power_board::received_first_msg);
     __enable_irq();
-    printf("POWER -> %f %f %f %f %f %d %d %d %d %f %f %f %f %1.2f\r\n",
+    printf("POWER RESPONSE %f %f %f %f %f %f %f %f %f %1.2f %d %d %d %d\r\n",
       powerData.sun_power,
       powerData.sun_voltage,
       powerData.sun_current,
       powerData.pwm_duty,
       powerData.device_temperature,
-      powerData.transistor_overheat_on,
-      powerBoardError.get_errors(),
-      powerData.device_calibrated,
-      powerData.pwm_generator_on,
       powerData.sun_meter_kwh,
       powerData.grid_meter_kwh,
       powerData.ref_voltage,
       powerData.ref_current,
-			powerData.power_version/100
+			powerData.power_version/100,
+      powerBoardError.get_errors(),
+      powerData.device_calibrated,
+      powerData.pwm_generator_on,
+      powerData.transistor_overheat_on
     );
     if(!power_board::received_first_msg) power_board::received_first_msg = true;
-  } else {
-    printf("POWER -> RECEIVDED INVALID DATA IN MESSAGE\r\n");
+  // } else {
+  //   printf("POWER_CMD RECEIVED INVALID DATA IN MESSAGE\r\n");
   }
   commsController.freeChannel();
 }

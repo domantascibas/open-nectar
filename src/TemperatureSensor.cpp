@@ -12,8 +12,9 @@ void TemperatureSensor::init() {
     sensorFound = true;
     measureTemperature();
     attachTicker(refreshRate);
-    printf("Temperature sensor found\r\n");
-  } else printf("Temperature sensor not found\r\n");
+	}
+//    printf("Temperature sensor found\r\n");
+//  } else printf("Temperature sensor not found\r\n");
 }
 
 bool TemperatureSensor::isSensorFound() {

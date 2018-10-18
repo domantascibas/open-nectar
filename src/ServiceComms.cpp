@@ -8,7 +8,7 @@ RawSerial pc(SERVICE_COMMS_TX_PIN, SERVICE_COMMS_RX_PIN);
 void parseCommand(uint8_t command) {
   switch(command) {
     case TEST_MODE_ENTER_TEST_MODE_CMD:
-      printf("ENTER TEST MODE\r\n");
+      printf("MODE TEST\n");
       if(!deviceOpMode.isInTestStand()) {
         deviceOpMode.setInTestStand();
         service::fakeTemperature = TEST_MODE_IDLE_ON_TEMPERATURE;
@@ -19,7 +19,7 @@ void parseCommand(uint8_t command) {
       break;
     
     case TEST_MODE_TURN_ON_GRID_CMD:
-      printf("TURN ON GRID\r\n");
+      printf("MODE TEST GRID\n");
       if(deviceOpMode.isInTestStand()) {
         service::fakeTemperature = TEST_MODE_GRID_ON_TEMPERATURE;
         service::newValueAvailable = true;
@@ -28,7 +28,7 @@ void parseCommand(uint8_t command) {
       break;
     
     case TEST_MODE_TURN_ON_SUN_CMD:
-      printf("TURN ON SUN\r\n");
+      printf("MODE TEST SUN\n");
       if(deviceOpMode.isInTestStand()) {
         service::fakeTemperature = TEST_MODE_SUN_ON_TEMPERATURE;
         service::newValueAvailable = true;
@@ -37,7 +37,7 @@ void parseCommand(uint8_t command) {
       break;
     
     case TEST_MODE_TURN_ON_IDLE_CMD:
-      printf("TURN ON IDLE\r\n");
+      printf("MODE TEST IDLE\n");
       if(deviceOpMode.isInTestStand()) {  
         service::fakeTemperature = TEST_MODE_IDLE_ON_TEMPERATURE;
         service::newValueAvailable = true;
@@ -46,7 +46,7 @@ void parseCommand(uint8_t command) {
       break;
     
     default:
-      printf("Bad command\r\n");
+      printf("MODE bad command\n");
       break;
   }
 }
@@ -55,7 +55,7 @@ void Rx_interrupt() {
   while(pc.readable()) {
     __disable_irq();
     char rcv = pc.getc();
-    printf("%c\r\n", rcv);
+//    printf("%c\r\n", rcv);
     __enable_irq();
     parseCommand(rcv);
   }
@@ -70,9 +70,9 @@ namespace service {
     
     pc.baud(pc_baud);
     pc.attach(&Rx_interrupt);
-    printf("\r\n[START]\r\n");
-    printf("[COMMS PC]\r\n");
-    printf("[ok] baud %d\r\n\n", pc_baud);
+    printf("SERVICE START\n");
+//    printf("[COMMS PC]\n");
+//    printf("[ok] baud %d\n", pc_baud);
   }
   
   float getFakeTemperature() {

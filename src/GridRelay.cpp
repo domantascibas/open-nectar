@@ -4,7 +4,7 @@
 DigitalIn zeroCross(ZERO_CROSS_PIN);
 
 void GridRelay::init() {
-  printf("Grid relay init\r\n");
+  printf("RELAYS GRID INIT\n");
 }
 
 void GridRelay::turnOn() {

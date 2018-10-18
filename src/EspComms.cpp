@@ -49,24 +49,28 @@ namespace esp {
     
     StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
     m_stream.stream.send_state_to_esp(_mainStateForEsp);
-    printf("\r\nCurrent time: %s\r", ctime(&rtc));
-    printf("-> ESP %f %f %f %f %d %d %f %f %d %d %d %f %f %d %d %d\r\n",
+    // printf("\r\nCurrent time: %s\r", ctime(&rtc));
+    printf("ESP COMMAND %d %f %f %f %f %f %f %f %f %f %f %d %d %d %d %d %d %d %d %d\n",
+      mainStateForEsp.time,
       mainStateForEsp.moment_sun_watt,
       mainStateForEsp.sun_voltage,
       mainStateForEsp.sun_current,
       mainStateForEsp.pwm_duty,
-			(mainStateForEsp.sun_relay_on == COMMS_TRUE_VALUE ? true : false),
-      (mainStateForEsp.grid_relay_on == COMMS_TRUE_VALUE ? true : false),
       mainStateForEsp.water_temperature,
       mainStateForEsp.device_temperature,
-      (mainStateForEsp.transistor_overheat_on == COMMS_TRUE_VALUE ? true : false),
-      mainStateForEsp.main_board_error_code,
-      mainStateForEsp.power_board_error_code,
       mainStateForEsp.sun_meter_kwh,
       mainStateForEsp.grid_meter_kwh,
-      (mainStateForEsp.reset == COMMS_TRUE_VALUE ? true : false),
+      mainStateForEsp.ref_current,
+      mainStateForEsp.ref_current,
+      mainStateForEsp.main_version,
+      mainStateForEsp.main_board_error_code,
+      mainStateForEsp.power_board_error_code,
+			(mainStateForEsp.sun_relay_on == COMMS_TRUE_VALUE ? true : false),
+      (mainStateForEsp.grid_relay_on == COMMS_TRUE_VALUE ? true : false),
       (mainStateForEsp.pair_mode == COMMS_TRUE_VALUE ? true : false),
-      (mainStateForEsp.send_boost_off == COMMS_TRUE_VALUE ? true : false)
+      (mainStateForEsp.send_boost_off == COMMS_TRUE_VALUE ? true : false),
+      (mainStateForEsp.reset == COMMS_TRUE_VALUE ? true : false),
+      (mainStateForEsp.transistor_overheat_on == COMMS_TRUE_VALUE ? true : false)
       );
     if(deviceOpMode.isReset()) deviceOpMode.setReset(false);
   }
@@ -101,7 +105,7 @@ void mbedStream::setup() {
   m_serial.baud(C_SERIAL_BAUD_RATE);
   esp::get_data_tick.attach(&esp::get_data_ISR, ESP_COMMS_PING_INTERVAL);
   m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
-  printf("[ESP] start\r\n");
+  printf("ESP START\n");
   esp::send_message();
 }
 
@@ -133,28 +137,48 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
 			espData.boiler_power = state.boiler_power;
 			espData.sync_time = state.sync_time;
 			espData.pin = state.pin;
-	float esp_version;
+			float esp_version;
       if((nectar_contract::HeaterMode)espData.heater_mode != nectar_contract::Boost)
         deviceOpMode.setBoostOff(false);
       if(DataService::getCurrentHeaterMode() != (nectar_contract::HeaterMode)espData.heater_mode) {
-        printf("HEATER MODE UPDATED\r\n");
+        // printf("HEATER MODE UPDATED\r\n");
         DataService::setCurrentHeaterMode((nectar_contract::HeaterMode)espData.heater_mode);
       }
       device_modes::updateHeaterMode = true;
-      printf("ESP -> %d %d %d %f %f %f %lld %d %1.2f\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin, espData.esp_version/100);
+      printf("ESP RESPONSE %lld %f %f %f %1.2f %d %d %d %d\n",
+        espData.sync_time,
+        espData.boiler_power,
+        espData.temperature,
+        espData.temperature_max,
+        espData.esp_version/100,
+        espData.pin,
+        espData.heater_mode,
+        espData.is_configured,
+        espData.has_internet_connection
+      );
       if(espData.sync_time != 0) {
         set_time(espData.sync_time);
         time_t sec = time(NULL);
         menu_actions::updateTime();
-        printf("Time set from ESP: %s\r\n", ctime(&sec));
+        // printf("Time set from ESP: %s\r\n", ctime(&sec));
       }
       __enable_irq();
     } else {
-      printf("[ESP] NO CONFIG %d %d %d %f %f %f %lld %d %1.2f\r\n", espData.heater_mode, espData.is_configured, espData.has_internet_connection, espData.temperature, espData.temperature_max, espData.boiler_power, espData.sync_time, espData.pin, espData.esp_version/100);
+      printf("ESP RESPONSE %lld %f %f %f %1.2f %d %d %d %d\n",
+        espData.sync_time,
+        espData.boiler_power,
+        espData.temperature,
+        espData.temperature_max,
+        espData.esp_version/100,
+        espData.pin,
+        espData.heater_mode,
+        espData.is_configured,
+        espData.has_internet_connection
+      );
     }
     if(!esp::received_first_msg) esp::received_first_msg = true;
-  } else {
-    printf("ESP -> RECEIVED INVALID DATA IN MESSAGE\r\n");
+  // } else {
+  //   printf("ESP -> RECEIVED INVALID DATA IN MESSAGE\r\n");
   }
   commsController.freeChannel();
 }

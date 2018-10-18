@@ -19,6 +19,7 @@ void TemperatureController::init() {
 
 float TemperatureController::getBoilerTemperature() {
   boilerTemperature = boilerTemp.getTemperature();
+	printf("TEMPERATURE BOILER %.2f\n", boilerTemperature);
   if(boilerTemperature > WATER_TEMPERATURE_LIMIT_MAX) {
     mainBoardError.set_error(MAX_TEMPERATURE);
   } else if(boilerTemperature < WATER_TEMPERATURE_LIMIT_MIN) {
@@ -26,7 +27,6 @@ float TemperatureController::getBoilerTemperature() {
   } else {
     if(mainBoardError.has_error(MAX_TEMPERATURE)) mainBoardError.clear_error(MAX_TEMPERATURE);
     if(mainBoardError.has_error(MIN_TEMPERATURE)) mainBoardError.clear_error(MIN_TEMPERATURE);
-    printf("[TEMPERATURE] boiler %.2f\r\n", boilerTemperature);
   }
   return boilerTemperature;
 }
@@ -35,16 +35,17 @@ void TemperatureController::updateTemperatures() {
   if(boilerTemp.isNewValueAvailable() || service::isNewValueAvailable()) {
 		
 		float processor_temp = processor_temperature_measure();
+		printf("TEMPERATURE PROCESSOR %.2f\n", processor_temp);
 		if(processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
 			if(!mainBoardError.has_error(PROCESSOR_OVERHEAT)) mainBoardError.set_error(PROCESSOR_OVERHEAT);
-			printf("PROCESSOR OVERHEAT\r\n");
+//			printf("TEMPERATURE OVERHEAT\n");
 		} else {
 			if(mainBoardError.has_error(PROCESSOR_OVERHEAT) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) mainBoardError.clear_error(PROCESSOR_OVERHEAT);
 		}
 		
     if(deviceOpMode.isInTestStand()) {
       temperatureData.setBoilerTemperature(service::getFakeTemperature());
-      printf("new fake temp\r\n");
+//      printf("new fake temp\r\n");
     } else {
       temperatureData.setBoilerTemperature(getBoilerTemperature());
     }

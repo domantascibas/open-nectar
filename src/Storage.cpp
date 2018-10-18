@@ -164,14 +164,13 @@ namespace Storage {
   void saveLanguage(const Language &language) {
     __disable_irq();
     if(isConfigured()) {
-      printf("[LANGUAGE] has config\r\n");
+      printf("LANGUAGE configured\n");
       if(isLanguageLoaded) {
-        printf("[LANGUAGE] saving new language %d\r\n\n", language);
+        printf("LANGUAGE SET %d\n", language);
 				sDataStruct.language = (uint16_t)language;
       }
     } else {
-      printf("[LANGUAGE] no config\r\n");
-      printf("[LANGUAGE] saving new language %d\r\n\n", language);
+      printf("LANGUAGE SET %d\n", language);
 			sDataStruct.language = (uint16_t)language;
     }
 		saveData();

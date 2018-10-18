@@ -36,27 +36,27 @@ void RelayController::setRelays(uint8_t state) {
       sunRelay.turnOff();
       gridRelay.turnOff();
       gridMeter.stopMeter(gridRelay.isOn());
-	    printf("turn off all\r\n");
+	    printf("RELAYS ALL OFF\n");
     break;
 		
     case TURN_OFF_SUN:
       sunRelay.turnOff();
       gridMeter.stopMeter(gridRelay.isOn());
-      printf("turn off sun\r\n");
+      printf("RELAYS SUN OFF\n");
 	  break;
     
     case TURN_ON_SUN:
       gridRelay.turnOff();
       sunRelay.turnOn();
       gridMeter.stopMeter(gridRelay.isOn());
-      printf("turn on sun\r\n");
+      printf("RELAYS SUN ON\n");
     break;
     
     case TURN_ON_GRID:
       sunRelay.turnOff();
       gridRelay.turnOn();
       gridMeter.startMeter();
-      printf("turn on grid\r\n");
+      printf("RELAYS GRID ON\n");
     break;
   }
 }
