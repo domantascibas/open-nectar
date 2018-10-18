@@ -11,6 +11,7 @@ static const int PROCESSOR_INTERNAL_TEMPERATURE_LIMIT = 120;
 static const float BOOST_TEMP = 70.0;
 static const float AWAY_TEMP = 10.0;
 static const float HIST = 2.0;
+static const uint8_t LOST_SENSOR_COUNT = 10;
 
 // Timing
 static const float POWER_INIT_TIMEOUT = 5;
