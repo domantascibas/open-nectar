@@ -1,5 +1,6 @@
 #include "TemperatureSensor.h"
 #include "error_controller.h"
+#include "consts.h"
 
 TemperatureSensor::TemperatureSensor(PinName pin, uint8_t refresh)
 : probe(pin), newValueAvailable(false), sensorFound(false), refreshRate(refresh) {
@@ -7,6 +8,7 @@ TemperatureSensor::TemperatureSensor(PinName pin, uint8_t refresh)
 
 void TemperatureSensor::init() {
 	temperature = 0.0;
+	last_temperature = 0.0;
 	errorCounter = 0;
   if(probe.begin()) {
     sensorFound = true;
@@ -44,20 +46,45 @@ void TemperatureSensor::measureTemperature() {
 }
 
 void TemperatureSensor::readTemperatureToStorage() {
-  probe.read(temperature);
-	if(temperature != 85.00) {
-		if(mainBoardError.has_error(NO_BOILER_TEMP)) {
-			mainBoardError.clear_error(NO_BOILER_TEMP);
+	if((identical_count >= LOST_SENSOR_COUNT) || mainBoardError.has_error(NO_BOILER_TEMP)) {
+		if(probe.begin()) {
+			sensorFound = true;
+			identical_count = 0;
+		} else {
+			sensorFound = false;
+			identical_count = LOST_SENSOR_COUNT;
 		}
-		errorCounter = 0;
-		newValueAvailable = true;
-	} else {
-		errorCounter++;
 	}
 	
-	if(errorCounter >= 10) {
-		errorCounter = 10;
+	if(sensorFound) {
+		last_temperature = temperature;
+		probe.read(temperature);
+		
+		if(temperature == last_temperature) {
+			identical_count++;
+		} else {
+			identical_count = 0;
+		}
+	
+		if(temperature != 85.00) {
+			if(mainBoardError.has_error(NO_BOILER_TEMP)) {
+				mainBoardError.clear_error(NO_BOILER_TEMP);
+			}
+			errorCounter = 0;
+			newValueAvailable = true;
+		} else {
+			errorCounter++;
+		}
+		
+		if(errorCounter >= 10) {
+			errorCounter = 10;
+			temperature = 0.0;
+			mainBoardError.set_error(NO_BOILER_TEMP);
+			newValueAvailable = true;
+		}
+	} else {
 		temperature = 0.0;
 		mainBoardError.set_error(NO_BOILER_TEMP);
+		newValueAvailable = true;
 	}
 }

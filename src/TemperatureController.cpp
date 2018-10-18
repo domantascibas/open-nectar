@@ -6,7 +6,7 @@
 #include "ServiceComms.h"
 #include "processor_temperature.h"
 
-TemperatureSensor boilerTemp(BOILER_TEMP_PIN, 3);
+TemperatureSensor boilerTemp(BOILER_TEMP_PIN, TEMPERATURE_SENSOR_UPDATE_PERIOD);
 
 void TemperatureController::init() {
 	processor_temperature_init();

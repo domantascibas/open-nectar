@@ -24,6 +24,8 @@ private:
   void detachTicker();
   void measureTemperature();
   void readTemperatureToStorage();
+	float last_temperature;
+	uint8_t identical_count;
 };
 
 #endif

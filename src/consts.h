@@ -11,6 +11,8 @@ static const int PROCESSOR_INTERNAL_TEMPERATURE_LIMIT = 120;
 static const float BOOST_TEMP = 70.0;
 static const float AWAY_TEMP = 10.0;
 static const float HIST = 2.0;
+static const uint8_t LOST_SENSOR_COUNT = 100;
+static const uint8_t TEMPERATURE_SENSOR_UPDATE_PERIOD = 3;
 
 // Timing
 static const float POWER_INIT_TIMEOUT = 5;
@@ -37,7 +39,7 @@ static const uint8_t EMPTY_VALUE = 0xFA;
 // Power board comms
 static const PinName POWER_COMMS_TX_PIN = PB_10;
 static const PinName POWER_COMMS_RX_PIN = PB_11;
-static const float POWER_COMMS_PING_INTERVAL = 2.0;
+static const float POWER_COMMS_PING_INTERVAL = 1.0;
 
 // ESP comms
 static const PinName ESP_COMMS_TX_PIN = PA_9;   //D8
