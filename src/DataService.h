@@ -1,5 +1,5 @@
-#ifndef DATA_SERVICE_H
-#define DATA_SERVICE_H
+#ifndef _NS_DATA_SERVICE_H
+#define _NS_DATA_SERVICE_H
 
 #include "NectarContract.h"
 #include "DeviceMode.h"

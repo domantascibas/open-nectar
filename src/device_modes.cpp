@@ -1,12 +1,9 @@
+#include "consts.h"
 #include "device_modes.h"
 #include "DataService.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "Sanitizer.h"
 #include "BoostTimeout.h"
-
-static const float BOOST_TEMP = 70.0;
-static const float AWAY_TEMP = 10.0;
-static const float HIST = 2.0;
 
 Ticker update_mode_tick;
 RelayController relayController;
@@ -63,7 +60,7 @@ namespace device_modes {
         switch(DataService::getCurrentHeaterMode()) {
           default:
           case nectar_contract::None:
-            printf("[MODE] DEFAULT\r\n"); 
+            printf("MODE AUTO\n"); 
 						if(isFirst) {
               isFirst = false;
               if(temp_boiler < temp) {
@@ -95,10 +92,10 @@ namespace device_modes {
           break;
 
           case nectar_contract::Boost:
-            printf("[MODE] BOOST\r\n");
+            printf("MODE BOOST\n");
 //						if((temp_boiler > BOOST_TEMP) || boostTimeoutReached()) {
 						if(temp_boiler > BOOST_TEMP) {
-							printf("Boost finished. Boiler temp %f  > max temp %f\r\n", temp_boiler, BOOST_TEMP);
+							printf("[INFO] Boost finished. Boiler temp %f  > max temp %f\r\n", temp_boiler, BOOST_TEMP);
 //							sanitizerTurnOn(false);
 //							boostTimeoutReset();
 							DataService::setPreviousHeaterMode();
@@ -109,7 +106,7 @@ namespace device_modes {
           break;
 
           case nectar_contract::Away:
-            printf("[MODE] AWAY\r\n");
+            printf("MODE AWAY\n");
 						if(relayController.isGridRelayOn()) {
 							if(temp_boiler < (AWAY_TEMP + HIST)) {
 								relayStateNew = TURN_ON_GRID;
@@ -128,23 +125,16 @@ namespace device_modes {
           break;
 
           case nectar_contract::Nogrid:
-            printf("[MODE] NO GRID\r\n");
+            printf("MODE NO_GRID\n");
 						relayStateNew = TURN_ON_SUN;
           break;
 					
 					case nectar_contract::Alloff:
-						printf("[MODE] ALL OFF\r\n");
+						printf("MODE ALL_OFF\n");
 						relayStateNew = TURN_OFF_ALL;
 					break;
         }
       }
-			
-//			if(powerData.sun_voltage < 10.0){
-//				if(!DataService::isDayTime()) {
-//					if(((relayController.getRelayState() == TURN_ON_SUN) && (relayStateNew == TURN_ON_SUN)) || ((relayController.getRelayState() == TURN_OFF_SUN) && (relayStateNew == TURN_ON_SUN)))
-//						relayStateNew = TURN_OFF_SUN;
-//				}
-//			}
 			
 			if(mainBoardError.has_error(NO_BOILER_TEMP)
 				|| mainBoardError.has_error(DEVICE_OVERHEAT)
@@ -152,17 +142,17 @@ namespace device_modes {
 				|| mainBoardError.has_error(MAX_TEMPERATURE)
 			)	{
 				relayStateNew = TURN_OFF_ALL;
-				printf("overheat/temperature-related errors\r\n");
+				printf("[ERROR] overheat/temperature-related errors\r\n");
 			}
 			
 			if((relayStateNew == TURN_ON_SUN) && powerBoardError.has_errors) {
 				relayStateNew = TURN_OFF_ALL;
-				printf("power board error\r\n");
+				printf("[ERROR] power board error\r\n");
 			}
 			
 			if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
 				if(temp_boiler > temp_max) {
-					printf("temp %f  > max temp %f\r\n", temp_boiler, temp_max);
+					printf("[INFO] temp %f  > max temp %f\r\n", temp_boiler, temp_max);
 					reachedMaxTemp = true;
 				}
 				relayStateNew = TURN_OFF_ALL;
@@ -179,5 +169,3 @@ namespace device_modes {
     }
   }
 }
-
-// *******************************Nectar Sun Copyright © Nectar Sun 2017*************************************   

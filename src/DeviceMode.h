@@ -1,5 +1,5 @@
-#ifndef DEVICE_MODE_H
-#define DEVICE_MODE_H
+#ifndef _NS_DEVICE_MODE_H
+#define _NS_DEVICE_MODE_H
 
 #include <stdint.h>
 

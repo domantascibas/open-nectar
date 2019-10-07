@@ -2,7 +2,7 @@
 #include "PowerBoardComms.h"
 
 void SunRelay::init() {
-  printf("Sun relay init\r\n");
+  printf("RELAYS SUN INIT\n");
 }
 
 void SunRelay::turnOn() {

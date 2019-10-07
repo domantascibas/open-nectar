@@ -1,7 +1,7 @@
 #include "DeviceMode.h"
 #include "device_modes.h"
 #include "Storage.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 
 DeviceMode deviceOpMode;
 

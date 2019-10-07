@@ -1,10 +1,10 @@
+#include "consts.h"
 #include "GridRelay.h"
 
-static const PinName ZERO_CROSS = PB_5;
-DigitalIn zeroCross(ZERO_CROSS);
+DigitalIn zeroCross(ZERO_CROSS_PIN);
 
 void GridRelay::init() {
-  printf("Grid relay init\r\n");
+  printf("RELAYS GRID INIT\n");
 }
 
 void GridRelay::turnOn() {

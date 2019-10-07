@@ -1,5 +1,5 @@
-#ifndef ENERGY_METER_H
-#define ENERGY_METER_H
+#ifndef _NS_ENERGY_METER_H
+#define _NS_ENERGY_METER_H
 
 #include "mbed.h"
 
@@ -21,6 +21,5 @@ private:
 };
 
 extern EnergyMeter gridMeter;
-//extern EnergyMeter sunMeter;
 
 #endif

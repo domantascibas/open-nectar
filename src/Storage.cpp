@@ -1,5 +1,6 @@
+#include "consts.h"
 #include "Storage.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 
 // day temp, night temp, max temp
 // day starts, night starts
@@ -7,11 +8,8 @@
 // current heater mode, previous heater mode
 
 namespace Storage {	
-  static const uint8_t DEVICE_CONFIGURED = 0xC0;
-  uint8_t config = 0xFA;
-  
-  static const uint8_t ESP_CONFIGURED = 0xEC;
-  uint8_t esp_config = 0xFA;
+  uint8_t config = EMPTY_VALUE;
+  uint8_t esp_config = EMPTY_VALUE;
   
   bool isLanguageLoaded = false;
 	bool emptyStorage = true;
@@ -56,8 +54,8 @@ namespace Storage {
 		emptyStorage = EE_ReadDatastruct(&rDataStruct);
 		
 		if(emptyStorage) {
-			sDataStruct.device_config = 0xFA;
-			sDataStruct.esp_config = 0xFA;
+			sDataStruct.device_config = EMPTY_VALUE;
+			sDataStruct.esp_config = EMPTY_VALUE;
 		} else {
 			sDataStruct = rDataStruct;
 		}
@@ -103,8 +101,8 @@ namespace Storage {
   
   void clearConfig() {
     __disable_irq();
-		sDataStruct.device_config = 0xFA;
-		sDataStruct.esp_config = 0xFA;
+		sDataStruct.device_config = EMPTY_VALUE;
+		sDataStruct.esp_config = EMPTY_VALUE;
 		saveData();
     __enable_irq();
   }
@@ -166,14 +164,13 @@ namespace Storage {
   void saveLanguage(const Language &language) {
     __disable_irq();
     if(isConfigured()) {
-      printf("[LANGUAGE] has config\r\n");
+      printf("LANGUAGE configured\n");
       if(isLanguageLoaded) {
-        printf("[LANGUAGE] saving new language %d\r\n\n", language);
+        printf("LANGUAGE SET %d\n", language);
 				sDataStruct.language = (uint16_t)language;
       }
     } else {
-      printf("[LANGUAGE] no config\r\n");
-      printf("[LANGUAGE] saving new language %d\r\n\n", language);
+      printf("LANGUAGE SET %d\n", language);
 			sDataStruct.language = (uint16_t)language;
     }
 		saveData();
@@ -225,5 +222,3 @@ namespace Storage {
     return new_time;
   }
 };
-
-// *******************************Nectar Sun Copyright (C) Nectar Sun 2017*************************************   

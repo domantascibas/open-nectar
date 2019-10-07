@@ -1,17 +1,14 @@
+#include "consts.h"
 #include "EnergyMeter.h"
 #include "DataService.h"
 
 EnergyMeter gridMeter(DataService::getBoilerPower);
-//EnergyMeter sunMeter(DataService::getBoilerPower);
-
-static const float INTERVAL = 5.0;
 
 void EnergyMeter::startMeter() {
   if(meterSet) {
-//    lastMomentPower = getPower();
-    ticker.attach(callback(this, &EnergyMeter::increaseMeter), INTERVAL);
+    ticker.attach(callback(this, &EnergyMeter::increaseMeter), ENERGY_METER_UPDATE_INTERVAL);
   } else {
-    printf("energy meter not set\r\n");
+    printf("[INFO] energy meter not set\n");
   }
 }
 
@@ -21,10 +18,8 @@ void EnergyMeter::stopMeter(bool increase) {
 }
 
 void EnergyMeter::increaseMeter() {
-//  float momentPower = ;
-  reading += getPower() * INTERVAL / 3600 / 1000;
-//  lastMomentPower = momentPower;
-  printf("[ENERGY] grid: %fkWh\r\n", reading);
+  reading += getPower() * ENERGY_METER_UPDATE_INTERVAL / 3600 / 1000;
+  printf("ENERGY GRID %f\n", reading);
 }
 
 void EnergyMeter::setMeterReading(float value) {

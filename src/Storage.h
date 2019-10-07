@@ -1,5 +1,5 @@
-#ifndef STORAGE_H
-#define STORAGE_H
+#ifndef _NS_STORAGE_H
+#define _NS_STORAGE_H
 #include <stdint.h>
 #include "menu_service.h"
 #include "DataService.h"
@@ -29,5 +29,3 @@ namespace Storage {
 };
 
 #endif
-
-// *******************************Nectar Sun Copyright (C) Nectar Sun 2017*************************************   
