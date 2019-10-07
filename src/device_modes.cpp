@@ -1,10 +1,10 @@
 #include "consts.h"
 #include "data.h"
 #include "device_modes.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "power_controller.h"
 #include "pwm_controller.h"
-#include "internal_temperature.h"
+#include "temperature_controller.h"
 #include "sensor_controller.h"
 
 void calibrate(void);
@@ -27,7 +27,7 @@ void device_modes_init(void) {
   no_power.fall(&shutdown_ISR);
   // calibration_button.fall(&calibrate_ISR);
 
-  internal_temperature_init();
+  temperature_controller_init();
   sensor_controller_init();
   power_controller_init();
   pwm_controller_init();
@@ -57,15 +57,8 @@ void device_modes_loop(void) {
   if(update_mode) {      
     update_mode = false;
 
-    float internal_temp = internal_temperature_measure();
-    data.device_temperature = internal_temp;
-    // printf("processor temp: %f\r\n", internal_temp);
-    if(internal_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
-      if(!nectarError.has_error(PROCESSOR_OVERHEAT)) nectarError.set_error(PROCESSOR_OVERHEAT);
-      printf("PROCESSOR OVERHEAT\r\n");
-    } else {
-      if(nectarError.has_error(PROCESSOR_OVERHEAT) && (internal_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) nectarError.clear_error(PROCESSOR_OVERHEAT);
-    }
+    temperature_controller_update_processor_temp();
+    temperature_controller_update_internal_temp();
     
     if(nectarError.has_errors && ((data.current_state != IDLE) || (data.current_state != MANUAL))) {
       data.current_state = STOP;
@@ -143,6 +136,7 @@ void update_mode_ISR(void) {
 void shutdown_ISR(void) {
   if(!data.isTestMode) {
     sensor_controller_save_meters();
+    device_modes_set_state_stop();
     printf("[ISR] Energy Meters: %.4f, %.4f\r\n", data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
   }
 }

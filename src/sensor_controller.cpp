@@ -2,7 +2,7 @@
 #include "sensor_controller.h"
 #include "Sensor.h"
 #include "flash_storage.h"
-#include "ErrorHandler.h"
+#include "error_controller.h"
 #include "data.h"
 
 float measure_voltage(void);
