@@ -4,7 +4,7 @@
 #include "mbed.h"
 
 static const char NECTAR_DEVICE_MODEL[] = "Nectar Sun S";
-static const float NECTAR_MAIN_BOARD_VERSION = 109;
+static const float NECTAR_MAIN_BOARD_VERSION = 110;
 
 // Temperature
 static const int PROCESSOR_INTERNAL_TEMPERATURE_LIMIT = 120;
