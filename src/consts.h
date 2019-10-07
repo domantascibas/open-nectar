@@ -3,7 +3,7 @@
 
 #include "mbed.h"
 
-static const float NECTAR_POWER_BOARD_VERSION = 108;
+static const float NECTAR_POWER_BOARD_VERSION = 110;
 static const float DEVICE_MODE_UPDATE_INTERVAL = 0.5;
 
 // Calibration settings
