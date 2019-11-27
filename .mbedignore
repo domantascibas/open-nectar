@@ -33,4 +33,5 @@ mbed-os/features/lwipstack/*
 mbed-os/components/*
 
 tmp/*
-TESTS/
+source/TESTS/
+source/NS-project/

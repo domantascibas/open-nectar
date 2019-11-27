@@ -1,5 +1,6 @@
 # ignore .vscode
 .vscode/*
+__pycache__/*
 
 # ignore mbed-os lib
 mbed-os/*
@@ -10,6 +11,7 @@ mbed/*
 BUILD/*
 DebugConfig/*
 bin/*
+source/NS-project/bin/*
 
 # ignore .py and .pyc files
 *.pyc

@@ -5,6 +5,7 @@
 
 static const float NECTAR_POWER_BOARD_VERSION = 110;
 static const float DEVICE_MODE_UPDATE_INTERVAL = 0.5;
+// let's make some changes
 
 // Calibration settings
 static const uint8_t DEVICE_CALIBRATED = 0xCA;
@@ -21,7 +22,7 @@ static const uint8_t V_SENSE_ADDR = 0x55 << 1;
 static const uint8_t I_SENSE_ADDR = 0x5A << 1;
 static const uint32_t I2C_FREQUENCY = 400000;
 static const float V_REF = 3.00;
-static const float INPUT_VDIV = 4.1/400;
+static const float INPUT_VDIV = 4.1 / 400;
 static const float CURRENT_LIMIT = 10.0;
 static const float VOLTAGE_LIMIT = 385.0;
 // static const float VOLTAGE_LIMIT = 440.0; // vido config

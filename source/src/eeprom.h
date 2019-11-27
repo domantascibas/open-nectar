@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    EEPROM_Emulation/inc/eeprom.h 
+  * @file    EEPROM_Emulation/inc/eeprom.h
   * @author  MCD Application Team
-  * @brief   This file contains all the functions prototypes for the EEPROM 
+  * @brief   This file contains all the functions prototypes for the EEPROM
   *          emulation firmware library.
   ******************************************************************************
   * @attention
@@ -213,9 +213,8 @@ extern "C"
 /* Variables' number */
 #define NB_OF_VAR ((uint8_t)0x09)
 
-  /* Exported types ------------------------------------------------------------*/
-  typedef struct
-  {
+/* Exported types ------------------------------------------------------------*/
+typedef struct {
     uint8_t device_calibrated;
     uint8_t extra_property;  // currently not used
     uint8_t extra_property2; // currently not used
@@ -226,35 +225,32 @@ extern "C"
 
     float sun_meter;
     float grid_meter;
-  } EE_SettingsDatastruct;
+} EE_SettingsDatastruct;
 
-  typedef struct
-  {
+typedef struct {
     uint8_t device_calibrated;
     uint8_t extra_property;  // currently not used
     uint8_t extra_property2; // currently not used
     uint8_t extra_property3; // currently not used
-  } EE_PropertiesDatastruct;
+} EE_PropertiesDatastruct;
 
-  typedef struct
-  {
+typedef struct {
     float ref_voltage;
     float ref_current;
-  } EE_CalibrationDatastruct;
+} EE_CalibrationDatastruct;
 
-  typedef struct
-  {
+typedef struct {
     float sun_meter;
     float grid_meter;
-  } EE_MeterDatastruct;
+} EE_MeterDatastruct;
 
-  /* Exported macro ------------------------------------------------------------*/
-  /* Exported functions ------------------------------------------------------- */
-  uint16_t EE_Init(void);
-  uint16_t EE_ReadVariable(uint16_t VirtAddress, uint16_t *Data);
-  uint16_t EE_WriteVariable(uint16_t VirtAddress, uint16_t Data);
-  uint16_t EE_ReadDatastruct(EE_SettingsDatastruct *Data);
-  uint16_t EE_WriteDatastruct(EE_SettingsDatastruct *Data);
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
+uint16_t EE_Init(void);
+uint16_t EE_ReadVariable(uint16_t VirtAddress, uint16_t *Data);
+uint16_t EE_WriteVariable(uint16_t VirtAddress, uint16_t Data);
+uint16_t EE_ReadDatastruct(EE_SettingsDatastruct *Data);
+uint16_t EE_WriteDatastruct(EE_SettingsDatastruct *Data);
 
 #ifdef __cplusplus
 }
