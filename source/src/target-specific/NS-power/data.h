@@ -20,7 +20,7 @@ enum modes {
     MANUAL
 };
 
-struct Data {
+typedef struct {
     bool isCalibrating;
     bool isInOnboarding;
     bool isTestMode;
@@ -48,14 +48,14 @@ struct Data {
     bool readingTemperature;
     bool safeToReadTemp;
     bool startCalibration;
-};
+} Data;
 
-struct StorageData {
+typedef struct {
     float ref_voltage;
     float ref_current;
     float sun_meter;
     float grid_meter;
-};
+} StorageData;
 
 extern Data data;
 extern StorageData storage_data;

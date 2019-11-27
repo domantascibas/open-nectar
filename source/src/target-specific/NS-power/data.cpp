@@ -5,6 +5,9 @@ bool isCalibrating = false;
 bool isInOnboarding = true;
 bool isTestMode = false;
 uint8_t current_state = IDLE;
+
+// change to uint16_t
+// should perform all calculations in uint32_t cast to uint16_t
   
 float moment_power = 0.00;
 float moment_voltage = 0.00;
