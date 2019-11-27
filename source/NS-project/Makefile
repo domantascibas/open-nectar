@@ -3,8 +3,12 @@ SRCDIR = ../src/
 format:
 	./astyle.sh FORMAT $(SRCDIR)
 
-compile:
+build:
 	bash -c "./build.sh"
 
-deploy:
-	bash -c "./build.sh"
+list:
+	bash -c "ls /opt/"
+
+clean:
+	rm ./bin/*
+	rm ./objects/*
