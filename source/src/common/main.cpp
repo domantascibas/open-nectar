@@ -5,10 +5,12 @@
 #include "pc_service_comms.h"
 #include "watchdog_timer.h"
 #include "error_controller.h"
+#include "data.h"
 
 int main(void) {
   error_controller_init();
   pc_service_comms_init();
+  PowerData_init();
 	flash_storage_init();
 
   printf("Starting device modes\r\n");
