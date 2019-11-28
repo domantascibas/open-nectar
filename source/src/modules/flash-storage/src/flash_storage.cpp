@@ -25,29 +25,35 @@ void flash_storage_init(void) {
     FLASH->KEYR = 0x45670123; //FLASH KEY 1
     FLASH->KEYR = 0xCDEF89AB; //FLASH KEY 2
   }
-  
+
   uint16_t result = EE_Init();
   if(result == HAL_OK) nectarError.clear_error(FLASH_ACCESS_ERROR);
 }
 
 bool flash_storage_load_data(float *voltage, float *current, float *sun, float *grid) {
   bool load_error = true;
-  
+
   EE_SettingsDatastruct rDataStruct;
   load_error = EE_ReadDatastruct(&rDataStruct);
-  
+
   if(load_error) {
     printf("[STORAGE] empty\r\n");
     sDataStruct.device_calibrated = EMPTY_VALUE;
   } else {
     printf("[STORAGE] not empty\r\n");
-    sDataStruct = rDataStruct;			
+    sDataStruct = rDataStruct;
     *voltage = sDataStruct.ref_voltage;
     *current = sDataStruct.ref_current;
 
     *sun = sDataStruct.sun_meter;
     *grid = sDataStruct.grid_meter;
     printf("[STORAGE] %d %d %f %f\r\n", sDataStruct.device_calibrated, sDataStruct.extra_property, sDataStruct.ref_voltage, sDataStruct.ref_current);
+  }
+
+  if (sDataStruct.device_calibrated == DEVICE_CALIBRATED) {
+    SET_STATUS(power_data.status, CALIBRATION_status);
+  } else {
+    CLEAR_STATUS(power_data.status, CALIBRATION_status);
   }
 
   return (sDataStruct.device_calibrated == DEVICE_CALIBRATED);
@@ -58,6 +64,7 @@ void flash_storage_save_data(float voltage, float current) {
   sDataStruct.ref_voltage = voltage;
   sDataStruct.ref_current = current;
   sDataStruct.device_calibrated = DEVICE_CALIBRATED;
+  SET_STATUS(power_data.status, CALIBRATION_status);
 
   flash_write_error = EE_WriteDatastruct(&sDataStruct);
   if(flash_write_error) {

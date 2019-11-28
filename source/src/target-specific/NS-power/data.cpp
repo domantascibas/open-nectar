@@ -1,7 +1,7 @@
 #include "mbed.h"
 #include "data.h"
 
-static PowerBoardDataStruct_t power_data;
+PowerBoardDataStruct_t power_data;
 
 bool isCalibrating = false;
 bool isInOnboarding = true;
