@@ -56,7 +56,8 @@ typedef struct PowerBoardDataStruct_tag {
     uint8_t temperature;
 } PowerBoardDataStruct_t;
 
-extern PowerBoardDataStruct_t power_data;
+// extern PowerBoardDataStruct_t power_data;
+extern const uint8_t *status_addr;
 uint8_t PowerData_init(void);
 uint8_t PowerData_read(powerDataType_t datatype, void *data);
 uint8_t PowerData_write(powerDataType_t datatype, void *data);
