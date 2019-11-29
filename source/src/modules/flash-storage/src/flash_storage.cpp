@@ -51,9 +51,9 @@ bool flash_storage_load_data(float *voltage, float *current, float *sun, float *
   }
 
   if (sDataStruct.device_calibrated == DEVICE_CALIBRATED) {
-    SET_STATUS(status_addr, CALIBRATION_status);
+    SET_STATUS(CALIBRATION_status);
   } else {
-    CLEAR_STATUS(status_addr, CALIBRATION_status);
+    CLEAR_STATUS(CALIBRATION_status);
   }
 
   return (sDataStruct.device_calibrated == DEVICE_CALIBRATED);
@@ -64,7 +64,7 @@ void flash_storage_save_data(float voltage, float current) {
   sDataStruct.ref_voltage = voltage;
   sDataStruct.ref_current = current;
   sDataStruct.device_calibrated = DEVICE_CALIBRATED;
-  SET_STATUS(status_addr, CALIBRATION_status);
+  SET_STATUS(CALIBRATION_status);
 
   flash_write_error = EE_WriteDatastruct(&sDataStruct);
   if(flash_write_error) {

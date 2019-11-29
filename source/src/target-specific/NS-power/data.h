@@ -3,10 +3,6 @@
 
 #include "NectarContract.h"
 
-#define CLEAR_STATUS(value, pos) (*value &= ~(1U << pos))
-#define SET_STATUS(value, pos) (*value |= (1U << pos))
-#define GET_STATUS(value, pos) ((*value & (1U << pos)) >> pos)
-
 typedef enum {
     M_VOLTAGE,
     M_CURRENT,
@@ -56,11 +52,14 @@ typedef struct PowerBoardDataStruct_tag {
     uint8_t temperature;
 } PowerBoardDataStruct_t;
 
-// extern PowerBoardDataStruct_t power_data;
-extern const uint8_t *status_addr;
 uint8_t PowerData_init(void);
+uint8_t *PowerData_getStatusPtr(void);
 uint8_t PowerData_read(powerDataType_t datatype, void *data);
 uint8_t PowerData_write(powerDataType_t datatype, void *data);
+
+#define CLEAR_STATUS(x) (*PowerData_getStatusPtr() &= ~(1U << x))
+#define SET_STATUS(x) (*PowerData_getStatusPtr() |= (1U << x))
+#define GET_STATUS(x) ((*PowerData_getStatusPtr() & (1U << x)) >> x)
 
 
 #define LED_ON            0

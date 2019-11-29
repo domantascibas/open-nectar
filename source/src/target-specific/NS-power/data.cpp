@@ -1,12 +1,16 @@
 #include "mbed.h"
 #include "data.h"
 
-PowerBoardDataStruct_t power_data;
-const uint8_t *status_addr = &power_data.status;
+static PowerBoardDataStruct_t power_data;
 
 uint8_t PowerData_init() {
     memset(&power_data, 0, sizeof(power_data));
     return 1;
+}
+
+// returns pointer to power_data.status struct
+uint8_t *PowerData_getStatusPtr(void) {
+    return &power_data.status;
 }
 
 uint8_t PowerData_read(powerDataType_t datatype, void *data) {
