@@ -23,4 +23,5 @@ Date        Firmware        Description
                 - Feature: MAIN board error handler update;
                 - Feature: POWER board shut down on power shortage;
                 - Feature: POWER board error handler update;
+                - Feature: PWM frequency change 12kHz;
                 # Recommended Update Package 00.01.23.00
