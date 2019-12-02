@@ -220,11 +220,11 @@ typedef struct {
     uint8_t extra_property2; // currently not used
     uint8_t extra_property3; // currently not used
 
-    float ref_voltage;
-    float ref_current;
+    uint16_t ref_voltage;
+    uint16_t ref_current;
 
-    float sun_meter;
-    float grid_meter;
+    uint32_t sun_meter;
+    uint32_t grid_meter;
 } EE_SettingsDatastruct;
 
 typedef struct {
@@ -235,13 +235,13 @@ typedef struct {
 } EE_PropertiesDatastruct;
 
 typedef struct {
-    float ref_voltage;
-    float ref_current;
+    uint16_t ref_voltage;
+    uint16_t ref_current;
 } EE_CalibrationDatastruct;
 
 typedef struct {
-    float sun_meter;
-    float grid_meter;
+    uint32_t sun_meter;
+    uint32_t grid_meter;
 } EE_MeterDatastruct;
 
 /* Exported macro ------------------------------------------------------------*/
