@@ -12,6 +12,7 @@ Sensor voltageSensor(V_SENSE_ADDR);
 Sensor currentSensor(I_SENSE_ADDR);
 
 void sensor_controller_init(void) {
+  uint16_t v_ref, i_ref;
   printf("Sensor Controller setup\r\n");
   if(voltageSensor.ping()) nectarError.clear_error(ADC_VOLTAGE_ERROR);
   else nectarError.set_error(ADC_VOLTAGE_ERROR);
@@ -20,12 +21,17 @@ void sensor_controller_init(void) {
   else nectarError.set_error(ADC_CURRENT_ERROR);
 
   if(!nectarError.has_error(FLASH_ACCESS_ERROR)) {
-    data.calibrated = flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
-    voltageSensor.set_reference(data.reference_voltage);
-    currentSensor.set_reference(data.reference_current);
+    // data.calibrated = flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
+    flash_storage_load_data();
+
+    PowerData_read(R_VOLTAGE, &v_ref);
+    PowerData_read(R_CURRENT, &i_ref);
+
+    voltageSensor.set_reference(((float)v_ref) / 100);
+    currentSensor.set_reference(((float)i_ref) / 100);
   } else nectarError.set_error(FLASH_ACCESS_ERROR);
   
-  if(data.calibrated) {
+  if(GET_STATUS(CALIBRATION_STATUS)) {
     nectarError.clear_error(CALIBRATION_ERROR);
   }
 
@@ -39,12 +45,17 @@ void sensor_controller_init(void) {
 }
 
 void sensor_controller_measure(void) {
+  uint16_t v, i;
   if(voltageSensor.ready_to_sample) {
-    data.moment_voltage = measure_voltage();
+    v = (uint16_t)(measure_voltage() * 100);
+    PowerData_write(M_VOLTAGE, &v);
+    // data.momnt_voltage = measure_voltage();
   }
   
   if(currentSensor.ready_to_sample) {
-    data.moment_current = measure_current();
+    i = (uint16_t)(measure_current() * 100);
+    PowerData_write(M_CURRENT, &i);
+    // data.moment_current = measure_current();
   }
 }
 
@@ -54,27 +65,34 @@ void sensor_controller_calibrate(void) {
   voltageSensor.calibrate();
   currentSensor.calibrate();
   
-	float c_voltage = voltageSensor.get_reference();
-	float c_current = currentSensor.get_reference();
+	uint16_t c_voltage = (uint16_t)(voltageSensor.get_reference() * 100);
+	uint16_t c_current = (uint16_t)(currentSensor.get_reference() * 100);
 	
-	if(((c_voltage < CALIBRATION_VOLTAGE_MAX) && (c_voltage > CALIBRATION_VOLTAGE_MIN)) && ((c_current < CALIBRATION_CURRENT_MAX) && (c_current > CALIBRATION_CURRENT_MIN))) {
+	if(((c_voltage < CALIBRATION_VOLTAGE_MAX * 100) && (c_voltage > CALIBRATION_VOLTAGE_MIN * 100)) && ((c_current < CALIBRATION_CURRENT_MAX * 100) && (c_current > CALIBRATION_CURRENT_MIN * 100))) {
 		if(nectarError.has_error(CALIBRATION_ERROR)) {
 			nectarError.clear_error(CALIBRATION_ERROR);
 		}
-		flash_storage_save_data(c_voltage, c_current);
-		data.reference_voltage = c_voltage;	
-		data.reference_current = c_current;
+		// flash_storage_save_data(c_voltage, c_current);
+		flash_storage_save_data();
+
+		// data.reference_voltage = c_voltage;
+		// data.reference_current = c_current;
+    PowerData_write(R_VOLTAGE, &c_voltage);
+    PowerData_write(R_CURRENT, &c_current);
 		printf("\r\n");
-		printf("[ok] calibrated. v_ref = %fV, i_ref = %fA\r\n", c_voltage, c_current);
+		printf("[ok] calibrated. v_ref = %dV, i_ref = %dA\r\n", c_voltage, c_current);
 		printf("\r\n");
 	} else {
 		printf("\r\n");
-		printf("[warn] bad calibration. v_ref = %fV, i_ref = %fA\r\n", c_voltage, c_current);
+		printf("[warn] bad calibration. v_ref = %dV, i_ref = %dA\r\n", c_voltage, c_current);
 		printf("*** Please recalibrate with DC+/- inputs shorted ***\r\n");
 		if(!nectarError.has_error(CALIBRATION_ERROR)) {
-			flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
+			// flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
+			flash_storage_load_data();
 			printf("[warn] loaded last calibration data from memory\r\n");
-			printf("[warn] v_ref = %fV, i_ref = %fA\r\n", data.reference_voltage, data.reference_current);
+      PowerData_read(R_VOLTAGE, &c_voltage);
+      PowerData_read(R_CURRENT, &c_current);
+			printf("[warn] v_ref = %dV, i_ref = %dA\r\n", c_voltage, c_current);
 		}
 		printf("\r\n");
 	}
@@ -84,7 +102,7 @@ void sensor_controller_calibrate(void) {
 }
 
 void sensor_controller_save_meters(void) {
-  flash_storage_save_meters(data.sun_energy_meter_kwh, data.grid_energy_meter_kwh);
+  flash_storage_save_meters();
 }
 
 float sensor_controller_get_voltage_ref(void) {

@@ -58,6 +58,7 @@ void mbedStream::received_main_board_state_for_power(const nectar_contract::Main
 }
 
 StreamObject mbedStream::get_power_board_state() {
+  uint16_t v_ref, i_ref;
   powerState.sun_power = data.moment_power;
   powerState.sun_voltage = data.moment_voltage;
   powerState.sun_current = data.moment_current;
@@ -69,8 +70,13 @@ StreamObject mbedStream::get_power_board_state() {
   powerState.pwm_generator_on = (power_controller_is_generator_on() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
   powerState.sun_meter_kwh = data.sun_energy_meter_kwh;
   powerState.grid_meter_kwh = data.grid_energy_meter_kwh;
-  powerState.ref_voltage = sensor_controller_get_voltage_ref();
-  powerState.ref_current = sensor_controller_get_current_ref();
+  
+  PowerData_read(R_VOLTAGE, &v_ref);
+  PowerData_read(R_CURRENT, &i_ref);
+
+  powerState.ref_voltage = ((float)v_ref) / 100;
+  // powerState.ref_current = sensor_controller_get_current_ref();
+  powerState.ref_current = ((float)i_ref) / 100;
 	powerState.power_version = NECTAR_POWER_BOARD_VERSION;
   
   StreamObject _powerState(&powerState, sizeof(powerState));
