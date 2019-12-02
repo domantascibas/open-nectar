@@ -20,11 +20,11 @@ typedef enum {
 } powerDataType_t;
 
 typedef enum {
-    GENERATOR_status,
-    MPPT_status,
-    PWM_status,
-    CALIBRATION_status,
-    OVERHEAT_status,
+    GENERATOR_STATUS,
+    MPPT_STATUS,
+    PWM_STATUS,
+    CALIBRATION_STATUS,
+    OVERHEAT_STATUS,
 } statusDataType_t;
 
 typedef struct momentData_tag {
