@@ -6,12 +6,16 @@
 #include "watchdog_timer.h"
 #include "error_controller.h"
 #include "data.h"
+#include "version.h"
+
+// TODO: make main more generic, so it can be shared between different targets
 
 int main(void) {
   error_controller_init();
   pc_service_comms_init();
   PowerData_init();
 	flash_storage_init();
+  // print device version numbers
 
   printf("Starting device modes\r\n");
   device_modes_init();
