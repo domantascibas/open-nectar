@@ -127,6 +127,26 @@ uint8_t PowerData_write(powerDataType_t datatype, void *data) {
     return 1;
 }
 
+uint8_t PowerData_info(void) {
+    printf("[PWR DATA] ***** INFO *****\n\r");
+    printf("[PWR DATA] timestamp:           %ld\n\r", power_data.timestamp);
+    printf("[PWR DATA] moment voltage:      %d V\n\r", power_data.mom.voltage);
+    printf("[PWR DATA] moment current:      %d A\n\r", power_data.mom.current);
+    printf("[PWR DATA] moment power:        %d W\n\r", power_data.mom.power);
+    printf("[PWR DATA] reference voltage:   %d V\n\r", power_data.ref.voltage);
+    printf("[PWR DATA] reference current:   %d A\n\r", power_data.ref.current);
+    printf("[PWR DATA] meter grid:          %ld kWh\n\r", power_data.meter.grid);
+    printf("[PWR DATA] meter sun:           %ld kWh\n\r", power_data.meter.sun);
+    printf("[PWR DATA] GENERATOR_STATUS:    %d\n\r", GET_STATUS(GENERATOR_STATUS));
+    printf("[PWR DATA] MPPT_STATUS:         %d\n\r", GET_STATUS(MPPT_STATUS));
+    printf("[PWR DATA] PWM_STATUS:          %d\n\r", GET_STATUS(PWM_STATUS));
+    printf("[PWR DATA] CALIBRATION_STATUS:  %d\n\r", GET_STATUS(CALIBRATION_STATUS));
+    printf("[PWR DATA] OVERHEAT_STATUS:     %d\n\r", GET_STATUS(OVERHEAT_STATUS));
+    printf("[PWR DATA] BOOST_STATUS:        %d\n\r", GET_STATUS(BOOST_STATUS));
+    // printf("[PWR DATA] status:              %d\n\r", power_data.status);
+    printf("[PWR DATA] internal temp:       %d\n\r", power_data.temperature);
+}
+
 bool isCalibrating = false;
 bool isInOnboarding = true;
 bool isTestMode = false;

@@ -25,6 +25,7 @@ typedef enum {
     PWM_STATUS,
     CALIBRATION_STATUS,
     OVERHEAT_STATUS,
+    BOOST_STATUS,
 } statusDataType_t;
 
 typedef struct momentData_tag {
@@ -56,6 +57,7 @@ uint8_t PowerData_init(void);
 uint8_t *PowerData_getStatusPtr(void);
 uint8_t PowerData_read(powerDataType_t datatype, void *data);
 uint8_t PowerData_write(powerDataType_t datatype, void *data);
+uint8_t PowerData_info(void);
 
 #define CLEAR_STATUS(x) (*PowerData_getStatusPtr() &= ~(1U << x))
 #define SET_STATUS(x) (*PowerData_getStatusPtr() |= (1U << x))
