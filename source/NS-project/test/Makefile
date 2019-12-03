@@ -27,11 +27,12 @@ SRC_DIRS = \
 TEST_SRC_DIRS = \
 	AllTests
 
-INCLUDE_DIRS =\
-  .\
-  common\
-  $(CPPUTEST_HOME)/include\
-  $(CPPUTEST_HOME)/include\CppUTest\MemoryLeakDetectorNewMacros.h
-#   $(CPPUTEST_HOME)/include\CppUTest\MemoryLeakDetectorMallocMacros.h
-
+INCLUDE_DIRS = \
+	.\
+	common\
+	$(CPPUTEST_HOME)/include\
+	$(CPPUTEST_HOME)/include/CppUTest\
+	$(CPPUTEST_HOME)/../../submodules/nectar_serial/src\
+	$(CPPUTEST_HOME)/../src/target-specific/NS-power
+	
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk
