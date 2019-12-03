@@ -1,16 +1,16 @@
 #include "CppUTest/TestHarness.h"
+#include "data.h"
 
 extern "C" {
 	/*
 	 * Add your c-only include files here
 	 */
-    // #include "data.h"
     #include "consts.h"
 }
 
 TEST_GROUP(CleanExit) {
     void setup() {
-        // PowerData_init();
+        PowerData_init();
     }
 
     void teardown() {

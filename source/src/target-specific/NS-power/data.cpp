@@ -66,6 +66,9 @@ uint8_t PowerData_read(powerDataType_t datatype, void *data) {
         case METER_DATA:
             *(meterData_t *)data = power_data.meter;
         break;
+
+        default:
+        break;
     }
     return 1;
 }
@@ -122,6 +125,9 @@ uint8_t PowerData_write(powerDataType_t datatype, void *data) {
         
         case METER_DATA:
             power_data.meter = *(meterData_t *)data;
+        break;
+
+        default:
         break;
     }
     return 1;
