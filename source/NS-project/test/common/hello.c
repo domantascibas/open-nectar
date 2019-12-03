@@ -30,7 +30,7 @@
 
 void printHelloWorld()
 {
-    PrintFormated("Hello World!\n");
+    PrintFormated("Oh hi, Mark!\n");
 }
 
 int (*PrintFormated)(const char*, ...) = printf;

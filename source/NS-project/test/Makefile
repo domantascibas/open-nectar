@@ -11,7 +11,7 @@ endif
 
 #--- Inputs ----#
 COMPONENT_NAME = NectarSun
-# CPPUTEST_HOME = ..
+CPPUTEST_HOME = ../../cpputest
 
 CPPUTEST_USE_EXTENSIONS = Y
 CPP_PLATFORM = Gcc
@@ -31,5 +31,7 @@ INCLUDE_DIRS =\
   .\
   common\
   $(CPPUTEST_HOME)/include\
+  $(CPPUTEST_HOME)/include\CppUTest\MemoryLeakDetectorNewMacros.h
+#   $(CPPUTEST_HOME)/include\CppUTest\MemoryLeakDetectorMallocMacros.h
 
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk
