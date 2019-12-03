@@ -7,3 +7,6 @@
 [submodule "submodules/error_handler"]
 	path = submodules/error_handler
 	url = git@gitlab.com:nectarsun/nectarsun-s/error_handler.git
+[submodule "source/cpputest"]
+	path = source/cpputest
+	url = https://github.com/cpputest/cpputest.git

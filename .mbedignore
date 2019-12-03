@@ -21,4 +21,5 @@ mbed-os/features/device_key/*
 
 tmp/*
 source/TESTS/
+source/cpputest/
 source/NS-project/
