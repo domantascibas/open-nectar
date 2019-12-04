@@ -2,7 +2,6 @@
 #include "sensor_controller.h"
 #include "Sensor.h"
 #include "error_controller.h"
-// #include "data.h"
 #include "flash_storage.h"
 
 extern "C" {
@@ -16,7 +15,7 @@ Sensor voltageSensor(V_SENSE_ADDR);
 Sensor currentSensor(I_SENSE_ADDR);
 
 void sensor_controller_init(void) {
-  uint16_t v_ref, i_ref;
+  uint16_t ref;
   printf("Sensor Controller setup\r\n");
   if(voltageSensor.ping()) nectarError_clear_error(ADC_VOLTAGE_ERROR);
   else nectarError_set_error(ADC_VOLTAGE_ERROR);
@@ -28,11 +27,10 @@ void sensor_controller_init(void) {
     // data.calibrated = flash_storage_load_data(&data.reference_voltage, &data.reference_current, &data.sun_energy_meter_kwh, &data.grid_energy_meter_kwh);
     flash_storage_load_data();
 
-    PowerData_read(R_VOLTAGE, &v_ref);
-    PowerData_read(R_CURRENT, &i_ref);
-
-    voltageSensor.set_reference(((float)v_ref) / 100);
-    currentSensor.set_reference(((float)i_ref) / 100);
+    PowerData_read(R_VOLTAGE, &ref);
+    voltageSensor.set_reference(DIV_REF_CONVERT(ref));
+    PowerData_read(R_CURRENT, &ref);
+    currentSensor.set_reference(DIV_REF_CONVERT(ref));
   } else nectarError_set_error(FLASH_ACCESS_ERROR);
   
   if(GET_STATUS(CALIBRATION_STATUS)) {
@@ -49,16 +47,16 @@ void sensor_controller_init(void) {
 }
 
 void sensor_controller_measure(void) {
-  uint16_t v, i;
+  uint16_t vi;
   if(voltageSensor.ready_to_sample) {
-    v = (uint16_t)(measure_voltage() * 100);
-    PowerData_write(M_VOLTAGE, &v);
+    vi = VI_CONVERT(measure_voltage());
+    PowerData_write(M_VOLTAGE, &vi);
     // data.momnt_voltage = measure_voltage();
   }
   
   if(currentSensor.ready_to_sample) {
-    i = (uint16_t)(measure_current() * 100);
-    PowerData_write(M_CURRENT, &i);
+    vi = VI_CONVERT(measure_current());
+    PowerData_write(M_CURRENT, &vi);
     // data.moment_current = measure_current();
   }
 }
@@ -69,8 +67,8 @@ void sensor_controller_calibrate(void) {
   voltageSensor.calibrate();
   currentSensor.calibrate();
   
-	uint16_t c_voltage = (uint16_t)(voltageSensor.get_reference() * 100);
-	uint16_t c_current = (uint16_t)(currentSensor.get_reference() * 100);
+	uint16_t c_voltage = REF_CONVERT(voltageSensor.get_reference());
+	uint16_t c_current = REF_CONVERT(currentSensor.get_reference());
 	
 	if(((c_voltage < CALIBRATION_VOLTAGE_MAX * 100) && (c_voltage > CALIBRATION_VOLTAGE_MIN * 100)) && ((c_current < CALIBRATION_CURRENT_MAX * 100) && (c_current > CALIBRATION_CURRENT_MIN * 100))) {
 		if(nectarError_has_error(CALIBRATION_ERROR)) {
@@ -102,7 +100,7 @@ void sensor_controller_calibrate(void) {
 	}
 
   sensor_controller_init();
-  data.isCalibrating = false;
+  data_setIsCalibrating(0);
 }
 
 void sensor_controller_save_meters(void) {

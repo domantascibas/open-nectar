@@ -35,8 +35,8 @@ void temperature_controller_update_processor_temp(void) {
 void temperature_controller_update_internal_temp(void) {
   float internal_temp;
   uint8_t int_temp;
-  if(data.safeToReadTemp) {
-    data.safeToReadTemp = false;
+  if(data_getSafeToReadTemp()) {
+    data_setSafeToReadTemp(0);
 
     if(deviceTemp.isReadyToMeasure()) {
       deviceTemp.measureTemperature();
@@ -54,7 +54,7 @@ void temperature_controller_update_internal_temp(void) {
       } else {
         if(nectarError_has_error(DEVICE_OVERHEAT) && (internal_temp < (DEVICE_TEMPERATURE_LIMIT_MAX - 5.0))) nectarError_clear_error(DEVICE_OVERHEAT);
       }
-      data.device_temperature = internal_temp;
+      // data.device_temperature = internal_temp;
       int_temp = (uint8_t)internal_temp;
       PowerData_write(TEMPERATURE, &int_temp);
     }

@@ -35,81 +35,81 @@ void pc_service_comms_init(void) {
 }
 
 void parse_command(uint8_t command) {
-  switch(command) {
-    case CALIBRATE:
-      data.isCalibrating = true;
-      data.startCalibration = true;
-      printf("\r\nCALIBRATING POWER BOARD\r\n");
-      break;
+  // switch(command) {
+  //   case CALIBRATE:
+  //     data.isCalibrating = true;
+  //     data.startCalibration = true;
+  //     printf("\r\nCALIBRATING POWER BOARD\r\n");
+  //     break;
     
-    case INCREASE_DUTY:
-      if(data.current_state == MANUAL) {
-        power_controller_manual_increase_duty(false);
-        printf("\r\nPWM DUTY INCREASED %f\r\n\n", power_controller_get_duty());
-      } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
-      break;
+  //   case INCREASE_DUTY:
+  //     if(data.current_state == MANUAL) {
+  //       power_controller_manual_increase_duty(false);
+  //       printf("\r\nPWM DUTY INCREASED %f\r\n\n", power_controller_get_duty());
+  //     } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
+  //     break;
     
-    case DECREASE_DUTY:
-      if(data.current_state == MANUAL) {
-        power_controller_manual_decrease_duty(false);
-        printf("\r\nPWM DUTY DECREASED %f\r\n\n", power_controller_get_duty());
-      } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
-      break;
+  //   case DECREASE_DUTY:
+  //     if(data.current_state == MANUAL) {
+  //       power_controller_manual_decrease_duty(false);
+  //       printf("\r\nPWM DUTY DECREASED %f\r\n\n", power_controller_get_duty());
+  //     } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
+  //     break;
       
-    case INCREASE_DUTY_FINE:
-      if(data.current_state == MANUAL) {
-        power_controller_manual_increase_duty();
-        printf("\r\nPWM DUTY INCREASED %f\r\n\n", power_controller_get_duty());
-      } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
-      break;
+  //   case INCREASE_DUTY_FINE:
+  //     if(data.current_state == MANUAL) {
+  //       power_controller_manual_increase_duty();
+  //       printf("\r\nPWM DUTY INCREASED %f\r\n\n", power_controller_get_duty());
+  //     } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
+  //     break;
       
-    case DECREASE_DUTY_FINE:
-      if(data.current_state == MANUAL) {
-        power_controller_manual_decrease_duty();
-        printf("\r\nPWM DUTY DECREASED %f\r\n\n", power_controller_get_duty());
-      } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
-      break;
+  //   case DECREASE_DUTY_FINE:
+  //     if(data.current_state == MANUAL) {
+  //       power_controller_manual_decrease_duty();
+  //       printf("\r\nPWM DUTY DECREASED %f\r\n\n", power_controller_get_duty());
+  //     } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
+  //     break;
     
-    case RESET_DUTY:
-      if(data.current_state == MANUAL) {
-        power_controller_mppt_stop();
-        printf("\r\nPWM DUTY RESET %f\r\n\n", power_controller_get_duty());
-      } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
-      break;
+  //   case RESET_DUTY:
+  //     if(data.current_state == MANUAL) {
+  //       power_controller_mppt_stop();
+  //       printf("\r\nPWM DUTY RESET %f\r\n\n", power_controller_get_duty());
+  //     } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
+  //     break;
     
-    case MANUAL_MODE:
-      data.current_state = MANUAL;
-      printf("\r\n[MANUAL MODE] press 'a' to exit manual mode\r\n\n");
-      break;
+  //   case MANUAL_MODE:
+  //     data.current_state = MANUAL;
+  //     printf("\r\n[MANUAL MODE] press 'a' to exit manual mode\r\n\n");
+  //     break;
     
-    case AUTO_MODE:
-      data.current_state = IDLE;
-      printf("\r\n[AUTO MODE] press 'm' to enter manual mode\r\n\n");
-      break;
+  //   case AUTO_MODE:
+  //     data.current_state = IDLE;
+  //     printf("\r\n[AUTO MODE] press 'm' to enter manual mode\r\n\n");
+  //     break;
     
-    case PWM_GENERATOR_START:
-      if(data.current_state == MANUAL) {
-        power_controller_manual_output_on();
-        printf("\r\nPWM GENERATOR STARTED\r\n\n");
-      } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
-      break;
+  //   case PWM_GENERATOR_START:
+  //     if(data.current_state == MANUAL) {
+  //       power_controller_manual_output_on();
+  //       printf("\r\nPWM GENERATOR STARTED\r\n\n");
+  //     } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
+  //     break;
     
-    case PWM_GENERATOR_STOP:
-      if(data.current_state == MANUAL) {
-        power_controller_manual_output_off();
-        printf("\r\nPWM GENERATOR STOPPED\r\n\n");
-      } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
-      break;
+  //   case PWM_GENERATOR_STOP:
+  //     if(data.current_state == MANUAL) {
+  //       power_controller_manual_output_off();
+  //       printf("\r\nPWM GENERATOR STOPPED\r\n\n");
+  //     } else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
+  //     break;
     
-    default:
-      if(data.current_state == MANUAL) printf("[MANUAL MODE] press 'a' to exit manual mode\r\n");
-      else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
-      break;
-  }
+  //   default:
+  //     if(data.current_state == MANUAL) printf("[MANUAL MODE] press 'a' to exit manual mode\r\n");
+  //     else printf("[AUTO MODE] press 'm' to enter manual mode\r\n");
+  //     break;
+  // }
 }
 
 void Rx_interrupt(void) {
-  if(data.isInOnboarding || data.isTestMode) {
+  if(data_getIsInOnboarding() || data_getIsTestMode()) {
     __disable_irq();
     while(pc.readable()) {
       char rcv = pc.getc();

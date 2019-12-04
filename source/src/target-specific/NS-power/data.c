@@ -137,6 +137,11 @@ uint8_t PowerData_write(powerDataType_t datatype, void *d) {
     return 0;
 }
 
+uint32_t PowerData_calculatePower(void) {
+    power_data.mom.power = (uint32_t)(power_data.mom.voltage * power_data.mom.current);
+    return power_data.mom.power;
+}
+
 uint8_t PowerData_info(void) {
     printf("\n\r");
     printf("[PWR DATA] ***** INFO *****\n\r");
@@ -157,6 +162,81 @@ uint8_t PowerData_info(void) {
     // printf("[PWR DATA] status:              %d\n\r", power_data.status);
     printf("[PWR DATA] internal temp:       %d\n\r", power_data.temperature);
     return 0;
+}
+
+
+Data data = {
+    0, 0, 0, IDLE, 0, 0, 0, 0, 0
+};
+
+StorageData storage_data = {
+    0.0, 0.0, 0.0, 0.0
+};
+
+uint8_t data_getSafeToReadTemp(void) {
+    return data.safeToReadTemp;
+}
+
+void data_setSafeToReadTemp(uint8_t set) {
+    data.safeToReadTemp = set;
+}
+
+//  uint32_t error;
+
+uint8_t data_getReadingTemperature(void) {
+    return data.readingTemperature;
+}
+
+void data_setReadingTemperature(uint8_t set) {
+    data.readingTemperature = set;
+}
+
+uint8_t data_getReadingSerial(void) {
+    return data.readingSerial;
+}
+
+void data_setReadingSerial(uint8_t set) {
+    data.readingSerial = set;
+}
+
+uint8_t data_getStartCalibration(void) {
+    return data.startCalibration;
+}
+
+void data_setStartCalibration(uint8_t set) {
+    data.startCalibration = set;
+}
+
+uint8_t data_getIsCalibrating(void) {
+    return data.isCalibrating;
+}
+
+void data_setIsCalibrating(uint8_t set) {
+    data.isCalibrating = set;
+}
+
+uint8_t data_getIsInOnboarding(void) {
+    return data.isInOnboarding;
+}
+
+void data_setIsInOnboarding(uint8_t set) {
+    data.isInOnboarding = set;
+}
+
+uint8_t data_getIsTestMode(void) {
+    return data.isTestMode;
+}
+
+void data_setIsTestMode(uint8_t set) {
+    data.isTestMode = set;
+}
+
+uint8_t data_getCurrent_state(void) {
+    return data.current_state;
+}
+
+void data_setCurrent_state(uint8_t set) {
+    data.current_state = set;
 }
 
 // static const uint8_t isCalibrating = 0;
@@ -189,12 +269,3 @@ uint8_t PowerData_info(void) {
 // static const uint8_t readingTemperature = 0;
 // static const uint8_t safeToReadTemp = 0;
 // static const uint8_t startCalibration = 0;
-
-Data data = {
-  0, 1, 0, IDLE, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-  0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0
-};
-
-StorageData storage_data = {
-  0.0, 0.0, 0.0, 0.0
-};

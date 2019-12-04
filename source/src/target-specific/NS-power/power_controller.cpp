@@ -2,7 +2,6 @@
 #include "pwm_controller.h"
 #include "power_controller.h"
 #include "error_controller.h"
-// #include "data.h"
 
 extern "C" {
     #include "data.h"
@@ -26,19 +25,23 @@ void power_controller_mppt_stop(void) {
   last_increase = true;
   generator_off();
   pwm_controller_set_duty(PWM_DUTY_MIN);
-  data.moment_power = 0;
+  uint32_t p = 0;
+  PowerData_write(M_POWER, &p);
 }
 
 void power_controller_mppt_start(void) {
   static float old_power = 0.0;
   float moment_power;
   float dP;
+  uint16_t iv;
   
-  moment_power = data.moment_current * data.moment_voltage;
-  data.moment_power = moment_power;
+  // moment_power = data.moment_current * data.moment_voltage;
+  moment_power = PowerData_calculatePower();
+  // data.moment_power = moment_power;
   dP = moment_power - old_power;
   
-	if(data.moment_current < CURRENT_THRESHOLD) {
+  PowerData_read(M_CURRENT, &iv);
+	if(DIV_VI_CONVERT(iv) < CURRENT_THRESHOLD) {
     power_controller_mppt_restart();
     old_power = moment_power;
   } else {
