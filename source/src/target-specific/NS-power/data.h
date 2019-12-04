@@ -84,9 +84,9 @@ enum modes {
 };
 
 typedef struct {
-    bool isCalibrating;
-    bool isInOnboarding;
-    bool isTestMode;
+    uint8_t isCalibrating;
+    uint8_t isInOnboarding;
+    uint8_t isTestMode;
     uint8_t current_state;
 
     float moment_power;
@@ -102,15 +102,15 @@ typedef struct {
     float pwm_duty;
     float device_temperature;
 
-    bool mosfet_overheat_on;
-    bool calibrated;
-    bool generator_on;
+    uint8_t mosfet_overheat_on;
+    uint8_t calibrated;
+    uint8_t generator_on;
 
     uint32_t error;
-    bool readingSerial;
-    bool readingTemperature;
-    bool safeToReadTemp;
-    bool startCalibration;
+    uint8_t readingSerial;
+    uint8_t readingTemperature;
+    uint8_t safeToReadTemp;
+    uint8_t startCalibration;
 } Data;
 
 typedef struct {
