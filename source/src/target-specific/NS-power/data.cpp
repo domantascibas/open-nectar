@@ -31,11 +31,11 @@ uint8_t PowerData_read(powerDataType_t datatype, void *d) {
         break;
     
         case R_VOLTAGE:
-            *(uint16_t *)d = power_data.ref.voltage;
+            *(uint32_t *)d = power_data.ref.voltage;
         break;
         
         case R_CURRENT:
-            *(uint16_t *)d = power_data.ref.current;
+            *(uint32_t *)d = power_data.ref.current;
         break;
         
         case GRID_METER:
@@ -92,11 +92,11 @@ uint8_t PowerData_write(powerDataType_t datatype, void *d) {
         break;
     
         case R_VOLTAGE:
-            power_data.ref.voltage = *(uint16_t *)d;
+            power_data.ref.voltage = *(uint32_t *)d;
         break;
         
         case R_CURRENT:
-            power_data.ref.current = *(uint16_t *)d;
+            power_data.ref.current = *(uint32_t *)d;
         break;
         
         case GRID_METER:
@@ -145,8 +145,8 @@ uint8_t PowerData_info(void) {
     printf("[PWR DATA] moment voltage:      %d V\n\r", power_data.mom.voltage);
     printf("[PWR DATA] moment current:      %d A\n\r", power_data.mom.current);
     printf("[PWR DATA] moment power:        %u W\n\r", (unsigned int)power_data.mom.power);
-    printf("[PWR DATA] reference voltage:   %d V\n\r", power_data.ref.voltage);
-    printf("[PWR DATA] reference current:   %d A\n\r", power_data.ref.current);
+    printf("[PWR DATA] reference voltage:   %u V\n\r", power_data.ref.voltage);
+    printf("[PWR DATA] reference current:   %u A\n\r", power_data.ref.current);
     printf("[PWR DATA] meter grid:          %u kWh\n\r", (unsigned int)power_data.meter.grid);
     printf("[PWR DATA] meter sun:           %u kWh\n\r", (unsigned int)power_data.meter.sun);
     printf("[PWR DATA] GENERATOR_STATUS:    %d\n\r", GET_STATUS(GENERATOR_STATUS));

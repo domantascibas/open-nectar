@@ -37,8 +37,8 @@ typedef struct momentData_tag {
 } momentData_t;
 
 typedef struct referenceData_tag {
-    uint16_t voltage;       // * 100
-    uint16_t current;       // * 100
+    uint32_t voltage;       // * 1000000000
+    uint32_t current;       // * 1000000000
 } referenceData_t;
 
 typedef struct meterData_tag {
