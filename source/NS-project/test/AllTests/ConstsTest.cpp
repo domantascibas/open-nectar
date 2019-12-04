@@ -1,9 +1,8 @@
 #include "CppUTest/TestHarness.h"
 
-#include "data.h"
-
 extern "C" {
     #include "consts.h"
+    #include "data.h"
 }
 
 TEST_GROUP(ConstsTests) {

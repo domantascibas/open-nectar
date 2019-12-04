@@ -1,7 +1,7 @@
 #ifndef _NS_DATA_H
 #define _NS_DATA_H
 
-#include "NectarContract.h"
+// #include "NectarContract.h"
 
 typedef enum {
     M_VOLTAGE,
@@ -122,6 +122,6 @@ typedef struct {
 
 extern Data data;
 extern StorageData storage_data;
-extern nectar_contract::PowerBoardState powerState;
+// extern nectar_contract::PowerBoardState powerState;
 
 #endif

@@ -2,7 +2,11 @@
 #include "pwm_controller.h"
 #include "power_controller.h"
 #include "error_controller.h"
-#include "data.h"
+// #include "data.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 void generator_on(void);
 void generator_off(void);

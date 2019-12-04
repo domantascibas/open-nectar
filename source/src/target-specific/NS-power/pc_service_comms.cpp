@@ -1,8 +1,12 @@
 #include "consts.h"
-#include "data.h"
+// #include "data.h"
 #include "pc_service_comms.h"
 #include "power_controller.h"
 #include "device_modes.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 void parse_command(uint8_t command);
 void Rx_interrupt(void);

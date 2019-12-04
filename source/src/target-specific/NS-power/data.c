@@ -1,4 +1,3 @@
-// #include "mbed.h"
 #include <string.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -145,8 +144,8 @@ uint8_t PowerData_info(void) {
     printf("[PWR DATA] moment voltage:      %d V\n\r", power_data.mom.voltage);
     printf("[PWR DATA] moment current:      %d A\n\r", power_data.mom.current);
     printf("[PWR DATA] moment power:        %u W\n\r", (unsigned int)power_data.mom.power);
-    printf("[PWR DATA] reference voltage:   %u V\n\r", power_data.ref.voltage);
-    printf("[PWR DATA] reference current:   %u A\n\r", power_data.ref.current);
+    printf("[PWR DATA] reference voltage:   %u V\n\r", (unsigned int)power_data.ref.voltage);
+    printf("[PWR DATA] reference current:   %u A\n\r", (unsigned int)power_data.ref.current);
     printf("[PWR DATA] meter grid:          %u kWh\n\r", (unsigned int)power_data.meter.grid);
     printf("[PWR DATA] meter sun:           %u kWh\n\r", (unsigned int)power_data.meter.sun);
     printf("[PWR DATA] GENERATOR_STATUS:    %d\n\r", GET_STATUS(GENERATOR_STATUS));
@@ -160,59 +159,42 @@ uint8_t PowerData_info(void) {
     return 0;
 }
 
-bool isCalibrating = false;
-bool isInOnboarding = true;
-bool isTestMode = false;
-uint8_t current_state = IDLE;
+// static const uint8_t isCalibrating = 0;
+// static const uint8_t isInOnboarding = 1;
+// static const uint8_t isTestMode = 0;
+// static const uint8_t current_state = IDLE;
 
-// change to uint16_t
-// should perform all calculations in uint32_t cast to uint16_t
+// // change to uint16_t
+// // should perform all calculations in uint32_t cast to uint16_t
   
-float moment_power = 0.00;
-float moment_voltage = 0.00;
-float moment_current = 0.00;
+// static const float moment_power = 0.00;
+// static const float moment_voltage = 0.00;
+// static const float moment_current = 0.00;
 
-float reference_voltage = 0.00;
-float reference_current = 0.00;
-  
-float grid_energy_meter_kwh = 0.00;
-float sun_energy_meter_kwh = 0.00;
+// static const float reference_voltage = 0.00;
+// static const float reference_current = 0.00;
 
-float pwm_duty = 0.1f;
-float device_temperature = 0.00;
+// static const float grid_energy_meter_kwh = 0.00;
+// static const float sun_energy_meter_kwh = 0.00;
 
-bool mosfet_overheat_on = false;
-bool calibrated = false;
-bool generator_on = false;
-  
-uint32_t power_board_error = 0x00000000;
-bool readingSerial = false;
-bool readingTemperature = false;
-bool safeToReadTemp = false;
-bool startCalibration = false;
+// static const float pwm_duty = 0.1f;
+// static const float device_temperature = 0.00;
+
+// static const uint8_t mosfet_overheat_on = 0;
+// static const uint8_t calibrated = 0;
+// static const uint8_t generator_on = 0;
+
+// static const uint32_t power_board_error = 0x00000000;
+// static const uint8_t readingSerial = 0;
+// static const uint8_t readingTemperature = 0;
+// static const uint8_t safeToReadTemp = 0;
+// static const uint8_t startCalibration = 0;
 
 Data data = {
-  isCalibrating, isInOnboarding, isTestMode, current_state, moment_power, moment_voltage, moment_current, reference_voltage, reference_current, grid_energy_meter_kwh, sun_energy_meter_kwh,
-  pwm_duty, device_temperature, mosfet_overheat_on, calibrated, generator_on, power_board_error, readingSerial, readingTemperature, safeToReadTemp, startCalibration
+  0, 1, 0, IDLE, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 StorageData storage_data = {
-  reference_voltage, reference_current, sun_energy_meter_kwh, grid_energy_meter_kwh
-};
-
-nectar_contract::PowerBoardState powerState = {
-  0,
-  0,
-  0,
-  0.1f,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0.0f,
-  0.0f,
-  0.0f
+  0.0, 0.0, 0.0, 0.0
 };

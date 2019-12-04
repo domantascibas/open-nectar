@@ -1,11 +1,15 @@
 #include "consts.h"
-#include "data.h"
+// #include "data.h"
 #include "device_modes.h"
 #include "error_controller.h"
 #include "power_controller.h"
 #include "pwm_controller.h"
 #include "temperature_controller.h"
 #include "sensor_controller.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 void calibrate(void);
 // void calibrate_ISR(void);

@@ -2,9 +2,30 @@
 #include "device_modes.h"
 #include "power_controller.h"
 #include "error_controller.h"
-#include "data.h"
+// #include "data.h"
 #include "main_board_comms.h"
 #include "sensor_controller.h"
+
+extern "C" {
+    #include "data.h"
+}
+
+nectar_contract::PowerBoardState powerState = {
+  0,
+  0,
+  0,
+  0.1f,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0.0f,
+  0.0f,
+  0.0f
+};
 
 mbedStream m_stream(NS_TX, NS_RX);
 

@@ -3,7 +3,11 @@
 #include "processor_temperature.h"
 #include "temperature_sensor.h"
 #include "error_controller.h"
-#include "data.h"
+// #include "data.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 TemperatureSensor deviceTemp(INTERNAL_TEMPERATURE_PIN, 5);
 

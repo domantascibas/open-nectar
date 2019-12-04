@@ -1,6 +1,8 @@
 #include "CppUTest/TestHarness.h"
 
-#include "data.h"
+extern "C" {
+    #include "data.h"
+}
 
 TEST_GROUP(PowerDataTests) {
     void setup() {

@@ -3,7 +3,11 @@
 #include "Sensor.h"
 #include "flash_storage.h"
 #include "error_controller.h"
-#include "data.h"
+// #include "data.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 float measure_voltage(void);
 float measure_current(void);

@@ -5,8 +5,12 @@
 #include "pc_service_comms.h"
 #include "watchdog_timer.h"
 #include "error_controller.h"
-#include "data.h"
+// #include "data.h"
 #include "version.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 // TODO: make main more generic, so it can be shared between different targets
 

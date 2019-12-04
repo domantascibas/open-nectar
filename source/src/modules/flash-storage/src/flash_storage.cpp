@@ -1,8 +1,12 @@
 #include "consts.h"
-#include "data.h"
+// #include "data.h"
 #include "flash_storage.h"
 #include "eeprom.h"
 #include "error_controller.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 // static uint8_t calibrated = EMPTY_VALUE;
 // static uint8_t extra_property = EMPTY_VALUE;
