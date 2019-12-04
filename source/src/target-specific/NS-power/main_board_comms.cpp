@@ -86,8 +86,8 @@ StreamObject mbedStream::get_power_board_state() {
   powerState.pwm_duty = power_controller_get_duty();
   powerState.device_temperature = data.device_temperature;
   powerState.transistor_overheat_on = (data.mosfet_overheat_on ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
-  powerState.power_board_error_code = nectarError.get_errors();
-  powerState.device_calibrated = (!nectarError.has_error(CALIBRATION_ERROR) ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
+  powerState.power_board_error_code = nectarError_get_errors();
+  powerState.device_calibrated = (!nectarError_has_error(CALIBRATION_ERROR) ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
   powerState.pwm_generator_on = (power_controller_is_generator_on() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
   powerState.sun_meter_kwh = data.sun_energy_meter_kwh;
   powerState.grid_meter_kwh = data.grid_energy_meter_kwh;

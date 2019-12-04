@@ -18,8 +18,8 @@ DigitalOut shutdown(SD_PIN);
 
 void power_controller_init(void) {
   generator_off();
-  nectarError.clear_error(DEVICE_OVERHEAT);
-  nectarError.clear_error(NO_LOAD);
+  nectarError_clear_error(DEVICE_OVERHEAT);
+  nectarError_clear_error(NO_LOAD);
 }
 
 void power_controller_mppt_stop(void) {

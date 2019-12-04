@@ -54,7 +54,7 @@ void device_modes_loop(void) {
     calibrate();
   }
 
-  if(!nectarError.has_error(CALIBRATION_ERROR)) {
+  if(!nectarError_has_error(CALIBRATION_ERROR)) {
     sensor_controller_measure();
   }
 
@@ -64,7 +64,7 @@ void device_modes_loop(void) {
     temperature_controller_update_processor_temp();
     temperature_controller_update_internal_temp();
     
-    if(nectarError.has_errors && ((data.current_state != IDLE) || (data.current_state != MANUAL))) {
+    if(nectarError_has_errors() && ((data.current_state != IDLE) || (data.current_state != MANUAL))) {
       data.current_state = STOP;
     }
     

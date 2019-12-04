@@ -31,12 +31,12 @@ void flash_storage_init(void) {
   }
 
   uint16_t result = EE_Init();
-  if(result == HAL_OK) nectarError.clear_error(FLASH_ACCESS_ERROR);
+  if(result == HAL_OK) nectarError_clear_error(FLASH_ACCESS_ERROR);
 }
 
-bool flash_storage_load_data(void) {
-// bool flash_storage_load_data(float *voltage, float *current, float *sun, float *grid) {
-  bool load_error = true;
+uint8_t flash_storage_load_data(void) {
+// uint8_t flash_storage_load_data(float *voltage, float *current, float *sun, float *grid) {
+  uint8_t load_error = 1;
 
   EE_SettingsDatastruct rDataStruct;
   load_error = EE_ReadDatastruct(&rDataStruct);
@@ -74,7 +74,7 @@ bool flash_storage_load_data(void) {
 // void flash_storage_save_data(float voltage, float current) {
 void flash_storage_save_data(void) {
   EE_SettingsDatastruct rDataStruct;
-  bool flash_write_error = true;
+  uint8_t flash_write_error = 1;
 
   // rDataStruct.ref_voltage = voltage;
   // rDataStruct.ref_current = current;
@@ -87,14 +87,14 @@ void flash_storage_save_data(void) {
   flash_write_error = EE_WriteDatastruct(&rDataStruct);
 
   if(flash_write_error) {
-    nectarError.set_error(FLASH_ACCESS_ERROR);
+    nectarError_set_error(FLASH_ACCESS_ERROR);
   }
 }
 
 void flash_storage_save_meters(void) {
   if (GET_STATUS(CALIBRATION_STATUS)) {
     EE_SettingsDatastruct rDataStruct;
-    bool flash_write_error = true;
+    uint8_t flash_write_error = 1;
 
     // sDataStruct.sun_meter = sun;
     // sDataStruct.grid_meter = grid;
@@ -105,7 +105,7 @@ void flash_storage_save_meters(void) {
     flash_write_error = EE_WriteDatastruct(&rDataStruct);
 
     if(flash_write_error) {
-      nectarError.set_error(FLASH_ACCESS_ERROR);
+      nectarError_set_error(FLASH_ACCESS_ERROR);
     }
   } else {
     printf("[FS] Device not calibrated. Meters and ref not saved");
