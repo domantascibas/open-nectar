@@ -139,6 +139,7 @@ uint8_t PowerData_write(powerDataType_t datatype, void *d) {
 }
 
 uint8_t PowerData_info(void) {
+    printf("\n\r");
     printf("[PWR DATA] ***** INFO *****\n\r");
     printf("[PWR DATA] timestamp:           %lu\n\r", (long unsigned)power_data.timestamp);
     printf("[PWR DATA] moment voltage:      %d V\n\r", power_data.mom.voltage);
