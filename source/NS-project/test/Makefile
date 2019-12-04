@@ -42,8 +42,8 @@ CPP_PLATFORM = Gcc
 SRC_DIRS = \
 
 SRC_FILES = \
+	../../src/target-specific/NS-power/data.cpp\
 	../../src/common/version.c
-	# ../../src/target-specific/NS-power/data.cpp\
 
 TEST_SRC_DIRS = \
 	AllTests\

@@ -55,8 +55,8 @@ typedef struct PowerBoardDataStruct_tag {
 
 uint8_t PowerData_init(void);
 uint8_t *PowerData_getStatusPtr(void);
-uint8_t PowerData_read(powerDataType_t datatype, void *data);
-uint8_t PowerData_write(powerDataType_t datatype, void *data);
+uint8_t PowerData_read(powerDataType_t datatype, void *d);
+uint8_t PowerData_write(powerDataType_t datatype, void *d);
 uint8_t PowerData_info(void);
 
 #define CLEAR_STATUS(x) (*PowerData_getStatusPtr() &= ~(1U << x))
