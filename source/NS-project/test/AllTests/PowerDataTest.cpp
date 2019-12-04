@@ -1,5 +1,6 @@
 #include "CppUTest/TestHarness.h"
-#include "data.h"
+// #include "data.h"
+#include "version.h"
 
 extern "C" {
 	/*
@@ -10,7 +11,7 @@ extern "C" {
 
 TEST_GROUP(CleanExit) {
     void setup() {
-        PowerData_init();
+        // PowerData_init();
     }
 
     void teardown() {
@@ -20,6 +21,7 @@ TEST_GROUP(CleanExit) {
 
 TEST(CleanExit, GET_STATUS_GENERATOR) {
     CHECK_EQUAL(110, NECTAR_POWER_BOARD_VERSION);
+    STRCMP_EQUAL("NS-Power", Dev_Model);
     // uint8_t status = (uint8_t)GENERATOR_STATUS;
     // PowerData_write(STATUS, &status);
     // CHECK_TEXT(GET_STATUS(GENERATOR_STATUS), "GENERATOR_STATUS SET");

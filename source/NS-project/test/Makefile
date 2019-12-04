@@ -9,9 +9,27 @@ ifndef SILENCE
 	SILENCE = @
 endif
 
+.PHONY: check_paths
+
+check_paths:
+	@echo "\nRepository dir\t" $(REPOSITORY_DIR)
+	@echo "\nProject dir\t" $(PROJECT_DIR)
+	@echo "\nMakefile dir\t" $(MAKEFILE_DIR)
+	@echo "\nTest dir\t" $(TEST_DIR)
+	@echo "\nSrc dir  \t" $(SRC_DIR)
+	@echo "\nSrc dirs  \t" $(SRC_DIRS)
+	@echo "\nInclude dirs  \t" $(INCLUDE_DIRS)
+	@echo "\nCpputest home  \t" $(CPPUTEST_HOME)
+
 #--- Inputs ----#
 COMPONENT_NAME = NectarSun
 CPPUTEST_HOME = ../../cpputest
+
+MAKEFILE_DIR = $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+PROJECT_DIR = $(realpath $(MAKEFILE_DIR)../../..)
+TEST_DIR = $(PROJECT_DIR)/source/NS-project/test
+SRC_DIR = $(PROJECT_DIR)/source/src
+# SUBMODULES_DIR = $(realpath $(MAKEFILE_DIR)../../..)/submodules
 
 CPPUTEST_USE_EXTENSIONS = Y
 CPP_PLATFORM = Gcc
@@ -22,17 +40,22 @@ CPP_PLATFORM = Gcc
 
 # CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE = -include ApplicationLib/ExamplesNewOverrides.h
 SRC_DIRS = \
-	common
+
+SRC_FILES = \
+	../../src/common/version.c
+	# ../../src/target-specific/NS-power/data.cpp\
 
 TEST_SRC_DIRS = \
-	AllTests
+	AllTests\
+	common
 
 INCLUDE_DIRS = \
 	.\
 	common\
 	$(CPPUTEST_HOME)/include\
 	$(CPPUTEST_HOME)/include/CppUTest\
-	$(CPPUTEST_HOME)/../../submodules/nectar_serial/src\
-	$(CPPUTEST_HOME)/../src/target-specific/NS-power
+	../../../submodules/nectar_serial/src\
+	../../src/target-specific/NS-power\
+	../../src/common
 	
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk

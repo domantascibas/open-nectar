@@ -3,16 +3,16 @@
 
 #define NS_POWER
 
-#define RELEASE_VER             "00.01.10.00";
+#define RELEASE_VER             "00.01.10.00"
 
 #ifdef NS_POWER
-#define DEV_MODEL_STR           "NS-Power";
+#define DEV_MODEL_STR           "NS-Power"
 #define HW_SIGN_ARRAY           { 0x50,0x77,0x30,0x31 }     // Pw01
 #define RELEASE_VERSION_STR     RELEASE_VER
 #endif
 
 #ifdef NS_MAIN
-#define DEV_MODEL_STR           "NS-Main";
+#define DEV_MODEL_STR           "NS-Main"
 #define HW_SIGN_ARRAY           { 0x4D,0x6E,0x30,0x31 }     // Mn01
 #define RELEASE_VERSION_STR     RELEASE_VER
 #endif
