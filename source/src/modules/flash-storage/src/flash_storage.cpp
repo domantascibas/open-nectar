@@ -1,11 +1,11 @@
-#include "consts.h"
+// #include "consts.h"
 // #include "data.h"
-#include "flash_storage.h"
 #include "eeprom.h"
 #include "error_controller.h"
+#include "flash_storage.h"
 
 extern "C" {
-    #include "data.h"
+  #include "data.h"
 }
 
 // static uint8_t calibrated = EMPTY_VALUE;

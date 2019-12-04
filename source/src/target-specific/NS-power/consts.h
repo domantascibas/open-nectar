@@ -18,7 +18,6 @@ static const float DEVICE_MODE_UPDATE_INTERVAL = 0.5f;
 // let's make some changes
 
 // Calibration settings
-static const uint8_t DEVICE_CALIBRATED = 0xCA;
 static const uint8_t EMPTY_VALUE = 0xFA;
 static const float CALIBRATION_VOLTAGE_MAX = 0.04f;
 static const float CALIBRATION_VOLTAGE_MIN = 0.001f;
