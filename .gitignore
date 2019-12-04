@@ -15,8 +15,8 @@ source/NS-project/bin/*
 source/NS-project/objects/*
 source/NS-project/test/objs/*
 source/NS-project/test/lib/*
-source/NS-project/test/*.d
-source/NS-project/test/*.o
+*.d
+*.o
 
 # ignore .py and .pyc files
 *.pyc
