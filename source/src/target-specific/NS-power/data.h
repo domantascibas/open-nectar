@@ -2,6 +2,7 @@
 #define _NS_DATA_H
 
 // #include "NectarContract.h"
+#include <stdint.h>
 
 typedef enum {
     M_VOLTAGE,

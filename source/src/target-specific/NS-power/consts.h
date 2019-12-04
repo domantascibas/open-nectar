@@ -2,6 +2,7 @@
 #define _NS_CONSTS_H
 
 #include "mbed.h"
+#include <stdint.h>
 
 // #ifdef __cplusplus
 // extern "C"
