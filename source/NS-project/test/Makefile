@@ -22,13 +22,13 @@ check_paths:
 	@echo "\nCpputest home  \t" $(CPPUTEST_HOME)
 
 #--- Inputs ----#
-COMPONENT_NAME = NectarSun
-CPPUTEST_HOME = ../../cpputest
-
 MAKEFILE_DIR = $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 PROJECT_DIR = $(realpath $(MAKEFILE_DIR)../../..)
 TEST_DIR = $(PROJECT_DIR)/source/NS-project/test
 SRC_DIR = $(PROJECT_DIR)/source/src
+
+COMPONENT_NAME = NectarSun
+CPPUTEST_HOME = $(PROJECT_DIR)/source/cpputest
 # SUBMODULES_DIR = $(realpath $(MAKEFILE_DIR)../../..)/submodules
 
 CPPUTEST_USE_EXTENSIONS = Y
