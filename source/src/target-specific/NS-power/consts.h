@@ -3,6 +3,16 @@
 
 #include "mbed.h"
 
+// #ifdef __cplusplus
+// extern "C"
+// #endif
+
+// #include <stddef>
+
+// #ifdef __cplusplus
+// }
+// #endif
+
 static const float NECTAR_POWER_BOARD_VERSION = 110;
 static const float DEVICE_MODE_UPDATE_INTERVAL = 0.5f;
 // let's make some changes
