@@ -1,6 +1,8 @@
 #ifndef _DATA_H
 #define _DATA_H
 
+#include "stdint.h"
+
 typedef enum {
     M_VOLTAGE,
     M_CURRENT,
@@ -14,7 +16,7 @@ typedef enum {
     TEMPERATURE,
     MOM_DATA,
     REF_DATA,
-    METER_DATA,
+    METER_DATA
 } powerDataType_t;
 
 typedef enum {
@@ -22,7 +24,7 @@ typedef enum {
     MPPT_STATUS,
     PWM_STATUS,
     CALIBRATION_STATUS,
-    OVERHEAT_STATUS,
+    OVERHEAT_STATUS
 } statusDataType_t;
 
 typedef struct momentData_tag {
