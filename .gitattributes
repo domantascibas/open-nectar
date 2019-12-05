@@ -9,3 +9,7 @@
 # Declare files that will always have LF line endings on checkout.
 *.Makefile text eol=lf
 *.mk text eol=lf
+*.sh text eol=lf
+*.ac text eol=lf
+*.am text eol=lf
+*.m4 text eol=lf
