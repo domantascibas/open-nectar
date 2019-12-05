@@ -34,8 +34,11 @@ You should be able to run the project after cloning the repository, updating sub
 cd your_dir/power_board/mbed-os/
 pip install -r requirements.txt
 ```
-6. go to the project root directory: `cd your_dir/power_board/`
-7. run `mbed-deploy`
+6. download mbed-os:
+```
+cd your_dir/power_board/
+mbed-deploy
+```
 8. update submodules
 9. try to compile: 
 ```
