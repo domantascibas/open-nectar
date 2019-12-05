@@ -39,8 +39,8 @@ pip install -r requirements.txt
 cd your_dir/power_board/
 mbed-deploy
 ```
-8. update submodules
-9. try to compile: 
+7. update submodules
+8. try to compile: 
 ```
 cd your_dir/power_board/NS-project/
 make build
