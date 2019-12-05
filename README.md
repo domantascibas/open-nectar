@@ -15,28 +15,33 @@ You should be able to run the project after cloning the repository, updating sub
 * Ubuntu          (18.04)
 * GNU make        (4.1)
 * https://github.com/xpack-dev-tools/arm-none-eabi-gcc-xpack/releases/v8.3.1-1.3/
+* pip             (9.0.1)
+* mercurial
+* git
 
 ```
-Give examples
+`sudo apt-get install python2.7 python-pip git mercurial`
 ```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+1. make sure you have Python 2.7, gcc (7.3.0), make (4.1), pip, mercurial
+2. install mbed-cli `pip install mbed-cli`
+3. download the ARM GCC compiler (xpack-dev-tools v8.3.1-1.3), install it at `/opt/path`
+4. run `mbed-cli`
+5. install missing python packages required by the project
 ```
-Give the example
+cd your_dir/power_board/mbed-os/
+pip install -r requirements.txt
 ```
-
-And repeat
-
+6. go to the project root directory: `cd your_dir/power_board/`
+7. run `mbed-deploy`
+8. update submodules
+9. try to compile: 
 ```
-until finished
+cd your_dir/power_board/NS-project/
+make build
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
@@ -50,23 +55,20 @@ Explain what these tests test and why
 Give an example
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
+### Coding style tests
 
 ```
-Give an example
+cd your_dir/power_board/NS-project/
+make format
 ```
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+use ST-link flasher.
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [mbed-os](https://os.mbed.com/docs/mbed-os/v5.14/introduction/index.html) - embedded C framework
 
 ## Contributing
 
