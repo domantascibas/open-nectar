@@ -8,12 +8,13 @@ You should be able to run the project after cloning the repository, updating sub
 
 ### Prerequisites
 
-mbed-cli        (version)
-Python 2.7      (2.7.15)
-gcc             (7.3.0)
-g++             (7.3.0)
-Ubuntu          (18.04)
-GNU make        (4.1)
+* mbed-cli        (version)
+* Python 2.7      (2.7.15)
+* gcc             (7.3.0)
+* g++             (7.3.0)
+* Ubuntu          (18.04)
+* GNU make        (4.1)
+
 
 ```
 Give examples
