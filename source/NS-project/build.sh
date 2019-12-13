@@ -8,7 +8,6 @@ cd $DIR/../..
 # clean bin
 rm -rf ./source/NS-project/bin/NS-power
 mkdir -p ./source/NS-project/bin/NS-power
-exit
 
 # compile project
 mbed compile
