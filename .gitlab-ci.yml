@@ -1,16 +1,15 @@
-variables:
-  SSH_PRIVATE_KEY: "HELLO WORLD"
-
 before_script:
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
     # - apt-get update
     # - apt-get --yes --force-yes install git ssh rsync
     - pwd
     - command -v make
     - command -v mbed
     # - mkdir "${HOME}/.ssh"
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    # - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    # - eval $(ssh-agent -s)
+    # - ssh-add <(echo "$SSH_PRIVATE_KEY")
     # - echo "${SSH_HOST_KEY}" > "${HOME}/.ssh/known_hosts"
     # - echo "${SSH_PRIVATE_KEY}" > "${HOME}/.ssh/id_rsa"
     # - chmod 700 "${HOME}/.ssh/id_rsa"
