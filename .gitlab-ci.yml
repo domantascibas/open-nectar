@@ -3,4 +3,4 @@ build:
     tags:
         - power
     script:
-        - ./source/NS-project/build.sh
+        - pwd
