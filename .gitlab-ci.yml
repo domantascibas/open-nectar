@@ -4,3 +4,4 @@ build:
         - power
     script:
         - pwd
+        - bash source/NS-project/build.sh
