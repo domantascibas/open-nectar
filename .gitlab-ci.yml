@@ -1,11 +1,11 @@
 variables:
-    GIT_SUBMODULE_STRATEGY: recursive
+    GIT_SUBMODULE_STRATEGY: normal
 
 before_script:
     - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - git submodule sync --recursive
-    - git submodule update --init --recursive
+    # - git submodule sync --recursive
+    # - git submodule update --init --recursive
     # - git submodule update --init --recursive
     # - mbed deploy
 
