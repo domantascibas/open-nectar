@@ -21,7 +21,7 @@ You should be able to run the project after cloning the repository, updating sub
 * autoreconf (for cppUtest)[https://cpputest.github.io/]
 
 ```
-`sudo apt-get install python2.7 python-pip git mercurial`
+sudo apt-get install python2.7 python-pip git mercurial
 ```
 
 ### Installing
