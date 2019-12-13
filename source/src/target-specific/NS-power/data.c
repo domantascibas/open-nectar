@@ -19,120 +19,120 @@ uint8_t PowerData_read(powerDataType_t datatype, void *d) {
     switch (datatype) {
         case M_VOLTAGE:
             *(uint16_t *)d = power_data.mom.voltage;
-        break;
+            break;
 
         case M_CURRENT:
             *(uint16_t *)d = power_data.mom.current;
-        break;
+            break;
 
         case M_POWER:
             *(uint32_t *)d = power_data.mom.power;
-        break;
-    
+            break;
+
         case R_VOLTAGE:
             *(uint32_t *)d = power_data.ref.voltage;
-        break;
-        
+            break;
+
         case R_CURRENT:
             *(uint32_t *)d = power_data.ref.current;
-        break;
-        
+            break;
+
         case GRID_METER:
             *(uint32_t *)d = power_data.meter.grid;
-        break;
-        
+            break;
+
         case SUN_METER:
             *(uint32_t *)d = power_data.meter.sun;
-        break;
-        
+            break;
+
         case TIMESTAMP:
             *(time_t *)d = power_data.timestamp;
-        break;
-        
+            break;
+
         case STATUS:
             *(uint8_t *)d = power_data.status;
-        break;
-        
+            break;
+
         case TEMPERATURE:
             *(uint8_t *)d = power_data.temperature;
-        break;
-        
+            break;
+
         case MOM_DATA:
             *(momentData_t *)d = power_data.mom;
-        break;
-        
+            break;
+
         case REF_DATA:
             *(referenceData_t *)d = power_data.ref;
-        break;
-        
+            break;
+
         case METER_DATA:
             *(meterData_t *)d = power_data.meter;
-        break;
+            break;
 
         case NUMEL:
         default:
-        break;
+            break;
     }
     return 0;
 }
 
 uint8_t PowerData_write(powerDataType_t datatype, void *d) {
-    switch(datatype) {
+    switch (datatype) {
         case M_VOLTAGE:
             power_data.mom.voltage = *(uint16_t *)d;
-        break;
+            break;
 
         case M_CURRENT:
             power_data.mom.current = *(uint16_t *)d;
-        break;
+            break;
 
         case M_POWER:
             power_data.mom.power = *(uint32_t *)d;
-        break;
-    
+            break;
+
         case R_VOLTAGE:
             power_data.ref.voltage = *(uint32_t *)d;
-        break;
-        
+            break;
+
         case R_CURRENT:
             power_data.ref.current = *(uint32_t *)d;
-        break;
-        
+            break;
+
         case GRID_METER:
             power_data.meter.grid = *(uint32_t *)d;
-        break;
-        
+            break;
+
         case SUN_METER:
             power_data.meter.sun = *(uint32_t *)d;
-        break;
-        
+            break;
+
         case TIMESTAMP:
             power_data.timestamp = *(time_t *)d;
-        break;
-        
+            break;
+
         case STATUS:
             power_data.status = *(uint8_t *)d;
-        break;
-        
+            break;
+
         case TEMPERATURE:
             power_data.temperature = *(uint8_t *)d;
-        break;
-        
+            break;
+
         case MOM_DATA:
             power_data.mom = *(momentData_t *)d;
-        break;
-        
+            break;
+
         case REF_DATA:
             power_data.ref = *(referenceData_t *)d;
-        break;
-        
+            break;
+
         case METER_DATA:
             power_data.meter = *(meterData_t *)d;
-        break;
+            break;
 
         case NUMEL:
         default:
-        break;
+            break;
     }
     return 0;
 }
@@ -246,7 +246,7 @@ void data_setCurrent_state(uint8_t set) {
 
 // // change to uint16_t
 // // should perform all calculations in uint32_t cast to uint16_t
-  
+
 // static const float moment_power = 0.00;
 // static const float moment_voltage = 0.00;
 // static const float moment_current = 0.00;
