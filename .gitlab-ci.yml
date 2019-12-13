@@ -1,3 +1,10 @@
+stages:
+  - build
+  - test
+#   - check-format
+#   - confluence
+#   - deploy
+
 variables:
     GIT_SUBMODULE_STRATEGY: normal
 
@@ -15,3 +22,10 @@ build:
     script:        
         - bash source/NS-project/build.sh
         # - make -C source/NS-project build
+
+test:
+    stage: test
+    tags:
+        - power
+    script:
+        - bash source/NS-project/build-test.sh
