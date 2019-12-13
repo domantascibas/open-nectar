@@ -6,7 +6,7 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - command -v make
     - command -v mbed
-    - mbed deploy
+    # - mbed deploy
 
 build:
     stage: build
