@@ -4,4 +4,6 @@ build:
         - power
     script:
         - pwd
-        - bash source/NS-project/build.sh
+        - command -v mbed
+        - command -v mbed-cli
+        # - bash source/NS-project/build.sh
