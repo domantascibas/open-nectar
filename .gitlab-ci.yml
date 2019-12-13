@@ -4,7 +4,7 @@ before_script:
     - pwd
     - command -v make
     - command -v mbed
-    - mkdir "${HOME}/.ssh"
+    # - mkdir "${HOME}/.ssh"
     - echo "${SSH_HOST_KEY}" > "${HOME}/.ssh/known_hosts"
     - echo "${SSH_PRIVATE_KEY}" > "${HOME}/.ssh/id_rsa"
     - git submodule update --init --recursive
