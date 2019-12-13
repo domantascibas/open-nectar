@@ -4,16 +4,13 @@ variables:
 before_script:
     - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    # - git submodule sync --recursive
-    # - git submodule update --init --recursive
-    # - git submodule update --init --recursive
-    # - mbed deploy
+    - command -v make
+    - command -v mbed
+    - mbed deploy
 
 build:
     stage: build
     tags:
         - power
     script:        
-        - command -v make
-        - command -v mbed
-        # - bash source/NS-project/build.sh
+        - bash source/NS-project/build.sh
