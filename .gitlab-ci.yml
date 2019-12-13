@@ -1,5 +1,5 @@
 before_script:
-    - ssh-keyscan example.com >> ~/.ssh/known_hosts
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - pwd
     # - git submodule update --init --recursive
