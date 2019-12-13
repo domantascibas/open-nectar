@@ -15,7 +15,10 @@ NectarSun-S product change log file
 
 Date        Firmware        Description
 ============================================================================================================================
-2019 10 XX - 00.01.11.XX
+2019 12 XX - 00.01.11.XX
+                - Other: refactored project structure; #4
+                - Other: adds cpputest for unit testing; #5
+                - Other: includes changelogs; #14
 ============================================================================================================================
 2019 10 07 - 00.01.10.01
                 - Bug fix: ESP configuration after reset issue fix;
@@ -25,3 +28,14 @@ Date        Firmware        Description
                 - Feature: POWER board error handler update;
                 - Feature: PWM frequency change 12kHz;
                 # Recommended Update Package 00.01.23.00
+============================================================================================================================
+
+>> Please specify the category of your change:
+1. New feature
+2. Bug fix
+3. Feature change
+4. New deprecation
+5. Feature removal
+6. Security fix
+7. Performance improvement
+8. Other
