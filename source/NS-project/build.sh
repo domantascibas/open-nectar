@@ -7,6 +7,10 @@ cd ./../../
 rm -rf ./source/NS-project/bin/NS-power
 mkdir -p ./source/NS-project/bin/NS-power
 
+# check if required software exists
+if command -v mbed-cli; then echo "mbed-cli found"; fi
+if command -v mbed; then echo "mbed found"; fi
+
 # compile project
 mbed compile
 
