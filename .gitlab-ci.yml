@@ -13,4 +13,5 @@ build:
     tags:
         - power
     script:        
-        - bash source/NS-project/build.sh
+        # - bash source/NS-project/build.sh
+        - make -C source/NS-project build
