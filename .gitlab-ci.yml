@@ -3,9 +3,7 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     # - apt-get update
     # - apt-get --yes --force-yes install git ssh rsync
-    - pwd
-    - command -v make
-    - command -v mbed
+    
     # - mkdir "${HOME}/.ssh"
     # - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     # - eval $(ssh-agent -s)
@@ -21,4 +19,7 @@ build:
     tags:
         - power
     script:
+        - pwd
+        - command -v make
+        - command -v mbed
         # - bash source/NS-project/build.sh
