@@ -13,6 +13,7 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - command -v make
     - command -v mbed
+    - bash source/NS-project/build-test.sh
     # - mbed deploy
 
 build:
@@ -28,4 +29,4 @@ test:
     tags:
         - power
     script:
-        - bash source/NS-project/build-test.sh
+        - make -C source/NS-project/test test
