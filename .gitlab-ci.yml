@@ -1,4 +1,6 @@
-build_linux:
+build:
     stage: build
+    tags:
+        - power
     script:
-        - source/NS-project/build.sh
+        - ./source/NS-project/build.sh
