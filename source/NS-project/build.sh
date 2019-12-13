@@ -4,11 +4,11 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 echo "DIR is '$DIR'"
 cd $DIR/../..
-exit
 
 # clean bin
 rm -rf ./source/NS-project/bin/NS-power
 mkdir -p ./source/NS-project/bin/NS-power
+exit
 
 # compile project
 mbed compile
