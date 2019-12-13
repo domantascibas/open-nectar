@@ -1,13 +1,12 @@
 [submodule "submodules/nectar_serial"]
 	path = submodules/nectar_serial
 	url = git@gitlab.com:nectarsun/nectarsun-s/nectar_serial.git
-
-[submodule "submodules/nucleo_helpers"]
-	path = submodules/nucleo_helpers
-	url = git@gitlab.com:nectarsun-public/nucleo-f091rc-helpers.git
 [submodule "submodules/ds1820"]
 	path = submodules/ds1820
 	url = git@gitlab.com:nectarsun/nectarsun-s/ds1820.git
 [submodule "submodules/error_handler"]
 	path = submodules/error_handler
 	url = git@gitlab.com:nectarsun/nectarsun-s/error_handler.git
+[submodule "source/cpputest"]
+	path = source/cpputest
+	url = https://github.com/cpputest/cpputest.git

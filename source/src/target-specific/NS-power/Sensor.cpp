@@ -1,6 +1,10 @@
 #include "consts.h"
 #include "Sensor.h"
-#include "data.h"
+// #include "data.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 #define REG_ADDR_RESULT         0x00
 #define REG_ADDR_ALERT          0x01

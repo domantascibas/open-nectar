@@ -1,6 +1,10 @@
 #include "consts.h"
 #include "temperature_sensor.h"
-#include "data.h"
+// #include "data.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 static const float TIMEOUT_TO_TEMP_READ = 0.5;
 

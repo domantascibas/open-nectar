@@ -3,7 +3,11 @@
 #include "processor_temperature.h"
 #include "temperature_sensor.h"
 #include "error_controller.h"
-#include "data.h"
+// #include "data.h"
+
+extern "C" {
+    #include "data.h"
+}
 
 TemperatureSensor deviceTemp(INTERNAL_TEMPERATURE_PIN, 5);
 
@@ -13,7 +17,7 @@ void temperature_controller_init(void) {
   deviceTemp.init();
 
   if(deviceTemp.isSensorFound()) {
-    nectarError.clear_error(DEVICE_OVERHEAT);
+    nectarError_clear_error(DEVICE_OVERHEAT);
   }
 }
 
@@ -21,17 +25,18 @@ void temperature_controller_update_processor_temp(void) {
   float processor_temp = processor_temperature_measure();
   // printf("processor temp: %f\r\n", internal_temp);
   if(processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
-    if(!nectarError.has_error(PROCESSOR_OVERHEAT)) nectarError.set_error(PROCESSOR_OVERHEAT);
+    if(!nectarError_has_error(PROCESSOR_OVERHEAT)) nectarError_set_error(PROCESSOR_OVERHEAT);
     printf("PROCESSOR OVERHEAT\r\n");
   } else {
-    if(nectarError.has_error(PROCESSOR_OVERHEAT) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) nectarError.clear_error(PROCESSOR_OVERHEAT);
+    if(nectarError_has_error(PROCESSOR_OVERHEAT) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) nectarError_clear_error(PROCESSOR_OVERHEAT);
   }
 }
 
 void temperature_controller_update_internal_temp(void) {
   float internal_temp;
-  if(data.safeToReadTemp) {
-    data.safeToReadTemp = false;
+  uint8_t int_temp;
+  if(data_getSafeToReadTemp()) {
+    data_setSafeToReadTemp(0);
 
     if(deviceTemp.isReadyToMeasure()) {
       deviceTemp.measureTemperature();
@@ -44,12 +49,14 @@ void temperature_controller_update_internal_temp(void) {
     if(deviceTemp.isNewValueAvailable()) {
       internal_temp = deviceTemp.getTemperature();
       if(internal_temp > DEVICE_TEMPERATURE_LIMIT_MAX) {
-        if(!nectarError.has_error(DEVICE_OVERHEAT)) nectarError.set_error(DEVICE_OVERHEAT);
+        if(!nectarError_has_error(DEVICE_OVERHEAT)) nectarError_set_error(DEVICE_OVERHEAT);
         printf("DEVICE OVERHEAT\r\n");
       } else {
-        if(nectarError.has_error(DEVICE_OVERHEAT) && (internal_temp < (DEVICE_TEMPERATURE_LIMIT_MAX - 5.0))) nectarError.clear_error(DEVICE_OVERHEAT);
+        if(nectarError_has_error(DEVICE_OVERHEAT) && (internal_temp < (DEVICE_TEMPERATURE_LIMIT_MAX - 5.0))) nectarError_clear_error(DEVICE_OVERHEAT);
       }
-      data.device_temperature = internal_temp;
+      // data.device_temperature = internal_temp;
+      int_temp = (uint8_t)internal_temp;
+      PowerData_write(TEMPERATURE, &int_temp);
     }
   }
 }
