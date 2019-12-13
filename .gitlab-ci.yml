@@ -6,5 +6,4 @@ build:
         - pwd
         - command -v make
         - command -v mbed
-        - command -v mbed-cli
-        # - bash source/NS-project/build.sh
+        - bash source/NS-project/build.sh
