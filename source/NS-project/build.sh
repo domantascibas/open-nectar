@@ -1,7 +1,10 @@
 #!/bin/bash
 # compile mbed program
 
-cd ./../../
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo "DIR is '$DIR'"
+cd $DIR/../..
+exit
 
 # clean bin
 rm -rf ./source/NS-project/bin/NS-power
