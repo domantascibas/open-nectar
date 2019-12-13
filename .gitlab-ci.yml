@@ -6,4 +6,7 @@ build:
         - pwd
         - command -v make
         - command -v mbed
+        - git submodule init
+        - git submodule update
+        - mbed deploy
         - bash source/NS-project/build.sh
