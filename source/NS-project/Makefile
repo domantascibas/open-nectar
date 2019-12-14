@@ -15,6 +15,3 @@ list:
 clean:
 	rm ./bin/*
 	rm ./objects/*
-
-build-test:
-	bash -c "./build-test.sh"

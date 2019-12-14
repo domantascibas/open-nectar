@@ -14,15 +14,13 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - command -v make
     - command -v mbed
-    - bash source/NS-project/build-test.sh
-    # - mbed deploy
 
 check-format:
     stage: check-format
     tags:
         - power
     script:
-        - make -C source/NS-project format
+        - make -C source/NS-project format-check
     only:
         - master
         - develop
@@ -33,7 +31,6 @@ build:
     tags:
         - power
     script:        
-        # - bash source/NS-project/build.sh
         - make -C source/NS-project build
     only:
         - master
