@@ -1,3 +1,11 @@
+stages:
+  - check-format
+  - build
+  - test
+#   - check-format
+#   - confluence
+#   - deploy
+
 variables:
     GIT_SUBMODULE_STRATEGY: normal
 
@@ -6,11 +14,35 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - command -v make
     - command -v mbed
+    - bash source/NS-project/build-test.sh
     # - mbed deploy
+
+check-format:
+    stage: check-format
+    tags:
+        - power
+    script:
+        - make -C source/NS-project format
 
 build:
     stage: build
     tags:
         - power
     script:        
-        - bash source/NS-project/build.sh
+        # - bash source/NS-project/build.sh
+        - make -C source/NS-project build
+    only:
+        - master
+        - devel
+        - /(?i)release(?-i).*/
+
+test:
+    stage: test
+    tags:
+        - power
+    script:
+        - make -C source/NS-project/test test
+    only:
+        - master
+        - devel
+        - /(?i)release(?-i).*/
