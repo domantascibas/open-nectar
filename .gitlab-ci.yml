@@ -1,4 +1,5 @@
 stages:
+  - check-format
   - build
   - test
 #   - check-format
@@ -16,13 +17,24 @@ before_script:
     - bash source/NS-project/build-test.sh
     # - mbed deploy
 
+check-format:
+    stage: check-format
+    tags:
+        - power
+    script:
+        - make -C source/NS-project format
+
 build:
     stage: build
     tags:
         - power
     script:        
-        - bash source/NS-project/build.sh
-        # - make -C source/NS-project build
+        # - bash source/NS-project/build.sh
+        - make -C source/NS-project build
+    only:
+        - master
+        - devel
+        - /(?i)release(?-i).*/
 
 test:
     stage: test
@@ -30,3 +42,7 @@ test:
         - power
     script:
         - make -C source/NS-project/test test
+    only:
+        - master
+        - devel
+        - /(?i)release(?-i).*/
