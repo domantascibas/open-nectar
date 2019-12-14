@@ -1,0 +1,16 @@
+variables:
+    GIT_SUBMODULE_STRATEGY: normal
+
+before_script:
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - command -v make
+    - command -v mbed
+    # - mbed deploy
+
+build:
+    stage: build
+    tags:
+        - power
+    script:        
+        - bash source/NS-project/build.sh
