@@ -23,6 +23,10 @@ check-format:
         - power
     script:
         - make -C source/NS-project format
+    only:
+        - master
+        - develop
+        - /(?i)release(?-i).*/
 
 build:
     stage: build
@@ -33,7 +37,7 @@ build:
         - make -C source/NS-project build
     only:
         - master
-        - devel
+        - develop
         - /(?i)release(?-i).*/
 
 test:
@@ -44,5 +48,5 @@ test:
         - make -C source/NS-project/test test
     only:
         - master
-        - devel
+        - develop
         - /(?i)release(?-i).*/
