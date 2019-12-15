@@ -4,9 +4,11 @@
 #include "data.h"
 
 static PowerBoardDataStruct_t power_data;
+static uint8_t sunStatus;
 
 uint8_t PowerData_init() {
     memset(&power_data, 0, sizeof(power_data));
+    sunStatus = 0;
     return 0;
 }
 
@@ -162,6 +164,14 @@ uint8_t PowerData_info(void) {
     // printf("[PWR DATA] status:              %d\n\r", power_data.status);
     printf("[PWR DATA] internal temp:       %d\n\r", power_data.temperature);
     return 0;
+}
+
+void SunStatus_set(uint8_t status) {
+    sunStatus = status;
+}
+
+uint8_t SunStatus_get(void) {
+    return sunStatus;
 }
 
 
