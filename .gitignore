@@ -15,6 +15,8 @@ source/NS-project/objects/*
 source/NS-project/test/objs/*
 source/NS-project/test/lib/*
 *.d
+*.o
+*.a
 
 # ignore other files
 *.doman
@@ -23,3 +25,4 @@ source/NS-project/test/lib/*
 
 mbed_config.h
 GettingStarted.html
+NectarSun_tests*
