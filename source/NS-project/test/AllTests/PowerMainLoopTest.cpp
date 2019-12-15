@@ -16,8 +16,12 @@ void set_variables(float voltage, float current, uint8_t sun_status) {
 
     PowerData_write(M_VOLTAGE, &v);
     PowerData_write(M_CURRENT, &i);
-    SunStatus_set(sun_status);
-    printf("\n\r[TEST] voltage %.2f, current %.2f\n\r", DIV_VI_CONVERT(v), DIV_VI_CONVERT(i));
+    if (sun_status) {
+        SET_STATUS(SUN_STATUS);
+    } else {
+        CLEAR_STATUS(SUN_STATUS);
+    }
+    // printf("\n\r[TEST] voltage %.2f, current %.2f\n\r", DIV_VI_CONVERT(v), DIV_VI_CONVERT(i));
 }
 
 TEST_GROUP(PowerMainLoopTests){

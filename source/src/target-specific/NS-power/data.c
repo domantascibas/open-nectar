@@ -184,18 +184,18 @@ uint8_t PowerData_info(void) {
     return 0;
 }
 
-void SunStatus_set(uint8_t status) {
-    sunStatus = status;
-    if (status) {
-        SET_STATUS(SUN_STATUS);
-    } else {
-        CLEAR_STATUS(SUN_STATUS);
-    }
-}
+// void SunStatus_set(uint8_t status) {
+//     sunStatus = status;
+//     if (status) {
+//         SET_STATUS(SUN_STATUS);
+//     } else {
+//         CLEAR_STATUS(SUN_STATUS);
+//     }
+// }
 
-uint8_t SunStatus_get(void) {
-    return sunStatus;
-}
+// uint8_t SunStatus_get(void) {
+//     return sunStatus;
+// }
 
 
 Data data = {

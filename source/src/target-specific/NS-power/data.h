@@ -65,8 +65,8 @@ uint8_t PowerData_write(powerDataType_t datatype, void *d);
 uint32_t PowerData_calculatePower(void);
 uint8_t PowerData_info(void);
 
-void SunStatus_set(uint8_t status);
-uint8_t SunStatus_get(void);
+// void SunStatus_set(uint8_t status);
+// uint8_t SunStatus_get(void);
 
 #define CLEAR_STATUS(x)         (*PowerData_getStatusPtr() &= (uint8_t)~(1U << x))
 #define SET_STATUS(x)           (*PowerData_getStatusPtr() |= (uint8_t)(1U << x))
