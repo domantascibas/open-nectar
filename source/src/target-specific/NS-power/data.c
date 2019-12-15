@@ -69,7 +69,7 @@ uint8_t PowerData_read(powerDataType_t datatype, void *d) {
             *(meterData_t *)d = power_data.meter;
             break;
 
-        case NUMEL:
+        case POWER_TYPE_COUNT:
         default:
             break;
     }
@@ -130,7 +130,7 @@ uint8_t PowerData_write(powerDataType_t datatype, void *d) {
             power_data.meter = *(meterData_t *)d;
             break;
 
-        case NUMEL:
+        case POWER_TYPE_COUNT:
         default:
             break;
     }

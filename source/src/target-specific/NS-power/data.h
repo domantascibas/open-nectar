@@ -18,7 +18,7 @@ typedef enum {
     MOM_DATA,
     REF_DATA,
     METER_DATA,
-    NUMEL
+    POWER_TYPE_COUNT
 } powerDataType_t;
 
 typedef enum {
@@ -28,7 +28,7 @@ typedef enum {
     CALIBRATION_STATUS,
     OVERHEAT_STATUS,
     BOOST_STATUS,
-    NUMEL_STATUS
+    STATUS_TYPE_COUNT
 } statusDataType_t;
 
 typedef struct momentData_tag {
