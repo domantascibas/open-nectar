@@ -26,8 +26,10 @@ typedef enum {
     MPPT_STATUS,
     PWM_STATUS,
     CALIBRATION_STATUS,
-    OVERHEAT_STATUS,
     BOOST_STATUS,
+    V_READY_STATUS,
+    I_READY_STATUS,
+    SUN_STATUS,
     STATUS_TYPE_COUNT
 } statusDataType_t;
 
@@ -52,7 +54,7 @@ typedef struct PowerBoardDataStruct_tag {
     referenceData_t ref;
     meterData_t meter;
     time_t timestamp;
-    uint8_t status;         // 0b - generator_status, 1b - MPPT_status, 2b - PWM_status, 3b - calibration_status, 4b - overheat_status
+    uint8_t status;         // 0b - generator_status, 1b - MPPT_status, 2b - PWM_status, 3b - calibration_status, 4b - boost_status, 5b - voltage_ready, 6b - current_ready, 7b - sun status
     uint8_t temperature;
 } PowerBoardDataStruct_t;
 

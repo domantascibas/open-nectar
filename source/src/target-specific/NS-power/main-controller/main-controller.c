@@ -1,18 +1,55 @@
 #include "main-controller.h"
 #include "data.h"
+#include <stdio.h>
+// #include "generator-controller.h"
 
-static powerStateDataType_t current_state;
-// static powerStateDataType_t next_state;
-// static powerStateDataType_t last_state;
+typedef struct powerState_tag {
+    powerStateDataType_t curr_state;
+    powerStateDataType_t next_state;
+} powerState_t;
+
+static const powerState_t pIdle_state =      {IDLE_STATE,        PWM_ON_STATE};
+static const powerState_t pPwmOn_state =     {PWM_ON_STATE,      MPPT_RUN_STATE};
+// static const powerState_t pMpptRun_state =   {MPPT_RUN_STATE,    IDLE_STATE};
+
+powerState_t current_state;
+
+uint8_t generatorController_run(void) {
+    SET_STATUS(GENERATOR_STATUS);
+    printf("GENERATOR STARTED\r\n");
+    return 1;
+}
 
 void MainController_init(void) {
-    current_state = IDLE_STATE;
+    current_state = pIdle_state;
 }
 
 powerStateDataType_t MainController_run(void) {
-    return current_state;
+    switch(current_state.curr_state) {
+        case IDLE_STATE:
+            PowerData_info();
+            if(SunStatus_get() && GET_STATUS(V_READY_STATUS)) {
+                if(generatorController_run()) {
+                    // delay(200ms)
+                    current_state = pPwmOn_state;
+                }
+            }
+        break;
+
+        case PWM_ON_STATE:
+        break;
+
+        case MPPT_RUN_STATE:
+        break;
+
+        case POWER_STATE_COUNT:
+        default:
+        break;
+    }
+
+    return current_state.curr_state;
 }
 
 powerStateDataType_t MainController_current_state_get(void) {
-    return current_state;
+    return current_state.curr_state;
 }

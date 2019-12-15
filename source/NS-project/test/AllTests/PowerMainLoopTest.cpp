@@ -1,5 +1,6 @@
 #include "CppUTest/TestHarness.h"
 #include <stdint.h>
+#include <stdio.h>
 
 extern "C" {
 #include "data.h"
@@ -10,16 +11,13 @@ extern "C" {
 #define ON 1
 
 void set_variables(float voltage, float current, uint8_t sun_status) {
-    uint16_t v = (uint16_t)(voltage * 100);
-    uint16_t i = (uint16_t)(current * 100);
+    uint16_t v = VI_CONVERT(voltage);
+    uint16_t i = VI_CONVERT(current);
 
     PowerData_write(M_VOLTAGE, &v);
     PowerData_write(M_CURRENT, &i);
     SunStatus_set(sun_status);
-}
-
-void generator_on(void) {
-    SET_STATUS(GENERATOR_STATUS);
+    printf("\n\r[TEST] voltage %.2f, current %.2f\n\r", DIV_VI_CONVERT(v), DIV_VI_CONVERT(i));
 }
 
 TEST_GROUP(PowerMainLoopTests){
@@ -33,11 +31,27 @@ TEST_GROUP(PowerMainLoopTests){
 };
 
 TEST(PowerMainLoopTests, PowerIdleState) {
-    // call mainController_loop periodically, change input variables
-    // set voltage = 10V * 100
-    // set sun status OFF
-    // I = 0.1 * 100
-    // 
     set_variables(10.0f, 0.1f, OFF);
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
+    CHECK_FALSE(GET_STATUS(PWM_STATUS));
+    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
 
+    set_variables(101.0f, 0.1f, OFF);
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
+    CHECK_FALSE(GET_STATUS(PWM_STATUS));
+    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    
+    set_variables(10.0f, 0.1f, ON);
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
+    CHECK_FALSE(GET_STATUS(PWM_STATUS));
+    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    
+    set_variables(101.0f, 0.1f, ON);
+    CHECK_EQUAL(PWM_ON_STATE, MainController_run());
+    CHECK(GET_STATUS(GENERATOR_STATUS));
+    CHECK_FALSE(GET_STATUS(PWM_STATUS));
+    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
 }

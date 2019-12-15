@@ -9,7 +9,7 @@ typedef enum {
 } powerStateDataType_t;
 
 void MainController_init(void);
-powerStateDataType_t MaonController_run(void);
+powerStateDataType_t MainController_run(void);
 powerStateDataType_t MainController_current_state_get(void);
 
 #endif
