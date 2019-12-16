@@ -8,3 +8,8 @@ uint8_t generatorController_run(void) {
     // printf("[GENERATOR] STARTED\r\n");
     return 1;
 }
+
+uint8_t pwmController_run(void) {
+    SET_STATUS(PWM_STATUS);
+    return 1;
+}

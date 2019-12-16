@@ -22,7 +22,7 @@ powerStateDataType_t MainController_run(void) {
     switch(current_state.curr_state) {
         case IDLE_STATE:
             if(GET_STATUS(SUN_STATUS) && GET_STATUS(V_READY_STATUS)) {
-                if(generatorController_run()) {
+                if(generatorController_run() && pwmController_run()) {
                     // delay(200ms)
                     current_state = pPwmOn_state;
                 }
@@ -30,6 +30,9 @@ powerStateDataType_t MainController_run(void) {
         break;
 
         case PWM_ON_STATE:
+            if(GET_STATUS(SUN_STATUS) && GET_STATUS(I_READY_STATUS)) {
+                
+            }
         break;
 
         case MPPT_RUN_STATE:
