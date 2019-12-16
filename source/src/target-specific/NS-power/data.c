@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include "data.h"
 
-static uint16_t V_THRESHOLD = VI_CONVERT(100);
+static uint16_t V_H_THRESHOLD = VI_CONVERT(100);
+static uint16_t V_L_THRESHOLD = VI_CONVERT(10);
 static uint16_t I_THRESHOLD = VI_CONVERT(0.2f);
 
 static PowerBoardDataStruct_t power_data;
@@ -86,9 +87,9 @@ uint8_t PowerData_write(powerDataType_t datatype, void *d) {
         case M_VOLTAGE:
             power_data.mom.voltage = *(uint16_t *)d;
             // printf("M_VOLTAGE\n\r");
-            if (power_data.mom.voltage >= V_THRESHOLD) {
+            if (power_data.mom.voltage >= V_H_THRESHOLD) {
                 SET_STATUS(V_READY_STATUS);
-            } else {
+            } else if (power_data.mom.voltage < V_L_THRESHOLD){
                 CLEAR_STATUS(V_READY_STATUS);
             }
             break;
