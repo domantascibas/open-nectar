@@ -3,28 +3,19 @@
 #include <stdio.h>
 #include "generator-controller.h"
 
-typedef struct powerState_tag {
-    powerStateDataType_t curr_state;
-    powerStateDataType_t next_state;
-} powerState_t;
-
-static const powerState_t pIdle_state =      {IDLE_STATE,        PWM_ON_STATE};
-static const powerState_t pPwmOn_state =     {PWM_ON_STATE,      MPPT_RUN_STATE};
-// static const powerState_t pMpptRun_state =   {MPPT_RUN_STATE,    IDLE_STATE};
-
-powerState_t current_state;
+static powerStateDataType_t state;
 
 void MainController_init(void) {
-    current_state = pIdle_state;
+    state = IDLE_STATE;
 }
 
 powerStateDataType_t MainController_run(void) {
-    switch(current_state.curr_state) {
+    switch(state) {
         case IDLE_STATE:
             if(GET_STATUS(SUN_STATUS) && GET_STATUS(V_READY_STATUS)) {
                 if(generatorController_run()) {
                     // delay(200ms)
-                    current_state = pPwmOn_state;
+                    state = PWM_ON_STATE;
                 }
             }
         break;
@@ -40,9 +31,9 @@ powerStateDataType_t MainController_run(void) {
         break;
     }
 
-    return current_state.curr_state;
+    return state;
 }
 
-powerStateDataType_t MainController_current_state_get(void) {
-    return current_state.curr_state;
+powerStateDataType_t MainController_state_get(void) {
+    return state;
 }

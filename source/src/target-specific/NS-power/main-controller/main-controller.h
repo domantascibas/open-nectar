@@ -10,6 +10,6 @@ typedef enum {
 
 void MainController_init(void);
 powerStateDataType_t MainController_run(void);
-powerStateDataType_t MainController_current_state_get(void);
+powerStateDataType_t MainController_state_get(void);
 
 #endif
