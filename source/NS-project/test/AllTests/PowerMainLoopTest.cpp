@@ -36,6 +36,13 @@ void gotoMpptRun(void) {
     MainController_run();
 }
 
+uint8_t checkStatus(uint8_t gen, uint8_t pwm, uint8_t mppt) {
+    CHECK_EQUAL(gen, GET_STATUS(GENERATOR_STATUS));
+    CHECK_EQUAL(pwm, GET_STATUS(PWM_STATUS));
+    CHECK_EQUAL(mppt, GET_STATUS(MPPT_STATUS));
+    return 1;
+}
+
 TEST_GROUP(PowerMainLoopIdleTests){
     void setup() {
         PowerData_init();
@@ -74,36 +81,28 @@ TEST_GROUP(PowerMainMpptRunLoopTests){
 TEST(PowerMainLoopIdleTests, PowerIdleState_FAIL_1) {
     set_variables(9.0f, 0.1f, OFF);
     CHECK_EQUAL(IDLE_STATE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    checkStatus(0, 0, 0);
 }
 
 // return to IDLE
 TEST(PowerMainLoopIdleTests, PowerIdleState_FAIL_2) {
     set_variables(101.0f, 0.1f, OFF);
     CHECK_EQUAL(IDLE_STATE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    checkStatus(0, 0, 0);
 }
 
 // return to IDLE
 TEST(PowerMainLoopIdleTests, PowerIdleState_FAIL_3) {
     set_variables(9.0f, 0.1f, ON);
     CHECK_EQUAL(IDLE_STATE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    checkStatus(0, 0, 0);
 }
 
 // go to PWM idle
 TEST(PowerMainLoopIdleTests, PowerIdleState_PASS) {
     set_variables(101.0f, 0.1f, ON);
     CHECK_EQUAL(PWM_IDLE_STATE, MainController_run());
-    CHECK(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    checkStatus(1, 0, 0);
 }
 
 
@@ -112,54 +111,46 @@ TEST(PowerMainLoopIdleTests, PowerIdleState_PASS) {
 TEST(PowerMainPwmIdleLoopTests, PowerPwmIdleState_FAIL_1_returnToIdle) {
     set_variables(50.0f, 0.1f, OFF);
     CHECK_EQUAL(RETURN_TO_IDLE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    checkStatus(0, 0, 0);
 }
 
 // return to IDLE
 TEST(PowerMainPwmIdleLoopTests, PowerPwmIdleState_FAIL_2_returnToIdle) {
     set_variables(9.0f, 0.1f, OFF);
     CHECK_EQUAL(RETURN_TO_IDLE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    checkStatus(0, 0, 0);
 }
 
 // stay at PWM IDLE
 TEST(PowerMainPwmIdleLoopTests, PowerPwmIdleState_STAY) {
     set_variables(50.0f, 0.1f, ON);
     CHECK_EQUAL(PWM_IDLE_STATE, MainController_run());
-    CHECK(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    checkStatus(1, 0, 0);
 }
 
 // return to IDLE
 TEST(PowerMainPwmIdleLoopTests, PowerPwmIdleState_FAIL_3_returnToIdle) {
     set_variables(50.0f, 0.3f, OFF);
     CHECK_EQUAL(RETURN_TO_IDLE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    checkStatus(0, 0, 0);
 }
 
 // return to IDLE
 TEST(PowerMainPwmIdleLoopTests, PowerPwmIdleState_FAIL_4_returnToIdle) {
     set_variables(9.0f, 0.3f, OFF);
     CHECK_EQUAL(RETURN_TO_IDLE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    checkStatus(0, 0, 0);
 }
 
 // go to MPPT start
 TEST(PowerMainPwmIdleLoopTests, PowerPwmIdleState_PASS) {
     set_variables(50.0f, 0.3f, ON);
     CHECK_EQUAL(MPPT_RUN_STATE, MainController_run());
-    CHECK(GET_STATUS(GENERATOR_STATUS));
-    CHECK(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    checkStatus(1, 1, 1);
 }
 
 
@@ -168,52 +159,44 @@ TEST(PowerMainPwmIdleLoopTests, PowerPwmIdleState_PASS) {
 TEST(PowerMainMpptRunLoopTests, PowerMpptRunState_FAIL_1_returnToIdle) {
     set_variables(50.0f, 0.1f, OFF);
     CHECK_EQUAL(RETURN_TO_IDLE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    checkStatus(0, 0, 0);
 }
 
 // return to IDLE
 TEST(PowerMainMpptRunLoopTests, PowerMpptRunState_FAIL_2_returnToIdle) {
     set_variables(9.0f, 0.1f, OFF);
     CHECK_EQUAL(RETURN_TO_IDLE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    checkStatus(0, 0, 0);
 }
 
 // stay at MPPT RUN
 TEST(PowerMainMpptRunLoopTests, PowerMpptRunState_STAY) {
     set_variables(50.0f, 0.1f, ON);
     CHECK_EQUAL(MPPT_RUN_STATE, MainController_run());
-    CHECK(GET_STATUS(GENERATOR_STATUS));
-    CHECK(GET_STATUS(PWM_STATUS));
-    CHECK(GET_STATUS(MPPT_STATUS));
+    checkStatus(1, 1, 1);
 }
 
 // return to IDLE
 TEST(PowerMainMpptRunLoopTests, PowerMpptRunState_FAIL_3_returnToIdle) {
     set_variables(50.0f, 0.3f, OFF);
     CHECK_EQUAL(RETURN_TO_IDLE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    checkStatus(0, 0, 0);
 }
 
 // return to IDLE
 TEST(PowerMainMpptRunLoopTests, PowerMpptRunState_FAIL_4_returnToIdle) {
     set_variables(9.0f, 0.3f, OFF);
     CHECK_EQUAL(RETURN_TO_IDLE, MainController_run());
-    CHECK_FALSE(GET_STATUS(GENERATOR_STATUS));
-    CHECK_FALSE(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    CHECK_EQUAL(IDLE_STATE, MainController_run());
+    checkStatus(0, 0, 0);
 }
 
 // stay at MPPT RUN
 TEST(PowerMainMpptRunLoopTests, PowerMpptRunState_STAY_2) {
     set_variables(50.0f, 0.3f, ON);
     CHECK_EQUAL(MPPT_RUN_STATE, MainController_run());
-    CHECK(GET_STATUS(GENERATOR_STATUS));
-    CHECK(GET_STATUS(PWM_STATUS));
-    CHECK_FALSE(GET_STATUS(MPPT_STATUS));
+    checkStatus(1, 1, 1);
 }

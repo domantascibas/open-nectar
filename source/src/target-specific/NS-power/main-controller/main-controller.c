@@ -28,6 +28,8 @@ powerStateDataType_t MainController_run(void) {
                 if(GET_STATUS(I_READY_STATUS)) {
                     if(pwmController_run()) {
                         // delay(200ms)
+                        mpptController_run();
+                        // delay(200ms)
                         state = MPPT_RUN_STATE;
                     }
                 } else {
@@ -40,7 +42,7 @@ powerStateDataType_t MainController_run(void) {
 
         case MPPT_RUN_STATE:
             if(GET_STATUS(SUN_STATUS) && GET_STATUS(V_READY_STATUS)) {
-
+                state = MPPT_RUN_STATE;
             } else {
                 state = RETURN_TO_IDLE;
             }
@@ -64,6 +66,7 @@ powerStateDataType_t MainController_state_get(void) {
 
 static void stopMppt(void) {
     // stop Mppt, delay, stop pwm, delay, turn off SD
+    mpptController_stop();
     // delay(200ms)
     pwmController_stop();
     // delay(200ms)
