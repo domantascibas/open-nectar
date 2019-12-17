@@ -1,5 +1,5 @@
 #include "consts.h"
-// #include "data.h"
+#include "pins.h"
 #include "device_modes.h"
 #include "error_controller.h"
 #include "power_controller.h"

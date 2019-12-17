@@ -1,4 +1,5 @@
 #include "consts.h"
+#include "pins.h"
 #include "sensor_controller.h"
 #include "Sensor.h"
 #include "error_controller.h"

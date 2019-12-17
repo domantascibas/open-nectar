@@ -1,4 +1,5 @@
 #include "consts.h"
+#include "pins.h"
 #include "pwm_controller.h"
 
 float clamp(float);
