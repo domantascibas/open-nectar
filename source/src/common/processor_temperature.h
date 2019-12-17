@@ -1,6 +1,8 @@
 #ifndef _NS_PROCESSOR_TEMPERATURE_H
 #define _NS_PROCESSOR_TEMPERATURE_H
 
+#include <stdint.h>
+
 /* Temperature sensor calibration value address */
 #define TEMP110_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7C2))
 #define TEMP30_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7B8))
