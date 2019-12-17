@@ -11,6 +11,14 @@ submodules/nucleo_helpers/mbed-os.lib
 submodules/nucleo_helpers/mbed_settings.py
 submodules/nucleo_helpers/.mbed
 
+submodules/device_menu/.vscode/*
+submodules/device_menu/MenuIcons/*
+submodules/device_menu/ns-localisation/*
+submodules/device_menu/test/*
+submodules/device_menu/.gitignore
+submodules/device_menu/.gitmodules
+submodules/device_menu/u8g2-mbed/TESTS/*
+
 mbed-os/components/*
 mbed-os/events/*
 mbed-os/features/*

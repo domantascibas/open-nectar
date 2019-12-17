@@ -209,7 +209,7 @@
 #define NB_OF_VAR             ((uint8_t)0x09)
 
 /* Exported types ------------------------------------------------------------*/
-struct EE_TimeConfigHeaterDatastruct {
+typedef struct {
     uint8_t device_config;
     uint8_t esp_config;
     uint8_t selected_heater_mode;
@@ -217,16 +217,16 @@ struct EE_TimeConfigHeaterDatastruct {
 
     uint16_t day_starts_time;
     uint16_t night_starts_time;
-};
+} EE_TimeConfigHeaterDatastruct;
 
-struct EE_LanguageTemperatureDatastruct {
+typedef struct {
     uint16_t language;
     uint16_t day_temperature;
     uint16_t night_temperature;
     uint16_t max_temperature;
-};
+} EE_LanguageTemperatureDatastruct;
 
-struct EE_SettingsDatastruct {
+typedef struct {
     uint8_t device_config;
     uint8_t esp_config;
     uint8_t selected_heater_mode;
@@ -240,7 +240,8 @@ struct EE_SettingsDatastruct {
     uint16_t day_temperature;
     uint16_t night_temperature;
     uint16_t max_temperature;
-};
+} EE_SettingsDatastruct;
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 uint16_t EE_Init(void);
