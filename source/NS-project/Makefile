@@ -6,8 +6,11 @@ format:
 format-check:
 	./astyle.sh CHECK $(SRCDIR)
 
-build:
+power:
 	bash -c "./build.sh"
+
+main:
+	bash -c "./build_main.sh"
 
 list:
 	bash -c "ls /opt/"

@@ -7,7 +7,7 @@ stages:
 #   - deploy
 
 variables:
-    GIT_SUBMODULE_STRATEGY: normal
+    GIT_SUBMODULE_STRATEGY: recursive
 
 before_script:
     - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
@@ -26,12 +26,23 @@ check-format:
         - develop
         - /(?i)release(?-i).*/
 
-build:
+build-power:
     stage: build
     tags:
         - power
     script:        
-        - make -C source/NS-project build
+        - make -C source/NS-project power
+    only:
+        - master
+        - develop
+        - /(?i)release(?-i).*/
+
+build-main:
+    stage: build
+    tags:
+        - main
+    script:        
+        - make -C source/NS-project main
     only:
         - master
         - develop

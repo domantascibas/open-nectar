@@ -1,4 +1,5 @@
 #include "consts.h"
+#include "pins.h"
 #include "pwm_controller.h"
 #include "power_controller.h"
 #include "error_controller.h"
