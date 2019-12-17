@@ -1,4 +1,5 @@
 #include "consts.h"
+#include "pins.h"
 #include "temperature_controller.h"
 #include "processor_temperature.h"
 #include "temperature_sensor.h"

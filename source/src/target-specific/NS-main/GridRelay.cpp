@@ -1,4 +1,5 @@
 #include "consts.h"
+#include "pins.h"
 #include "GridRelay.h"
 
 // DigitalIn zeroCross(ZERO_CROSS_PIN);

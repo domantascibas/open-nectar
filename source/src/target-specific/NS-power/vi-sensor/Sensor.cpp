@@ -1,6 +1,6 @@
 #include "consts.h"
+#include "pins.h"
 #include "Sensor.h"
-// #include "data.h"
 
 extern "C" {
     #include "data.h"

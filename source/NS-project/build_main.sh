@@ -29,7 +29,6 @@ source/NS-project/
 
 submodules/device_menu/*
 
-source/src/common/*
 source/src/modules/*
 source/src/target-specific/NS-power/*" >> ./.mbedignore
 

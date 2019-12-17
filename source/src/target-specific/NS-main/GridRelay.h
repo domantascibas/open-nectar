@@ -2,6 +2,7 @@
 #define _NS_GRID_RELAY_H
 
 #include "consts.h"
+#include "pins.h"
 #include "Relay.h"
 
 struct GridRelay : Relay {

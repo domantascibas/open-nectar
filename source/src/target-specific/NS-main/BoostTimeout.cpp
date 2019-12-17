@@ -1,4 +1,5 @@
 #include "consts.h"
+#include "pins.h"
 #include "BoostTimeout.h"
 #include "device_modes.h"
 

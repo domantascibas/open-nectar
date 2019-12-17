@@ -1,4 +1,5 @@
 #include "consts.h"
+#include "pins.h"
 #include "EnergyMeter.h"
 #include "DataService.h"
 

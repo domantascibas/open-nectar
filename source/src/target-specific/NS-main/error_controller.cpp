@@ -1,4 +1,5 @@
 #include "consts.h"
+#include "pins.h"
 #include "error_controller.h"
 
 // ErrorHandler mainBoardError;
