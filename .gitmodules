@@ -4,9 +4,6 @@
 [submodule "submodules/device_menu"]
 	path = submodules/device_menu
 	url = git@gitlab.com:nectarsun/nectarsun-s/device_menu.git
-[submodule "submodules/nucleo_helpers"]
-	path = submodules/nucleo_helpers
-	url = git@gitlab.com:nectarsun-public/nucleo-f091rc-helpers.git
 [submodule "submodules/ds1820"]
 	path = submodules/ds1820
 	url = git@gitlab.com:nectarsun/nectarsun-s/ds1820.git
