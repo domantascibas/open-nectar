@@ -13,7 +13,9 @@ before_script:
     - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - command -v make
-    - command -v mbed
+    - command -v mbe
+    - chmod 755 ./source/NS-project/build.sh
+    - chmod 755 ./source/NS-project/build_main.sh
 
 check-format:
     stage: check-format
