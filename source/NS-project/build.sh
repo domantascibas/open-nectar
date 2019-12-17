@@ -24,14 +24,6 @@ submodules/nucleo_helpers/mbed-os.lib
 submodules/nucleo_helpers/mbed_settings.py
 submodules/nucleo_helpers/.mbed
 
-mbed-os/components/*
-mbed-os/events/*
-mbed-os/features/*
-mbed-os/rtos/*
-mbed-os/features/net/*
-mbed-os/features/nvstore/*
-mbed-os/features/device_key/*
-
 source/TESTS/
 source/cpputest/
 source/NS-project/
