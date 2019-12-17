@@ -1,5 +1,4 @@
 #include <string.h>
-#include <stdint.h>
 #include <stdio.h>
 #include "data.h"
 
@@ -89,7 +88,7 @@ uint8_t PowerData_write(powerDataType_t datatype, void *d) {
             // printf("M_VOLTAGE\n\r");
             if (power_data.mom.voltage >= V_H_THRESHOLD) {
                 SET_STATUS(V_READY_STATUS);
-            } else if (power_data.mom.voltage < V_L_THRESHOLD){
+            } else if (power_data.mom.voltage < V_L_THRESHOLD) {
                 CLEAR_STATUS(V_READY_STATUS);
             }
             break;

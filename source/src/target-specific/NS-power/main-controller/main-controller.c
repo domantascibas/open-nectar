@@ -11,22 +11,22 @@ void MainController_init(void) {
 }
 
 powerStateDataType_t MainController_run(void) {
-    switch(state) {
+    switch (state) {
         case IDLE_STATE:
-            if(GET_STATUS(SUN_STATUS) && GET_STATUS(V_READY_STATUS)) {
-                if(generatorController_run()) {
+            if (GET_STATUS(SUN_STATUS) && GET_STATUS(V_READY_STATUS)) {
+                if (generatorController_run()) {
                     // delay(200ms)
                     state = PWM_IDLE_STATE;
                 }
             } else {
                 state = IDLE;
             }
-        break;
+            break;
 
         case PWM_IDLE_STATE:
-            if(GET_STATUS(SUN_STATUS) && GET_STATUS(V_READY_STATUS)) {
-                if(GET_STATUS(I_READY_STATUS)) {
-                    if(pwmController_run()) {
+            if (GET_STATUS(SUN_STATUS) && GET_STATUS(V_READY_STATUS)) {
+                if (GET_STATUS(I_READY_STATUS)) {
+                    if (pwmController_run()) {
                         // delay(200ms)
                         mpptController_run();
                         // delay(200ms)
@@ -38,24 +38,24 @@ powerStateDataType_t MainController_run(void) {
             } else {
                 state = RETURN_TO_IDLE;
             }
-        break;
+            break;
 
         case MPPT_RUN_STATE:
-            if(GET_STATUS(SUN_STATUS) && GET_STATUS(V_READY_STATUS)) {
+            if (GET_STATUS(SUN_STATUS) && GET_STATUS(V_READY_STATUS)) {
                 state = MPPT_RUN_STATE;
             } else {
                 state = RETURN_TO_IDLE;
             }
-        break;
+            break;
 
         case RETURN_TO_IDLE:
             stopMppt();
             state = IDLE_STATE;
-        break;
+            break;
 
         case POWER_STATE_COUNT:
         default:
-        break;
+            break;
     }
     return state;
 }
