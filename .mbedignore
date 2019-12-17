@@ -19,7 +19,8 @@ mbed-os/features/net/*
 mbed-os/features/nvstore/*
 mbed-os/features/device_key/*
 
-tmp/*
 source/TESTS/
 source/cpputest/
 source/NS-project/
+
+submodules/device_menu/*
