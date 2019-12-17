@@ -16,6 +16,7 @@ before_script:
     - command -v mbe
     - chmod 755 ./source/NS-project/build.sh
     - chmod 755 ./source/NS-project/build_main.sh
+    - chmod 755 ./source/NS-project/astyle.sh
 
 check-format:
     stage: check-format
