@@ -1,0 +1,4 @@
+TARGET=NUCLEO_F091RC
+TOOLCHAIN=GCC_ARM
+GCC_ARM_PATH=/opt/xPacks/arm-none-eabi-gcc/8.3.1-1.3/bin/
+ROOT=.
