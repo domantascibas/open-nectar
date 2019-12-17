@@ -3,6 +3,7 @@
 
 // #include "NectarContract.h"
 #include <stdint.h>
+#include <time.h>
 
 typedef enum {
     M_VOLTAGE,
@@ -18,7 +19,7 @@ typedef enum {
     MOM_DATA,
     REF_DATA,
     METER_DATA,
-    NUMEL
+    POWER_TYPE_COUNT
 } powerDataType_t;
 
 typedef enum {
@@ -26,9 +27,12 @@ typedef enum {
     MPPT_STATUS,
     PWM_STATUS,
     CALIBRATION_STATUS,
-    OVERHEAT_STATUS,
     BOOST_STATUS,
-    NUMEL_STATUS
+    V_READY_STATUS,
+    I_READY_STATUS,
+    SUN_STATUS,
+    STATUS_TYPE_COUNT,
+    OVERHEAT_STATUS,
 } statusDataType_t;
 
 typedef struct momentData_tag {
@@ -52,7 +56,7 @@ typedef struct PowerBoardDataStruct_tag {
     referenceData_t ref;
     meterData_t meter;
     time_t timestamp;
-    uint8_t status;         // 0b - generator_status, 1b - MPPT_status, 2b - PWM_status, 3b - calibration_status, 4b - overheat_status
+    uint8_t status;         // 0b - generator_status, 1b - MPPT_status, 2b - PWM_status, 3b - calibration_status, 4b - boost_status, 5b - voltage_ready, 6b - current_ready, 7b - sun status
     uint8_t temperature;
 } PowerBoardDataStruct_t;
 
@@ -62,6 +66,9 @@ uint8_t PowerData_read(powerDataType_t datatype, void *d);
 uint8_t PowerData_write(powerDataType_t datatype, void *d);
 uint32_t PowerData_calculatePower(void);
 uint8_t PowerData_info(void);
+
+// void SunStatus_set(uint8_t status);
+// uint8_t SunStatus_get(void);
 
 #define CLEAR_STATUS(x)         (*PowerData_getStatusPtr() &= (uint8_t)~(1U << x))
 #define SET_STATUS(x)           (*PowerData_getStatusPtr() |= (uint8_t)(1U << x))

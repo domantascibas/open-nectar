@@ -18,7 +18,7 @@ TEST(PowerDataTests, GET_STATUS) {
     statusDataType_t i;
     uint8_t s, r;
     printf("\n\r");
-    for (i = (statusDataType_t)0; i < NUMEL_STATUS;) {
+    for (i = (statusDataType_t)0; i < STATUS_TYPE_COUNT;) {
         s = (uint8_t)(1 << i);
         PowerData_write(STATUS, &s);
         PowerData_read(STATUS, &r);
@@ -48,7 +48,7 @@ TEST(PowerDataTests, SET_CLEAR_STATUS) {
 //     statusDataType_t i;
 //     uint8_t r;
 //     printf("\n\r");
-//     for (i = (statusDataType_t)0; i < NUMEL_STATUS;) {
+//     for (i = (statusDataType_t)0; i < STATUS_TYPE_COUNT;) {
 //         SET_STATUS(i);
 //         PowerData_read(STATUS, &r);
 //         CHECK(GET_STATUS(i));
@@ -67,7 +67,7 @@ TEST(PowerDataTests, SET_CLEAR_STATUS) {
 //     statusDataType_t i;
 //     uint8_t r;
 //     printf("\n\r");
-//     for (i = (statusDataType_t)0; i < NUMEL_STATUS;) {
+//     for (i = (statusDataType_t)0; i < STATUS_TYPE_COUNT;) {
 //         r = (uint8_t)(1 << i);
 //         SET_STATUS(i);
 //         CHECK_EQUAL(r, *PowerData_getStatusPtr());

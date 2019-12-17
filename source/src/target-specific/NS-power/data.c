@@ -1,12 +1,17 @@
 #include <string.h>
-#include <stdint.h>
 #include <stdio.h>
 #include "data.h"
 
+static uint16_t V_H_THRESHOLD = VI_CONVERT(100);
+static uint16_t V_L_THRESHOLD = VI_CONVERT(10);
+static uint16_t I_THRESHOLD = VI_CONVERT(0.2f);
+
 static PowerBoardDataStruct_t power_data;
+static uint8_t sunStatus;
 
 uint8_t PowerData_init() {
     memset(&power_data, 0, sizeof(power_data));
+    sunStatus = 0;
     return 0;
 }
 
@@ -69,7 +74,7 @@ uint8_t PowerData_read(powerDataType_t datatype, void *d) {
             *(meterData_t *)d = power_data.meter;
             break;
 
-        case NUMEL:
+        case POWER_TYPE_COUNT:
         default:
             break;
     }
@@ -80,10 +85,22 @@ uint8_t PowerData_write(powerDataType_t datatype, void *d) {
     switch (datatype) {
         case M_VOLTAGE:
             power_data.mom.voltage = *(uint16_t *)d;
+            // printf("M_VOLTAGE\n\r");
+            if (power_data.mom.voltage >= V_H_THRESHOLD) {
+                SET_STATUS(V_READY_STATUS);
+            } else if (power_data.mom.voltage < V_L_THRESHOLD) {
+                CLEAR_STATUS(V_READY_STATUS);
+            }
             break;
 
         case M_CURRENT:
             power_data.mom.current = *(uint16_t *)d;
+            // printf("M_CURRENT\n\r");
+            if (power_data.mom.current >= I_THRESHOLD) {
+                SET_STATUS(I_READY_STATUS);
+            } else {
+                CLEAR_STATUS(I_READY_STATUS);
+            }
             break;
 
         case M_POWER:
@@ -130,7 +147,7 @@ uint8_t PowerData_write(powerDataType_t datatype, void *d) {
             power_data.meter = *(meterData_t *)d;
             break;
 
-        case NUMEL:
+        case POWER_TYPE_COUNT:
         default:
             break;
     }
@@ -157,12 +174,28 @@ uint8_t PowerData_info(void) {
     printf("[PWR DATA] MPPT_STATUS:         %d\n\r", GET_STATUS(MPPT_STATUS));
     printf("[PWR DATA] PWM_STATUS:          %d\n\r", GET_STATUS(PWM_STATUS));
     printf("[PWR DATA] CALIBRATION_STATUS:  %d\n\r", GET_STATUS(CALIBRATION_STATUS));
-    printf("[PWR DATA] OVERHEAT_STATUS:     %d\n\r", GET_STATUS(OVERHEAT_STATUS));
     printf("[PWR DATA] BOOST_STATUS:        %d\n\r", GET_STATUS(BOOST_STATUS));
+    printf("[PWR DATA] V_READY_STATUS:      %d\n\r", GET_STATUS(V_READY_STATUS));
+    printf("[PWR DATA] I_READY_STATUS:      %d\n\r", GET_STATUS(I_READY_STATUS));
+    printf("[PWR DATA] SUN_STATUS:          %d\n\r", GET_STATUS(SUN_STATUS));
+    printf("[PWR DATA] OVERHEAT_STATUS:     %d\n\r", GET_STATUS(OVERHEAT_STATUS));
     // printf("[PWR DATA] status:              %d\n\r", power_data.status);
     printf("[PWR DATA] internal temp:       %d\n\r", power_data.temperature);
     return 0;
 }
+
+// void SunStatus_set(uint8_t status) {
+//     sunStatus = status;
+//     if (status) {
+//         SET_STATUS(SUN_STATUS);
+//     } else {
+//         CLEAR_STATUS(SUN_STATUS);
+//     }
+// }
+
+// uint8_t SunStatus_get(void) {
+//     return sunStatus;
+// }
 
 
 Data data = {
