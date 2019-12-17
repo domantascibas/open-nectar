@@ -175,11 +175,11 @@ uint8_t PowerData_info(void) {
     printf("[PWR DATA] MPPT_STATUS:         %d\n\r", GET_STATUS(MPPT_STATUS));
     printf("[PWR DATA] PWM_STATUS:          %d\n\r", GET_STATUS(PWM_STATUS));
     printf("[PWR DATA] CALIBRATION_STATUS:  %d\n\r", GET_STATUS(CALIBRATION_STATUS));
-    // printf("[PWR DATA] OVERHEAT_STATUS:     %d\n\r", GET_STATUS(OVERHEAT_STATUS));
     printf("[PWR DATA] BOOST_STATUS:        %d\n\r", GET_STATUS(BOOST_STATUS));
     printf("[PWR DATA] V_READY_STATUS:      %d\n\r", GET_STATUS(V_READY_STATUS));
     printf("[PWR DATA] I_READY_STATUS:      %d\n\r", GET_STATUS(I_READY_STATUS));
     printf("[PWR DATA] SUN_STATUS:          %d\n\r", GET_STATUS(SUN_STATUS));
+    printf("[PWR DATA] OVERHEAT_STATUS:     %d\n\r", GET_STATUS(OVERHEAT_STATUS));
     // printf("[PWR DATA] status:              %d\n\r", power_data.status);
     printf("[PWR DATA] internal temp:       %d\n\r", power_data.temperature);
     return 0;

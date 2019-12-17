@@ -3,6 +3,7 @@
 
 // #include "NectarContract.h"
 #include <stdint.h>
+#include <time.h>
 
 typedef enum {
     M_VOLTAGE,
@@ -30,7 +31,8 @@ typedef enum {
     V_READY_STATUS,
     I_READY_STATUS,
     SUN_STATUS,
-    STATUS_TYPE_COUNT
+    STATUS_TYPE_COUNT,
+    OVERHEAT_STATUS,
 } statusDataType_t;
 
 typedef struct momentData_tag {
