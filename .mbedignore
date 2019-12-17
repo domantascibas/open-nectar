@@ -21,6 +21,14 @@ submodules/device_menu/Screens/*
 submodules/device_menu/.gitignore
 submodules/device_menu/.gitmodules
 
+submodules/device_menu/*
+#submodules/ds1820/*
+#submodules/error_handler/*
+#submodules/nectar_serial/*
+submodules/nucleo_helpers/*
+
+source/src/ignore/*
+
 mbed-os/components/*
 mbed-os/events/*
 mbed-os/features/*
