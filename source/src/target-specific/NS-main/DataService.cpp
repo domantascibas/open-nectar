@@ -1,6 +1,6 @@
 #include "DataService.h"
 #include "device_modes.h"
-#include "../submodules/device_menu/src/helpers/helpers.h"
+// #include "../submodules/device_menu/src/helpers/helpers.h"
 // #include "menu_service.h"
 #include "Storage.h"
 #include "CommsController.h"
@@ -71,11 +71,11 @@ nectar_contract::ESPState espData = {
 	// DataService::esp_version
 };
 
-time_t timeHMtoTime(time_hm timeHM) {
-  // time_t rtc = time(NULL);
+// time_t timeHMtoTime(time_hm timeHM) {
+//   // time_t rtc = time(NULL);
   
-  // return rtc - (rtc % (24 * 60 * 60)) + timeHM.hours * 60 * 60 + timeHM.minutes * 60;
-}
+//   // return rtc - (rtc % (24 * 60 * 60)) + timeHM.hours * 60 * 60 + timeHM.minutes * 60;
+// }
 
 void TemperatureData::setDayTemperature(float temp) {
   // dayTemperature = temp;
