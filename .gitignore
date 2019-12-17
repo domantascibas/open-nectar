@@ -16,6 +16,7 @@ source/NS-project/test/objs/*
 source/NS-project/test/lib/*
 *.d
 *.o
+*.a
 
 # ignore other files
 *.doman
