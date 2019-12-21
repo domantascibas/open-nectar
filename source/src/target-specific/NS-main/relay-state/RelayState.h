@@ -17,7 +17,6 @@ typedef enum {
 typedef struct {
     relayStateType_t state;
     relayStateType_t state_next;
-    // uint8_t is_switching;
 } relayControllerType_t;
 
 void RelayState_init(void);
