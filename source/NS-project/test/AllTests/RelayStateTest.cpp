@@ -6,12 +6,15 @@ extern "C" {
 #include "RelayState.h"
 }
 
-TEST_GROUP(RelayStateTests) {
+TEST_GROUP (RelayStateTests) {
     void setup() {
+        RelayState_init();
     }
 
     void teardown() {
     }
 };
 
-#endif
+TEST (RelayStateTests, CheckInit) {
+    CHECK_EQUAL(OFF, RelayState_get(SUN_RELAY));
+}

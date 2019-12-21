@@ -41,6 +41,7 @@ CPP_PLATFORM = Gcc
 # CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE = -include ApplicationLib/ExamplesNewOverrides.h
 SRC_DIRS = \
 	../../src/target-specific/NS-power/main-controller\
+	../../src/target-specific/NS-main/relay-state\
 	../../src/modules/generator-controller
 
 SRC_FILES = \
@@ -60,6 +61,7 @@ INCLUDE_DIRS = \
 	../../../submodules/nectar_serial/src\
 	../../src/target-specific/NS-power\
 	../../src/target-specific/NS-power/main-controller\
+	../../src/target-specific/NS-main/relay-state\
 	../../src/modules/generator-controller\
 	../../src/common
 	
