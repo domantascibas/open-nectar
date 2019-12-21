@@ -69,7 +69,7 @@ relayStateType_t RelayState_get(relayType_t type) {
         default:
             break;
     }
-    return 2;
+    return 3;
 }
 
 uint8_t is_switching(void) {
