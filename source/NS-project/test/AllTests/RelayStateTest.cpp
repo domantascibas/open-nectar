@@ -18,3 +18,8 @@ TEST_GROUP (RelayStateTests) {
 TEST (RelayStateTests, CheckInit) {
     CHECK_EQUAL(OFF, RelayState_get(SUN_RELAY));
 }
+
+// check sun relay turns on
+// check grid relay turns on
+// check that both relays aren't turned on
+// check do not allow relay switch if still switching

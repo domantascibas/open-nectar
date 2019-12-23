@@ -198,78 +198,95 @@ uint8_t PowerData_info(void) {
 // }
 
 
-Data data = {
-    0, 0, 0, IDLE, 0, 0, 0, 0, 0
-};
+// Data data = {
+//     0, 0, 0, IDLE, 0, 0, 0, 0, 0
+// };
 
+uint8_t get;
 StorageData storage_data = {
     0.0, 0.0, 0.0, 0.0
 };
 
 uint8_t data_getSafeToReadTemp(void) {
-    return data.safeToReadTemp;
+    // return data.safeToReadTemp;
+    return 0;
 }
 
 void data_setSafeToReadTemp(uint8_t set) {
-    data.safeToReadTemp = set;
+    get = set;
+    // data.safeToReadTemp = set;
 }
 
 //  uint32_t error;
 
 uint8_t data_getReadingTemperature(void) {
-    return data.readingTemperature;
+    // return data.readingTemperature;
+    return 0;
 }
 
 void data_setReadingTemperature(uint8_t set) {
-    data.readingTemperature = set;
+    get = set;
+    // data.readingTemperature = set;
 }
 
 uint8_t data_getReadingSerial(void) {
-    return data.readingSerial;
+    // return data.readingSerial;
+    return 0;
 }
 
 void data_setReadingSerial(uint8_t set) {
-    data.readingSerial = set;
+    get = set;
+    // data.readingSerial = set;
 }
 
 uint8_t data_getStartCalibration(void) {
-    return data.startCalibration;
+    // return data.startCalibration;
+    return 0;
 }
 
 void data_setStartCalibration(uint8_t set) {
-    data.startCalibration = set;
+    get = set;
+    // data.startCalibration = set;
 }
 
 uint8_t data_getIsCalibrating(void) {
-    return data.isCalibrating;
+    // return data.isCalibrating;
+    return 0;
 }
 
 void data_setIsCalibrating(uint8_t set) {
-    data.isCalibrating = set;
+    get = set;
+    // data.isCalibrating = set;
 }
 
 uint8_t data_getIsInOnboarding(void) {
-    return data.isInOnboarding;
+    // return data.isInOnboarding;
+    return 0;
 }
 
 void data_setIsInOnboarding(uint8_t set) {
-    data.isInOnboarding = set;
+    get = set;
+    // data.isInOnboarding = set;
 }
 
 uint8_t data_getIsTestMode(void) {
-    return data.isTestMode;
+    // return data.isTestMode;
+    return 0;
 }
 
 void data_setIsTestMode(uint8_t set) {
-    data.isTestMode = set;
+    get = set;
+    // data.isTestMode = set;
 }
 
 uint8_t data_getCurrent_state(void) {
-    return data.current_state;
+    // return data.current_state;
+    return 0;
 }
 
 void data_setCurrent_state(uint8_t set) {
-    data.current_state = set;
+    get = set;
+    // data.current_state = set;
 }
 
 // static const uint8_t isCalibrating = 0;
