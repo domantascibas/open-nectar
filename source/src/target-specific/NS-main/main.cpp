@@ -1,20 +1,19 @@
 #include "consts.h"
-// #include "ServiceComms.h"
-// #include "EspComms.h"
-// #include "PowerBoardComms.h"
+#include "ServiceComms.h"
+#include "EspComms.h"
+#include "PowerBoardComms.h"
 #include "device_modes.h"
 // #include "menu_service.h"
 #include "error_controller.h"
 #include "TemperatureController.h"
-// #include "DataService.h"
+#include "DataService.h"
 #include "Storage.h"
-// #include "CommsController.h"
+#include "CommsController.h"
 #include "watchdog_timer.h"
 #include "DeviceMode.h"
 
-// bool inErrorScreen = false;
+bool inErrorScreen = false;
 
-// TemperatureController tempController;
 Timer comms_timeout;
 
 int main() {
@@ -24,7 +23,7 @@ int main() {
   deviceOpMode_init();
   storage_init();
   
-  // service::setup();
+  service_setup();
   
   // menu_service::setup();
   // menu_service::updateScreen();
@@ -35,17 +34,17 @@ int main() {
   wait(0.5);
 
 	// menu_service::updateScreen();
-	// wait(0.5);
-	// esp::setup();
-	// wait(0.5);
-	// power_board::setup();
+	wait(0.5);
+	esp::setup();
+	wait(0.5);
+	power_board::setup();
 	
 	comms_timeout.start();
   current_s = comms_timeout.read();
-	// while((!power_board::receivedFirstMessage() || (powerData.power_version == 0.00)) && (current_s < POWER_INIT_TIMEOUT)) {
-	// 	__WFI();
-	// 	current_s = comms_timeout.read();
-	// }
+	while((!power_board::receivedFirstMessage() || (powerData.power_version == 0.00)) && (current_s < POWER_INIT_TIMEOUT)) {
+		__WFI();
+		current_s = comms_timeout.read();
+	}
 	comms_timeout.stop();
 	comms_timeout.reset();
 	// menu_service::updateScreen();
@@ -54,17 +53,17 @@ int main() {
 	// menu_service::updateScreen();
 	comms_timeout.start();
 	current_s = comms_timeout.read();
-  // while((!esp::receivedFirstMessage() || (espData.esp_version == 0.00)) && (current_s < ESP_INIT_TIMEOUT)) {
-	// 	__WFI();
-	// 	current_s = comms_timeout.read();
-	// }
+  while((!esp::receivedFirstMessage() || (espData.esp_version == 0.00)) && (current_s < ESP_INIT_TIMEOUT)) {
+		__WFI();
+		current_s = comms_timeout.read();
+	}
 	comms_timeout.stop();
 	comms_timeout.reset();
 	// menu_service::updateScreen();
   wait(1.5);
   
 	// menu_service::updateScreen();
-	// device_modes::setup();
+	device_modes_setup();
   wait(2);
 	
 	watchdog_timer_init();
@@ -79,7 +78,7 @@ int main() {
         printf("CONFIG loading data from storage\r\n");
         storage_loadConfigData();
         if(storage_isEspConfigured()) {
-  //         espData.is_configured = true;
+          espData.is_configured = true;
           deviceOpMode_setConfigured();
         }
         deviceOpMode_endOnboarding();
@@ -94,37 +93,37 @@ int main() {
     switch(deviceOpMode_getCurrentMode()) {
       default:
       case NOT_CONFIGURED:        // ESP NOT CONFIGURED
-  //       if(espData.is_configured) {
-  //         printf("CONFIG SAVE\n");
-  //         deviceOpMode.setConfigured();
-  //         menu_service::needUpdate = true;
-  //         menu_service::resetScreen = true;
-  //         Storage::saveEspConfig();
-  //       }
+        if(espData.is_configured) {
+          printf("CONFIG SAVE\n");
+          deviceOpMode_setConfigured();
+          // menu_service::needUpdate = true;
+          // menu_service::resetScreen = true;
+          storage_saveEspConfig();
+        }
         break;
       
       case CONFIGURED:            // ESP CONFIGURED
-  //       if(!espData.is_configured) {
-  //         printf("CONFIG RESET\n");
-  //       }
+        if(!espData.is_configured) {
+          printf("CONFIG RESET\n");
+        }
         break;
       
       case WELCOME:
-  //       //nothing to do here
-  //       //wait for user to finish onboarding
-  //       if(espData.is_configured || Storage::isEspConfigured()) {
-  //         deviceOpMode.endOnboarding();
-  //         printf("CONFIG HAS_CONFIG\n");
-  //         menu_service::needUpdate = true;
-  //         menu_service::resetScreen = true;
-  //       }
+        //nothing to do here
+        //wait for user to finish onboarding
+        if(espData.is_configured || storage_isEspConfigured()) {
+          deviceOpMode_endOnboarding();
+          printf("CONFIG HAS_CONFIG\n");
+          // menu_service::needUpdate = true;
+          // menu_service::resetScreen = true;
+        }
         break;
       
       case TEST_MODE:
-  //       if(isFirst) {
-  //         isFirst = false;
-  //         deviceOpMode.setTestMode();
-  //       }
+        if(isFirst) {
+          isFirst = false;
+          deviceOpMode_setTestMode();
+        }
         break;
     }
     
@@ -133,7 +132,7 @@ int main() {
       device_modes_loop();
     }
     
-  //   commsController.clearQueue();
+    commsController.clearQueue();
     
     __WFI();
   }
