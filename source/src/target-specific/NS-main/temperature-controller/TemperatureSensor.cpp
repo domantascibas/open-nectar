@@ -45,8 +45,7 @@ uint8_t temperatureSensor_isNewValAvail(void) {
 
 uint8_t temperatureSensor_get(void) {
 	new_value_avail = 0;
-	// return temperature;
-	return 85;
+	return temperature;
 }
 
 uint8_t temperatureSensor_start(void) {
