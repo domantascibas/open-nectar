@@ -6,7 +6,7 @@
 
 DS1820 temp_probe(BOILER_TEMP_PIN);
 // Ticker ticker;
-// Timeout timeout;
+Timeout timeout;
 
 uint8_t temperature;
 uint8_t last_temperature;
@@ -22,13 +22,21 @@ uint8_t new_value_avail;
 // - wait for conversion end
 // - temperature ready
 
+// void attachTicker(float interval) {
+// 	ticker.attach(callback(this, &temperatureSensor_start), interval);
+// }
+
+// void detachTicker(void) {
+// 	ticker.detach();
+// }
+
 void temperatureSensor_init(void) {
 	temperature = 0.0;
 	last_temperature = 0.0;
 	error_counter = 0;
 	if(temp_probe.begin()) {
 		sensor_found = 1;
-		// temperatureSensor_start();
+		temperatureSensor_start();
 		// attachTicker(refreshRate);
 	}
 //    printf("Temperature sensor found\r\n");
