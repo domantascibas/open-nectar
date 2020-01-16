@@ -5,6 +5,8 @@
 
 // RawSerial pc(SERVICE_COMMS_TX_PIN, SERVICE_COMMS_RX_PIN);
 
+uint8_t newValueAvailable;
+
 void parseCommand(uint8_t command) {
   // switch(command) {
   //   case TEST_MODE_ENTER_TEST_MODE_CMD:
@@ -80,9 +82,12 @@ namespace service {
 //   }
   
 //   bool isNewValueAvailable() {
-//     if(newValueAvailable) {
-//       newValueAvailable = false;
-//       return true;
-//     } else return false;
-//   }
+}
+
+uint8_t service_newValAvail(void) {
+  if (newValueAvailable) {
+    newValueAvailable = 0;
+    return 1;
+  }
+  return 0;
 }
