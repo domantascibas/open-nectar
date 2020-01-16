@@ -5,8 +5,6 @@
 
 // RawSerial pc(SERVICE_COMMS_TX_PIN, SERVICE_COMMS_RX_PIN);
 
-uint8_t newValueAvailable;
-
 void parseCommand(uint8_t command) {
   // switch(command) {
   //   case TEST_MODE_ENTER_TEST_MODE_CMD:
@@ -82,6 +80,17 @@ namespace service {
 //   }
   
 //   bool isNewValueAvailable() {
+}
+
+static uint8_t fakeTemperature = TEST_MODE_IDLE_ON_TEMPERATURE;
+static uint8_t newValueAvailable = 0;
+
+void service_setup(void) {
+  static const uint32_t pc_baud = SERVICE_COMMS_BAUD_RATE;
+}
+
+uint8_t service_getFakeTemperature(void) {
+  return fakeTemperature;
 }
 
 uint8_t service_newValAvail(void) {
