@@ -4,14 +4,30 @@
 // #include "menu_service.h"
 #include "DataService.h"
 // #include "localization.h"
+extern "C" {
 #include "eeprom.h"
+}
 
-enum TimeType { Current, DayStart, NightStart };
-enum TemperatureType { TemperatureDay, TemperatureNight, TemperatureMax };
+typedef enum { 
+    Current,
+    DayStart,
+    NightStart
+} TimeType;
+typedef enum { 
+    TemperatureDay,
+    TemperatureNight,
+    TemperatureMax
+} TemperatureType;
 
-enum Language { EN, DE, RU, LT, LanguageCout };
+typedef enum {
+    EN,
+    DE,
+    RU,
+    LT,
+    LanguageCout
+} Language;
 
-enum LocalizationKey {
+typedef enum {
     LocalizationSettings,
     LocalizationReset,
     LocalizationPairing,
@@ -47,7 +63,20 @@ enum LocalizationKey {
     LocalizationGrid,
     LocalizationIdle,
     LocalizationTotal,
-};
+} LocalizationKey;
+
+void storage_init(void);
+uint8_t storage_isEspConfigured(void);
+uint8_t storage_isConfigured(void);
+void storage_saveEspConfig(void);
+void storage_saveConfig(void);
+void storage_clearConfig(void);
+void storage_loadConfigData(void);
+
+uint16_t storage_saveData(void);
+uint8_t storage_readData(void);
+
+void storage_saveTemp(TemperatureType type, uint8_t temp);
 
 namespace Storage {
 void init();
