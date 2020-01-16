@@ -1,9 +1,8 @@
-// #include "mbed.h"
 #include "consts.h"
 #include "pins.h"
 #include "DS1820.h"
 #include "TemperatureSensor.h"
-// #include "error_controller.h"
+#include "error_controller.h"
 
 DS1820 temp_probe(BOILER_TEMP_PIN);
 // Ticker ticker;
@@ -55,8 +54,7 @@ uint8_t temperatureSensor_start(void) {
 }
 
 void temperatureSensor_read(void) {
-	// if((identical_count >= LOST_SENSOR_COUNT) || mainBoardError.has_error(NO_BOILER_TEMP)) {
-	if (identical_count >= LOST_SENSOR_COUNT) {
+	if((identical_count >= LOST_SENSOR_COUNT) || mainBoardError.has_error(NO_BOILER_TEMP)) {
 		if (temp_probe.begin()) {
 			sensor_found = 1;
 			identical_count = 0;
@@ -79,9 +77,9 @@ void temperatureSensor_read(void) {
 		}
 
 		if (temperature != 85) {
-			// if(mainBoardError.has_error(NO_BOILER_TEMP)) {
-			// 	mainBoardError.clear_error(NO_BOILER_TEMP);
-			// }
+			if(mainBoardError.has_error(NO_BOILER_TEMP)) {
+				mainBoardError.clear_error(NO_BOILER_TEMP);
+			}
 			error_counter = 0;
 			new_value_avail = 1;
 		} else {
@@ -91,12 +89,12 @@ void temperatureSensor_read(void) {
 		if(error_counter >= 10) {
 			error_counter = 10;
 			temperature = 0;
-			// mainBoardError.set_error(NO_BOILER_TEMP);
+			mainBoardError.set_error(NO_BOILER_TEMP);
 			new_value_avail = 1;
 		}
 	} else {
 		temperature = 0;
-		// mainBoardError.set_error(NO_BOILER_TEMP);
+		mainBoardError.set_error(NO_BOILER_TEMP);
 		new_value_avail = 1;
 	}
 }
