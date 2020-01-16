@@ -5,7 +5,8 @@
 #include "device_modes.h"
 // #include "menu_service.h"
 #include "error_controller.h"
-#include "TemperatureController.h"
+// #include "TemperatureController.h"
+#include "TemperatureSensor.h"
 #include "DataService.h"
 #include "Storage.h"
 #include "CommsController.h"
@@ -14,12 +15,12 @@
 // bool inErrorScreen = false;
 
 // TemperatureController tempController;
-// Timer comms_timeout;
+Timer comms_timeout;
 
 int main() {
-	// float current_s;
-  // static bool isFirst = true;
-	// error_controller_init();
+	float current_s;
+  static bool isFirst = true;
+	error_controller_init();
   // Storage::init();
   
   // service::setup();
@@ -28,6 +29,7 @@ int main() {
   // menu_service::updateScreen();
   // wait(1.0);
   // tempController.init();
+  temperatureSensor_init();
   // wait(0.5);
   // tempController.updateTemperatures();
   // wait(0.5);
@@ -65,14 +67,14 @@ int main() {
 	// device_modes::setup();
   // wait(2);
 	
-	// watchdog_timer_init();
+	watchdog_timer_init();
   // deviceOpMode.endLoading();
   
-  // while(1) {
-  //   watchdog_timer_update();
+  while(1) {
+    watchdog_timer_update();
     
-  //   if(isFirst) {
-  //     isFirst = false;
+    if(isFirst) {
+      isFirst = false;
   //     if(Storage::isConfigured()) {
   //       printf("CONFIG loading data from storage\r\n");
   //       Storage::loadConfigData();
@@ -83,7 +85,7 @@ int main() {
   //       deviceOpMode.endOnboarding();
   //     }
   //     menu_service::needUpdate = true;
-  //   }
+    }
     
   //   if(menu_service::needUpdate) {
   //     menu_service::updateScreen();
@@ -133,6 +135,6 @@ int main() {
     
   //   commsController.clearQueue();
     
-  //   __WFI();
-  // }
+    __WFI();
+  }
 }
