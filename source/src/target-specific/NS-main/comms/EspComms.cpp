@@ -75,7 +75,7 @@ namespace esp {
       (mainStateForEsp.reset == COMMS_TRUE_VALUE ? true : false),
       (mainStateForEsp.transistor_overheat_on == COMMS_TRUE_VALUE ? true : false)
       );
-    if(deviceOpMode.isReset()) deviceOpMode.setReset(false);
+    if(deviceOpMode_isReset()) deviceOpMode_setReset(false);
   }
   
   bool is_message_valid(const nectar_contract::ESPState &state) {
