@@ -59,15 +59,15 @@ void storage_saveEspConfig(void) {
 
 void storage_saveConfig(void) {
   batchSaving = true;
-  // saveTemp(TemperatureDay, menu_actions::temperature(TemperatureDay));
-  // saveTemp(TemperatureNight, menu_actions::temperature(TemperatureNight));
-  // saveTemp(TemperatureMax, menu_actions::temperature(TemperatureMax));
+  // Storage::saveTemp(TemperatureDay, menu_actions::temperature(TemperatureDay));
+  // Storage::saveTemp(TemperatureNight, menu_actions::temperature(TemperatureNight));
+  // Storage::saveTemp(TemperatureMax, menu_actions::temperature(TemperatureMax));
   
-  // saveTime(menu_actions::getTime(DayStart), DayStart);
-  // saveTime(menu_actions::getTime(NightStart), NightStart);
+  // Storage::saveTime(menu_actions::getTime(DayStart), DayStart);
+  // Storage::saveTime(menu_actions::getTime(NightStart), NightStart);
   
-  // saveLanguage(localization::currentLanguage());
-  // saveHeaterMode(DataService::getCurrentHeaterMode(), DataService::getPreviousHeaterMode());
+  // Storage::saveLanguage(localization::currentLanguage());
+  Storage::saveHeaterMode(DataService::getCurrentHeaterMode(), DataService::getPreviousHeaterMode());
   
   batchSaving = false;
   __disable_irq();
@@ -87,16 +87,16 @@ void storage_loadConfigData(void) {
     __disable_irq();
 		storage_readData();
 		
-    // menu_actions::setTemperature(TemperatureDay, sDataStruct.day_temperature);
-    // menu_actions::setTemperature(TemperatureNight, sDataStruct.night_temperature);
-    // menu_actions::setTemperature(TemperatureMax, sDataStruct.max_temperature);
+    // menu_actions::setTemperature(TemperatureDay, rDataStruct.day_temperature);
+    // menu_actions::setTemperature(TemperatureNight, rDataStruct.night_temperature);
+    // menu_actions::setTemperature(TemperatureMax, rDataStruct.max_temperature);
     
     // menu_actions::setTime(loadTime(DayStart), DayStart);
     // menu_actions::setTime(loadTime(NightStart), NightStart);
     
-    // localization::setLanguage((const Language)sDataStruct.language);
+    // localization::setLanguage((const Language)rDataStruct.language);
     isLanguageLoaded = true;
-    // DataService::updateHeaterMode((nectar_contract::HeaterMode)sDataStruct.selected_heater_mode, (nectar_contract::HeaterMode)sDataStruct.previous_heater_mode);
+    DataService::updateHeaterMode((nectar_contract::HeaterMode)rDataStruct.selected_heater_mode, (nectar_contract::HeaterMode)rDataStruct.previous_heater_mode);
     __enable_irq();
 }
 
@@ -120,81 +120,34 @@ uint8_t storage_readData(void) {
 }
 
 namespace Storage {	
-  // uint8_t config = EMPTY_VALUE;
-  // uint8_t esp_config = EMPTY_VALUE;
-  
-  // bool isLanguageLoaded = false;
-	// bool emptyStorage = true;
-	// bool batchSaving = false;
-
-	EE_SettingsDatastruct sDataStruct = {
-		// config,
-		// esp_config,
-		// (uint8_t)DataService::getCurrentHeaterMode(),
-		// (uint8_t)DataService::getPreviousHeaterMode(),
-		// (menu_actions::getTime(DayStart).hours*100 + menu_actions::getTime(DayStart).minutes),
-		// (menu_actions::getTime(NightStart).hours*100 + menu_actions::getTime(NightStart).minutes),
-		// localization::currentLanguage(),
-		// (uint16_t)menu_actions::temperature(TemperatureDay),
-		// (uint16_t)menu_actions::temperature(TemperatureNight),
-		// (uint16_t)menu_actions::temperature(TemperatureMax)
-	};
-
-  void init() {
-  }
-	
-	uint16_t saveData() {
-	}
-	
-	bool readData() {
-	}
-  
-  bool isEspConfigured() {
-  }
-  
-  bool isConfigured() {
-  }
-  
-  void saveEspConfig() {
-  }
-  
-  void saveConfig() {
-  }
-  
-  void clearConfig() {
-  }
-  
-  void loadConfigData() {
-  }
-  
   void saveTemp(const TemperatureType &type, const int8_t &t) {
-    // __disable_irq();
-    // switch(type) {
-    //   case TemperatureDay:
-		// 		sDataStruct.day_temperature = (uint16_t)t;
-    //     break;
+    __disable_irq();
+    switch(type) {
+      case TemperatureDay:
+				rDataStruct.day_temperature = (uint16_t)t;
+        break;
       
-    //   case TemperatureNight:
-    //     sDataStruct.night_temperature = (uint16_t)t;
-    //     break;
+      case TemperatureNight:
+        rDataStruct.night_temperature = (uint16_t)t;
+        break;
       
-    //   case TemperatureMax:
-    //     sDataStruct.max_temperature = (uint16_t)t;
-    //     break;
-    // }
-		// saveData();
-    // __enable_irq();
+      case TemperatureMax:
+        rDataStruct.max_temperature = (uint16_t)t;
+        break;
+    }
+		storage_saveData();
+    __enable_irq();
   }
   
   // void saveTime(const time_hm &timeItem, const TimeType &type) {
   //   // __disable_irq();
   //   // switch(type) {
   //   //   case DayStart:
-	// 	// 		sDataStruct.day_starts_time = timeItem.hours*100 + timeItem.minutes;
+	// 	// 		rDataStruct.day_starts_time = timeItem.hours*100 + timeItem.minutes;
   //   //     break;
       
   //   //   case NightStart:
-	// 	// 		sDataStruct.night_starts_time = timeItem.hours*100 + timeItem.minutes;
+	// 	// 		rDataStruct.night_starts_time = timeItem.hours*100 + timeItem.minutes;
   //   //     break;
       
   //   //   case Current:
@@ -205,41 +158,41 @@ namespace Storage {
   // }
   
   void saveLanguage(const Language &language) {
-    // __disable_irq();
-    // if(isConfigured()) {
-    //   printf("LANGUAGE configured\n");
-    //   if(isLanguageLoaded) {
-    //     printf("LANGUAGE SET %d\n", language);
-		// 		sDataStruct.language = (uint16_t)language;
-    //   }
-    // } else {
-    //   printf("LANGUAGE SET %d\n", language);
-		// 	sDataStruct.language = (uint16_t)language;
-    // }
-		// saveData();
-    // __enable_irq();
+    __disable_irq();
+    if(storage_isConfigured()) {
+      printf("LANGUAGE configured\n");
+      if(isLanguageLoaded) {
+        printf("LANGUAGE SET %d\n", language);
+				rDataStruct.language = (uint16_t)language;
+      }
+    } else {
+      printf("LANGUAGE SET %d\n", language);
+			rDataStruct.language = (uint16_t)language;
+    }
+		storage_saveData();
+    __enable_irq();
   }
   
   void saveHeaterMode(nectar_contract::HeaterMode currMode, nectar_contract::HeaterMode prevMode) {
-    // __disable_irq();
-		// sDataStruct.selected_heater_mode = (uint16_t)currMode;
-		// sDataStruct.previous_heater_mode = (uint16_t)prevMode;
-		// saveData();
-    // __enable_irq();
+    __disable_irq();
+		rDataStruct.selected_heater_mode = (uint16_t)currMode;
+		rDataStruct.previous_heater_mode = (uint16_t)prevMode;
+		storage_saveData();
+    __enable_irq();
   }
   
   void saveCurrentHeaterMode(nectar_contract::HeaterMode mode) {
-    // __disable_irq();
-    // sDataStruct.selected_heater_mode = (uint16_t)mode;
-		// saveData();
-    // __enable_irq();
+    __disable_irq();
+    rDataStruct.selected_heater_mode = (uint16_t)mode;
+		storage_saveData();
+    __enable_irq();
   }
   
   void savePreviousHeaterMode(nectar_contract::HeaterMode mode) {
-    // __disable_irq();
-    // sDataStruct.previous_heater_mode = (uint16_t)mode;
-		// saveData();
-    // __enable_irq();
+    __disable_irq();
+    rDataStruct.previous_heater_mode = (uint16_t)mode;
+		storage_saveData();
+    __enable_irq();
   }
   
   // time_hm loadTime(const TimeType &type) {
@@ -248,11 +201,11 @@ namespace Storage {
     
     // switch(type) {
     //   case DayStart:
-    //     loadedTime = sDataStruct.day_starts_time;
+    //     loadedTime = rDataStruct.day_starts_time;
     //     break;
       
     //   case NightStart:
-    //     loadedTime = sDataStruct.night_starts_time;
+    //     loadedTime = rDataStruct.night_starts_time;
     //     break;
       
     //   case Current:
