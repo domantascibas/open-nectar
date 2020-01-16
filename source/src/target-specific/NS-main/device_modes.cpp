@@ -3,64 +3,56 @@
 #include "device_modes.h"
 #include "DataService.h"
 #include "error_controller.h"
-#include "Sanitizer.h"
+// #include "Sanitizer.h"
 // #include "BoostTimeout.h"
 
 // Ticker update_mode_tick;
 // RelayController relayController;
 
-namespace device_modes {
-  // bool reachedMaxTemp = false;
-  // bool updateHeaterMode = false;
-  // static bool isFirst = true;
-  // uint8_t relayStateNew = TURN_OFF_ALL;
-  
-  void update_mode_ISR() {
-  //   updateHeaterMode = true;
-  }
-  
-  bool isGridRelayOn() {
-    // return relayController.isGridRelayOn();
-    return 1;
-  }
-  
-  bool isSunRelayOn() {
-    // return relayController.isSunRelayOn();
-    return 1;
-  }
-	
-	bool turnOffRelays() {
-		// relayStateNew = TURN_OFF_ALL;
-    // relayController.setRelays(relayStateNew);
-		// return true;
-    return 1;
-	}
-  
-  void setup() {
+static uint8_t reachedMaxTemp = 0;
+static uint8_t updateHeaterMode = 0;
+static uint8_t isFirst = 1;
+static uint8_t relayStateNew = TURN_OFF_ALL;
+
+void device_modes_update_mode_ISR(void) {
+  updateHeaterMode = 1;
+}
+
+void device_modes_setHeaterMode(uint8_t i) {
+  updateHeaterMode = i;
+}
+
+void device_modes_setup(void) {
     // update_mode_tick.attach(update_mode_ISR, 1.5);
     // relayController.init();
-  }
-  
-  void reset() {
-    // DataService::resetData();
-    // relayStateNew = TURN_OFF_ALL;
-    // relayController.setRelays(relayStateNew);
-    // isFirst = true;
-  }
+}
 
-  void loop() {
+
+void device_modes_reset(void) {
+  // DataService::resetData();
+  // relayStateNew = TURN_OFF_ALL;
+  // relayController.setRelays(relayStateNew);
+  isFirst = true;
+}
+
+void device_modes_loop() {
 //     if(updateHeaterMode && relayController.finishedSwitching() && !DataService::getCalibrate()) {
-//       updateHeaterMode = false;
+  if(updateHeaterMode) {
+    updateHeaterMode = 0;
       
 //       float temp = temperatureData.getTemperature();
 //       float temp_boiler = temperatureData.getBoilerTemperature();
 //       float temp_min = temperatureData.getMinTemperature();
 //       float temp_max = temperatureData.getMaxTemperature();
+    uint8_t temp = 85;
+    uint8_t temp_boiler = 85;
+    uint8_t temp_min = 60;
+    uint8_t temp_max = 85;
       
-//       if(reachedMaxTemp && ((temp_boiler + HIST) < temp_max)) reachedMaxTemp = false;
-//       if(reachedMaxTemp) {
+    if(reachedMaxTemp && ((temp_boiler + HIST) < temp_max)) reachedMaxTemp = 0;
+      if(reachedMaxTemp) {
 //         relayStateNew = TURN_OFF_ALL;
-//       } else {
+      } else {
 //         switch(DataService::getCurrentHeaterMode()) {
 //           default:
 //           case nectar_contract::None:
@@ -68,7 +60,7 @@ namespace device_modes {
 // 						if(isFirst) {
 //               isFirst = false;
 //               if(temp_boiler < temp) {
-//                 relayStateNew = TURN_ON_GRID;
+//                 // relayStateNew = TURN_ON_GRID;
 //               } else {
 //                 relayStateNew = TURN_ON_SUN;
 //               }
@@ -138,38 +130,76 @@ namespace device_modes {
 // 						relayStateNew = TURN_OFF_ALL;
 // 					break;
 //         }
-//       }
+      }
 			
-// 			if(mainBoardError.has_error(NO_BOILER_TEMP)
-// 				|| mainBoardError.has_error(DEVICE_OVERHEAT)
-// 				|| mainBoardError.has_error(MIN_TEMPERATURE)
-// 				|| mainBoardError.has_error(MAX_TEMPERATURE)
-// 			)	{
-// 				relayStateNew = TURN_OFF_ALL;
-// 				printf("[ERROR] overheat/temperature-related errors\r\n");
-// 			}
+			if(mainBoardError.has_error(NO_BOILER_TEMP)
+				|| mainBoardError.has_error(DEVICE_OVERHEAT)
+				|| mainBoardError.has_error(MIN_TEMPERATURE)
+				|| mainBoardError.has_error(MAX_TEMPERATURE)
+			)	{
+				relayStateNew = TURN_OFF_ALL;
+				printf("[ERROR] overheat/temperature-related errors\r\n");
+			}
 			
-// 			if((relayStateNew == TURN_ON_SUN) && powerBoardError.has_errors) {
-// 				relayStateNew = TURN_OFF_ALL;
-// 				printf("[ERROR] power board error\r\n");
-// 			}
+			if((relayStateNew == TURN_ON_SUN) && powerBoardError.has_errors) {
+				relayStateNew = TURN_OFF_ALL;
+				printf("[ERROR] power board error\r\n");
+			}
 			
-// 			if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
-// 				if(temp_boiler > temp_max) {
-// 					printf("[INFO] temp %f  > max temp %f\r\n", temp_boiler, temp_max);
-// 					reachedMaxTemp = true;
-// 				}
-// 				relayStateNew = TURN_OFF_ALL;
-// 				//data.error = BOILER_TEMP_SENSOR_ERROR;
-// 			}
+			if((temp_boiler < temp_min) || (temp_boiler > temp_max)) {
+				if(temp_boiler > temp_max) {
+					printf("[INFO] temp %f  > max temp %f\r\n", temp_boiler, temp_max);
+					reachedMaxTemp = true;
+				}
+				relayStateNew = TURN_OFF_ALL;
+				//data.error = BOILER_TEMP_SENSOR_ERROR;
+			}
 			
-// 			if((deviceOpMode.getCurrentMode() == TEST_MODE) && !DataService::isModeSelected()) {
-// 				relayStateNew = TURN_OFF_ALL;
-// 			}
+			// if((deviceOpMode_getCurrentMode() == TEST_MODE) && !DataService::isModeSelected()) {
+			// 	relayStateNew = TURN_OFF_ALL;
+			// }
 			
-//       if(relayStateNew != relayController.getRelayState()) {
-//         relayController.setRelays(relayStateNew);
-//       }
-//     }
+      // if(relayStateNew != relayController.getRelayState()) {
+      //   relayController.setRelays(relayStateNew);
+      // }
+    }
+}
+
+namespace device_modes {
+  // bool reachedMaxTemp = false;
+  // bool updateHeaterMode = false;
+  // static bool isFirst = true;
+  // uint8_t relayStateNew = TURN_OFF_ALL;
+  
+  void update_mode_ISR() {
+  //   updateHeaterMode = true;
+  }
+  
+  bool isGridRelayOn() {
+    // return relayController.isGridRelayOn();
+    return 1;
+  }
+  
+  bool isSunRelayOn() {
+    // return relayController.isSunRelayOn();
+    return 1;
+  }
+	
+	bool turnOffRelays() {
+		// relayStateNew = TURN_OFF_ALL;
+    // relayController.setRelays(relayStateNew);
+		// return true;
+    return 1;
+	}
+  
+  void setup() {
+  }
+
+  void reset() {
+
+  }
+
+  void loop() {
+
   }
 }
