@@ -3,7 +3,7 @@
 
 #include "NectarContract.h"
 #include "DeviceMode.h"
-#include "EspComms.h"
+// #include "EspComms.h"
 
 namespace DataService {
 nectar_contract::HeaterMode getCurrentHeaterMode(void);
