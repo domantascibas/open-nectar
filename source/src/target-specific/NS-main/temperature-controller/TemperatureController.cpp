@@ -1,55 +1,57 @@
 #include "consts.h"
-// #include "TemperatureController.h"
-// #include "error_controller.h"
-// #include "DataService.h"
-// #include "device_modes.h"
-// #include "ServiceComms.h"
-// #include "processor_temperature.h"
+#include "TemperatureController.h"
+#include "TemperatureSensor.h"
+#include "processor_temperature.h"
+#include "error_controller.h"
+#include "ServiceComms.h"
+#include "DeviceMode.h"
+#include "device_modes.h"
+#include "DataService.h"
 
-// TemperatureSensor boilerTemp(BOILER_TEMP_PIN, TEMPERATURE_SENSOR_UPDATE_PERIOD);
+uint8_t boilerTemperature;
 
-void TemperatureController::init() {
-	// processor_temperature_init();
-  // boilerTemp.init();
-  
-  // if(boilerTemp.isSensorFound()) {
-  //   mainBoardError.clear_error(NO_BOILER_TEMP);
-  // }
+void temperatureController_init(void) {
+  boilerTemperature = 0;
+
+  processor_temperature_init();
+  temperatureSensor_init();
+
+  if (temperatureSensor_isFound()) {
+    mainBoardError.clear_error(NO_BOILER_TEMP);
+  }
 }
 
-float TemperatureController::getBoilerTemperature() {
-  // boilerTemperature = boilerTemp.getTemperature();
-	// printf("TEMPERATURE BOILER %.2f\n", boilerTemperature);
-  // if(boilerTemperature > WATER_TEMPERATURE_LIMIT_MAX) {
-  //   mainBoardError.set_error(MAX_TEMPERATURE);
-  // } else if(boilerTemperature < WATER_TEMPERATURE_LIMIT_MIN) {
-  //   mainBoardError.set_error(MIN_TEMPERATURE);
-  // } else {
-  //   if(mainBoardError.has_error(MAX_TEMPERATURE)) mainBoardError.clear_error(MAX_TEMPERATURE);
-  //   if(mainBoardError.has_error(MIN_TEMPERATURE)) mainBoardError.clear_error(MIN_TEMPERATURE);
-  // }
-  // return boilerTemperature;
-  return 85;
+uint8_t temperatureController_getBoilerTemp(void) {
+  boilerTemperature = temperatureSensor_get();
+	printf("TEMPERATURE BOILER %d\n", boilerTemperature);
+  if(boilerTemperature > WATER_TEMPERATURE_LIMIT_MAX) {
+    mainBoardError.set_error(MAX_TEMPERATURE);
+  } else if (boilerTemperature < WATER_TEMPERATURE_LIMIT_MIN) {
+    mainBoardError.set_error(MIN_TEMPERATURE);
+  } else {
+    if (mainBoardError.has_error(MAX_TEMPERATURE)) mainBoardError.clear_error(MAX_TEMPERATURE);
+    if (mainBoardError.has_error(MIN_TEMPERATURE)) mainBoardError.clear_error(MIN_TEMPERATURE);
+  }
+  return boilerTemperature;
 }
 
-void TemperatureController::updateTemperatures() {
-//   if(boilerTemp.isNewValueAvailable() || service::isNewValueAvailable()) {
+void temperatureController_update(void) {
+  if (temperatureSensor_isNewValAvail() || service_newValAvail()) {
+		float processor_temp = processor_temperature_measure();
+		printf("TEMPERATURE PROCESSOR %.2f\n", processor_temp);
+		if (processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
+			if (!mainBoardError.has_error(PROCESSOR_OVERHEAT)) mainBoardError.set_error(PROCESSOR_OVERHEAT);
+//			printf("TEMPERATURE OVERHEAT\n");
+		} else {
+			if (mainBoardError.has_error(PROCESSOR_OVERHEAT) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) mainBoardError.clear_error(PROCESSOR_OVERHEAT);
+		}
 		
-// 		float processor_temp = processor_temperature_measure();
-// 		printf("TEMPERATURE PROCESSOR %.2f\n", processor_temp);
-// 		if(processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
-// 			if(!mainBoardError.has_error(PROCESSOR_OVERHEAT)) mainBoardError.set_error(PROCESSOR_OVERHEAT);
-// //			printf("TEMPERATURE OVERHEAT\n");
-// 		} else {
-// 			if(mainBoardError.has_error(PROCESSOR_OVERHEAT) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) mainBoardError.clear_error(PROCESSOR_OVERHEAT);
-// 		}
-		
-//     if(deviceOpMode.isInTestStand()) {
-//       temperatureData.setBoilerTemperature(service::getFakeTemperature());
-// //      printf("new fake temp\r\n");
-//     } else {
-//       temperatureData.setBoilerTemperature(getBoilerTemperature());
-//     }
-//     device_modes::updateHeaterMode = true;
-//   }
+    if (deviceOpMode_isInTestStand()) {
+      temperatureData_setBoilerTemperature(service_getFakeTemperature());
+     printf("new fake temp\r\n");
+    } else {
+      temperatureData_setBoilerTemperature(temperatureController_getBoilerTemp());
+    }
+    device_modes_setHeaterMode(1);
+  }
 }
