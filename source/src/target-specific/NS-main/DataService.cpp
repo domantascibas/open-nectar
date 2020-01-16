@@ -270,3 +270,9 @@ bool DataService::isModeSelected(void) {
 	// return mode_selected;
   return 0;
 }	
+
+static uint8_t boilerTemperature;
+
+void temperatureData_setBoilerTemperature(uint8_t temp) {
+  boilerTemperature = temp;
+}

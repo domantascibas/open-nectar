@@ -57,4 +57,6 @@ extern TemperatureData temperatureData;
 extern nectar_contract::ESPState espData;
 extern nectar_contract::PowerBoardState powerData;
 
+void temperatureData_setBoilerTemperature(uint8_t temp);
+
 #endif
