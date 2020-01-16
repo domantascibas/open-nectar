@@ -4,12 +4,12 @@
 #include "GridRelay.h"
 #include "SunRelay.h"
 
-enum RelayStates {
+typedef enum {
     TURN_OFF_ALL,
     TURN_ON_SUN,
     TURN_ON_GRID,
     TURN_OFF_SUN
-};
+} RelayStates;
 
 struct RelayController {
     RelayController();
