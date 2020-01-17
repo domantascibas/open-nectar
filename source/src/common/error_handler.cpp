@@ -1,6 +1,57 @@
 #include "mbed.h"
 #include "error_handler.h"
 
+Error_t nsError = {0, 0};
+
+#define ERROR_CLEAR(x)          (nsError.error &= (uint16_t)~(1U << x))
+#define ERROR_SET(x)            (nsError.error |= (uint16_t)(1U << x))
+#define ERROR_GET(x)            ((nsError.error & (uint16_t)(1U << x)) >> x)
+
+uint8_t error_init(uint16_t error) {
+  nsError.hasError = 0;
+  nsError.error = error;
+  if (error != 0) {
+    nsError.hasError = 1;
+  }
+  return 1;
+}
+
+uint8_t error_set(NS_ERROR error) {
+  ERROR_SET(error);
+  nsError.hasError = 1;
+  return 1;
+}
+
+uint16_t error_get(void) {
+  return nsError.error;
+}
+
+uint8_t error_hasError(void) {
+  return nsError.hasError;
+}
+
+uint8_t error_clear(NS_ERROR error) {
+  ERROR_CLEAR(error);
+  if (nsError.error == 0) {
+    nsError.hasError = 0;
+  }
+  return 1;
+}
+
+uint8_t error_clearAll(void) {
+  nsError.error = 0;
+  nsError.hasError = 0;
+  return 1;
+}
+
+void error_print(void) {
+  if (nsError.hasError) {
+    printf("[NS-ERROR] errors present: 0x%2X\r\n", nsError.error);
+  } else {
+    printf("[NS-ERROR] no errors present\r\n");
+  }
+}
+
 ErrorHandler::ErrorHandler() {
   has_errors = false;
   last_error = NONE;
@@ -9,7 +60,7 @@ ErrorHandler::ErrorHandler() {
 void ErrorHandler::set_error(ERROR_CODE err) {
   last_error = err;
   has_errors = true;
-  raised_errors |= 1 << err;
+  raised_errors |= (uint32_t)(1UL << err);
   print_error(&err);
 }
 
@@ -39,7 +90,7 @@ void ErrorHandler::clear_error() {
 }
 
 void ErrorHandler::clear_error(ERROR_CODE err) {
-  raised_errors &= ~(1 << err);
+  raised_errors &= (uint32_t)~(1UL << err);
   printf("ERRORS CLEARED %X\n", err);
   if(raised_errors == 0x00000000) {
     last_error = NONE;
@@ -51,7 +102,7 @@ void ErrorHandler::clear_error(ERROR_CODE err) {
 }
 
 bool ErrorHandler::has_error(ERROR_CODE err) {
-  return (raised_errors & (1 << err)) >> err;
+  return (raised_errors & (uint32_t)(1UL << err)) >> err;
 }
 
 void ErrorHandler::print_error(ERROR_CODE *err) {
@@ -74,6 +125,10 @@ void ErrorHandler::print_error(ERROR_CODE *err) {
     
     case DC_OVER_VOLTAGE:
       printf("ERROR ERR DC OVER VOLTAGE\n");
+      break;
+
+    case DC_CURRENT_LEAKS:
+      printf("ERROR ERR DC CURRENT_LEAKS\n");
       break;
     
     case DC_OVER_CURRENT:
@@ -104,6 +159,8 @@ void ErrorHandler::print_error(ERROR_CODE *err) {
       printf("ERROR ERR PROCESSOR OVERHEAT\n");
       break;
     
+    case DC_LOW_VOLTAGE:
+    case NONE:
     default:
       printf("ERROR ERR Unspecified Error\n");
       break;

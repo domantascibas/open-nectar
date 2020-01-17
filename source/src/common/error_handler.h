@@ -4,6 +4,18 @@
 #include <stdint.h>
 #include "error_codes.h"
 
+typedef struct {
+    uint16_t error;
+    uint8_t hasError;
+} Error_t;
+
+uint8_t error_init(uint16_t error);
+uint8_t error_set(NS_ERROR error);
+uint16_t error_get(void);
+uint8_t error_clear(NS_ERROR error);
+uint8_t error_clearAll(void);
+void error_print(void);
+
 struct ErrorHandler {
 public:
     ErrorHandler();
