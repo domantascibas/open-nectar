@@ -45,7 +45,8 @@ SRC_DIRS = \
 
 SRC_FILES = \
 	../../src/target-specific/NS-power/data.cpp\
-	../../src/common/version.c
+	../../src/common/version.c\
+	../../src/common/error_handler.cpp
 
 TEST_SRC_DIRS = \
 	AllTests\
