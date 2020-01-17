@@ -19,7 +19,7 @@ typedef enum {
     NS_PROCESSOR_OVERHEAT_MAIN,
     NS_PROCESSOR_OVERHEAT_POWER,
     NS_ERROR_COUNT
-} NS_ERROR;
+} NS_ERROR_t;
 
 typedef enum {
     FLASH_ACCESS_ERROR,

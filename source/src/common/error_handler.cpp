@@ -16,7 +16,7 @@ uint8_t error_init(uint16_t error) {
   return 1;
 }
 
-uint8_t error_set(NS_ERROR error) {
+uint8_t error_set(NS_ERROR_t error) {
   ERROR_SET(error);
   nsError.hasError = 1;
   return 1;
@@ -30,7 +30,7 @@ uint8_t error_hasError(void) {
   return nsError.hasError;
 }
 
-uint8_t error_clear(NS_ERROR error) {
+uint8_t error_clear(NS_ERROR_t error) {
   ERROR_CLEAR(error);
   if (nsError.error == 0) {
     nsError.hasError = 0;
