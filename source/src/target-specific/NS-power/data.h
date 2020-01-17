@@ -128,19 +128,19 @@ void data_setCurrent_state(uint8_t set);
 #define LED_ON            0
 #define LED_OFF           1
 
-enum codes {
+typedef enum {
     NS_OK,
     NS_ERROR,
     MSG_OK,
     MSG_ERROR
-};
+} codes;
 
-enum modes {
+typedef enum {
     IDLE,
     RUNNING,
     STOP,
     MANUAL
-};
+} modes;
 
 // extern Data data;
 extern StorageData storage_data;
