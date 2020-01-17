@@ -16,3 +16,14 @@ TEST_GROUP(ErrorHandler) {
 TEST(ErrorHandler, Init) {
     error_print();
 }
+
+TEST(ErrorHandler, Set) {
+    error_set(NS_DEVICE_OVERHEAT);
+    error_print();
+}
+
+TEST(ErrorHandler, Clear) {
+    error_clear(NS_MIN_TEMPERATURE);
+    error_clear(NS_MAX_TEMPERATURE);
+    error_print();
+}
