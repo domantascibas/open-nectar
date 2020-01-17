@@ -30,7 +30,6 @@ source/NS-project/
 submodules/device_menu/*
 
 source/src/modules/*
-source/src/target-specific/NS-main/tmp/*
 source/src/target-specific/NS-power/*" >> ./.mbedignore
 
 # compile project
