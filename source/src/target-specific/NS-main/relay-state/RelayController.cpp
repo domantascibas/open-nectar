@@ -17,14 +17,17 @@ void RelayController::init() {
 
 bool RelayController::isGridRelayOn() {
   return gridRelay.isOn();
+// return 0;
 }
 
 bool RelayController::isSunRelayOn() {
   return sunRelay.isOn();
+//   return 0;
 }
 
 uint8_t RelayController::getRelayState() {
   return relayState;
+//   return 0;
 }
 
 void RelayController::setRelays(uint8_t state) {
@@ -64,4 +67,5 @@ void RelayController::setRelays(uint8_t state) {
 bool RelayController::finishedSwitching() {
   if(!gridRelay.isSwitching() && !sunRelay.isSwitching()) return true;
   else return false;
+// return 0;
 }

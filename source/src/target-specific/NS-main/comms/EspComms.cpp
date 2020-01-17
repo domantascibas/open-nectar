@@ -7,7 +7,7 @@
 #include "DataService.h"
 #include "CommsController.h"
 
-// extern RelayController relayController;
+extern RelayController relayController;
 
 namespace esp {
   Ticker get_data_tick;
@@ -27,11 +27,9 @@ namespace esp {
     time_t rtc = time(NULL);
     nectar_contract::MainBoardStateForESP mainStateForEsp = {
       powerData.sun_power,
-      COMMS_FALSE_VALUE,
-      // (relayController.isGridRelayOn() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
+      (relayController.isGridRelayOn() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
       temperatureData.getBoilerTemperature(),
-      COMMS_FALSE_VALUE,
-      // (relayController.isSunRelayOn() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
+      (relayController.isSunRelayOn() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
       powerData.sun_voltage,
       powerData.sun_current,
       temperatureData.getDeviceTemperature(),

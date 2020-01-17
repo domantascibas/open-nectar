@@ -3,37 +3,37 @@
 #define TRUE 1
 #define FALSE 0
 
-relayControllerType_t sunRelay = {OFF, OFF};
-relayControllerType_t gridRelay = {OFF, OFF};
+relayControllerType_t sunRelayNew = {OFF, OFF};
+relayControllerType_t gridRelayNew = {OFF, OFF};
 
 uint8_t is_switching(void);
 
 void RelayState_init(void) {
-    sunRelay.state = OFF;
-    sunRelay.state_next = OFF;
+    sunRelayNew.state = OFF;
+    sunRelayNew.state_next = OFF;
 
-    gridRelay.state = OFF;
-    gridRelay.state_next = OFF;
+    gridRelayNew.state = OFF;
+    gridRelayNew.state_next = OFF;
 }
 
 uint8_t RelayState_run(void) {
     if (!is_switching()) {
         // check that both relays can't turn on at the same time
-        if (sunRelay.state != sunRelay.state_next) {
-            if (sunRelay.state != SWITCHING) {
-                sunRelay.state = SWITCHING;
+        if (sunRelayNew.state != sunRelayNew.state_next) {
+            if (sunRelayNew.state != SWITCHING) {
+                sunRelayNew.state = SWITCHING;
                 // set timeout
             } else {
-                sunRelay.state = sunRelay.state_next;
+                sunRelayNew.state = sunRelayNew.state_next;
             }
         }
 
-        if (gridRelay.state != gridRelay.state_next) {
-            if (gridRelay.state != SWITCHING) {
-                gridRelay.state = SWITCHING;
+        if (gridRelayNew.state != gridRelayNew.state_next) {
+            if (gridRelayNew.state != SWITCHING) {
+                gridRelayNew.state = SWITCHING;
                 // set timeout
             } else {
-                gridRelay.state = gridRelay.state_next;
+                gridRelayNew.state = gridRelayNew.state_next;
             }
         }
     }
@@ -43,11 +43,11 @@ uint8_t RelayState_run(void) {
 uint8_t RelayState_set(relayType_t type, relayStateType_t state) {
     switch (type) {
         case SUN_RELAY:
-            sunRelay.state_next = state;
+            sunRelayNew.state_next = state;
             break;
 
         case GRID_RELAY:
-            gridRelay.state_next = state;
+            gridRelayNew.state_next = state;
             break;
 
         default:
@@ -59,11 +59,11 @@ uint8_t RelayState_set(relayType_t type, relayStateType_t state) {
 relayStateType_t RelayState_get(relayType_t type) {
     switch (type) {
         case SUN_RELAY:
-            return sunRelay.state;
+            return sunRelayNew.state;
             break;
 
         case GRID_RELAY:
-            return gridRelay.state;
+            return gridRelayNew.state;
             break;
 
         default:
@@ -73,7 +73,7 @@ relayStateType_t RelayState_get(relayType_t type) {
 }
 
 uint8_t is_switching(void) {
-    if (sunRelay.state == SWITCHING || gridRelay.state == SWITCHING) {
+    if (sunRelayNew.state == SWITCHING || gridRelayNew.state == SWITCHING) {
         return 1;
     }
     return 0;
