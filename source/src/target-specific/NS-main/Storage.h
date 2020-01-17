@@ -8,12 +8,12 @@ extern "C" {
 #include "eeprom.h"
 }
 
-typedef enum { 
+typedef enum {
     Current,
     DayStart,
     NightStart
 } TimeType;
-typedef enum { 
+typedef enum {
     TemperatureDay,
     TemperatureNight,
     TemperatureMax
@@ -77,14 +77,14 @@ uint16_t storage_saveData(void);
 uint8_t storage_readData(void);
 
 namespace Storage {
-    void saveTemp(const TemperatureType &, const int8_t &);
-    // void saveTime(const time_hm &, const TimeType &);
-    void saveLanguage(const Language &);
-    void saveHeaterMode(nectar_contract::HeaterMode, nectar_contract::HeaterMode);
-    void saveCurrentHeaterMode(nectar_contract::HeaterMode);
-    void savePreviousHeaterMode(nectar_contract::HeaterMode);
+void saveTemp(const TemperatureType &, const int8_t &);
+// void saveTime(const time_hm &, const TimeType &);
+void saveLanguage(const Language &);
+void saveHeaterMode(nectar_contract::HeaterMode, nectar_contract::HeaterMode);
+void saveCurrentHeaterMode(nectar_contract::HeaterMode);
+void savePreviousHeaterMode(nectar_contract::HeaterMode);
 
-    // time_hm loadTime(const TimeType &);
+// time_hm loadTime(const TimeType &);
 };
 
 #endif
