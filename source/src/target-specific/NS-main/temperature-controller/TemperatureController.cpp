@@ -2,11 +2,14 @@
 #include "TemperatureController.h"
 #include "TemperatureSensor.h"
 #include "processor_temperature.h"
-#include "error_handler.h"
 #include "ServiceComms.h"
 #include "DeviceMode.h"
 #include "device_modes.h"
 #include "DataService.h"
+
+extern "C" {
+#include "error_handler.h"
+}
 
 uint8_t boilerTemperature;
 

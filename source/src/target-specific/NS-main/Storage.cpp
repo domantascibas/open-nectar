@@ -1,6 +1,9 @@
 #include "consts.h"
 #include "Storage.h"
+
+extern "C" {
 #include "error_handler.h"
+}
 
 // day temp, night temp, max temp
 // day starts, night starts

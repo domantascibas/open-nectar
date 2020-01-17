@@ -2,9 +2,12 @@
 #include "pins.h"
 #include "device_modes.h"
 #include "DataService.h"
-#include "error_handler.h"
 // #include "Sanitizer.h"
 #include "BoostTimeout.h"
+
+extern "C" {
+#include "error_handler.h"
+}
 
 Ticker update_mode_tick;
 RelayController relayController;

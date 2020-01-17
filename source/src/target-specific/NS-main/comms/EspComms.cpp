@@ -2,10 +2,13 @@
 #include "pins.h"
 #include "EspComms.h"
 #include "device_modes.h"
-#include "error_handler.h"
 // #include "menu_service.h"
 #include "DataService.h"
 #include "CommsController.h"
+
+extern "C" {
+#include "error_handler.h"
+}
 
 extern RelayController relayController;
 

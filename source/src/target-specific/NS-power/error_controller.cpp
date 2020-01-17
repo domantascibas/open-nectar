@@ -1,6 +1,9 @@
 #include "consts.h"
-#include "error_handler.h"
 #include "error_controller.h"
+
+extern "C" {
+#include "error_handler.h"
+}
 
 static ErrorHandler nectarError;
 

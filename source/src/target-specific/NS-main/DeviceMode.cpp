@@ -1,7 +1,10 @@
 #include "DeviceMode.h"
 #include "device_modes.h"
 #include "Storage.h"
+
+extern "C" {
 #include "error_handler.h"
+}
 
 static opModes currentMode;
 static uint8_t testMode;

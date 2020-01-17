@@ -4,7 +4,6 @@
 #include "PowerBoardComms.h"
 #include "device_modes.h"
 // #include "menu_service.h"
-#include "error_controller.h"
 #include "TemperatureController.h"
 #include "DataService.h"
 #include "Storage.h"
@@ -12,18 +11,22 @@
 #include "watchdog_timer.h"
 #include "DeviceMode.h"
 
-bool inErrorScreen = false;
+extern "C" {
+#include "error_handler.h"
+}
 
+bool inErrorScreen = false;
 Timer comms_timeout;
 
 int main() {
 	float current_s;
-  static bool isFirst = true;
-	error_controller_init();
-  deviceOpMode_init();
-  storage_init();
+    static bool isFirst = true;
+    uint16_t err = (1U << NS_FLASH_ACCESS_MAIN) | (1U << NS_NO_BOILER_TEMP);
+    error_init(err);
+    deviceOpMode_init();
+    storage_init();
   
-  service_setup();
+    service_setup();
   
   // menu_service::setup();
   // menu_service::updateScreen();

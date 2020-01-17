@@ -1,9 +1,12 @@
 #include "PowerBoardComms.h"
-#include "error_handler.h"
 #include "DataService.h"
 #include "EnergyMeter.h"
 #include "CommsController.h"
 #include "pins.h"
+
+extern "C" {
+#include "error_handler.h"
+}
 
 namespace power_board {
   Ticker get_data_tick;
