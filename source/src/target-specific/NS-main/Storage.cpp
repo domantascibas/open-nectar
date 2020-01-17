@@ -1,6 +1,6 @@
 #include "consts.h"
 #include "Storage.h"
-#include "error_controller.h"
+#include "error_handler.h"
 
 // day temp, night temp, max temp
 // day starts, night starts
@@ -27,7 +27,8 @@ void storage_init(void) {
   if (FLASH->CR & (0x1 << 0x7)) {
     FLASH->KEYR = 0x45670123; //FLASH KEY 1
     FLASH->KEYR = 0xCDEF89AB; //FLASH KEY 2
-    mainBoardError.clear_error(FLASH_ACCESS_ERROR);
+    // mainBoardError.clear_error(FLASH_ACCESS_ERROR);
+    error_clear(NS_FLASH_ACCESS_MAIN);
   }
   EE_Init();
   storage_readData();

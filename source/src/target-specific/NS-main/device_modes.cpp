@@ -2,7 +2,7 @@
 #include "pins.h"
 #include "device_modes.h"
 #include "DataService.h"
-#include "error_controller.h"
+#include "error_handler.h"
 // #include "Sanitizer.h"
 #include "BoostTimeout.h"
 
@@ -127,16 +127,17 @@ void device_modes_loop() {
         }
       }
 			
-			if(mainBoardError.has_error(NO_BOILER_TEMP)
-				|| mainBoardError.has_error(DEVICE_OVERHEAT)
-				|| mainBoardError.has_error(MIN_TEMPERATURE)
-				|| mainBoardError.has_error(MAX_TEMPERATURE)
+			if(error_isSet(NS_NO_BOILER_TEMP)
+				|| error_isSet(NS_DEVICE_OVERHEAT)
+				|| error_isSet(NS_MIN_TEMPERATURE)
+				|| error_isSet(NS_MAX_TEMPERATURE)
 			)	{
 				relayStateNew = TURN_OFF_ALL;
 				printf("[ERROR] overheat/temperature-related errors\r\n");
 			}
 			
-			if((relayStateNew == TURN_ON_SUN) && powerBoardError.has_errors) {
+			// if((relayStateNew == TURN_ON_SUN) && powerBoardError.has_errors) {
+			if((relayStateNew == TURN_ON_SUN) && error_hasError()) {
 				relayStateNew = TURN_OFF_ALL;
 				printf("[ERROR] power board error\r\n");
 			}

@@ -1,5 +1,5 @@
 #include "PowerBoardComms.h"
-#include "error_controller.h"
+#include "error_handler.h"
 #include "DataService.h"
 #include "EnergyMeter.h"
 #include "CommsController.h"
@@ -132,7 +132,11 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
 		powerData.power_version = state.power_version;
 		
 		powerData.power_board_error_code = state.power_board_error_code;
-    powerBoardError.save_error_code(state.power_board_error_code);
+    // powerBoardError.save_error_code(state.power_board_error_code);
+    uint8_t i;
+    for (i = 0; i < (uint8_t)NS_ERROR_COUNT; i++) {
+        error_set((NS_ERROR_t)i);
+    }
     
     if(!power_board::received_first_msg || !gridMeter.isMeterSet() || (powerData.grid_meter_kwh > gridMeter.getMeterReading())) gridMeter.setMeterReading(powerData.grid_meter_kwh);
     DataService::calculateSolarKwhDiff(!power_board::received_first_msg);
@@ -148,7 +152,8 @@ void powerStream::received_power_board_state(const nectar_contract::PowerBoardSt
       powerData.ref_voltage,
       powerData.ref_current,
 			powerData.power_version/100,
-      powerBoardError.get_errors(),
+    //   powerBoardError.get_errors(),
+    error_get(),
       powerData.device_calibrated,
       powerData.pwm_generator_on,
       powerData.transistor_overheat_on

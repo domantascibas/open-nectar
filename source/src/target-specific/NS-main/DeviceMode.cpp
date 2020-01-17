@@ -1,7 +1,7 @@
 #include "DeviceMode.h"
 #include "device_modes.h"
 #include "Storage.h"
-#include "error_controller.h"
+#include "error_handler.h"
 
 static opModes currentMode;
 static uint8_t testMode;
@@ -63,7 +63,8 @@ void deviceOpMode_endOnboarding(void) {
 
 void deviceOpMode_setInTestStand(void) {
   inTestStand = 1;
-	mainBoardError.clear_error(NO_BOILER_TEMP);
+  error_clear(NS_NO_BOILER_TEMP);
+	// mainBoardError.clear_error(NO_BOILER_TEMP);
 }
 
 uint8_t deviceOpMode_isInTestMode(void) {

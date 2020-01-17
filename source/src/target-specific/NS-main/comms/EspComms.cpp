@@ -2,7 +2,7 @@
 #include "pins.h"
 #include "EspComms.h"
 #include "device_modes.h"
-#include "error_controller.h"
+#include "error_handler.h"
 // #include "menu_service.h"
 #include "DataService.h"
 #include "CommsController.h"
@@ -35,8 +35,10 @@ namespace esp {
       temperatureData.getDeviceTemperature(),
       (powerData.transistor_overheat_on ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE),
       powerData.pwm_duty,
-      powerBoardError.get_errors(),
-      mainBoardError.get_errors(),
+      error_get(),
+    //   powerBoardError.get_errors(),
+      error_get(),
+    //   mainBoardError.get_errors(),
       powerData.sun_meter_kwh,
       powerData.grid_meter_kwh,
       rtc,
