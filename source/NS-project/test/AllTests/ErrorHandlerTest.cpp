@@ -1,6 +1,9 @@
 #include "CppUTest/TestHarness.h"
 #include <stdio.h>
+
+// extern "C" {
 #include "error_handler.h"
+// }
 
 TEST_GROUP(ErrorHandler) {
     void setup() {

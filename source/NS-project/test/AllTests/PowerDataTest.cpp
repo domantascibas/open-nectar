@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 extern "C" {
-    #include "data.h"
+#include "data.h"
 }
 
 TEST_GROUP(PowerDataTests) {

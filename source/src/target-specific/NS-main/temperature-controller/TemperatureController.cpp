@@ -7,9 +7,9 @@
 #include "device_modes.h"
 #include "DataService.h"
 
-extern "C" {
+// extern "C" {
 #include "error_handler.h"
-}
+// }
 
 uint8_t boilerTemperature;
 

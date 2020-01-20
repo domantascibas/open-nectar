@@ -5,9 +5,9 @@
 // #include "Sanitizer.h"
 #include "BoostTimeout.h"
 
-extern "C" {
+// extern "C" {
 #include "error_handler.h"
-}
+// }
 
 Ticker update_mode_tick;
 RelayController relayController;

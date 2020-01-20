@@ -3,9 +3,9 @@
 #include "DS1820.h"
 #include "TemperatureSensor.h"
 
-extern "C" {
+// extern "C" {
 #include "error_handler.h"
-}
+// }
 
 DS1820 temp_probe(BOILER_TEMP_PIN);
 // Ticker ticker;

@@ -4,9 +4,9 @@
 #include "CommsController.h"
 #include "pins.h"
 
-extern "C" {
+// extern "C" {
 #include "error_handler.h"
-}
+// }
 
 namespace power_board {
   Ticker get_data_tick;

@@ -11,9 +11,9 @@
 #include "watchdog_timer.h"
 #include "DeviceMode.h"
 
-extern "C" {
+// extern "C" {
 #include "error_handler.h"
-}
+// }
 
 bool inErrorScreen = false;
 Timer comms_timeout;

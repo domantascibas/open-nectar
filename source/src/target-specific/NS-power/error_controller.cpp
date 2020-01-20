@@ -1,9 +1,9 @@
 #include "consts.h"
 #include "error_controller.h"
 
-extern "C" {
+// extern "C" {
 #include "error_handler.h"
-}
+// }
 
 static ErrorHandler nectarError;
 

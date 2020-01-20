@@ -6,9 +6,9 @@
 #include "DataService.h"
 #include "CommsController.h"
 
-extern "C" {
+// extern "C" {
 #include "error_handler.h"
-}
+// }
 
 extern RelayController relayController;
 

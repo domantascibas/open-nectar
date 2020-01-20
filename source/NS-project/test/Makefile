@@ -45,7 +45,8 @@ SRC_DIRS = \
 	../../src/modules/generator-controller
 
 SRC_FILES = \
-	../../src/target-specific/NS-power/data.cpp\
+	../../src/target-specific/NS-power/data.c\
+	../../src/common/error_handler.c\
 	../../src/common/version.c
 
 TEST_SRC_DIRS = \
