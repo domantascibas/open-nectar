@@ -3,7 +3,8 @@
 #include "main_board_comms.h"
 #include "pc_service_comms.h"
 #include "watchdog_timer.h"
-#include "error_controller.h"
+// #include "error_controller.h"
+#include "error_handler.h"
 #include "version.h"
 #include "flash_storage.h"
 
@@ -13,8 +14,10 @@ extern "C" {
 
 // TODO: make main more generic, so it can be shared between different targets
 
+uint16_t err = (1U << NS_FLASH_ACCESS_POWER) | (1U << NS_ADC_VOLTAGE) | (1U << NS_ADC_CURRENT) | (1U << NS_CALIBRATION) | (1U << NS_DC_OVER_VOLTAGE) | (1U << NS_DC_OVER_CURRENT) | (1U << NS_DC_CURRENT_LEAKS) | (1U << NS_NO_LOAD) | (1U << NS_DEVICE_OVERHEAT) | (1U << NS_PROCESSOR_OVERHEAT_POWER);
+
 int main(void) {
-    error_controller_init();
+    error_init(err);
     pc_service_comms_init();
     PowerData_init();
     flash_storage_init();

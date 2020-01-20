@@ -1,7 +1,8 @@
 #include "consts.h"
 #include "pins.h"
 #include "device_modes.h"
-#include "error_controller.h"
+// #include "error_controller.h"
+#include "error_handler.h"
 #include "power_controller.h"
 #include "pwm_controller.h"
 #include "temperature_controller.h"
@@ -57,7 +58,7 @@ void device_modes_loop(void) {
     calibrate();
   }
 
-  if(!nectarError_has_error(CALIBRATION_ERROR)) {
+  if(!error_isSet(NS_CALIBRATION)) {
     sensor_controller_measure();
   }
 
@@ -67,7 +68,7 @@ void device_modes_loop(void) {
     temperature_controller_update_processor_temp();
     temperature_controller_update_internal_temp();
     
-    if(nectarError_has_errors() && ((data_getCurrent_state() != (uint8_t)IDLE) || (data_getCurrent_state() != (uint8_t)MANUAL))) {
+    if(error_hasError() && ((data_getCurrent_state() != (uint8_t)IDLE) || (data_getCurrent_state() != (uint8_t)MANUAL))) {
       data_setCurrent_state((uint8_t)STOP);
     }
     

@@ -2,10 +2,11 @@
 #include "pins.h"
 #include "device_modes.h"
 #include "power_controller.h"
-#include "error_controller.h"
+// #include "error_controller.h"
 // #include "data.h"
 #include "main_board_comms.h"
 #include "sensor_controller.h"
+#include "error_handler.h"
 
 extern "C" {
     #include "data.h"
@@ -97,8 +98,8 @@ StreamObject mbedStream::get_power_board_state() {
   PowerData_read(TEMPERATURE, &t);
   powerState.device_temperature = DIV_T_CONVERT(t);
   powerState.transistor_overheat_on = (GET_STATUS(OVERHEAT_STATUS) ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
-  powerState.power_board_error_code = nectarError_get_errors();
-  powerState.device_calibrated = (!nectarError_has_error(CALIBRATION_ERROR) ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
+  powerState.power_board_error_code = error_get();
+  powerState.device_calibrated = (!error_isSet(NS_CALIBRATION) ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
   powerState.pwm_generator_on = (power_controller_is_generator_on() ? COMMS_TRUE_VALUE : COMMS_FALSE_VALUE);
   PowerData_read(SUN_METER, &p);
   powerState.sun_meter_kwh = DIV_METER_CONVERT(p);

@@ -2,7 +2,8 @@
 #include "pins.h"
 #include "pwm_controller.h"
 #include "power_controller.h"
-#include "error_controller.h"
+// #include "error_controller.h"
+#include "error_handler.h"
 
 extern "C" {
     #include "data.h"
@@ -18,8 +19,8 @@ DigitalOut shutdown(SD_PIN);
 
 void power_controller_init(void) {
   generator_off();
-  nectarError_clear_error(DEVICE_OVERHEAT);
-  nectarError_clear_error(NO_LOAD);
+  error_clear(NS_DEVICE_OVERHEAT);
+  error_clear(NS_NO_LOAD);
 }
 
 void power_controller_mppt_stop(void) {

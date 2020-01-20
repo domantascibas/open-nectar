@@ -1,8 +1,9 @@
 // #include "consts.h"
 // #include "data.h"
 #include "eeprom.h"
-#include "error_controller.h"
+// #include "error_controller.h"
 #include "flash_storage.h"
+#include "error_handler.h"
 
 extern "C" {
   #include "data.h"
@@ -31,7 +32,7 @@ void flash_storage_init(void) {
   }
 
   uint16_t result = EE_Init();
-  if(result == HAL_OK) nectarError_clear_error(FLASH_ACCESS_ERROR);
+  if(result == HAL_OK) error_clear(NS_FLASH_ACCESS_POWER);
 }
 
 uint8_t flash_storage_load_data(void) {
@@ -87,7 +88,7 @@ void flash_storage_save_data(void) {
   flash_write_error = EE_WriteDatastruct(&rDataStruct);
 
   if(flash_write_error) {
-    nectarError_set_error(FLASH_ACCESS_ERROR);
+    error_set(NS_FLASH_ACCESS_POWER);
   }
 }
 
@@ -105,7 +106,7 @@ void flash_storage_save_meters(void) {
     flash_write_error = EE_WriteDatastruct(&rDataStruct);
 
     if(flash_write_error) {
-      nectarError_set_error(FLASH_ACCESS_ERROR);
+      error_set(NS_FLASH_ACCESS_POWER);
     }
   } else {
     printf("[FS] Device not calibrated. Meters and ref not saved");
