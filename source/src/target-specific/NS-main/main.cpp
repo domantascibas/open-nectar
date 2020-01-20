@@ -3,7 +3,7 @@
 #include "EspComms.h"
 #include "PowerBoardComms.h"
 #include "device_modes.h"
-// #include "menu_service.h"
+#include "menu_service.h"
 #include "TemperatureController.h"
 #include "DataService.h"
 #include "Storage.h"
@@ -28,8 +28,8 @@ int main() {
   
     service_setup();
   
-  // menu_service::setup();
-  // menu_service::updateScreen();
+  menu_service::setup();
+  menu_service::updateScreen();
   wait(1.0);
   temperatureController_init();
   wait(0.5);

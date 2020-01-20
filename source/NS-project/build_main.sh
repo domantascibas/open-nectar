@@ -27,7 +27,10 @@ source/TESTS/
 source/cpputest/
 source/NS-project/
 
-submodules/device_menu/*
+submodules/device_menu/MenuIcons/*
+submodules/device_menu/ns-localisation/*
+submodules/device_menu/test/*
+submodules/device_menu/u8g2-mbed/TESTS/*
 
 source/src/modules/*
 source/src/target-specific/NS-power/*" >> ./.mbedignore
