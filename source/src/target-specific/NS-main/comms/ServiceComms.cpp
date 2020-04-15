@@ -66,7 +66,8 @@ void Rx_interrupt() {
 }
 
 void service_setup(void) {
-    static const uint32_t pc_baud = SERVICE_COMMS_BAUD_RATE;
+    pc.baud(SERVICE_COMMS_BAUD_RATE);
+    printf("PC serial @%d", SERVICE_COMMS_BAUD_RATE);
 }
 
 uint8_t service_getFakeTemperature(void) {
