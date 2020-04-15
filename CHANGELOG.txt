@@ -15,7 +15,8 @@ NectarSun-S product change log file
 
 Date        Firmware        Description
 ============================================================================================================================
-2019 12 XX - 00.01.11.XX
+2020 04 XX - 00.01.11.XX
+                - Feature: MBED-OS RTOS added;
                 - Other: refactored project structure; #4
                 - Other: adds cpputest for unit testing; #5
                 - Other: includes changelogs; #14
