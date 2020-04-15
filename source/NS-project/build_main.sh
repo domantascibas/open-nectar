@@ -32,6 +32,11 @@ submodules/device_menu/ns-localisation/*
 submodules/device_menu/test/*
 submodules/device_menu/u8g2-mbed/TESTS/*
 
+source/src/target-specific/NS-main/device_menu/MenuIcons/*
+source/src/target-specific/NS-main/device_menu/ns-localisation/*
+source/src/target-specific/NS-main/device_menu/test/*
+source/src/target-specific/NS-main/device_menu/u8g2-mbed/TESTS/*
+
 source/src/modules/*
 source/src/target-specific/NS-power/*" >> ./.mbedignore
 
