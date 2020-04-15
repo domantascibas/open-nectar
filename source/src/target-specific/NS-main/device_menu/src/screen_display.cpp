@@ -441,6 +441,6 @@ void render(ScreenModel *screen) {
     __disable_irq();
     u8g2_SendBuffer(&myScreen);
     __enable_irq();
-    printf("SCREEN %s\n", screen->title.c_str());
+    printf("SCREEN %s\r\n", screen->title.c_str());
 }
 }

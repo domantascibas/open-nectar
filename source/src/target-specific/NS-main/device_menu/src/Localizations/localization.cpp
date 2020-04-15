@@ -47,7 +47,7 @@ std::string languageName(const Language &language) {
 };
 
 void setLanguage(const Language &language) {
-    printf("[LANGUAGE] selected language %d\n", language);
+    printf("[LANGUAGE] selected language %d\r\n", language);
     if (_language == language)
         return;
     _language = language;

@@ -13,9 +13,9 @@ struct IdleScreen : ScreenModel {
         screenType = Idle;
     };
 
-    virtual ScreenModel *upModel();
-    virtual ScreenModel *downModel();
-    virtual ScreenModel *nextModel();
+    // virtual ScreenModel *upModel();
+    // virtual ScreenModel *downModel();
+    // virtual ScreenModel *nextModel();
 };
 
 #endif

@@ -41,9 +41,9 @@ void temperatureSensor_init(void) {
         sensor_found = 1;
         temperatureSensor_start();
         // attachTicker(refreshRate);
-    }
-//    printf("Temperature sensor found\r\n");
-//  } else printf("Temperature sensor not found\r\n");
+        printf("Temperature sensor found\r\n");
+    } else
+        printf("Temperature sensor not found\r\n");
 }
 
 uint8_t temperatureSensor_isFound(void) {

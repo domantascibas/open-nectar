@@ -6,7 +6,7 @@ extern "C" {
 #include "data.h"
 }
 
-static const float TIMEOUT_TO_TEMP_READ = 0.5;
+static const float TIMEOUT_TO_TEMP_READ = 1;
 
 TemperatureSensor::TemperatureSensor(PinName pin, uint8_t refresh)
     : probe(pin) {

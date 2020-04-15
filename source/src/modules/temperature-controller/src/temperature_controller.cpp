@@ -25,7 +25,7 @@ void temperature_controller_init(void) {
 
 void temperature_controller_update_processor_temp(void) {
     float processor_temp = processor_temperature_measure();
-    // printf("processor temp: %f\r\n", internal_temp);
+    printf("processor temp: %f\r\n", internal_temp);
     if (processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
         if (!error_isSet(NS_PROCESSOR_OVERHEAT_POWER)) {
             error_set(NS_PROCESSOR_OVERHEAT_POWER);

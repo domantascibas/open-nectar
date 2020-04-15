@@ -17,17 +17,17 @@ void temperatureController_init(void) {
     boilerTemperature = 0;
 
     processor_temperature_init();
-    temperatureSensor_init();
+    // temperatureSensor_init();
 
-    if (temperatureSensor_isFound()) {
+    if (!temperatureSensor_isFound()) {
         // mainBoardError.clear_error(NO_BOILER_TEMP);
-        error_clear(NS_NO_BOILER_TEMP);
+        error_set(NS_NO_BOILER_TEMP);
     }
 }
 
 uint8_t temperatureController_getBoilerTemp(void) {
     boilerTemperature = temperatureSensor_get();
-    printf("TEMPERATURE BOILER %d\n", boilerTemperature);
+    printf("TEMPERATURE BOILER %d\r\n", boilerTemperature);
     if (boilerTemperature > WATER_TEMPERATURE_LIMIT_MAX) {
         // mainBoardError.set_error(MAX_TEMPERATURE);
         error_set(NS_MAX_TEMPERATURE);
@@ -44,9 +44,9 @@ uint8_t temperatureController_getBoilerTemp(void) {
 }
 
 void temperatureController_update(void) {
-    if (temperatureSensor_isNewValAvail() || service_newValAvail()) {
+    // if (temperatureSensor_isNewValAvail() || service_newValAvail()) {
         float processor_temp = processor_temperature_measure();
-        printf("TEMPERATURE PROCESSOR %.2f\n", processor_temp);
+        printf("TEMPERATURE PROCESSOR %.2f\r\n", processor_temp);
         if (processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
             // if (!mainBoardError.has_error(PROCESSOR_OVERHEAT)) mainBoardError.set_error(PROCESSOR_OVERHEAT);
             if (!error_isSet(NS_PROCESSOR_OVERHEAT_MAIN)) error_set(NS_PROCESSOR_OVERHEAT_MAIN);
@@ -63,5 +63,5 @@ void temperatureController_update(void) {
             temperatureData_setBoilerTemperature(temperatureController_getBoilerTemp());
         }
         device_modes_setHeaterMode(1);
-    }
+    // }
 }

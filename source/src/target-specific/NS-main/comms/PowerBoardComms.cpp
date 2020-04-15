@@ -13,7 +13,7 @@ Ticker get_data_tick;
 bool received_first_msg = false;
 static bool startPowerBoard = false;
 
-powerStream m_stream(POWER_COMMS_TX_PIN, POWER_COMMS_RX_PIN);
+powerStream m_stream(POWER_COMMS_TX_PIN, POWER_COMMS_RX_PIN, C_SERIAL_BAUD_RATE);
 
 void get_data_ISR() {
     commsController.sendPowerMessage();
@@ -93,11 +93,9 @@ bool is_message_valid(const nectar_contract::PowerBoardState &state) {
  */
 
 void powerStream::setup() {
-    m_serial.baud(C_SERIAL_BAUD_RATE);
-    power_board::get_data_tick.attach(&power_board::get_data_ISR, POWER_COMMS_PING_INTERVAL);
-
+    // power_board::get_data_tick.attach(&power_board::get_data_ISR, POWER_COMMS_PING_INTERVAL);
     m_serial.attach(callback(this, &powerStream::Rx_interrupt));
-    printf("POWER START\n");
+    printf("[comms] POWER START @ %d\r\n", C_SERIAL_BAUD_RATE);
 }
 
 void powerStream::Rx_interrupt() {

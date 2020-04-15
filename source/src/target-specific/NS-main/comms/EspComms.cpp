@@ -16,7 +16,7 @@ namespace esp {
 Ticker get_data_tick;
 bool received_first_msg = false;
 
-mbedStream m_stream(ESP_COMMS_TX_PIN, ESP_COMMS_RX_PIN);
+mbedStream m_stream(ESP_COMMS_TX_PIN, ESP_COMMS_RX_PIN, C_SERIAL_BAUD_RATE);
 
 void get_data_ISR() {
     commsController.sendEspMessage();
@@ -56,7 +56,7 @@ void send_message() {
     StreamObject _mainStateForEsp(&mainStateForEsp, sizeof(mainStateForEsp));
     m_stream.stream.send_state_to_esp(_mainStateForEsp);
     // printf("\r\nCurrent time: %s\r", ctime(&rtc));
-    printf("ESP COMMAND %d %f %f %f %f %f %f %f %f %f %f %d %d %d %d %d %d %d %d %d\n",
+    printf("ESP COMMAND %d %f %f %f %f %f %f %f %f %f %f %d %d %d %d %d %d %d %d %d\r\n",
             mainStateForEsp.time,
             mainStateForEsp.moment_sun_watt,
             mainStateForEsp.sun_voltage,
@@ -107,11 +107,9 @@ bool receivedFirstMessage() {
  */
 
 void mbedStream::setup() {
-    m_serial.baud(C_SERIAL_BAUD_RATE);
-    esp::get_data_tick.attach(&esp::get_data_ISR, ESP_COMMS_PING_INTERVAL);
+    // esp::get_data_tick.attach(&esp::get_data_ISR, ESP_COMMS_PING_INTERVAL);
     m_serial.attach(callback(this, &mbedStream::Rx_interrupt));
-    printf("ESP START\n");
-    esp::send_message();
+    printf("[comms] ESP START @ %d\r\n", C_SERIAL_BAUD_RATE);
 }
 
 void mbedStream::Rx_interrupt() {
@@ -150,7 +148,7 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
                 DataService::setCurrentHeaterMode((nectar_contract::HeaterMode)espData.heater_mode);
             }
             device_modes_setHeaterMode(1);
-            printf("ESP RESPONSE %lld %f %f %f %1.2f %d %d %d %d\n",
+            printf("ESP RESPONSE %lld %f %f %f %1.2f %d %d %d %d\r\n",
                     espData.sync_time,
                     espData.boiler_power,
                     espData.temperature,
@@ -169,7 +167,7 @@ void mbedStream::received_esp_state(const nectar_contract::ESPState &state) {
             }
             __enable_irq();
         } else {
-            printf("ESP RESPONSE %lld %f %f %f %1.2f %d %d %d %d\n",
+            printf("ESP RESPONSE %lld %f %f %f %1.2f %d %d %d %d\r\n",
                     espData.sync_time,
                     espData.boiler_power,
                     espData.temperature,

@@ -52,14 +52,14 @@ void enableButtons(void) {
     keyUp.rise(&upButtonPressed);
     keyDown.rise(&downButtonPressed);
     keyCenter.rise(&nextButtonPressed);
-    printf("BUTTONS ENABLED\n");
+    printf("BUTTONS ENABLED\r\n");
 }
 
 void disableButtons(void) {
     keyUp.rise(NULL);
     keyDown.rise(NULL);
     keyCenter.rise(NULL);
-    printf("BUTTONS DISABLED\n");
+    printf("BUTTONS DISABLED\r\n");
 }
 
 //   void enterTestScreen(void) {
@@ -174,19 +174,20 @@ void updateScreen(void) {
 }
 
 void setup(void) {
-//     buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
-//     resetScreen = false;
-//     localization::setup();
-//     ScreenDisplay::setup();
-//     m_screen = new SetLanguageScreen(localization::currentLanguage());
+    buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
+    resetScreen = false;
+    localization::setup();
+    ScreenDisplay::setup();
+    // m_screen = new SetLanguageScreen(localization::currentLanguage());
+    m_screen = new IdleScreen();
 
-//     screenUpdater.attach(&screenUpdaterISR, 1);
-//     timeKeeper.attach(&menu_actions::updateTime, MENU_TIME_KEEPER_PERIOD);
+    screenUpdater.attach(&screenUpdaterISR, 1);
+    timeKeeper.attach(&menu_actions::updateTime, MENU_TIME_KEEPER_PERIOD);
 
-//     time_t curr_time = time(NULL);
-//     if(curr_time > 0) {
-// //      printf("Current time %s\r\n", ctime(&curr_time));
-//     }
+    time_t curr_time = time(NULL);
+    if(curr_time > 0) {
+        printf("Current time %s\r\n", ctime(&curr_time));
+    }
 }
 
 void upButtonPressed(void) {

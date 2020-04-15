@@ -13,8 +13,7 @@ void processor_temperature_init(void) {
     ADC1->SMPR |= ADC_SMPR_SMP_0 | ADC_SMPR_SMP_1 | ADC_SMPR_SMP_2;
     ADC1->CR |= ADC_CR_ADEN;
     ADC->CCR |= ADC_CCR_TSEN;
-
-//  printf("***\r\nProcessor temp initialized\r\n***\r\n");
+    printf("Processor temp initialized\r\n");
 }
 
 float processor_temperature_measure(void) {
