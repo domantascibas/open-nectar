@@ -43,7 +43,7 @@ mbed-deploy
 7. update submodules
 8. try to compile: 
 ```
-cd your_dir/power_board/NS-project/
+cd your_dir/power_board/source/NS-project/
 make build
 ```
 
@@ -62,7 +62,7 @@ Give an example
 ### Coding style tests
 
 ```
-cd your_dir/power_board/NS-project/
+cd your_dir/power_board/source/NS-project/
 make format
 ```
 
@@ -72,7 +72,7 @@ use ST-link flasher.
 
 ## Built With
 
-* [mbed-os](https://os.mbed.com/docs/mbed-os/v5.14/introduction/index.html) - embedded C framework
+* [mbed-os](https://os.mbed.com/docs/mbed-os/v5.14/introduction/index.html) - embedded C framework (5.10 RC-3)
 
 ## Contributing
 
