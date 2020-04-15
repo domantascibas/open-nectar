@@ -12,7 +12,7 @@ fi
 
 RUN="${1}"
 SRCDIR="${2}"
-COMMAND="astyle --options=../../.astylerc --suffix=none --formatted --recursive "${SRCDIR}"/*.c,*.h"
+COMMAND="astyle --options=../../.astylerc --suffix=none --formatted --recursive "${SRCDIR}"/*.c,*.h,*.cpp"
 
 if [ "${RUN}" = "CHECK" ]; then
 	echo "Checking code..."
