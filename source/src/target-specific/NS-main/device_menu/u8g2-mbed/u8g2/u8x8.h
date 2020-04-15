@@ -1,44 +1,44 @@
 /*
 
   u8x8.h
-  
+
   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
 
   Copyright (c) 2016, olikraus@gmail.com
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-  * Redistributions of source code must retain the above copyright notice, this list 
+  * Redistributions of source code must retain the above copyright notice, this list
     of conditions and the following disclaimer.
-    
-  * Redistributions in binary form must reproduce the above copyright notice, this 
-    list of conditions and the following disclaimer in the documentation and/or other 
+
+  * Redistributions in binary form must reproduce the above copyright notice, this
+    list of conditions and the following disclaimer in the documentation and/or other
     materials provided with the distribution.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
-  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
-  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
-  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
-  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
-  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-  
-  
-  
-  U8glib has several layers. Each layer is implemented with a callback function. 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+
+  U8glib has several layers. Each layer is implemented with a callback function.
   This callback function handels the messages for the layer.
 
   The topmost level is the display layer. It includes the following messages:
-  
-    U8X8_MSG_DISPLAY_SETUP_MEMORY			no communicaation with the display, setup memory ony
+
+    U8X8_MSG_DISPLAY_SETUP_MEMORY           no communicaation with the display, setup memory ony
     U8X8_MSG_DISPLAY_INIT
     U8X8_MSG_DISPLAY_SET_FLIP_MODE
     U8X8_MSG_DISPLAY_SET_POWER_SAVE
@@ -47,23 +47,23 @@
 
   A display driver may decided to breakdown these messages to a lower level interface or
   implement this functionality directly.
-  
+
 
   One layer is the Command/Arg/Data interface. It can be used by the display layer
   to communicate with the display hardware.
   This layer only deals with data, commands and arguments. D/C line is unknown.
     U8X8_MSG_CAD_INIT
-    U8X8_MSG_CAD_SET_I2C_ADR	(obsolete)
+    U8X8_MSG_CAD_SET_I2C_ADR    (obsolete)
     U8X8_MSG_CAD_SET_DEVICE (obsolete)
     U8X8_MSG_CAD_START_TRANSFER
     U8X8_MSG_CAD_SEND_CMD
     U8X8_MSG_CAD_SEND_ARG
     U8X8_MSG_CAD_SEND_DATA
     U8X8_MSG_CAD_END_TRANSFER
-    
+
   The byte interface is there to send 1 byte (8 bits) to the display hardware.
-  This layer depends on the hardware of a microcontroller, if a specific hardware 
-  should be used (I2C or SPI). 
+  This layer depends on the hardware of a microcontroller, if a specific hardware
+  should be used (I2C or SPI).
   If this interface is implemented via software, it may use the GPIO level for sending
   bytes.
     U8X8_MSG_BYTE_INIT
@@ -113,7 +113,7 @@
 
 #if defined(__GNUC__) && defined(__AVR__)
 #include <avr/pgmspace.h>
-#endif 
+#endif
 
 /*==========================================*/
 /* C++ compatible */
@@ -154,7 +154,7 @@ extern "C" {
 #endif
 
 #if defined(ESP8266)
-uint8_t u8x8_pgm_read_esp(const uint8_t * addr);   /* u8x8_8x8.c */
+uint8_t u8x8_pgm_read_esp(const uint8_t *addr);    /* u8x8_8x8.c */
 #  define U8X8_FONT_SECTION(name) __attribute__((section(".text." name)))
 #  define u8x8_pgm_read(adr) u8x8_pgm_read_esp(adr)
 #  define U8X8_PROGMEM
@@ -163,11 +163,11 @@ uint8_t u8x8_pgm_read_esp(const uint8_t * addr);   /* u8x8_8x8.c */
 
 
 #ifndef U8X8_FONT_SECTION
-#  define U8X8_FONT_SECTION(name) 
+#  define U8X8_FONT_SECTION(name)
 #endif
 
 #ifndef u8x8_pgm_read
-#  define u8x8_pgm_read(adr) (*(const uint8_t *)(adr)) 
+#  define u8x8_pgm_read(adr) (*(const uint8_t *)(adr))
 #endif
 
 #ifndef U8X8_PROGMEM
@@ -194,82 +194,80 @@ typedef uint16_t (*u8x8_char_cb)(u8x8_t *u8x8, uint8_t b);
 
 //struct u8x8_mcd_struct
 //{
-//  u8x8_msg_cb cb;		/* current callback function */
-//  u8x8_t *u8g2;		/* pointer to the u8g2 parent to minimize the number of args */
+//  u8x8_msg_cb cb;     /* current callback function */
+//  u8x8_t *u8g2;       /* pointer to the u8g2 parent to minimize the number of args */
 //  u8x8_mcd_t *next;
 //};
 
-struct u8x8_tile_struct
-{
-  uint8_t *tile_ptr;	/* pointer to one or more tiles... should be "const" */
-  uint8_t cnt;		/* number of tiles */
-  uint8_t x_pos;	/* tile x position */
-  uint8_t y_pos;	/* tile x position */
+struct u8x8_tile_struct {
+    uint8_t *tile_ptr;    /* pointer to one or more tiles... should be "const" */
+    uint8_t cnt;      /* number of tiles */
+    uint8_t x_pos;    /* tile x position */
+    uint8_t y_pos;    /* tile x position */
 };
 
 
-struct u8x8_display_info_struct
-{
-  /* == general == */
+struct u8x8_display_info_struct {
+    /* == general == */
 
-  uint8_t chip_enable_level;			/* UC1601: 0 */
-  uint8_t chip_disable_level;			/* opposite of chip_enable_level */
-  
-  uint8_t post_chip_enable_wait_ns;		/* UC1601: 5ns */
-  uint8_t pre_chip_disable_wait_ns;		/* UC1601: 5ns */
-  uint8_t reset_pulse_width_ms;		/* UC1601: 0.003ms --> 1ms */ 
-  uint8_t post_reset_wait_ms;			/* UC1601: 6ms  */ 
-  
-  
-  /* == SPI interface == */
-  
-  /* after SDA has been applied, wait this much time for the SCK data takeover edge */
-  /* if this is smaller than sck_pulse_width_ns, then use the value from sck_pulse_width_ns */
-  uint8_t sda_setup_time_ns;		/* UC1601: 12ns */
-  /* the pulse width of the the clock signal, cycle time is twice this value */
-  /* max freq is 1/(2*sck_pulse_width_ns) */
-  /* AVR: below 70: DIV2, 8 MHz, >= 70 --> 4MHz clock (DIV4) */
-  uint8_t sck_pulse_width_ns;		/* UC1701: 50ns */
-  
-  /* until here we have 8 bytes (uint8_t). Newly introduced for SPI.beginTransaction */
-  uint32_t sck_clock_hz;
-  
-  /* previous name "sck_takeover_edge" renamed to "spi_mode" */
-  /* bit 0 of spi_mode is equal to the value of the previous variable sck_takeover_edge, 20 Aug 16: This is wrong the bit is actually inverted */ 
-  /* SPI has four clock modes: */
-  /*   0: clock active high, data out on falling edge, clock default value is zero, takover on rising edge */
-  /*   1: clock active high, data out on rising edge, clock default value is zero, takover on falling edge */
-  /*   2: clock active low, data out on rising edge */
-  /*   3: clock active low, data out on falling edge */
-  /* most displays have clock mode 1 */
-  uint8_t spi_mode;
-  
-  /* == I2C == */
-  uint8_t i2c_bus_clock_100kHz;		/* UC1601: 1000000000/275 = 37 *100k */
+    uint8_t chip_enable_level;            /* UC1601: 0 */
+    uint8_t chip_disable_level;           /* opposite of chip_enable_level */
 
-  
-  /* == 8 bit interface == */
-  
-  /* how long to wait after all data line are set */
-  uint8_t data_setup_time_ns;		/* UC1601: 30ns */
-  /* write enable pulse width */
-  uint8_t write_pulse_width_ns;		/* UC1601: 40ns */
-  
-  /* == layout == */
-  uint8_t tile_width;
-  uint8_t tile_height;
+    uint8_t post_chip_enable_wait_ns;     /* UC1601: 5ns */
+    uint8_t pre_chip_disable_wait_ns;     /* UC1601: 5ns */
+    uint8_t reset_pulse_width_ms;     /* UC1601: 0.003ms --> 1ms */
+    uint8_t post_reset_wait_ms;           /* UC1601: 6ms  */
 
-  uint8_t default_x_offset;		/* default x offset for the display */
-  uint8_t flipmode_x_offset;	/* x offset, if flip mode is enabled */
- 
- /* pixel width is not used by the u8x8 procedures */
- /* instead it will be used by the u8g2 procedures, because the pixel dimension can */
- /* not always be calculated from the tile_width/_height */
- /* the following conditions must be true: */
- /* pixel_width <= tile_width*8 */
- /* pixel_height <= tile_height*8 */
-  uint16_t pixel_width;
-  uint16_t pixel_height;
+
+    /* == SPI interface == */
+
+    /* after SDA has been applied, wait this much time for the SCK data takeover edge */
+    /* if this is smaller than sck_pulse_width_ns, then use the value from sck_pulse_width_ns */
+    uint8_t sda_setup_time_ns;        /* UC1601: 12ns */
+    /* the pulse width of the the clock signal, cycle time is twice this value */
+    /* max freq is 1/(2*sck_pulse_width_ns) */
+    /* AVR: below 70: DIV2, 8 MHz, >= 70 --> 4MHz clock (DIV4) */
+    uint8_t sck_pulse_width_ns;       /* UC1701: 50ns */
+
+    /* until here we have 8 bytes (uint8_t). Newly introduced for SPI.beginTransaction */
+    uint32_t sck_clock_hz;
+
+    /* previous name "sck_takeover_edge" renamed to "spi_mode" */
+    /* bit 0 of spi_mode is equal to the value of the previous variable sck_takeover_edge, 20 Aug 16: This is wrong the bit is actually inverted */
+    /* SPI has four clock modes: */
+    /*   0: clock active high, data out on falling edge, clock default value is zero, takover on rising edge */
+    /*   1: clock active high, data out on rising edge, clock default value is zero, takover on falling edge */
+    /*   2: clock active low, data out on rising edge */
+    /*   3: clock active low, data out on falling edge */
+    /* most displays have clock mode 1 */
+    uint8_t spi_mode;
+
+    /* == I2C == */
+    uint8_t i2c_bus_clock_100kHz;     /* UC1601: 1000000000/275 = 37 *100k */
+
+
+    /* == 8 bit interface == */
+
+    /* how long to wait after all data line are set */
+    uint8_t data_setup_time_ns;       /* UC1601: 30ns */
+    /* write enable pulse width */
+    uint8_t write_pulse_width_ns;     /* UC1601: 40ns */
+
+    /* == layout == */
+    uint8_t tile_width;
+    uint8_t tile_height;
+
+    uint8_t default_x_offset;     /* default x offset for the display */
+    uint8_t flipmode_x_offset;    /* x offset, if flip mode is enabled */
+
+    /* pixel width is not used by the u8x8 procedures */
+    /* instead it will be used by the u8g2 procedures, because the pixel dimension can */
+    /* not always be calculated from the tile_width/_height */
+    /* the following conditions must be true: */
+    /* pixel_width <= tile_width*8 */
+    /* pixel_height <= tile_height*8 */
+    uint16_t pixel_width;
+    uint16_t pixel_height;
 };
 
 
@@ -287,15 +285,15 @@ struct u8x8_display_info_struct
 #define U8X8_PIN_D7 7
 
 #define U8X8_PIN_E 8
-#define U8X8_PIN_CS 9			/* parallel, SPI */
-#define U8X8_PIN_DC 10			/* parallel, SPI */
-#define U8X8_PIN_RESET 11		/* parallel, SPI, I2C */
+#define U8X8_PIN_CS 9           /* parallel, SPI */
+#define U8X8_PIN_DC 10          /* parallel, SPI */
+#define U8X8_PIN_RESET 11       /* parallel, SPI, I2C */
 
-#define U8X8_PIN_I2C_CLOCK 12	/* 1 = Input/high impedance, 0 = drive low */
-#define U8X8_PIN_I2C_DATA 13	/* 1 = Input/high impedance, 0 = drive low */
+#define U8X8_PIN_I2C_CLOCK 12   /* 1 = Input/high impedance, 0 = drive low */
+#define U8X8_PIN_I2C_DATA 13    /* 1 = Input/high impedance, 0 = drive low */
 
-#define U8X8_PIN_CS1 14			/* KS0108 extra chip select */
-#define U8X8_PIN_CS2 15			/* KS0108 extra chip select */
+#define U8X8_PIN_CS1 14         /* KS0108 extra chip select */
+#define U8X8_PIN_CS2 15         /* KS0108 extra chip select */
 
 #define U8X8_PIN_OUTPUT_CNT 16
 
@@ -308,39 +306,38 @@ struct u8x8_display_info_struct
 
 #define U8X8_PIN_INPUT_CNT 6
 
-#ifdef U8X8_USE_PINS 
+#ifdef U8X8_USE_PINS
 #define U8X8_PIN_CNT (U8X8_PIN_OUTPUT_CNT+U8X8_PIN_INPUT_CNT)
 #define U8X8_PIN_NONE 255
 #endif
 
-struct u8x8_struct
-{
-  const u8x8_display_info_t *display_info;
-  u8x8_char_cb next_cb; /*  procedure, which will be used to get the next char from the string */
-  u8x8_msg_cb display_cb;
-  u8x8_msg_cb cad_cb;
-  u8x8_msg_cb byte_cb;
-  u8x8_msg_cb gpio_and_delay_cb;
-  const uint8_t *font;
-  uint16_t encoding;		/* encoding result for utf8 decoder in next_cb */
-  uint8_t x_offset;	/* copied from info struct, can be modified in flip mode */
-  uint8_t is_font_inverse_mode; 	/* 0: normal, 1: font glyphs are inverted */
-  uint8_t i2c_address;	/* a valid i2c adr. Initially this is 255, but this is set to something usefull during DISPLAY_INIT */
-					/* i2c_address is the address for writing data to the display */
-					/* usually, the lowest bit must be zero for a valid address */
-  uint8_t i2c_started;	/* for i2c interface */
-  uint8_t device_address;	/* this is the device address, replacement for U8X8_MSG_CAD_SET_DEVICE */
-  uint8_t utf8_state;		/* number of chars which are still to scan */
-  uint8_t gpio_result;	/* return value from the gpio call (only for MENU keys at the moment) */ 
-  uint8_t debounce_default_pin_state;
-  uint8_t debounce_last_pin_state;
-  uint8_t debounce_state;
-  uint8_t debounce_result_msg;	/* result msg or event after debounce */
+struct u8x8_struct {
+    const u8x8_display_info_t *display_info;
+    u8x8_char_cb next_cb; /*  procedure, which will be used to get the next char from the string */
+    u8x8_msg_cb display_cb;
+    u8x8_msg_cb cad_cb;
+    u8x8_msg_cb byte_cb;
+    u8x8_msg_cb gpio_and_delay_cb;
+    const uint8_t *font;
+    uint16_t encoding;        /* encoding result for utf8 decoder in next_cb */
+    uint8_t x_offset; /* copied from info struct, can be modified in flip mode */
+    uint8_t is_font_inverse_mode;     /* 0: normal, 1: font glyphs are inverted */
+    uint8_t i2c_address;  /* a valid i2c adr. Initially this is 255, but this is set to something usefull during DISPLAY_INIT */
+    /* i2c_address is the address for writing data to the display */
+    /* usually, the lowest bit must be zero for a valid address */
+    uint8_t i2c_started;  /* for i2c interface */
+    uint8_t device_address;   /* this is the device address, replacement for U8X8_MSG_CAD_SET_DEVICE */
+    uint8_t utf8_state;       /* number of chars which are still to scan */
+    uint8_t gpio_result;  /* return value from the gpio call (only for MENU keys at the moment) */
+    uint8_t debounce_default_pin_state;
+    uint8_t debounce_last_pin_state;
+    uint8_t debounce_state;
+    uint8_t debounce_result_msg;  /* result msg or event after debounce */
 #ifdef U8X8_WITH_USER_PTR
-  void *user_ptr;
+    void *user_ptr;
 #endif
-#ifdef U8X8_USE_PINS 
-  uint8_t pins[U8X8_PIN_CNT];	/* defines a pinlist: Mainly a list of pins for the Arduino Envionment, use U8X8_PIN_xxx to access */
+#ifdef U8X8_USE_PINS
+    uint8_t pins[U8X8_PIN_CNT];   /* defines a pinlist: Mainly a list of pins for the Arduino Envionment, use U8X8_PIN_xxx to access */
 #endif
 };
 
@@ -361,7 +358,7 @@ struct u8x8_struct
 #define u8x8_GetSPIClockDefaultLevel(u8x8) (((u8x8)->display_info->spi_mode & 0x02) >> 1)
 
 
-#ifdef U8X8_USE_PINS 
+#ifdef U8X8_USE_PINS
 #define u8x8_SetPin(u8x8,pin,val) (u8x8)->pins[pin] = (val)
 #define u8x8_SetMenuSelectPin(u8x8, val) u8x8_SetPin((u8x8),U8X8_PIN_MENU_SELECT,(val))
 #define u8x8_SetMenuNextPin(u8x8, val) u8x8_SetPin((u8x8),U8X8_PIN_MENU_NEXT,(val))
@@ -381,33 +378,33 @@ void u8x8_d_helper_display_init(u8x8_t *u8g2);
 /* Display Interface */
 
 /*
-  Name: 	U8X8_MSG_DISPLAY_SETUP_MEMORY
-  Args:	None
+  Name:     U8X8_MSG_DISPLAY_SETUP_MEMORY
+  Args: None
   Tasks:
     1) setup u8g2->display_info
       copy u8g2->display_info->default_x_offset to u8g2->x_offset
-      
+
    usually calls u8x8_d_helper_display_setup_memory()
 */
 #define U8X8_MSG_DISPLAY_SETUP_MEMORY 9
 
 /*
-  Name: 	U8X8_MSG_DISPLAY_INIT
-  Args:	None
+  Name:     U8X8_MSG_DISPLAY_INIT
+  Args: None
   Tasks:
 
-    2) put interface into default state: 
-	  execute u8x8_gpio_Init for port directions
-	  execute u8x8_cad_Init for default port levels
+    2) put interface into default state:
+      execute u8x8_gpio_Init for port directions
+      execute u8x8_cad_Init for default port levels
     3) set CS status (not clear, may be done in cad/byte interface
     4) execute display reset (gpio interface)
-    5) send setup sequence to display, do not activate display, disable "power save" will follow 
+    5) send setup sequence to display, do not activate display, disable "power save" will follow
 */
 #define U8X8_MSG_DISPLAY_INIT 10
 
 /*
-  Name: 	U8X8_MSG_DISPLAY_SET_POWER_SAVE
-  Args:	arg_int: 0: normal mode (RAM is visible on the display), 1: nothing is shown
+  Name:     U8X8_MSG_DISPLAY_SET_POWER_SAVE
+  Args: arg_int: 0: normal mode (RAM is visible on the display), 1: nothing is shown
   Tasks:
     Depending on arg_int, put the display into normal or power save mode.
     Send the corresponding sequence to the display.
@@ -416,10 +413,10 @@ void u8x8_d_helper_display_init(u8x8_t *u8g2);
 #define U8X8_MSG_DISPLAY_SET_POWER_SAVE 11
 
 /*
-  Name: 	U8X8_MSG_DISPLAY_SET_FLIP_MODE
-  Args:	arg_int: 0: normal mode, 1: flipped HW screen (180 degree)
+  Name:     U8X8_MSG_DISPLAY_SET_FLIP_MODE
+  Args: arg_int: 0: normal mode, 1: flipped HW screen (180 degree)
   Tasks:
-    Reprogramms the display controller to rotate the display by 
+    Reprogramms the display controller to rotate the display by
     180 degree (arg_int = 1) or not (arg_int = 0)
     This may change u8g2->x_offset if the display is smaller than the controller ram
     This message should only be supported if U8X8_WITH_FLIP_MODE is defined.
@@ -430,16 +427,16 @@ void u8x8_d_helper_display_init(u8x8_t *u8g2);
 #define U8X8_MSG_DISPLAY_SET_CONTRAST 14
 
 /*
-  Name: 	U8X8_MSG_DISPLAY_DRAW_TILE
-  Args:	
+  Name:     U8X8_MSG_DISPLAY_DRAW_TILE
+  Args:
     arg_int: How often to repeat this tile pattern
     arg_ptr: pointer to u8x8_tile_t
-        uint8_t *tile_ptr;	pointer to one or more tiles (number is "cnt")
-	uint8_t cnt;		number of tiles
-	uint8_t x_pos;		first tile x position
-	uint8_t y_pos;		first tile y position 
+        uint8_t *tile_ptr;  pointer to one or more tiles (number is "cnt")
+    uint8_t cnt;        number of tiles
+    uint8_t x_pos;      first tile x position
+    uint8_t y_pos;      first tile y position
   Tasks:
-    One tile has exactly 8 bytes (8x8 pixel monochrome bitmap). 
+    One tile has exactly 8 bytes (8x8 pixel monochrome bitmap).
     The lowest bit of the first byte is the upper left corner
     The highest bit of the first byte is the lower left corner
     The lowest bit of the last byte is the upper right corner
@@ -447,24 +444,24 @@ void u8x8_d_helper_display_init(u8x8_t *u8g2);
     "tile_ptr" is the address of a memory area, which contains
     one or more tiles. "cnt" will contain the exact number of
     tiles in the memory areay. The size of the memory area is 8*cnt;
-    Multiple tiles in the memory area form a horizontal sequence, this 
+    Multiple tiles in the memory area form a horizontal sequence, this
     means the first tile is drawn at x_pos/y_pos, the second tile is drawn
     at x_pos+1/y_pos, third at x_pos+2/y_pos.
     "arg_int" tells how often the tile sequence should be repeated:
     For example if "cnt" is two and tile_ptr points to tiles A and B,
     then for arg_int = 3, the following tile sequence will be drawn:
-    ABABAB. Totally, cnt*arg_int tiles will be drawn. 
-        
+    ABABAB. Totally, cnt*arg_int tiles will be drawn.
+
 */
 #define U8X8_MSG_DISPLAY_DRAW_TILE 15
 
 
 /*
-  Name: 	U8X8_MSG_DISPLAY_REFRESH
-  Args:	
+  Name:     U8X8_MSG_DISPLAY_REFRESH
+  Args:
     arg_int: -
     arg_ptr: -
-  
+
   This was introduced for the SSD1606 eInk display.
   The problem is, that all RAM access will not appear on the screen
   unless a special command is executed. With this message, this command
@@ -478,10 +475,10 @@ void u8x8_d_helper_display_init(u8x8_t *u8g2);
 /*==========================================*/
 /* u8x8_setup.c */
 
-/* 
-  Setup u8x8 object itself. This should be the very first function 
+/*
+  Setup u8x8 object itself. This should be the very first function
   called on the new u8x8 object. After this call, assign the callback
-  functions. Optional: Set the pins 
+  functions. Optional: Set the pins
 */
 
 void u8x8_SetupDefaults(u8x8_t *u8x8); /* do not use this, use u8x8_Setup() instead */
@@ -492,9 +489,9 @@ void u8x8_Setup(u8x8_t *u8x8, u8x8_msg_cb display_cb, u8x8_msg_cb cad_cb, u8x8_m
 /* u8x8_display.c */
 uint8_t u8x8_DrawTile(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr);
 
-/* 
-  After a call to u8x8_SetupDefaults, 
-  setup u8x8 memory structures & inform callbacks 
+/*
+  After a call to u8x8_SetupDefaults,
+  setup u8x8 memory structures & inform callbacks
   This function is also called from u8x8_Setup(), so do not call u8x8_SetupMemory()
   directly, but use u8x8_Setup() instead.
 */
@@ -503,8 +500,8 @@ void u8x8_SetupMemory(u8x8_t *u8x8);
 /*
   After calling u8x8_SetupMemory()/u8x8_Setup(), init the display hardware itself.
   This will will the first time, u8x8 talks to the display.
-  It will init the display, but keep display in power save mode. 
-  Usually this command must be followed by u8x8_SetPowerSave() 
+  It will init the display, but keep display in power save mode.
+  Usually this command must be followed by u8x8_SetPowerSave()
 */
 void u8x8_InitDisplay(u8x8_t *u8x8);
 /* wake up display from power save mode */
@@ -512,9 +509,9 @@ void u8x8_SetPowerSave(u8x8_t *u8x8, uint8_t is_enable);
 void u8x8_SetFlipMode(u8x8_t *u8x8, uint8_t mode);
 void u8x8_SetContrast(u8x8_t *u8x8, uint8_t value);
 void u8x8_ClearDisplayWithTile(u8x8_t *u8x8, const uint8_t *buf)  U8X8_NOINLINE;
-void u8x8_ClearDisplay(u8x8_t *u8x8);	// this does not work for u8g2 in some cases
+void u8x8_ClearDisplay(u8x8_t *u8x8);   // this does not work for u8g2 in some cases
 void u8x8_FillDisplay(u8x8_t *u8x8);
-void u8x8_RefreshDisplay(u8x8_t *u8x8);	// make RAM content visible on the display (Dec 16: SSD1606 only)
+void u8x8_RefreshDisplay(u8x8_t *u8x8); // make RAM content visible on the display (Dec 16: SSD1606 only)
 void u8x8_ClearLine(u8x8_t *u8x8, uint8_t line);
 
 
@@ -558,29 +555,29 @@ uint8_t u8x8_cad_StartTransfer(u8x8_t *u8x8) U8X8_NOINLINE;
 uint8_t u8x8_cad_EndTransfer(u8x8_t *u8x8) U8X8_NOINLINE;
 
 /*
-#define U8X8_C(c0)				(0x04), (c0)
-#define U8X8_CA(c0,a0)			(0x05), (c0), (a0)
-#define U8X8_CAA(c0,a0,a1)		(0x06), (c0), (a0), (a1)
-#define U8X8_DATA()			(0x10)
-#define U8X8_D1(d0)			(0x11), (d0)
+#define U8X8_C(c0)              (0x04), (c0)
+#define U8X8_CA(c0,a0)          (0x05), (c0), (a0)
+#define U8X8_CAA(c0,a0,a1)      (0x06), (c0), (a0), (a1)
+#define U8X8_DATA()         (0x10)
+#define U8X8_D1(d0)         (0x11), (d0)
 */
 
-#define U8X8_C(c0)				(U8X8_MSG_CAD_SEND_CMD), (c0)
-#define U8X8_A(a0)				(U8X8_MSG_CAD_SEND_ARG), (a0)
-#define U8X8_CA(c0,a0)			(U8X8_MSG_CAD_SEND_CMD), (c0), (U8X8_MSG_CAD_SEND_ARG), (a0)
-#define U8X8_CAA(c0,a0,a1)		(U8X8_MSG_CAD_SEND_CMD), (c0), (U8X8_MSG_CAD_SEND_ARG), (a0), (U8X8_MSG_CAD_SEND_ARG), (a1)
-#define U8X8_CAAAA(c0,a0,a1,a2,a3)		(U8X8_MSG_CAD_SEND_CMD), (c0), (U8X8_MSG_CAD_SEND_ARG), (a0), (U8X8_MSG_CAD_SEND_ARG), (a1), (U8X8_MSG_CAD_SEND_ARG), (a2), (U8X8_MSG_CAD_SEND_ARG), (a3)
-#define U8X8_AAC(a0,a1,c0)		(U8X8_MSG_CAD_SEND_ARG), (a0), (U8X8_MSG_CAD_SEND_ARG), (a1), (U8X8_MSG_CAD_SEND_CMD), (c0)
-#define U8X8_D1(d0)			(U8X8_MSG_CAD_SEND_DATA), (d0)
+#define U8X8_C(c0)              (U8X8_MSG_CAD_SEND_CMD), (c0)
+#define U8X8_A(a0)              (U8X8_MSG_CAD_SEND_ARG), (a0)
+#define U8X8_CA(c0,a0)          (U8X8_MSG_CAD_SEND_CMD), (c0), (U8X8_MSG_CAD_SEND_ARG), (a0)
+#define U8X8_CAA(c0,a0,a1)      (U8X8_MSG_CAD_SEND_CMD), (c0), (U8X8_MSG_CAD_SEND_ARG), (a0), (U8X8_MSG_CAD_SEND_ARG), (a1)
+#define U8X8_CAAAA(c0,a0,a1,a2,a3)      (U8X8_MSG_CAD_SEND_CMD), (c0), (U8X8_MSG_CAD_SEND_ARG), (a0), (U8X8_MSG_CAD_SEND_ARG), (a1), (U8X8_MSG_CAD_SEND_ARG), (a2), (U8X8_MSG_CAD_SEND_ARG), (a3)
+#define U8X8_AAC(a0,a1,c0)      (U8X8_MSG_CAD_SEND_ARG), (a0), (U8X8_MSG_CAD_SEND_ARG), (a1), (U8X8_MSG_CAD_SEND_CMD), (c0)
+#define U8X8_D1(d0)         (U8X8_MSG_CAD_SEND_DATA), (d0)
 
-#define U8X8_A4(a0,a1,a2,a3)		U8X8_A(a0), U8X8_A(a1), U8X8_A(a2), U8X8_A(a3)
-#define U8X8_A8(a0,a1,a2,a3,a4,a5,a6,a7)	U8X8_A4((a0), (a1), (a2), (a3)), U8X8_A4((a4), (a5), (a6), (a7))
+#define U8X8_A4(a0,a1,a2,a3)        U8X8_A(a0), U8X8_A(a1), U8X8_A(a2), U8X8_A(a3)
+#define U8X8_A8(a0,a1,a2,a3,a4,a5,a6,a7)    U8X8_A4((a0), (a1), (a2), (a3)), U8X8_A4((a4), (a5), (a6), (a7))
 
 
-#define U8X8_START_TRANSFER()	(U8X8_MSG_CAD_START_TRANSFER)
-#define U8X8_END_TRANSFER()	(U8X8_MSG_CAD_END_TRANSFER)
-#define U8X8_DLY(m)			(0xfe),(m)		/* delay in milli seconds */
-#define U8X8_END()			(0xff)
+#define U8X8_START_TRANSFER()   (U8X8_MSG_CAD_START_TRANSFER)
+#define U8X8_END_TRANSFER() (U8X8_MSG_CAD_END_TRANSFER)
+#define U8X8_DLY(m)         (0xfe),(m)      /* delay in milli seconds */
+#define U8X8_END()          (0xff)
 
 void u8x8_cad_SendSequence(u8x8_t *u8x8, uint8_t const *data);
 uint8_t u8x8_cad_empty(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
@@ -640,52 +637,52 @@ uint8_t u8x8_byte_sed1520(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_
 #define U8X8_MSG_GPIO_AND_DELAY_INIT 40
 
 /* arg_int: milliseconds */
-#define U8X8_MSG_DELAY_MILLI		41
+#define U8X8_MSG_DELAY_MILLI        41
 
 /* 10MICRO and 100NANO are not used at the moment */
-#define U8X8_MSG_DELAY_10MICRO		42
-#define U8X8_MSG_DELAY_100NANO		43
+#define U8X8_MSG_DELAY_10MICRO      42
+#define U8X8_MSG_DELAY_100NANO      43
 
 
-#define U8X8_MSG_DELAY_NANO		44
+#define U8X8_MSG_DELAY_NANO     44
 /* delay of one i2c unit, should be 5us for 100K, and 1.25us for 400K */
-#define U8X8_MSG_DELAY_I2C		45
+#define U8X8_MSG_DELAY_I2C      45
 
 #define U8X8_MSG_GPIO(x) (64+(x))
-#ifdef U8X8_USE_PINS 
+#ifdef U8X8_USE_PINS
 #define u8x8_GetPinIndex(u8x8, msg) ((msg)&0x3f)
 #define u8x8_GetPinValue(u8x8, msg) ((u8x8)->pins[(msg)&0x3f])
 #endif
 
-#define U8X8_MSG_GPIO_D0			U8X8_MSG_GPIO(U8X8_PIN_D0)
-#define U8X8_MSG_GPIO_SPI_CLOCK	U8X8_MSG_GPIO(U8X8_PIN_SPI_CLOCK)
-#define U8X8_MSG_GPIO_D1			U8X8_MSG_GPIO(U8X8_PIN_D1)
-#define U8X8_MSG_GPIO_SPI_DATA		U8X8_MSG_GPIO(U8X8_PIN_SPI_DATA)
-#define U8X8_MSG_GPIO_D2			U8X8_MSG_GPIO(U8X8_PIN_D2)
-#define U8X8_MSG_GPIO_D3			U8X8_MSG_GPIO(U8X8_PIN_D3)
-#define U8X8_MSG_GPIO_D4			U8X8_MSG_GPIO(U8X8_PIN_D4)
-#define U8X8_MSG_GPIO_D5			U8X8_MSG_GPIO(U8X8_PIN_D5)
-#define U8X8_MSG_GPIO_D6			U8X8_MSG_GPIO(U8X8_PIN_D6)
-#define U8X8_MSG_GPIO_D7			U8X8_MSG_GPIO(U8X8_PIN_D7)
-#define U8X8_MSG_GPIO_E 			U8X8_MSG_GPIO(U8X8_PIN_E)			// used as E1 for the SED1520
-#define U8X8_MSG_GPIO_CS			U8X8_MSG_GPIO(U8X8_PIN_CS)		// used as E2 for the SED1520
-#define U8X8_MSG_GPIO_DC			U8X8_MSG_GPIO(U8X8_PIN_DC)
-#define U8X8_MSG_GPIO_RESET 		U8X8_MSG_GPIO(U8X8_PIN_RESET)
-#define U8X8_MSG_GPIO_I2C_CLOCK	U8X8_MSG_GPIO(U8X8_PIN_I2C_CLOCK)
-#define U8X8_MSG_GPIO_I2C_DATA		U8X8_MSG_GPIO(U8X8_PIN_I2C_DATA)
+#define U8X8_MSG_GPIO_D0            U8X8_MSG_GPIO(U8X8_PIN_D0)
+#define U8X8_MSG_GPIO_SPI_CLOCK U8X8_MSG_GPIO(U8X8_PIN_SPI_CLOCK)
+#define U8X8_MSG_GPIO_D1            U8X8_MSG_GPIO(U8X8_PIN_D1)
+#define U8X8_MSG_GPIO_SPI_DATA      U8X8_MSG_GPIO(U8X8_PIN_SPI_DATA)
+#define U8X8_MSG_GPIO_D2            U8X8_MSG_GPIO(U8X8_PIN_D2)
+#define U8X8_MSG_GPIO_D3            U8X8_MSG_GPIO(U8X8_PIN_D3)
+#define U8X8_MSG_GPIO_D4            U8X8_MSG_GPIO(U8X8_PIN_D4)
+#define U8X8_MSG_GPIO_D5            U8X8_MSG_GPIO(U8X8_PIN_D5)
+#define U8X8_MSG_GPIO_D6            U8X8_MSG_GPIO(U8X8_PIN_D6)
+#define U8X8_MSG_GPIO_D7            U8X8_MSG_GPIO(U8X8_PIN_D7)
+#define U8X8_MSG_GPIO_E             U8X8_MSG_GPIO(U8X8_PIN_E)           // used as E1 for the SED1520
+#define U8X8_MSG_GPIO_CS            U8X8_MSG_GPIO(U8X8_PIN_CS)      // used as E2 for the SED1520
+#define U8X8_MSG_GPIO_DC            U8X8_MSG_GPIO(U8X8_PIN_DC)
+#define U8X8_MSG_GPIO_RESET         U8X8_MSG_GPIO(U8X8_PIN_RESET)
+#define U8X8_MSG_GPIO_I2C_CLOCK U8X8_MSG_GPIO(U8X8_PIN_I2C_CLOCK)
+#define U8X8_MSG_GPIO_I2C_DATA      U8X8_MSG_GPIO(U8X8_PIN_I2C_DATA)
 
 
-#define U8X8_MSG_GPIO_CS1			U8X8_MSG_GPIO(U8X8_PIN_CS1)	/* KS0108 extra chip select */
-#define U8X8_MSG_GPIO_CS2			U8X8_MSG_GPIO(U8X8_PIN_CS2)	/* KS0108 extra chip select */
+#define U8X8_MSG_GPIO_CS1           U8X8_MSG_GPIO(U8X8_PIN_CS1) /* KS0108 extra chip select */
+#define U8X8_MSG_GPIO_CS2           U8X8_MSG_GPIO(U8X8_PIN_CS2) /* KS0108 extra chip select */
 
 
 /* these message expect the return value in u8x8->gpio_result */
-#define U8X8_MSG_GPIO_MENU_SELECT	U8X8_MSG_GPIO(U8X8_PIN_MENU_SELECT)
-#define U8X8_MSG_GPIO_MENU_NEXT	U8X8_MSG_GPIO(U8X8_PIN_MENU_NEXT)
-#define U8X8_MSG_GPIO_MENU_PREV	U8X8_MSG_GPIO(U8X8_PIN_MENU_PREV)
-#define U8X8_MSG_GPIO_MENU_HOME	U8X8_MSG_GPIO(U8X8_PIN_MENU_HOME)
-#define U8X8_MSG_GPIO_MENU_UP		U8X8_MSG_GPIO(U8X8_PIN_MENU_UP)
-#define U8X8_MSG_GPIO_MENU_DOWN	U8X8_MSG_GPIO(U8X8_PIN_MENU_DOWN)
+#define U8X8_MSG_GPIO_MENU_SELECT   U8X8_MSG_GPIO(U8X8_PIN_MENU_SELECT)
+#define U8X8_MSG_GPIO_MENU_NEXT U8X8_MSG_GPIO(U8X8_PIN_MENU_NEXT)
+#define U8X8_MSG_GPIO_MENU_PREV U8X8_MSG_GPIO(U8X8_PIN_MENU_PREV)
+#define U8X8_MSG_GPIO_MENU_HOME U8X8_MSG_GPIO(U8X8_PIN_MENU_HOME)
+#define U8X8_MSG_GPIO_MENU_UP       U8X8_MSG_GPIO(U8X8_PIN_MENU_UP)
+#define U8X8_MSG_GPIO_MENU_DOWN U8X8_MSG_GPIO(U8X8_PIN_MENU_DOWN)
 
 
 #define u8x8_gpio_Init(u8x8) ((u8x8)->gpio_and_delay_cb((u8x8), U8X8_MSG_GPIO_AND_DELAY_INIT, 0, NULL ))
@@ -741,8 +738,8 @@ uint8_t u8x8_ConnectBitmapToU8x8(u8x8_t *u8x8);
 
 /*==========================================*/
 /* u8x8_d_utf8.c */
-void u8x8_Setup_Utf8(u8x8_t *u8x8);	/* stdout UTF-8 display */
-void utf8_show(void);		/* show content of UTF-8 frame buffer */
+void u8x8_Setup_Utf8(u8x8_t *u8x8); /* stdout UTF-8 display */
+void utf8_show(void);       /* show content of UTF-8 frame buffer */
 
 
 /*==========================================*/
@@ -835,7 +832,7 @@ uint16_t u8x8_upscale_byte(uint8_t x) U8X8_NOINLINE;
 void u8x8_utf8_init(u8x8_t *u8x8);
 uint16_t u8x8_ascii_next(u8x8_t *u8x8, uint8_t b);
 uint16_t u8x8_utf8_next(u8x8_t *u8x8, uint8_t b);
-// the following two functions are replaced by the init/next functions 
+// the following two functions are replaced by the init/next functions
 //uint16_t u8x8_get_encoding_from_utf8_string(const char **str);
 //uint16_t u8x8_get_char_from_string(const char **str);
 
@@ -843,7 +840,7 @@ void u8x8_SetFont(u8x8_t *u8x8, const uint8_t *font_8x8);
 void u8x8_DrawGlyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding);
 void u8x8_Draw2x2Glyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding);
 uint8_t u8x8_DrawString(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s);
-uint8_t u8x8_DrawUTF8(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s);	/* return number of glyps */
+uint8_t u8x8_DrawUTF8(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s);   /* return number of glyps */
 uint8_t u8x8_Draw2x2String(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s);
 uint8_t u8x8_Draw2x2UTF8(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s);
 uint8_t u8x8_GetUTF8Len(u8x8_t *u8x8, const char *s);
@@ -859,7 +856,7 @@ const char *u8x8_u16toa(uint16_t v, uint8_t d);
 /* u8x8_string.c */
 
 uint8_t u8x8_GetStringLineCnt(const char *str);  /* return 0 for str==NULL */
-const char *u8x8_GetStringLineStart(uint8_t line_idx, const char *str );
+const char *u8x8_GetStringLineStart(uint8_t line_idx, const char *str);
 void u8x8_CopyStringLine(char *dest, uint8_t line_idx, const char *str);
 /* draw one line, consider \t for center */
 uint8_t u8x8_DrawUTF8Line(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t w, const char *s);
@@ -869,15 +866,14 @@ uint8_t u8x8_DrawUTF8Lines(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t w, const 
 /*==========================================*/
 
 /* u8x8_selection_list.c */
-struct _u8sl_struct
-{
-  uint8_t visible;		/* number of visible elements in the menu */
-  uint8_t total;			/* total number of elements in the menu */
-  uint8_t first_pos;		/* position of the first visible line */
-  uint8_t current_pos;	/* current cursor position, starts at 0 */  
-  
-  uint8_t x;		/* u8x8 only, not used in u8g2 */
-  uint8_t y;		/* u8x8 only, not used in u8g2 */
+struct _u8sl_struct {
+    uint8_t visible;      /* number of visible elements in the menu */
+    uint8_t total;            /* total number of elements in the menu */
+    uint8_t first_pos;        /* position of the first visible line */
+    uint8_t current_pos;  /* current cursor position, starts at 0 */
+
+    uint8_t x;        /* u8x8 only, not used in u8g2 */
+    uint8_t y;        /* u8x8 only, not used in u8g2 */
 };
 typedef struct _u8sl_struct u8sl_t;
 

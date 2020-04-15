@@ -4,19 +4,19 @@
 #include "../ScreenModel.h"
 
 struct CalibrateScreen : ScreenModel {
-	CalibrateScreen() : ScreenModel() {
-		hasUpModel = true;
-    hasDownModel = true;
-    hasNextModel = true;
-		
-		screenType = Titled;
-    icon = ICON_RESET;
-    title = "Calibrate";
-	};
-	
-	virtual ScreenModel *upModel();
-	virtual ScreenModel *nextModel();
-	virtual ScreenModel *downModel();
+    CalibrateScreen() : ScreenModel() {
+        hasUpModel = true;
+        hasDownModel = true;
+        hasNextModel = true;
+
+        screenType = Titled;
+        icon = ICON_RESET;
+        title = "Calibrate";
+    };
+
+    virtual ScreenModel *upModel();
+    virtual ScreenModel *nextModel();
+    virtual ScreenModel *downModel();
 };
 
 #endif

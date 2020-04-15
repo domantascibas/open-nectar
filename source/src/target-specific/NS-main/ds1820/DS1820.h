@@ -1,12 +1,11 @@
 #ifndef DS1820_H_
-    #define DS1820_H_
+#define DS1820_H_
 
-    #include <OneWire.h>
+#include <OneWire.h>
 
-class   DS1820
-{
+class   DS1820 {
     OneWire oneWire;
-    bool    present;    
+    bool    present;
     bool    model_s;
     uint8_t data[12];
     uint8_t addr[8];
@@ -20,6 +19,6 @@ public:
     void   setResolution(uint8_t res);
     void   startConversion(void);
     float  read(void);
-    uint8_t read(float& temp);
+    uint8_t read(float &temp);
 };
 #endif /* DS1820_H_ */

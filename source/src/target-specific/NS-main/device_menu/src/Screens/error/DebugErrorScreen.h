@@ -5,19 +5,19 @@
 #include "../ScreenModel.h"
 
 struct DebugErrorScreen : ScreenModel {
-  DebugErrorScreen() : ScreenModel() {
-    refreshRate = 1;
-    screenType = DebugError;
-    
-    title = "DebugErrorScreen";
-    subtitle = itos(menu_actions::error());
-    
-    hasDownModel = true;
-    hasUpModel = true;
-  };
-  
-  virtual ScreenModel *upModel();
-  virtual ScreenModel *downModel();
+    DebugErrorScreen() : ScreenModel() {
+        refreshRate = 1;
+        screenType = DebugError;
+
+        title = "DebugErrorScreen";
+        subtitle = itos(menu_actions::error());
+
+        hasDownModel = true;
+        hasUpModel = true;
+    };
+
+    virtual ScreenModel *upModel();
+    virtual ScreenModel *downModel();
 };
 
 #endif

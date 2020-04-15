@@ -7,26 +7,26 @@
 enum ConfirmationType { Reset, Pairing, Calibration };
 
 struct ConfirmationScreen : ScreenModel {
-  ConfirmationScreen(const ConfirmationType &type, const std::string &_title,
-                     const bool &isYes)
-      : ScreenModel(), type(type), isYes(isYes) {
+    ConfirmationScreen(const ConfirmationType &type, const std::string &_title,
+            const bool &isYes)
+        : ScreenModel(), type(type), isYes(isYes) {
 
-    hasUpModel = true;
-    hasDownModel = true;
-    hasNextModel = true;
+        hasUpModel = true;
+        hasDownModel = true;
+        hasNextModel = true;
 
-    title = _title;
-    subtitle = isYes ? LocalizedString(LocalizationYes)
-                     : LocalizedString(LocalizationNo);
-    screenType = Subtitled;
-  };
+        title = _title;
+        subtitle = isYes ? LocalizedString(LocalizationYes)
+                : LocalizedString(LocalizationNo);
+        screenType = Subtitled;
+    };
 
-  bool isYes;
-  ConfirmationType type;
+    bool isYes;
+    ConfirmationType type;
 
-  virtual ScreenModel *upModel();
-  virtual ScreenModel *downModel();
-  virtual ScreenModel *nextModel();
+    virtual ScreenModel *upModel();
+    virtual ScreenModel *downModel();
+    virtual ScreenModel *nextModel();
 };
 
 #endif

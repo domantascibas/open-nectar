@@ -5,24 +5,24 @@
 #include "../ScreenModel.h"
 
 struct ErrorScreen : ScreenModel {
-  ErrorScreen() : ScreenModel() {
-    refreshRate = 1;
-    
-    screenType = IdleError;
-    title = "ERROR";
-    subtitle = itos(menu_actions::error());
-    
-    if(menu_actions::isInTestMode()) {
-      hasDownModel = true;
-      hasUpModel = true;
-    } else {
-      hasDownModel = false;
-      hasUpModel = false;
-    }
-  };
-  
-  virtual ScreenModel *upModel();
-  virtual ScreenModel *downModel();
+    ErrorScreen() : ScreenModel() {
+        refreshRate = 1;
+
+        screenType = IdleError;
+        title = "ERROR";
+        subtitle = itos(menu_actions::error());
+
+        if (menu_actions::isInTestMode()) {
+            hasDownModel = true;
+            hasUpModel = true;
+        } else {
+            hasDownModel = false;
+            hasUpModel = false;
+        }
+    };
+
+    virtual ScreenModel *upModel();
+    virtual ScreenModel *downModel();
 };
 
 #endif

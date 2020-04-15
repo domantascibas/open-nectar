@@ -5,10 +5,10 @@
 #include "u8g2.h"
 
 namespace ScreenDisplay {
-  void setup();
-	void init();
-  void clear();
-  void render(ScreenModel *);
+void setup();
+void init();
+void clear();
+void render(ScreenModel *);
 }
 
 #endif

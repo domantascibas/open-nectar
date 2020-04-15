@@ -5,20 +5,20 @@
 #include "../ScreenModel.h"
 
 struct WelcomeTimeScreen : ScreenModel {
-  WelcomeTimeScreen(TimeType type)
-      : ScreenModel(), type(type), time(menu_actions::getTime(type)) {
+    WelcomeTimeScreen(TimeType type)
+        : ScreenModel(), type(type), time(menu_actions::getTime(type)) {
 
-    hasNextModel = true;
-    title = LocalizedString(LocalizationSetTime);
-    icon = ICON_TIME;
+        hasNextModel = true;
+        title = LocalizedString(LocalizationSetTime);
+        icon = ICON_TIME;
 
-    screenType = Titled;
-  };
+        screenType = Titled;
+    };
 
-  TimeType type;
-  time_hm time;
+    TimeType type;
+    time_hm time;
 
-  virtual ScreenModel *nextModel();
+    virtual ScreenModel *nextModel();
 };
 
 #endif

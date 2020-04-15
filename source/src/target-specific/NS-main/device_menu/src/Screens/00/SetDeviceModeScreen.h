@@ -6,43 +6,43 @@
 #include "../ScreenModel.h"
 
 struct SetDeviceModeScreen : ScreenModel {
-  SetDeviceModeScreen(const HeaterMode &mode) : ScreenModel(), mode(mode) {
-    hasUpModel = true;
-    hasDownModel = true;
-    hasNextModel = true;
+    SetDeviceModeScreen(const HeaterMode &mode) : ScreenModel(), mode(mode) {
+        hasUpModel = true;
+        hasDownModel = true;
+        hasNextModel = true;
 
-    switch (mode) {
-    case None:
-      title = LocalizedString(LocalizationDefault);
-      icon = ICON_AUTO;
-      break;
-    case Boost:
-      title = LocalizedString(LocalizationBoost);
-      icon = ICON_BOOST;
-      break;
-    case Nogrid:
-      title = LocalizedString(LocalizationNoGrid);
-      icon = ICON_NO_GRID;
-      break;
-    case Away:
-      title = LocalizedString(LocalizationAway);
-      icon = ICON_AWAY;
-      break;
-		case Alloff:
-			title = "All off";
-			icon = ICON_AUTO;
-    }
+        switch (mode) {
+            case None:
+                title = LocalizedString(LocalizationDefault);
+                icon = ICON_AUTO;
+                break;
+            case Boost:
+                title = LocalizedString(LocalizationBoost);
+                icon = ICON_BOOST;
+                break;
+            case Nogrid:
+                title = LocalizedString(LocalizationNoGrid);
+                icon = ICON_NO_GRID;
+                break;
+            case Away:
+                title = LocalizedString(LocalizationAway);
+                icon = ICON_AWAY;
+                break;
+            case Alloff:
+                title = "All off";
+                icon = ICON_AUTO;
+        }
 
-    selector = ScreenSelector(1, 0);
-    screenType = Selector;
+        selector = ScreenSelector(1, 0);
+        screenType = Selector;
 //    screenType = Titled;
-  };
+    };
 
-  HeaterMode mode;
+    HeaterMode mode;
 
-  virtual ScreenModel *upModel();
-  virtual ScreenModel *downModel();
-  virtual ScreenModel *nextModel();
+    virtual ScreenModel *upModel();
+    virtual ScreenModel *downModel();
+    virtual ScreenModel *nextModel();
 };
 
 #endif

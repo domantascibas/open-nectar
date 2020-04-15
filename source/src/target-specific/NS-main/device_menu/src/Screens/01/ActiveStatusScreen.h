@@ -4,16 +4,16 @@
 #include "../ScreenModel.h"
 
 struct ActiveStatusScreen : ScreenModel {
-  ActiveStatusScreen() : ScreenModel() {
-    refreshRate = 2;
-    hasDownModel = true;
-    hasUpModel = true;
-    title = "ActiveStatusScreen";
-    screenType = ActiveStatus;
-  };
+    ActiveStatusScreen() : ScreenModel() {
+        refreshRate = 2;
+        hasDownModel = true;
+        hasUpModel = true;
+        title = "ActiveStatusScreen";
+        screenType = ActiveStatus;
+    };
 
-  virtual ScreenModel *downModel();
-  virtual ScreenModel *upModel();
+    virtual ScreenModel *downModel();
+    virtual ScreenModel *upModel();
 };
 
 #endif

@@ -6,37 +6,37 @@
 #include "../ScreenModel.h"
 
 struct TemperatureScreen : ScreenModel {
-  TemperatureScreen(const TemperatureType &type)
-      : ScreenModel(), type(type),
-        temperature(menu_actions::temperature(type)) {
+    TemperatureScreen(const TemperatureType &type)
+        : ScreenModel(), type(type),
+          temperature(menu_actions::temperature(type)) {
 
-    hasUpModel = true;
-    hasDownModel = true;
-    hasNextModel = true;
+        hasUpModel = true;
+        hasDownModel = true;
+        hasNextModel = true;
 
-    switch (type) {
-    case TemperatureDay:
-      title = LocalizedString(LocalizationDayTemp);
-      break;
-    case TemperatureNight:
-      title = LocalizedString(LocalizationNightTemp);
-      break;
-    case TemperatureMax:
-      title = LocalizedString(LocalizationMaxTemp);
-      break;
-    }
+        switch (type) {
+            case TemperatureDay:
+                title = LocalizedString(LocalizationDayTemp);
+                break;
+            case TemperatureNight:
+                title = LocalizedString(LocalizationNightTemp);
+                break;
+            case TemperatureMax:
+                title = LocalizedString(LocalizationMaxTemp);
+                break;
+        }
 
-    subtitle = itos(temperature) + "°";
-    screenType = Subtitled;
-    icon = ICON_TEMPERATURE;
-  };
+        subtitle = itos(temperature) + "°";
+        screenType = Subtitled;
+        icon = ICON_TEMPERATURE;
+    };
 
-  int8_t temperature;
-  TemperatureType type;
+    int8_t temperature;
+    TemperatureType type;
 
-  virtual ScreenModel *upModel();
-  virtual ScreenModel *downModel();
-  virtual ScreenModel *nextModel();
+    virtual ScreenModel *upModel();
+    virtual ScreenModel *downModel();
+    virtual ScreenModel *nextModel();
 };
 
 #endif

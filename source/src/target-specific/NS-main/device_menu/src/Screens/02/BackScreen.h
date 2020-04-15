@@ -4,19 +4,19 @@
 #include "../ScreenModel.h"
 
 struct BackScreen : ScreenModel {
-  BackScreen() : ScreenModel() {
-    hasUpModel = true;
-    hasDownModel = true;
-    hasNextModel = true;
+    BackScreen() : ScreenModel() {
+        hasUpModel = true;
+        hasDownModel = true;
+        hasNextModel = true;
 
-    title = LocalizedString(LocalizationBack);
-    screenType = Titled;
-    icon = ICON_BACK;
-  };
+        title = LocalizedString(LocalizationBack);
+        screenType = Titled;
+        icon = ICON_BACK;
+    };
 
-  virtual ScreenModel *upModel();
-  virtual ScreenModel *downModel();
-  virtual ScreenModel *nextModel();
+    virtual ScreenModel *upModel();
+    virtual ScreenModel *downModel();
+    virtual ScreenModel *nextModel();
 };
 
 #endif

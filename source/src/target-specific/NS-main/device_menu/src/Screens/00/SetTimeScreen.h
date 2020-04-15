@@ -4,29 +4,27 @@
 #include "../ScreenModel.h"
 #include "../../menu_service.h"
 
-struct SetTimeScreen : ScreenModel
-{
-  SetTimeScreen(TimeType type, time_hm time, bool isHours = true, bool onboarding = false)
-      : ScreenModel(), type(type), time(time), isHours(isHours)
-  {
+struct SetTimeScreen : ScreenModel {
+    SetTimeScreen(TimeType type, time_hm time, bool isHours = true, bool onboarding = false)
+        : ScreenModel(), type(type), time(time), isHours(isHours) {
 
-    hasUpModel = true;
-    hasDownModel = true;
-    hasNextModel = true;
+        hasUpModel = true;
+        hasDownModel = true;
+        hasNextModel = true;
 
-    title = time.string();
-    screenType = Selector;
-    selector = ScreenSelector(2, isHours ? 0 : 1);
-  };
+        title = time.string();
+        screenType = Selector;
+        selector = ScreenSelector(2, isHours ? 0 : 1);
+    };
 
-  TimeType type;
-  time_hm time;
-  bool isHours;
-  bool onboarding;
+    TimeType type;
+    time_hm time;
+    bool isHours;
+    bool onboarding;
 
-  virtual ScreenModel *upModel();
-  virtual ScreenModel *downModel();
-  virtual ScreenModel *nextModel();
+    virtual ScreenModel *upModel();
+    virtual ScreenModel *downModel();
+    virtual ScreenModel *nextModel();
 };
 
 #endif

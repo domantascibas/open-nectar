@@ -5,22 +5,22 @@
 #include "../ScreenModel.h"
 
 struct PairingScreen : ScreenModel {
-  PairingScreen() : ScreenModel() {
-    hasUpModel = true;
-    hasDownModel = true;
-    hasNextModel = true;
-    
-    refreshRate = 5;
+    PairingScreen() : ScreenModel() {
+        hasUpModel = true;
+        hasDownModel = true;
+        hasNextModel = true;
 
-    title = LocalizedString(LocalizationPairing);
-    subtitle = menu_actions::getPin();
-    screenType = Subtitled;
-    icon = menu_actions::isPairingOn() ? ICON_PAIR_ACTIVE : ICON_PAIR_INACTIVE;
-  };
+        refreshRate = 5;
 
-  virtual ScreenModel *upModel();
-  virtual ScreenModel *downModel();
-  virtual ScreenModel *nextModel();
+        title = LocalizedString(LocalizationPairing);
+        subtitle = menu_actions::getPin();
+        screenType = Subtitled;
+        icon = menu_actions::isPairingOn() ? ICON_PAIR_ACTIVE : ICON_PAIR_INACTIVE;
+    };
+
+    virtual ScreenModel *upModel();
+    virtual ScreenModel *downModel();
+    virtual ScreenModel *nextModel();
 };
 
 #endif
