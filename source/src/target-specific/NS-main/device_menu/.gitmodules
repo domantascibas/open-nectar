@@ -1,0 +1,3 @@
+[submodule "ns-localisation"]
+	path = ns-localisation
+	url = https://gitlab.com/nectarsun/nectarsun-s/localization.git
