@@ -37,6 +37,12 @@ source/src/target-specific/NS-main/device_menu/ns-localisation/*
 source/src/target-specific/NS-main/device_menu/test/*
 source/src/target-specific/NS-main/device_menu/u8g2-mbed/TESTS/*
 
+source/src/target-specific/NS-main/device_menu/src/Screens/00/*
+source/src/target-specific/NS-main/device_menu/src/Screens/01/*
+source/src/target-specific/NS-main/device_menu/src/Screens/02/*
+source/src/target-specific/NS-main/device_menu/src/Screens/engineering_menu/*
+source/src/target-specific/NS-main/device_menu/src/Screens/error/*
+
 source/src/modules/*
 source/src/target-specific/NS-power/*" >> ./.mbedignore
 

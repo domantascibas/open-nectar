@@ -9,10 +9,10 @@
 // #include "Sanitizer.h"
 // #include "BoostTimeout.h"
 
-#include "Screens/00/SetLanguageScreen.h"
-#include "Screens/01/ActiveStatusScreen.h"
-#include "Screens/error/DebugScreen.h"
-#include "Screens/error/ErrorScreen.h"
+// #include "Screens/00/SetLanguageScreen.h"
+// #include "Screens/01/ActiveStatusScreen.h"
+// #include "Screens/error/DebugScreen.h"
+// #include "Screens/error/ErrorScreen.h"
 #include "Screens/welcome/IdleScreen.h"
 
 // PD_2 button backlight control. active HIGH
@@ -135,16 +135,16 @@ namespace menu_service {
         isFirst = false;
         buttonBacklight = MENU_BUTTON_BACKLIGHT_ON;
         enableButtons();
-        if(!menu_actions::isInOnboarding()) {        
-          ScreenModel *active_screen = new ActiveStatusScreen();
-          setScreenModel(active_screen);
-          menu_actions::updateTime();
-          idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
-        } else {
-          set_time(MENU_DEFAULT_INIT_TIME);
-          time_t curr_time = time(NULL);
-          printf("TIME %s", ctime(&curr_time));
-        }
+        // if(!menu_actions::isInOnboarding()) {        
+        //   ScreenModel *active_screen = new ActiveStatusScreen();
+        //   setScreenModel(active_screen);
+        //   menu_actions::updateTime();
+        //   idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
+        // } else {
+        //   set_time(MENU_DEFAULT_INIT_TIME);
+        //   time_t curr_time = time(NULL);
+        //   printf("TIME %s", ctime(&curr_time));
+        // }
       }
       
     //   if(menu_actions::isErrorCritical(powerBoardError.get_errors()) || menu_actions::isErrorCritical(mainBoardError.get_errors())) {
@@ -157,10 +157,10 @@ namespace menu_service {
     //   }
       
       if(resetScreen) {
-        resetScreen = false;
-        ScreenModel *active_screen = new ActiveStatusScreen();
-        setScreenModel(active_screen);
-        idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
+        // resetScreen = false;
+        // ScreenModel *active_screen = new ActiveStatusScreen();
+        // setScreenModel(active_screen);
+        // idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
       }
       
       if (m_screen->refreshRate != 0) {
@@ -174,19 +174,19 @@ namespace menu_service {
   }
 
   void setup(void) {
-    buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
-    resetScreen = false;
-    localization::setup();
-    ScreenDisplay::setup();
-    m_screen = new SetLanguageScreen(localization::currentLanguage());
+//     buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
+//     resetScreen = false;
+//     localization::setup();
+//     ScreenDisplay::setup();
+//     m_screen = new SetLanguageScreen(localization::currentLanguage());
 
-    screenUpdater.attach(&screenUpdaterISR, 1);
-    timeKeeper.attach(&menu_actions::updateTime, MENU_TIME_KEEPER_PERIOD);
+//     screenUpdater.attach(&screenUpdaterISR, 1);
+//     timeKeeper.attach(&menu_actions::updateTime, MENU_TIME_KEEPER_PERIOD);
 
-    time_t curr_time = time(NULL);
-    if(curr_time > 0) {
-//      printf("Current time %s\r\n", ctime(&curr_time));
-    }
+//     time_t curr_time = time(NULL);
+//     if(curr_time > 0) {
+// //      printf("Current time %s\r\n", ctime(&curr_time));
+//     }
   }
 
   void upButtonPressed(void) {
