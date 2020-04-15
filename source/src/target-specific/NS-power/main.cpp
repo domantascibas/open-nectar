@@ -9,7 +9,7 @@
 #include "flash_storage.h"
 
 extern "C" {
-    #include "data.h"
+#include "data.h"
 }
 
 // TODO: make main more generic, so it can be shared between different targets
@@ -27,10 +27,10 @@ int main(void) {
     device_modes_init();
     main_board_comms_init();
     printf("SETUP DONE\r\n");
-    
+
     watchdog_timer_init();
-    
-    while(1) {
+
+    while (1) {
         watchdog_timer_update();
         device_modes_loop();
         __WFI();

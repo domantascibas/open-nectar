@@ -6,13 +6,13 @@
 #include "../00/ConfirmationScreen.h"
 
 ScreenModel *CalibrateScreen::upModel() {
-  return new DebugErrorScreen();
+    return new DebugErrorScreen();
 };
 
 ScreenModel *CalibrateScreen::downModel() {
-  return new ActiveStatusScreen();
+    return new ActiveStatusScreen();
 };
 
 ScreenModel *CalibrateScreen::nextModel() {
-	return new ConfirmationScreen(Calibration, title + "?", true);
+    return new ConfirmationScreen(Calibration, title + "?", true);
 };

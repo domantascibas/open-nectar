@@ -38,30 +38,30 @@ uint8_t enterPressCounter = 0;
 ScreenModel *m_screen;
 
 void setScreenModel(ScreenModel *screen_model) {
-  ScreenDisplay::clear();
-  delete m_screen;
-  m_screen = screen_model;
+    ScreenDisplay::clear();
+    delete m_screen;
+    m_screen = screen_model;
 }
 
 namespace menu_service {
-	void returnToIdle(void);
-  volatile bool needUpdate = false;
-  bool resetScreen = false;
-  
-  void enableButtons(void) {
+void returnToIdle(void);
+volatile bool needUpdate = false;
+bool resetScreen = false;
+
+void enableButtons(void) {
     keyUp.rise(&upButtonPressed);
     keyDown.rise(&downButtonPressed);
     keyCenter.rise(&nextButtonPressed);
     printf("BUTTONS ENABLED\n");
-  }
-  
-  void disableButtons(void) {
+}
+
+void disableButtons(void) {
     keyUp.rise(NULL);
     keyDown.rise(NULL);
     keyCenter.rise(NULL);
     printf("BUTTONS DISABLED\n");
-  }
-  
+}
+
 //   void enterTestScreen(void) {
 //     deviceOpMode.setTestMode();
 //     // if(menu_actions::hasErrors()) {
@@ -73,9 +73,9 @@ namespace menu_service {
 //     // }
 //     needUpdate = true;
 //   }
-	
-// 	void enterMenuItem(void) {
-// 		if (!m_screen->hasNextModel)
+
+//  void enterMenuItem(void) {
+//      if (!m_screen->hasNextModel)
 //       return;
 //     buttonBacklight = MENU_BUTTON_BACKLIGHT_ON;
 //     setScreenModel(m_screen->nextModel());
@@ -85,7 +85,7 @@ namespace menu_service {
 //     } else {
 //       idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
 //     }
-// 	}
+//  }
 
 //   void longPressISR(void) {
 //     if (keyUp && keyDown) {
@@ -99,81 +99,81 @@ namespace menu_service {
 //       enterTestScreen();
 //     }
 //   }
-	
-	// void enterPressISR(void) {
-	// 	if(keyCenter) {
-	// 		enterPressCounter++;
-	// 	} else {
-	// 		enterPressCounter = 0;
-	// 		enterPressTicker.detach();
-	// 		isEnterPressReleased = true;
-	// 		enableButtons();
-	// 	}
-	// 	if(enterPressCounter >= (MENU_BUTTON_ENTER_PRESS_PERIOD / MENU_BUTTON_DEBOUNCE_PERIOD)) {
-	// 		if(isEnterPressReleased) {
-	// 			isEnterPressReleased = false;
-	// 			enterPressCounter = 0;
-	// 			enterMenuItem();
-	// 		}
-	// 	}			
-	// }
 
-  void screenUpdaterISR(void) { needUpdate = true; }
+// void enterPressISR(void) {
+//  if(keyCenter) {
+//      enterPressCounter++;
+//  } else {
+//      enterPressCounter = 0;
+//      enterPressTicker.detach();
+//      isEnterPressReleased = true;
+//      enableButtons();
+//  }
+//  if(enterPressCounter >= (MENU_BUTTON_ENTER_PRESS_PERIOD / MENU_BUTTON_DEBOUNCE_PERIOD)) {
+//      if(isEnterPressReleased) {
+//          isEnterPressReleased = false;
+//          enterPressCounter = 0;
+//          enterMenuItem();
+//      }
+//  }
+// }
 
-  void returnToIdle(void) {
+void screenUpdaterISR(void) { needUpdate = true; }
+
+void returnToIdle(void) {
     ScreenModel *idle_screen = new IdleScreen();
     setScreenModel(idle_screen);
     needUpdate = true;
     buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
-  }
+}
 
-  void updateScreen(void) {
+void updateScreen(void) {
     needUpdate = false;
-    
-    if(!deviceOpMode_isLoading()) {
-      if(isFirst) {
-        isFirst = false;
-        buttonBacklight = MENU_BUTTON_BACKLIGHT_ON;
-        enableButtons();
-        // if(!menu_actions::isInOnboarding()) {        
-        //   ScreenModel *active_screen = new ActiveStatusScreen();
-        //   setScreenModel(active_screen);
-        //   menu_actions::updateTime();
-        //   idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
-        // } else {
-        //   set_time(MENU_DEFAULT_INIT_TIME);
-        //   time_t curr_time = time(NULL);
-        //   printf("TIME %s", ctime(&curr_time));
-        // }
-      }
-      
-    //   if(menu_actions::isErrorCritical(powerBoardError.get_errors()) || menu_actions::isErrorCritical(mainBoardError.get_errors())) {
-    //     if(menu_actions::isErrorCritical(powerBoardError.get_errors())) printf("[CRITICAL] POWER ERROR: 0x%X\n", powerBoardError.get_errors());
-    //     if(menu_actions::isErrorCritical(mainBoardError.get_errors())) printf("[CRITICAL] MAIN ERROR: 0x%X\n", mainBoardError.get_errors());
-    //     if(!menu_actions::isInTestMode()) {
-    //       ScreenModel *error_screen = new ErrorScreen();
-    //       setScreenModel(error_screen);
-    //     }
-    //   }
-      
-      if(resetScreen) {
-        // resetScreen = false;
-        // ScreenModel *active_screen = new ActiveStatusScreen();
-        // setScreenModel(active_screen);
-        // idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
-      }
-      
-      if (m_screen->refreshRate != 0) {
-        screenUpdater.attach(&screenUpdaterISR, m_screen->refreshRate);
-      } else {
-        screenUpdater.detach();
-      }
-    }
-    
-    ScreenDisplay::render(m_screen);
-  }
 
-  void setup(void) {
+    if (!deviceOpMode_isLoading()) {
+        if (isFirst) {
+            isFirst = false;
+            buttonBacklight = MENU_BUTTON_BACKLIGHT_ON;
+            enableButtons();
+            // if(!menu_actions::isInOnboarding()) {
+            //   ScreenModel *active_screen = new ActiveStatusScreen();
+            //   setScreenModel(active_screen);
+            //   menu_actions::updateTime();
+            //   idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
+            // } else {
+            //   set_time(MENU_DEFAULT_INIT_TIME);
+            //   time_t curr_time = time(NULL);
+            //   printf("TIME %s", ctime(&curr_time));
+            // }
+        }
+
+        //   if(menu_actions::isErrorCritical(powerBoardError.get_errors()) || menu_actions::isErrorCritical(mainBoardError.get_errors())) {
+        //     if(menu_actions::isErrorCritical(powerBoardError.get_errors())) printf("[CRITICAL] POWER ERROR: 0x%X\n", powerBoardError.get_errors());
+        //     if(menu_actions::isErrorCritical(mainBoardError.get_errors())) printf("[CRITICAL] MAIN ERROR: 0x%X\n", mainBoardError.get_errors());
+        //     if(!menu_actions::isInTestMode()) {
+        //       ScreenModel *error_screen = new ErrorScreen();
+        //       setScreenModel(error_screen);
+        //     }
+        //   }
+
+        if (resetScreen) {
+            // resetScreen = false;
+            // ScreenModel *active_screen = new ActiveStatusScreen();
+            // setScreenModel(active_screen);
+            // idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
+        }
+
+        if (m_screen->refreshRate != 0) {
+            screenUpdater.attach(&screenUpdaterISR, m_screen->refreshRate);
+        } else {
+            screenUpdater.detach();
+        }
+    }
+
+    ScreenDisplay::render(m_screen);
+}
+
+void setup(void) {
 //     buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
 //     resetScreen = false;
 //     localization::setup();
@@ -187,9 +187,9 @@ namespace menu_service {
 //     if(curr_time > 0) {
 // //      printf("Current time %s\r\n", ctime(&curr_time));
 //     }
-  }
+}
 
-  void upButtonPressed(void) {
+void upButtonPressed(void) {
 //     disableButtons();
 //     buttonDebouncer.attach(enableButtons, MENU_BUTTON_DEBOUNCE_PERIOD);
 //     if(deviceOpMode.isOnboarding()) {
@@ -208,9 +208,9 @@ namespace menu_service {
 //     } else {
 //       idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
 //     }
-  };
+};
 
-  void downButtonPressed(void) {
+void downButtonPressed(void) {
 //     disableButtons();
 //     buttonDebouncer.attach(enableButtons, MENU_BUTTON_DEBOUNCE_PERIOD);
 //     if (deviceOpMode.isOnboarding()) {
@@ -229,51 +229,51 @@ namespace menu_service {
 //     } else {
 //       idleScreen.attach(&returnToIdle, MENU_TIMEOUT_TO_IDLE);
 //     }
-  };
+};
 
-  void nextButtonPressed(void) {
+void nextButtonPressed(void) {
 //     disableButtons();
-// 		if(!isEnterPress)
-// 			isEnterPress = true;
-// 		enterPressTicker.attach(enterPressISR, MENU_BUTTON_DEBOUNCE_PERIOD);
-  };
+//      if(!isEnterPress)
+//          isEnterPress = true;
+//      enterPressTicker.attach(enterPressISR, MENU_BUTTON_DEBOUNCE_PERIOD);
+};
 } // namespace menu_service
 
 namespace menu_actions {
-  uint8_t pairingPeriodCounter;
-	uint8_t screenInitCounter = 0;
-  char textString[16];  
-  
-  bool hasConfig(void) {
-    if(deviceOpMode_isInTestMode()) return false;
+uint8_t pairingPeriodCounter;
+uint8_t screenInitCounter = 0;
+char textString[16];
+
+bool hasConfig(void) {
+    if (deviceOpMode_isInTestMode()) return false;
 //    printf("has config %d\r\n", deviceOpMode.isConfigured());
     return deviceOpMode_isConfigured();
-  }
-  bool hasWifi(void) {
+}
+bool hasWifi(void) {
 //    printf("has wifi %d\r\n", espData.has_internet_connection);
     return espData.has_internet_connection;
-  }
+}
 
-  const HeaterMode &deviceMode(void) {
+const HeaterMode &deviceMode(void) {
     return (HeaterMode)DataService::getCurrentHeaterMode();
-  };
+};
 
-  void setDeviceMode(const HeaterMode &mode) {
+void setDeviceMode(const HeaterMode &mode) {
     DataService::setCurrentHeaterMode((nectar_contract::HeaterMode)mode);
-  };
+};
 
-  void reset(void) {
+void reset(void) {
     // deviceOpMode.setReset(true);
     // commsController.sendEspMessage();
     // idleScreen.detach();
     // localization::setLanguage(EN);
-	// 	localization::saveLanguage();
-    
+    //  localization::saveLanguage();
+
     // deviceOpMode.resetConfiguration();
     // startPairing(true);
-  };
+};
 
-  void startPairing(const bool &start) {
+void startPairing(const bool &start) {
     // if(start) {
     //   deviceOpMode.setPairing(true);
     //   pairingPeriodCounter = 0;
@@ -281,20 +281,20 @@ namespace menu_actions {
     //   deviceOpMode.setPairing(false);
     //   pairingPeriodCounter = 0;
     // }
-  };
-	
-	void calibratePowerBoard(void) {
-		// DataService::setCalibrate(true);
-	};
-  
-  bool isPairingOn(void) { return deviceOpMode_isPairing(); };
-  bool isInTestMode(void) { return deviceOpMode_isInTestMode(); };
-  bool isInOnboarding(void) { return deviceOpMode_isOnboarding(); };
-  bool isLoading(void) { return deviceOpMode_isLoading(); };
-  void endOnboarding(void) { deviceOpMode_endOnboarding(); };
-	void modeSelected(void) { DataService::modeSelected(); };
-	
-  std::string getPin(void) {
+};
+
+void calibratePowerBoard(void) {
+    // DataService::setCalibrate(true);
+};
+
+bool isPairingOn(void) { return deviceOpMode_isPairing(); };
+bool isInTestMode(void) { return deviceOpMode_isInTestMode(); };
+bool isInOnboarding(void) { return deviceOpMode_isOnboarding(); };
+bool isLoading(void) { return deviceOpMode_isLoading(); };
+void endOnboarding(void) { deviceOpMode_endOnboarding(); };
+void modeSelected(void) { DataService::modeSelected(); };
+
+std::string getPin(void) {
     // if(isPairingOn()) {
     //   if(espData.pin != 0) {
     //     snprintf(textString, 5, "%d", espData.pin);
@@ -305,8 +305,8 @@ namespace menu_actions {
     // } else {
     //   return LocalizedString(LocalizationPairingInactive);
     // }
-  };
-  
+};
+
 //   uint32_t error(void) {
 //     if(powerBoardError.has_errors) {
 //       return powerBoardError.get_errors();
@@ -314,15 +314,15 @@ namespace menu_actions {
 //     if(mainBoardError.has_errors) {
 //       return mainBoardError.get_errors();
 //     }
-    
+
 //     return 0xFFFF;
 //   }
-  
+
 //   bool hasErrors(void) {
 //     if(powerBoardError.has_errors || mainBoardError.has_errors) return true;
 //     else return false;
 //   }
-  
+
 //   bool isErrorCritical(uint32_t err) {
 //     if((err == NONE) || (err == 0x00)) return false;
 //     else {
@@ -342,7 +342,7 @@ namespace menu_actions {
 //     }
 //   }
 
-  int8_t temperature(const TemperatureType &type) {
+int8_t temperature(const TemperatureType &type) {
     // switch (type) {
     // case TemperatureDay:
     //   return temperatureData.getDayTemperature();
@@ -351,9 +351,9 @@ namespace menu_actions {
     // case TemperatureMax:
     //   return temperatureData.getMaxTemperature();
     // }
-  };
+};
 
-  void setTemperature(const TemperatureType &type, const int8_t &t) {
+void setTemperature(const TemperatureType &type, const int8_t &t) {
     // switch (type) {
     // case TemperatureDay:
     //   temperatureData.setDayTemperature(t);
@@ -366,13 +366,13 @@ namespace menu_actions {
     //   break;
     // }
     // Storage::saveTemp(type, t);
-  };
+};
 
-  time_hm _time(12, 00);
-  time_hm _time_day_start(6, 00);
-  time_hm _time_night_start(23, 00);
+time_hm _time(12, 00);
+time_hm _time_day_start(6, 00);
+time_hm _time_night_start(23, 00);
 
-  void updateTime(void) {
+void updateTime(void) {
 //     time_t rtc = time(NULL);
 
 //     int8_t hrs = rtc / 60 / 60 % 24;
@@ -380,7 +380,7 @@ namespace menu_actions {
 
 //     time_hm new_time(hrs, min);
 //     _time = new_time;
-    
+
 //     if(pairingPeriodCounter >= MENU_PAIRING_PERIOD) {
 //       pairingPeriodCounter = 0;
 //       deviceOpMode_setPairing(0);
@@ -389,22 +389,22 @@ namespace menu_actions {
 //     }
 
 //     if ((hrs == 0) && (min == 0)) {
-// 			DataService::calculateSolarKwhDiff(true);
-// 		}
-		
-// 		if(screenInitCounter >= MENU_SCREEN_INIT_PERIOD) {
-// 			screenInitCounter = 0;
-// 			ScreenDisplay::init();
-// 		} else {
-// 			screenInitCounter++;
-// 		}
-		
-// //		sanitizerIncreaseCounter();
-// //		boostTimeoutIncreaseCounter();
-//     menu_service::needUpdate = true;
-  }
+//          DataService::calculateSolarKwhDiff(true);
+//      }
 
-  time_hm getTime(const TimeType &type) {
+//      if(screenInitCounter >= MENU_SCREEN_INIT_PERIOD) {
+//          screenInitCounter = 0;
+//          ScreenDisplay::init();
+//      } else {
+//          screenInitCounter++;
+//      }
+
+// //       sanitizerIncreaseCounter();
+// //       boostTimeoutIncreaseCounter();
+//     menu_service::needUpdate = true;
+}
+
+time_hm getTime(const TimeType &type) {
     // switch (type) {
     // case Current:
     //   return _time;
@@ -413,9 +413,9 @@ namespace menu_actions {
     // case NightStart:
     //   return _time_night_start;
     // }
-  }
+}
 
-  void setTime(const time_hm &nectar_time, const TimeType &type) {
+void setTime(const time_hm &nectar_time, const TimeType &type) {
 //     time_t rtc = time(NULL);
 //     switch (type) {
 //     case Current:
@@ -430,5 +430,5 @@ namespace menu_actions {
 //       break;
 //     }
 //     Storage::saveTime(nectar_time, type);
-  }
+}
 } // namespace menu_actions

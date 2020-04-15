@@ -6,7 +6,7 @@
 #include "error_handler.h"
 
 extern "C" {
-  #include "data.h"
+#include "data.h"
 }
 
 // static uint8_t calibrated = EMPTY_VALUE;
@@ -26,89 +26,89 @@ extern "C" {
 // };
 
 void flash_storage_init(void) {
-  if(FLASH->CR & (0x1 << 0x7)) {
-    FLASH->KEYR = 0x45670123; //FLASH KEY 1
-    FLASH->KEYR = 0xCDEF89AB; //FLASH KEY 2
-  }
+    if (FLASH->CR & (0x1 << 0x7)) {
+        FLASH->KEYR = 0x45670123; //FLASH KEY 1
+        FLASH->KEYR = 0xCDEF89AB; //FLASH KEY 2
+    }
 
-  uint16_t result = EE_Init();
-  if(result == HAL_OK) error_clear(NS_FLASH_ACCESS_POWER);
+    uint16_t result = EE_Init();
+    if (result == HAL_OK) error_clear(NS_FLASH_ACCESS_POWER);
 }
 
 uint8_t flash_storage_load_data(void) {
 // uint8_t flash_storage_load_data(float *voltage, float *current, float *sun, float *grid) {
-  uint8_t load_error = 1;
+    uint8_t load_error = 1;
 
-  EE_SettingsDatastruct rDataStruct;
-  load_error = EE_ReadDatastruct(&rDataStruct);
+    EE_SettingsDatastruct rDataStruct;
+    load_error = EE_ReadDatastruct(&rDataStruct);
 
-  if(load_error) {
-    printf("[STORAGE] empty\r\n");
-    // sDataStruct.device_calibrated = EMPTY_VALUE;
-    CLEAR_STATUS(CALIBRATION_STATUS);
-    return 0;
-  } else {
-    printf("[STORAGE] not empty\r\n");
-    // sDataStruct = rDataStruct;
-    // *voltage = sDataStruct.ref_voltage;
-    // *current = sDataStruct.ref_current;
-    PowerData_write(R_VOLTAGE, &rDataStruct.ref_voltage);
-    PowerData_write(R_CURRENT, &rDataStruct.ref_current);
+    if (load_error) {
+        printf("[STORAGE] empty\r\n");
+        // sDataStruct.device_calibrated = EMPTY_VALUE;
+        CLEAR_STATUS(CALIBRATION_STATUS);
+        return 0;
+    } else {
+        printf("[STORAGE] not empty\r\n");
+        // sDataStruct = rDataStruct;
+        // *voltage = sDataStruct.ref_voltage;
+        // *current = sDataStruct.ref_current;
+        PowerData_write(R_VOLTAGE, &rDataStruct.ref_voltage);
+        PowerData_write(R_CURRENT, &rDataStruct.ref_current);
 
-    // *sun = sDataStruct.sun_meter;
-    // *grid = sDataStruct.grid_meter;
-    PowerData_write(SUN_METER, &rDataStruct.sun_meter);
-    PowerData_write(GRID_METER, &rDataStruct.grid_meter);
-    // printf("[STORAGE] %d %d %f %f\r\n", sDataStruct.device_calibrated, sDataStruct.extra_property, sDataStruct.ref_voltage, sDataStruct.ref_current);
-    PowerData_info();
-  }
+        // *sun = sDataStruct.sun_meter;
+        // *grid = sDataStruct.grid_meter;
+        PowerData_write(SUN_METER, &rDataStruct.sun_meter);
+        PowerData_write(GRID_METER, &rDataStruct.grid_meter);
+        // printf("[STORAGE] %d %d %f %f\r\n", sDataStruct.device_calibrated, sDataStruct.extra_property, sDataStruct.ref_voltage, sDataStruct.ref_current);
+        PowerData_info();
+    }
 
-  if (rDataStruct.device_calibrated == DEVICE_CALIBRATED) {
-    SET_STATUS(CALIBRATION_STATUS);
-  } else {
-    CLEAR_STATUS(CALIBRATION_STATUS);
-  }
+    if (rDataStruct.device_calibrated == DEVICE_CALIBRATED) {
+        SET_STATUS(CALIBRATION_STATUS);
+    } else {
+        CLEAR_STATUS(CALIBRATION_STATUS);
+    }
 
-  return 1;
+    return 1;
 }
 
 // void flash_storage_save_data(float voltage, float current) {
 void flash_storage_save_data(void) {
-  EE_SettingsDatastruct rDataStruct;
-  uint8_t flash_write_error = 1;
-
-  // rDataStruct.ref_voltage = voltage;
-  // rDataStruct.ref_current = current;
-  // rDataStruct.device_calibrated = DEVICE_CALIBRATED;
-  PowerData_read(R_VOLTAGE, &rDataStruct.ref_voltage);
-  PowerData_read(R_CURRENT, &rDataStruct.ref_current);
-  PowerData_read(SUN_METER, &rDataStruct.sun_meter);
-  PowerData_read(GRID_METER, &rDataStruct.grid_meter);
-  rDataStruct.device_calibrated = DEVICE_CALIBRATED;
-  flash_write_error = EE_WriteDatastruct(&rDataStruct);
-
-  if(flash_write_error) {
-    error_set(NS_FLASH_ACCESS_POWER);
-  }
-}
-
-void flash_storage_save_meters(void) {
-  if (GET_STATUS(CALIBRATION_STATUS)) {
     EE_SettingsDatastruct rDataStruct;
     uint8_t flash_write_error = 1;
 
-    // sDataStruct.sun_meter = sun;
-    // sDataStruct.grid_meter = grid;
+    // rDataStruct.ref_voltage = voltage;
+    // rDataStruct.ref_current = current;
+    // rDataStruct.device_calibrated = DEVICE_CALIBRATED;
     PowerData_read(R_VOLTAGE, &rDataStruct.ref_voltage);
     PowerData_read(R_CURRENT, &rDataStruct.ref_current);
     PowerData_read(SUN_METER, &rDataStruct.sun_meter);
     PowerData_read(GRID_METER, &rDataStruct.grid_meter);
+    rDataStruct.device_calibrated = DEVICE_CALIBRATED;
     flash_write_error = EE_WriteDatastruct(&rDataStruct);
 
-    if(flash_write_error) {
-      error_set(NS_FLASH_ACCESS_POWER);
+    if (flash_write_error) {
+        error_set(NS_FLASH_ACCESS_POWER);
     }
-  } else {
-    printf("[FS] Device not calibrated. Meters and ref not saved");
-  }
+}
+
+void flash_storage_save_meters(void) {
+    if (GET_STATUS(CALIBRATION_STATUS)) {
+        EE_SettingsDatastruct rDataStruct;
+        uint8_t flash_write_error = 1;
+
+        // sDataStruct.sun_meter = sun;
+        // sDataStruct.grid_meter = grid;
+        PowerData_read(R_VOLTAGE, &rDataStruct.ref_voltage);
+        PowerData_read(R_CURRENT, &rDataStruct.ref_current);
+        PowerData_read(SUN_METER, &rDataStruct.sun_meter);
+        PowerData_read(GRID_METER, &rDataStruct.grid_meter);
+        flash_write_error = EE_WriteDatastruct(&rDataStruct);
+
+        if (flash_write_error) {
+            error_set(NS_FLASH_ACCESS_POWER);
+        }
+    } else {
+        printf("[FS] Device not calibrated. Meters and ref not saved");
+    }
 }

@@ -6,27 +6,27 @@
 #include "TemperatureScreen.h"
 
 ScreenModel *TimeScreen::upModel() {
-  switch (type) {
-  case DayStart:
-    return new TemperatureScreen(TemperatureMax);
-  case NightStart:
-    return new TimeScreen(DayStart);
-  case Current:
-    return new TimeScreen(NightStart);
-  }
+    switch (type) {
+        case DayStart:
+            return new TemperatureScreen(TemperatureMax);
+        case NightStart:
+            return new TimeScreen(DayStart);
+        case Current:
+            return new TimeScreen(NightStart);
+    }
 };
 
 ScreenModel *TimeScreen::downModel() {
-  switch (type) {
-  case DayStart:
-    return new TimeScreen(NightStart);
-  case NightStart:
-    return new TimeScreen(Current);
-  case Current:
-    return new LanguageScreen();
-  }
+    switch (type) {
+        case DayStart:
+            return new TimeScreen(NightStart);
+        case NightStart:
+            return new TimeScreen(Current);
+        case Current:
+            return new LanguageScreen();
+    }
 };
 
 ScreenModel *TimeScreen::nextModel() {
-  return new SetTimeScreen(type, time, true);
+    return new SetTimeScreen(type, time, true);
 };

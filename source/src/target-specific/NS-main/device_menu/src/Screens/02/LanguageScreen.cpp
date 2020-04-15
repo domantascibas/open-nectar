@@ -9,19 +9,19 @@
 #include "ResetScreen.h"
 
 ScreenModel *LanguageScreen::upModel() {
-  if (menu_actions::hasConfig())
-    return new ResetScreen();
-  return new TimeScreen(Current);
+    if (menu_actions::hasConfig())
+        return new ResetScreen();
+    return new TimeScreen(Current);
 };
 
 ScreenModel *LanguageScreen::downModel() {
-  if (menu_actions::hasConfig()) {
-    return new BackScreen();
-  } else {
-    return new PairingScreen();
-  }
+    if (menu_actions::hasConfig()) {
+        return new BackScreen();
+    } else {
+        return new PairingScreen();
+    }
 };
 
 ScreenModel *LanguageScreen::nextModel() {
-  return new SetLanguageScreen(localization::currentLanguage());
+    return new SetLanguageScreen(localization::currentLanguage());
 };

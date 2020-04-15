@@ -4,11 +4,11 @@
  * available at <http://developer.mbed.org/users/hudakz/code/OneWire/>
  *
  * Example of use:
- * 
+ *
  * #include "DS1820.h"
  *
  * Serial serial(USBTX, USBRX);
- * 
+ *
  * int main() {
  *     DS1820  ds1820(PA_9);    // substitute PA_9 with actual mbed pin name connected to the DS1820 data pin
  *
@@ -24,12 +24,12 @@
  *        serial.printf("No DS1820 sensor found!\r\n");
  * }
  *
- * 
- * Note: Don't forget to connect a 4.7k Ohm resistor 
+ *
+ * Note: Don't forget to connect a 4.7k Ohm resistor
  *       between the DS1820's data pin and the +3.3V pin
  *
  */
- 
+
 #include "DS1820.h"
 
 #define DEBUG 0
@@ -59,15 +59,13 @@ DS1820::DS1820(PinName pin) :
  */
 DS1820::DS1820(char model, PinName pin) :
     oneWire(pin) {
-    if((model == 'S') or (model == 's')) {
+    if ((model == 'S') or (model == 's')) {
         present = true;
         model_s = true;
-    }
-    else if((model == 'B') or (model == 'b')) {
+    } else if ((model == 'B') or (model == 'b')) {
         present = true;
         model_s = false;
-    }
-    else
+    } else
         present = false;
 }
 
@@ -81,7 +79,7 @@ DS1820::DS1820(char model, PinName pin) :
 bool DS1820::begin(void) {
     oneWire.reset_search();
     wait_ms(250);
-    if(!oneWire.search(addr)) {
+    if (!oneWire.search(addr)) {
 #if DEBUG
         serial.printf("No addresses.\r\n");
 #endif
@@ -92,51 +90,50 @@ bool DS1820::begin(void) {
 
 #if DEBUG
     serial.printf("ROM =");
-    for(uint8_t i = 0; i < 8; i++) {
+    for (uint8_t i = 0; i < 8; i++) {
         serial.printf(" %x", addr[i]);
     }
     serial.printf("\r\n");
 #endif
 
-    if(OneWire::crc8(addr, 7) == addr[7]) {
+    if (OneWire::crc8(addr, 7) == addr[7]) {
         present = true;
 
         // the first ROM byte indicates which chip
-        switch(addr[0]) {
-        case 0x10:
-            model_s = true;
+        switch (addr[0]) {
+            case 0x10:
+                model_s = true;
 #if DEBUG
-            serial.printf("DS18S20 or old DS1820\r\n");
-#endif            
-            break;
+                serial.printf("DS18S20 or old DS1820\r\n");
+#endif
+                break;
 
-        case 0x28:
-            model_s = false;
+            case 0x28:
+                model_s = false;
 #if DEBUG
-            serial.printf("DS18B20\r\n");
-#endif            
-            break;
+                serial.printf("DS18B20\r\n");
+#endif
+                break;
 
-        case 0x22:
-            model_s = false;
+            case 0x22:
+                model_s = false;
 #if DEBUG
-            serial.printf("DS1822\r\n");
-#endif            
-            break;
+                serial.printf("DS1822\r\n");
+#endif
+                break;
 
-        default:
-            present = false;
+            default:
+                present = false;
 #if DEBUG
-            serial.printf("Device doesn't belong to the DS1820 family\r\n");
-#endif            
-            return false;
+                serial.printf("Device doesn't belong to the DS1820 family\r\n");
+#endif
+                return false;
         }
         return true;
-    }
-    else {
-#if DEBUG    
+    } else {
+#if DEBUG
         serial.printf("Invalid CRC!\r\n");
-#endif    
+#endif
         return false;
     }
 }
@@ -144,7 +141,7 @@ bool DS1820::begin(void) {
 /**
  * @brief   Informs about presence of a DS1820 sensor.
  * @note    begin() shall be called before using this function
- *          if a generic DS1820 instance was created by the user. 
+ *          if a generic DS1820 instance was created by the user.
  *          No need to call begin() for a specific DS1820 instance.
  * @param
  * @retval  true:   when a DS1820 sensor is present
@@ -165,24 +162,24 @@ bool DS1820::isPresent(void) {
  */
 void DS1820::setResolution(uint8_t res) {
     // keep resolution within limits
-    if(res > 12)
+    if (res > 12)
         res = 12;
-    if(res < 9)
-        res = 9;      
-    if(model_s)
+    if (res < 9)
         res = 9;
-       
+    if (model_s)
+        res = 9;
+
     oneWire.reset();
     oneWire.skip();
     oneWire.write(0xBE);            // to read Scratchpad
-    for(uint8_t i = 0; i < 9; i++)  // read Scratchpad bytes
-        data[i] = oneWire.read();   
+    for (uint8_t i = 0; i < 9; i++) // read Scratchpad bytes
+        data[i] = oneWire.read();
 
-    data[4] |= (res - 9) << 5;      // update configuration byte (set resolution)  
+    data[4] |= (res - 9) << 5;      // update configuration byte (set resolution)
     oneWire.reset();
     oneWire.skip();
     oneWire.write(0x4E);            // to write into Scratchpad
-    for(uint8_t i = 2; i < 5; i++)  // write three bytes (2nd, 3rd, 4th) into Scratchpad
+    for (uint8_t i = 2; i < 5; i++) // write three bytes (2nd, 3rd, 4th) into Scratchpad
         oneWire.write(data[i]);
 }
 
@@ -197,7 +194,7 @@ void DS1820::setResolution(uint8_t res) {
  * @retval
  */
 void DS1820::startConversion(void) {
-    if(present) {
+    if (present) {
         oneWire.reset();
         oneWire.skip();
         oneWire.write(0x44);    //start temperature conversion
@@ -211,52 +208,48 @@ void DS1820::startConversion(void) {
  * @retval  Floating point temperature value
  */
 float DS1820::read(void) {
-    if(present) {
+    if (present) {
         oneWire.reset();
         oneWire.skip();
         oneWire.write(0xBE);            // to read Scratchpad
-        for(uint8_t i = 0; i < 9; i++)  // read Scratchpad bytes
-            data[i] = oneWire.read();   
+        for (uint8_t i = 0; i < 9; i++) // read Scratchpad bytes
+            data[i] = oneWire.read();
 
         // Convert the raw bytes to a 16-bit unsigned value
-        uint16_t*   p_word = reinterpret_cast < uint16_t * > (&data[0]);
+        uint16_t   *p_word = reinterpret_cast < uint16_t * >(&data[0]);
 
 #if DEBUG
         serial.printf("raw = %#x\r\n", *p_word);
-#endif            
+#endif
 
-        if(model_s) {
+        if (model_s) {
             *p_word = *p_word << 3;         // 9-bit resolution
-            if(data[7] == 0x10) {
+            if (data[7] == 0x10) {
 
                 // "count remain" gives full 12-bit resolution
                 *p_word = (*p_word & 0xFFF0) + 12 - data[6];
             }
-        }
-        else {
+        } else {
             uint8_t cfg = (data[4] & 0x60); // default 12-bit resolution
-            
+
             // at lower resolution, the low bits are undefined, so let's clear them
-            if(cfg == 0x00)
-                *p_word = *p_word &~7;      //  9-bit resolution
-            else
-            if(cfg == 0x20)
-                *p_word = *p_word &~3;      // 10-bit resolution
-            else
-            if(cfg == 0x40)
-                *p_word = *p_word &~1;      // 11-bit resolution
-                                               
+            if (cfg == 0x00)
+                *p_word = *p_word & ~7;     //  9-bit resolution
+            else if (cfg == 0x20)
+                *p_word = *p_word & ~3;     // 10-bit resolution
+            else if (cfg == 0x40)
+                *p_word = *p_word & ~1;     // 11-bit resolution
+
         }
 
         // Convert the raw bytes to a 16-bit signed fixed point value :
         // 1 sign bit, 7 integer bits, 8 fractional bits (two’s compliment
         // and the LSB of the 16-bit binary number represents 1/256th of a unit).
         *p_word = *p_word << 4;
-        
+
         // Convert to floating point value
-        return(toFloat(*p_word));
-    }
-    else
+        return (toFloat(*p_word));
+    } else
         return 0;
 }
 
@@ -272,27 +265,27 @@ float DS1820::read(void) {
  *              1 - sensor not present ('temp' is not updated)
  *              2 - CRC error ('temp' is not updated)
  */
-uint8_t DS1820::read(float& temp) {
-    if(present) {
+uint8_t DS1820::read(float &temp) {
+    if (present) {
         oneWire.reset();
         oneWire.skip();
         oneWire.write(0xBE);            // to read Scratchpad
-        for(uint8_t i = 0; i < 9; i++)  // reading scratchpad registers
+        for (uint8_t i = 0; i < 9; i++) // reading scratchpad registers
             data[i] = oneWire.read();
 
-        if(oneWire.crc8(data, 8) != data[8])    // if calculated CRC does not match the stored one
+        if (oneWire.crc8(data, 8) != data[8])   // if calculated CRC does not match the stored one
             return 2;                           // return with CRC error
 
         // Convert the raw bytes to a 16bit unsigned value
-        uint16_t*   p_word = reinterpret_cast < uint16_t * > (&data[0]);
+        uint16_t   *p_word = reinterpret_cast < uint16_t * >(&data[0]);
 
 #if DEBUG
         serial.printf("raw = %#x\r\n", *p_word);
 #endif
 
-        if(model_s) {
+        if (model_s) {
             *p_word = *p_word << 3;         // 9 bit resolution,  max conversion time = 750ms
-            if(data[7] == 0x10) {
+            if (data[7] == 0x10) {
 
                 // "count remain" gives full 12 bit resolution
                 *p_word = (*p_word & 0xFFF0) + 12 - data[6];
@@ -305,19 +298,16 @@ uint8_t DS1820::read(float& temp) {
             // Convert to floating point value
             temp = toFloat(*p_word);
             return 0;   // return with no errors
-        }
-        else {
+        } else {
             uint8_t cfg = (data[4] & 0x60); // default 12bit resolution, max conversion time = 750ms
 
             // at lower resolution, the low bits are undefined, so let's clear them
-            if(cfg == 0x00)
-                *p_word = *p_word &~7;      //  9bit resolution, max conversion time = 93.75ms
-            else
-            if(cfg == 0x20)
-                *p_word = *p_word &~3;      // 10bit resolution, max conversion time = 187.5ms
-            else
-            if(cfg == 0x40)
-                *p_word = *p_word &~1;      // 11bit resolution, max conversion time = 375ms
+            if (cfg == 0x00)
+                *p_word = *p_word & ~7;     //  9bit resolution, max conversion time = 93.75ms
+            else if (cfg == 0x20)
+                *p_word = *p_word & ~3;     // 10bit resolution, max conversion time = 187.5ms
+            else if (cfg == 0x40)
+                *p_word = *p_word & ~1;     // 11bit resolution, max conversion time = 375ms
 
             // Convert the raw bytes to a 16bit signed fixed point value :
             // 1 sign bit, 7 integer bits, 8 fractional bits (two's compliment
@@ -327,8 +317,7 @@ uint8_t DS1820::read(float& temp) {
             temp = toFloat(*p_word);
             return 0;   // return with no errors
         }
-    }
-    else
+    } else
         return 1;   // error, sensor is not present
 }
 
@@ -337,12 +326,12 @@ uint8_t DS1820::read(float& temp) {
  * @note    The 16-bit unsigned integer represnts actually
  *          a 16-bit signed fixed point value:
  *          1 sign bit, 7 integer bits, 8 fractional bits (two’s compliment
- *          and the LSB of the 16-bit binary number represents 1/256th of a unit).       
+ *          and the LSB of the 16-bit binary number represents 1/256th of a unit).
  * @param   16-bit unsigned integer
  * @retval  Floating point value
  */
 float DS1820::toFloat(uint16_t word) {
-    if(word & 0x8000)
+    if (word & 0x8000)
         return (-float(uint16_t(~word + 1)) / 256.0f);
     else
         return (float(word) / 256.0f);

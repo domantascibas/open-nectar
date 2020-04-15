@@ -6,13 +6,13 @@
 #include "SettingsScreen.h"
 
 ScreenModel *ActiveStatusScreen::upModel() {
-  if (menu_actions::isInTestMode()) {
-    return new CalibrateScreen();
-  } else {
-    return new SettingsScreen();
-  }
+    if (menu_actions::isInTestMode()) {
+        return new CalibrateScreen();
+    } else {
+        return new SettingsScreen();
+    }
 };
 
 ScreenModel *ActiveStatusScreen::downModel() {
-  return new ActiveTotalScreen();
+    return new ActiveTotalScreen();
 };

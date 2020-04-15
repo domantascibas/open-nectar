@@ -7,6 +7,6 @@
 ScreenModel *DeviceModeScreen::upModel() { return new ActiveTotalScreen(); };
 ScreenModel *DeviceModeScreen::downModel() { return new SettingsScreen(); };
 ScreenModel *DeviceModeScreen::nextModel() {
-  HeaterMode curr_mode = menu_actions::deviceMode();
-  return new SetDeviceModeScreen(curr_mode);
+    HeaterMode curr_mode = menu_actions::deviceMode();
+    return new SetDeviceModeScreen(curr_mode);
 };

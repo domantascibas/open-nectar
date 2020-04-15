@@ -5,56 +5,56 @@
 CommsController commsController;
 
 CommsController::CommsController() {
-  isFree = true;
-  nextPower = false;
-  nextEsp = false;
+    isFree = true;
+    nextPower = false;
+    nextEsp = false;
 }
 
 void CommsController::sendPowerMessage() {
-  if(isFree) {
-    isFree = false;
-    nextPower = false;
-    power_board::send_message();
-  } else {
-    if(!nextPower) {
-      nextPower = true;
+    if (isFree) {
+        isFree = false;
+        nextPower = false;
+        power_board::send_message();
+    } else {
+        if (!nextPower) {
+            nextPower = true;
+        }
     }
-  }
 }
 
 void CommsController::sendEspMessage() {
-  if(isFree) {
-    isFree = false;
-    nextEsp = false;
-    esp::send_message();
-  } else {
-    if(!nextEsp) {
-      nextEsp = true;
+    if (isFree) {
+        isFree = false;
+        nextEsp = false;
+        esp::send_message();
+    } else {
+        if (!nextEsp) {
+            nextEsp = true;
+        }
     }
-  }
 }
 
 void CommsController::clearQueue() {
-  if(nextEsp) {
-    isFree = false;
-    nextEsp = false;
-    esp::send_message();
-  }
-  if(nextPower) {
-    isFree = false;
-    nextPower = false;
-    power_board::send_message();
-  }
+    if (nextEsp) {
+        isFree = false;
+        nextEsp = false;
+        esp::send_message();
+    }
+    if (nextPower) {
+        isFree = false;
+        nextPower = false;
+        power_board::send_message();
+    }
 }
 
 void CommsController::busyChannel() {
-  isFree = false;
+    isFree = false;
 }
 
 void CommsController::freeChannel() {
-  isFree = true;
+    isFree = true;
 }
 
 bool CommsController::isChannelFree() {
-  return isFree;
+    return isFree;
 }

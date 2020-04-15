@@ -7,17 +7,17 @@
 #include "ResetScreen.h"
 
 ScreenModel *BackScreen::upModel() {
-  if (menu_actions::hasConfig()) {
-    return new LanguageScreen();
-  } else {
-    return new PairingScreen();
-  }
+    if (menu_actions::hasConfig()) {
+        return new LanguageScreen();
+    } else {
+        return new PairingScreen();
+    }
 };
 
 ScreenModel *BackScreen::downModel() {
-  return new ResetScreen();
+    return new ResetScreen();
 };
 
 ScreenModel *BackScreen::nextModel() {
-  return new SettingsScreen();
+    return new SettingsScreen();
 };

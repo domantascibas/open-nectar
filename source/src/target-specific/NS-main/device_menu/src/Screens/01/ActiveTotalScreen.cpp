@@ -6,6 +6,6 @@
 
 ScreenModel *ActiveTotalScreen::upModel() { return new ActiveStatusScreen(); };
 ScreenModel *ActiveTotalScreen::downModel() {
-  if(menu_actions::hasConfig()) return new SettingsScreen();
-  else return new DeviceModeScreen();
+    if (menu_actions::hasConfig()) return new SettingsScreen();
+    else return new DeviceModeScreen();
 };

@@ -4,5 +4,5 @@
 #include "../00/SetTimeScreen.h"
 
 ScreenModel *WelcomeTimeScreen::nextModel() {
-  return new SetTimeScreen(type, time, true, true);
+    return new SetTimeScreen(type, time, true, true);
 };

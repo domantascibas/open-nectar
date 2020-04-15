@@ -4,9 +4,9 @@
 #include "DebugScreen.h"
 
 ScreenModel *ErrorScreen::upModel() {
-  return new SettingsScreen();
+    return new SettingsScreen();
 };
 
 ScreenModel *ErrorScreen::downModel() {
-  return new DebugScreen();
+    return new DebugScreen();
 };

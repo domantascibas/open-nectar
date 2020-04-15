@@ -5,13 +5,13 @@
 #include "../01/SettingsScreen.h"
 
 ScreenModel *DebugScreen::upModel() {
-  if(menu_actions::hasErrors()) {
-    return new ErrorScreen();
-  } else {
-    return new SettingsScreen();
-  }
+    if (menu_actions::hasErrors()) {
+        return new ErrorScreen();
+    } else {
+        return new SettingsScreen();
+    }
 };
 
 ScreenModel *DebugScreen::downModel() {
-  return new DebugErrorScreen();
+    return new DebugErrorScreen();
 };

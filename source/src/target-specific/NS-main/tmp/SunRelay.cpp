@@ -2,37 +2,37 @@
 #include "PowerBoardComms.h"
 
 void SunRelay::init() {
-  printf("RELAYS SUN INIT\n");
+    printf("RELAYS SUN INIT\n");
 }
 
 void SunRelay::turnOn() {
-  relayTurnOn = true;
-  switching = true;
-  timeout.attach(callback(this, &SunRelay::timeoutIsr), 3.0);
+    relayTurnOn = true;
+    switching = true;
+    timeout.attach(callback(this, &SunRelay::timeoutIsr), 3.0);
 }
 
 void SunRelay::turnOff() {
-  relayTurnOn = false;
-  switching = true;
-  timeout.attach(callback(this, &SunRelay::timeoutSd), 0.5);
+    relayTurnOn = false;
+    switching = true;
+    timeout.attach(callback(this, &SunRelay::timeoutSd), 0.5);
 }
 
 void SunRelay::timeoutSd() {
-	if(relayTurnOn) {
-		power_board::start();
-		switching = false;
-  } else {
-		power_board::stop();
-    timeout.attach(callback(this, &SunRelay::timeoutIsr), 3.0);
-  }
+    if (relayTurnOn) {
+        power_board::start();
+        switching = false;
+    } else {
+        power_board::stop();
+        timeout.attach(callback(this, &SunRelay::timeoutIsr), 3.0);
+    }
 }
 
 void SunRelay::timeoutIsr() {
-  if(relayTurnOn) {
-		relayOn();
-		timeout.attach(callback(this, &SunRelay::timeoutSd), 1.0);
-  } else {
-    relayOff();
-		switching = false;
-  }
+    if (relayTurnOn) {
+        relayOn();
+        timeout.attach(callback(this, &SunRelay::timeoutSd), 1.0);
+    } else {
+        relayOff();
+        switching = false;
+    }
 }

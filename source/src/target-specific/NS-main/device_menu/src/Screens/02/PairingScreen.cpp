@@ -9,6 +9,6 @@ ScreenModel *PairingScreen::upModel() { return new LanguageScreen(); };
 ScreenModel *PairingScreen::downModel() { return new BackScreen(); };
 
 ScreenModel *PairingScreen::nextModel() {
-  return new ConfirmationScreen(
-      Pairing, LocalizedString(LocalizationPairingStart), true);
+    return new ConfirmationScreen(
+                    Pairing, LocalizedString(LocalizationPairingStart), true);
 };

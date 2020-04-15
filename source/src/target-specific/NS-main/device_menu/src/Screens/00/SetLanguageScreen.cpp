@@ -6,16 +6,16 @@
 using namespace localization;
 
 ScreenModel *SetLanguageScreen::upModel() {
-  return new SetLanguageScreen(prevLanguage(language));
+    return new SetLanguageScreen(prevLanguage(language));
 };
 
 ScreenModel *SetLanguageScreen::downModel() {
-  return new SetLanguageScreen(nextLanguage(language));
+    return new SetLanguageScreen(nextLanguage(language));
 };
 
 ScreenModel *SetLanguageScreen::nextModel() {
-  setLanguage(language);
-	saveLanguage();
-  if(menu_actions::isInOnboarding()) return new WelcomeTimeScreen(Current);
-  else return new LanguageScreen();
+    setLanguage(language);
+    saveLanguage();
+    if (menu_actions::isInOnboarding()) return new WelcomeTimeScreen(Current);
+    else return new LanguageScreen();
 };

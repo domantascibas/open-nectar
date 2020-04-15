@@ -9,11 +9,11 @@
 ScreenModel *ResetScreen::upModel() { return new BackScreen(); };
 
 ScreenModel *ResetScreen::downModel() {
-  if (menu_actions::hasConfig())
-    return new LanguageScreen();
-  return new TemperatureScreen(TemperatureDay);
+    if (menu_actions::hasConfig())
+        return new LanguageScreen();
+    return new TemperatureScreen(TemperatureDay);
 };
 
 ScreenModel *ResetScreen::nextModel() {
-  return new ConfirmationScreen(Reset, title + "?", true);
+    return new ConfirmationScreen(Reset, title + "?", true);
 };
