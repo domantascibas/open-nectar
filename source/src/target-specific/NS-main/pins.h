@@ -11,8 +11,8 @@
 #define POWER_COMMS_TX_PIN PB_10
 #define POWER_COMMS_RX_PIN PB_11
 
-#define ESP_COMMS_TX_PIN PA_9   //D8
-#define ESP_COMMS_RX_PIN PA_10  //D2
+#define ESP_COMMS_TX_PIN PA_9   //D8    connected to ESP pin5
+#define ESP_COMMS_RX_PIN PA_10  //D2    connected to ESP pin4
 
 #define SERVICE_COMMS_TX_PIN PA_2
 #define SERVICE_COMMS_RX_PIN PA_3
