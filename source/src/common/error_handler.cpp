@@ -7,18 +7,15 @@ Error_t nsError = {0, 0};
 #define ERROR_SET(x)            (nsError.error |= (uint16_t)(1U << x))
 #define ERROR_GET(x)            ((nsError.error & (uint16_t)(1U << x)) >> x)
 
-uint8_t error_init(uint16_t error) {
+uint8_t error_init(void) {
     nsError.hasError = 0;
-    nsError.error = error;
-    if (error != 0) {
-        nsError.hasError = 1;
-    }
     return 1;
 }
 
 uint8_t error_set(NS_ERROR_t error) {
     ERROR_SET(error);
     nsError.hasError = 1;
+    printf("[err_handler] err set:%d\r\n", (uint8_t)error);
     return 1;
 }
 
@@ -42,6 +39,7 @@ uint8_t error_clear(NS_ERROR_t error) {
     if (nsError.error == 0) {
         nsError.hasError = 0;
     }
+    printf("[err_handler] err clr:%d\r\n", (uint8_t)error);
     return 1;
 }
 

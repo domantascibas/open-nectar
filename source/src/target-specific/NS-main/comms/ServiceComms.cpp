@@ -4,7 +4,7 @@
 // #include "menu_service.h"
 #include "pins.h"
 
-RawSerial pc(SERVICE_COMMS_TX_PIN, SERVICE_COMMS_RX_PIN);
+RawSerial pc(SERVICE_COMMS_TX_PIN, SERVICE_COMMS_RX_PIN, PC_BAUD);
 
 static uint8_t fakeTemperature = TEST_MODE_IDLE_ON_TEMPERATURE;
 static uint8_t newValueAvailable = 0;
@@ -66,8 +66,7 @@ void Rx_interrupt() {
 }
 
 void service_setup(void) {
-    pc.baud(SERVICE_COMMS_BAUD_RATE);
-    printf("PC serial @%d", SERVICE_COMMS_BAUD_RATE);
+    
 }
 
 uint8_t service_getFakeTemperature(void) {

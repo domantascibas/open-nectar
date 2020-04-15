@@ -53,8 +53,8 @@ void render(ScreenModel *screen) {
     if (menu_actions::isLoading()) {
         u8g2_SetFont(&myScreen, SmallFont);
         u8g2_SetFontPosTop(&myScreen);
-        w = u8g2_GetStrWidth(&myScreen, NECTAR_DEVICE_MODEL);
-        u8g2_DrawUTF8(&myScreen, SCREEN_CENTER_HORIZONTAL - w / 2, 0, NECTAR_DEVICE_MODEL);
+        w = u8g2_GetStrWidth(&myScreen, PRODUCT_NAME);
+        u8g2_DrawUTF8(&myScreen, SCREEN_CENTER_HORIZONTAL - w / 2, 0, PRODUCT_NAME);
 
         u8g2_SetFont(&myScreen, XSmallFont);
         u8g2_SetFontPosTop(&myScreen);

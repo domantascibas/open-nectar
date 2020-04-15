@@ -4,7 +4,7 @@
 #include "mbed.h"
 #include <stdint.h>
 
-#define NECTAR_DEVICE_MODEL "Nectar Sun S"
+#define PRODUCT_NAME "Nectar Sun S"
 #define NECTAR_MAIN_BOARD_VERSION 110
 #define NECTAR_POWER_BOARD_VERSION NECTAR_MAIN_BOARD_VERSION
 

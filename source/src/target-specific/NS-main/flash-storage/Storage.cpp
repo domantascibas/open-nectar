@@ -26,16 +26,14 @@ void storage_init(void) {
     emptyStorage = 1;
     batchSaving = 0;
 
-    __disable_irq();
     if (FLASH->CR & (0x1 << 0x7)) {
         FLASH->KEYR = 0x45670123; //FLASH KEY 1
         FLASH->KEYR = 0xCDEF89AB; //FLASH KEY 2
-        // mainBoardError.clear_error(FLASH_ACCESS_ERROR);
-        error_clear(NS_FLASH_ACCESS_MAIN);
+        EE_Init();
+        storage_readData();
+    } else {
+        error_set(NS_FLASH_ACCESS_MAIN);
     }
-    EE_Init();
-    storage_readData();
-    __enable_irq();
 }
 
 uint8_t storage_isEspConfigured(void) {
@@ -120,6 +118,9 @@ uint8_t storage_readData(void) {
         rDataStruct.device_config = EMPTY_VALUE;
         rDataStruct.esp_config = EMPTY_VALUE;
     }
+
+    printf("[storage] config:       0x%02X\r\n", rDataStruct.device_config);
+    printf("[storage] esp_config:   0x%02X\r\n", rDataStruct.esp_config);
     return emptyStorage;
 }
 
