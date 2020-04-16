@@ -124,7 +124,7 @@ void returnToIdle(void) {
     ScreenModel *idle_screen = new IdleScreen();
     setScreenModel(idle_screen);
     needUpdate = true;
-    buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
+    // buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
 }
 
 void updateScreen(void) {
@@ -133,8 +133,8 @@ void updateScreen(void) {
     if (!deviceOpMode_isLoading()) {
         if (isFirst) {
             isFirst = false;
-            buttonBacklight = MENU_BUTTON_BACKLIGHT_ON;
-            enableButtons();
+            // buttonBacklight = MENU_BUTTON_BACKLIGHT_ON;
+            // enableButtons();
             // if(!menu_actions::isInOnboarding()) {
             //   ScreenModel *active_screen = new ActiveStatusScreen();
             //   setScreenModel(active_screen);
@@ -174,7 +174,7 @@ void updateScreen(void) {
 }
 
 void setup(void) {
-    buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
+    // buttonBacklight = MENU_BUTTON_BACKLIGHT_OFF;
     resetScreen = false;
     localization::setup();
     ScreenDisplay::setup();
@@ -185,7 +185,7 @@ void setup(void) {
     timeKeeper.attach(&menu_actions::updateTime, MENU_TIME_KEEPER_PERIOD);
 
     time_t curr_time = time(NULL);
-    if(curr_time > 0) {
+    if (curr_time > 0) {
         printf("Current time %s\r\n", ctime(&curr_time));
     }
 }

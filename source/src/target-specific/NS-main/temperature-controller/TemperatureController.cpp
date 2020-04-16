@@ -45,23 +45,23 @@ uint8_t temperatureController_getBoilerTemp(void) {
 
 void temperatureController_update(void) {
     // if (temperatureSensor_isNewValAvail() || service_newValAvail()) {
-        float processor_temp = processor_temperature_measure();
-        printf("TEMPERATURE PROCESSOR %.2f\r\n", processor_temp);
-        if (processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
-            // if (!mainBoardError.has_error(PROCESSOR_OVERHEAT)) mainBoardError.set_error(PROCESSOR_OVERHEAT);
-            if (!error_isSet(NS_PROCESSOR_OVERHEAT_MAIN)) error_set(NS_PROCESSOR_OVERHEAT_MAIN);
+    float processor_temp = processor_temperature_measure();
+    printf("TEMPERATURE PROCESSOR %.2f\r\n", processor_temp);
+    if (processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
+        // if (!mainBoardError.has_error(PROCESSOR_OVERHEAT)) mainBoardError.set_error(PROCESSOR_OVERHEAT);
+        if (!error_isSet(NS_PROCESSOR_OVERHEAT_MAIN)) error_set(NS_PROCESSOR_OVERHEAT_MAIN);
 //          printf("TEMPERATURE OVERHEAT\n");
-        } else {
-            // if (mainBoardError.has_error(PROCESSOR_OVERHEAT) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) mainBoardError.clear_error(PROCESSOR_OVERHEAT);
-            if (error_isSet(NS_PROCESSOR_OVERHEAT_MAIN) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5))) error_clear(NS_PROCESSOR_OVERHEAT_MAIN);
-        }
+    } else {
+        // if (mainBoardError.has_error(PROCESSOR_OVERHEAT) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5.0))) mainBoardError.clear_error(PROCESSOR_OVERHEAT);
+        if (error_isSet(NS_PROCESSOR_OVERHEAT_MAIN) && (processor_temp < (PROCESSOR_INTERNAL_TEMPERATURE_LIMIT - 5))) error_clear(NS_PROCESSOR_OVERHEAT_MAIN);
+    }
 
-        if (deviceOpMode_isInTestStand()) {
-            temperatureData_setBoilerTemperature(service_getFakeTemperature());
-            printf("new fake temp\r\n");
-        } else {
-            temperatureData_setBoilerTemperature(temperatureController_getBoilerTemp());
-        }
-        device_modes_setHeaterMode(1);
+    if (deviceOpMode_isInTestStand()) {
+        temperatureData_setBoilerTemperature(service_getFakeTemperature());
+        printf("new fake temp\r\n");
+    } else {
+        temperatureData_setBoilerTemperature(temperatureController_getBoilerTemp());
+    }
+    device_modes_setHeaterMode(1);
     // }
 }

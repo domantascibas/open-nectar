@@ -66,7 +66,7 @@ void Rx_interrupt() {
 }
 
 void service_setup(void) {
-    
+
 }
 
 uint8_t service_getFakeTemperature(void) {

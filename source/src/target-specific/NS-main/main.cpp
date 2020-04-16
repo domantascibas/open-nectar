@@ -16,8 +16,21 @@
 #include "error_handler.h"
 // }
 
+#define BTN_LIGHT_ON      1
+#define BTN_LIGHT_OFF     0
+
+DigitalOut lights(MENU_BUTTON_BACKLIGHT_PIN, BTN_LIGHT_OFF);
+
 bool inErrorScreen = false;
 Timer comms_timeout;
+Thread temperatureThread;
+
+void temperatureUpdate() {
+    while (1) {
+        temperatureController_update();
+        wait(5);
+    }
+}
 
 static void print_device_info(void) {
     printf("[INFO] product:     %s\r\n", PRODUCT_NAME);
@@ -28,13 +41,15 @@ static void print_device_info(void) {
 }
 
 static void hw_init(void) {
-    watchdog_timer_init();
+    // watchdog_timer_init();
     storage_init();
     // temperature_controller_init();
     temperatureController_init();
-    menu_service::setup();
-    menu_service::updateScreen();
+    // menu_service::setup();
+    // menu_service::updateScreen();
 }
+
+#define BLINKING_RATE           1
 
 int main() {
     printf("\r\n");
@@ -45,9 +60,26 @@ int main() {
     error_init();
     hw_init();
 
-    // comms_init
-    esp::setup();
-    power_board::setup();
+    wait(5);
+    temperatureThread.start(temperatureUpdate);
+
+    while (true) {
+        lights = !lights;
+        printf("[BTN] lights: %s\r\n", lights ? "ON" : "OFF");
+        wait(BLINKING_RATE);
+    }
+}
+
+// int main() {
+
+//     hw_init();
+
+//     // comms_init
+//     esp::setup();
+//     power_board::setup();
+
+
+// }
 
 //     float current_s;
 //     static bool isFirst = true;
@@ -95,83 +127,77 @@ int main() {
 
 //     deviceOpMode_endLoading();
 
-    uint16_t tim = 0;
-    while (1) {
-        if(tim % 500 == 0) {
-            // temperature_controller_update_processor_temp();
-            // temperatureController_getBoilerTemp();
-            temperatureController_update();
-        }
 
-        tim++;
-        if (tim >= 30000) {
-            tim = 0;
-        }
-        watchdog_timer_update();
-        wait_ms(10);
 
-        //         if (isFirst) {
-        //             isFirst = false;
-        //             if (storage_isConfigured()) {
-        //                 printf("CONFIG loading data from storage\r\n");
-        //                 storage_loadConfigData();
-        //                 if (storage_isEspConfigured()) {
-        //                     espData.is_configured = true;
-        //                     deviceOpMode_setConfigured();
-        //                 }
-        //                 deviceOpMode_endOnboarding();
-        //             }
-        //     menu_service::needUpdate = true;
-        //         }
+// temperatureThread.start(temperatureUpdate);
+// screenThread.start(screenUpdate);
 
-        //   if(menu_service::needUpdate) {
-        //     menu_service::updateScreen();
-        //   }
+// Thread::wait(osWaitForever);
 
-        //         switch (deviceOpMode_getCurrentMode()) {
-        //             default:
-        //             case NOT_CONFIGURED:        // ESP NOT CONFIGURED
-        //                 if (espData.is_configured) {
-        //                     printf("CONFIG SAVE\n");
-        //                     deviceOpMode_setConfigured();
-        // // menu_service::needUpdate = true;
-        // // menu_service::resetScreen = true;
-        //                     storage_saveEspConfig();
-        //                 }
-        //                 break;
+// while (1) {
+//     watchdog_timer_update();
+//         if (isFirst) {
+//             isFirst = false;
+//             if (storage_isConfigured()) {
+//                 printf("CONFIG loading data from storage\r\n");
+//                 storage_loadConfigData();
+//                 if (storage_isEspConfigured()) {
+//                     espData.is_configured = true;
+//                     deviceOpMode_setConfigured();
+//                 }
+//                 deviceOpMode_endOnboarding();
+//             }
+//     menu_service::needUpdate = true;
+//         }
 
-        //             case CONFIGURED:            // ESP CONFIGURED
-        //                 if (!espData.is_configured) {
-        //                     printf("CONFIG RESET\n");
-        //                 }
-        //                 break;
+//   if(menu_service::needUpdate) {
+//     menu_service::updateScreen();
+//   }
 
-        //             case WELCOME:
-        // //nothing to do here
-        // //wait for user to finish onboarding
-        //                 if (espData.is_configured || storage_isEspConfigured()) {
-        //                     deviceOpMode_endOnboarding();
-        //                     printf("CONFIG HAS_CONFIG\n");
-        // // menu_service::needUpdate = true;
-        // // menu_service::resetScreen = true;
-        //                 }
-        //                 break;
+//         switch (deviceOpMode_getCurrentMode()) {
+//             default:
+//             case NOT_CONFIGURED:        // ESP NOT CONFIGURED
+//                 if (espData.is_configured) {
+//                     printf("CONFIG SAVE\n");
+//                     deviceOpMode_setConfigured();
+// // menu_service::needUpdate = true;
+// // menu_service::resetScreen = true;
+//                     storage_saveEspConfig();
+//                 }
+//                 break;
 
-        //             case TEST_MODE:
-        //                 if (isFirst) {
-        //                     isFirst = false;
-        //                     deviceOpMode_setTestMode();
-        //                 }
-        //                 break;
-        //         }
+//             case CONFIGURED:            // ESP CONFIGURED
+//                 if (!espData.is_configured) {
+//                     printf("CONFIG RESET\n");
+//                 }
+//                 break;
 
-        //         temperatureController_update();
-        //         if (!deviceOpMode_isOnboarding()) {
-        //             device_modes_loop();
-        //         }
+//             case WELCOME:
+// //nothing to do here
+// //wait for user to finish onboarding
+//                 if (espData.is_configured || storage_isEspConfigured()) {
+//                     deviceOpMode_endOnboarding();
+//                     printf("CONFIG HAS_CONFIG\n");
+// // menu_service::needUpdate = true;
+// // menu_service::resetScreen = true;
+//                 }
+//                 break;
 
-        //         commsController.clearQueue();
+//             case TEST_MODE:
+//                 if (isFirst) {
+//                     isFirst = false;
+//                     deviceOpMode_setTestMode();
+//                 }
+//                 break;
+//         }
 
-        __WFI();
-    }
-}
+//         temperatureController_update();
+//         if (!deviceOpMode_isOnboarding()) {
+//             device_modes_loop();
+//         }
+
+//         commsController.clearQueue();
+
+//     __WFI();
+// }
+// }
