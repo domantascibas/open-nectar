@@ -9,33 +9,21 @@ cd $DIR/../..
 rm -rf ./source/NS-project/bin/NS-main
 mkdir -p ./source/NS-project/bin/NS-main
 
+# source/TESTS/
+# source/cpputest/
+# source/NS-project/
+
 # prepare .mbedignore
-echo "submodules/nectar_serial/mbed/*
+echo "
+mbed-os/components/*
+mbed-os/features/*
+
+submodules/nectar_serial/mbed/*
 submodules/nectar_serial/.vscode/*
 submodules/nectar_serial/test/*
 submodules/nectar_serial/.gitignore
 submodules/nectar_serial/library.properties
 submodules/nectar_serial/README.md
-
-submodules/nucleo_helpers/TESTS/*
-submodules/nucleo_helpers/mbed-os/*
-submodules/nucleo_helpers/mbed-os.lib
-submodules/nucleo_helpers/mbed_settings.py
-submodules/nucleo_helpers/.mbed
-
-source/TESTS/
-source/cpputest/
-source/NS-project/
-
-submodules/device_menu/MenuIcons/*
-submodules/device_menu/ns-localisation/*
-submodules/device_menu/test/*
-submodules/device_menu/u8g2-mbed/TESTS/*
-
-source/src/target-specific/NS-main/device_menu/MenuIcons/*
-source/src/target-specific/NS-main/device_menu/ns-localisation/*
-source/src/target-specific/NS-main/device_menu/test/*
-source/src/target-specific/NS-main/device_menu/u8g2-mbed/TESTS/*
 
 source/src/target-specific/NS-main/device_menu/src/Screens/00/*
 source/src/target-specific/NS-main/device_menu/src/Screens/01/*
@@ -44,7 +32,8 @@ source/src/target-specific/NS-main/device_menu/src/Screens/engineering_menu/*
 source/src/target-specific/NS-main/device_menu/src/Screens/error/*
 
 source/src/modules/*
-source/src/target-specific/NS-power/*" >> ./.mbedignore
+source/src/target-specific/NS-power/*
+" >> ./.mbedignore
 
 # compile project
 mbed compile
