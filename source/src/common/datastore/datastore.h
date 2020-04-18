@@ -88,4 +88,6 @@ typedef struct {
 
 } datastore_t;
 
+extern datastore_t datastore;
+
 #endif

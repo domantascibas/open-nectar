@@ -1,6 +1,6 @@
 #include "datastore.h"
 
-datastore_t datastore {
+datastore_t datastore = {
     // ---------------------------------------------------------------
     // Main board data
     // ---------------------------------------------------------------
