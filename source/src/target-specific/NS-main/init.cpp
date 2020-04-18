@@ -11,6 +11,8 @@
 #include "CommsController.h"
 #include "watchdog_timer.h"
 #include "DeviceMode.h"
+#include "datastore.h"
+#include "processor_temperature.h"
 
 // extern "C" {
 #include "error_handler.h"
@@ -27,8 +29,9 @@ Thread temperatureThread;
 
 static void temperatureUpdate() {
     while (1) {
-        temperatureController_update();
-        wait(5);
+        processor_temperature_measure();
+        printf("[TEMP] processor: %d\r\n", datastore.sMainBoard.sTemperature.ucProcessor);
+        wait(4);
     }
 }
 
@@ -42,10 +45,11 @@ void print_device_info(void) {
 
 void hw_init(void) {
     error_init();
-    // watchdog_timer_init();
     storage_init();
+    processor_temperature_init();
+    // watchdog_timer_init();
     // temperature_controller_init();
-    temperatureController_init();
+    // temperatureController_init();
     // menu_service::setup();
     // menu_service::updateScreen();
 }

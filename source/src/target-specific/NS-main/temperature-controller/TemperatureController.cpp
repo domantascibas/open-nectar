@@ -45,8 +45,9 @@ uint8_t temperatureController_getBoilerTemp(void) {
 
 void temperatureController_update(void) {
     // if (temperatureSensor_isNewValAvail() || service_newValAvail()) {
-    float processor_temp = processor_temperature_measure();
-    printf("TEMPERATURE PROCESSOR %.2f\r\n", processor_temp);
+    // float processor_temp = processor_temperature_measure();
+    float processor_temp = 0;
+    // printf("TEMPERATURE PROCESSOR %.2f\r\n", processor_temp);
     if (processor_temp > PROCESSOR_INTERNAL_TEMPERATURE_LIMIT) {
         // if (!mainBoardError.has_error(PROCESSOR_OVERHEAT)) mainBoardError.set_error(PROCESSOR_OVERHEAT);
         if (!error_isSet(NS_PROCESSOR_OVERHEAT_MAIN)) error_set(NS_PROCESSOR_OVERHEAT_MAIN);
