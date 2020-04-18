@@ -5,7 +5,7 @@
 
 typedef struct {
     // ---------------------------------------------------------------
-    // Main board data
+    // Board data
     // ---------------------------------------------------------------
     struct {
         char ucVersion[12];                     // 12B
@@ -20,18 +20,7 @@ typedef struct {
             uint16_t usVss5V;                   // 2B
             uint16_t usVss12V;                  // 2B
         } sVoltage;
-    } sMainBoard;
-
-    // ---------------------------------------------------------------
-    // Power board data
-    // ---------------------------------------------------------------
-    struct {
-        char ucVersion[12];                     // 12B
-
-        struct {
-            uint8_t ucProcessor;                // 1B
-        } sTemperature;
-    } sPowerBoard;
+    } sBoard;
 
     // ---------------------------------------------------------------
     // Energy meter data
