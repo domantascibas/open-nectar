@@ -3,7 +3,7 @@
 
 #define NS_MAIN
 
-#define RELEASE_VER             "00.01.10.00"
+#define RELEASE_VER             "00.02.00.00"
 
 #ifdef NS_POWER
 #define DEV_MODEL_STR           "NS-Power"

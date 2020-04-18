@@ -16,8 +16,8 @@
 #include "error_handler.h"
 // }
 
-#define BTN_LIGHT_ON      1
-#define BTN_LIGHT_OFF     0
+#define BTN_LIGHT_ON 1
+#define BTN_LIGHT_OFF 0
 
 DigitalOut lights(MENU_BUTTON_BACKLIGHT_PIN, BTN_LIGHT_OFF);
 
@@ -25,14 +25,14 @@ bool inErrorScreen = false;
 Timer comms_timeout;
 Thread temperatureThread;
 
-void temperatureUpdate() {
+static void temperatureUpdate() {
     while (1) {
         temperatureController_update();
         wait(5);
     }
 }
 
-static void print_device_info(void) {
+void print_device_info(void) {
     printf("[INFO] product:     %s\r\n", PRODUCT_NAME);
     printf("[INFO] type:        %s\r\n", Dev_Model);
     printf("[INFO] version:     %s\r\n", version);
@@ -40,7 +40,8 @@ static void print_device_info(void) {
     printf("[INFO] hw sign:     %s\r\n", HW_sign);
 }
 
-static void hw_init(void) {
+void hw_init(void) {
+    error_init();
     // watchdog_timer_init();
     storage_init();
     // temperature_controller_init();
@@ -49,17 +50,9 @@ static void hw_init(void) {
     // menu_service::updateScreen();
 }
 
-#define BLINKING_RATE           1
+#define BLINKING_RATE 1
 
-int main() {
-    printf("\r\n");
-    // should print current time
-    printf("\r\n***** START *****\r\n");
-    print_device_info();
-
-    error_init();
-    hw_init();
-
+void run(void) {
     wait(5);
     temperatureThread.start(temperatureUpdate);
 
@@ -77,7 +70,6 @@ int main() {
 //     // comms_init
 //     esp::setup();
 //     power_board::setup();
-
 
 // }
 
@@ -126,8 +118,6 @@ int main() {
 //     wait(2);
 
 //     deviceOpMode_endLoading();
-
-
 
 // temperatureThread.start(temperatureUpdate);
 // screenThread.start(screenUpdate);
