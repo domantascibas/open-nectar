@@ -12,7 +12,7 @@
 #include "watchdog_timer.h"
 #include "DeviceMode.h"
 #include "datastore.h"
-#include "threadControl.h"
+#include "threadManager.h"
 
 // extern "C" {
 #include "error_handler.h"

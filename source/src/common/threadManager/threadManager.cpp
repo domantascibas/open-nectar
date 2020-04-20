@@ -1,4 +1,4 @@
-#include "threadControl.h"
+#include "threadManager.h"
 #include "processor_temperature.h"
 
 Thread _threadProcTemp;

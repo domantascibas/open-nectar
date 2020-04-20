@@ -1,5 +1,5 @@
-#ifndef _NS_THREAD_CONTROL_H
-#define _NS_THREAD_CONTROL_H
+#ifndef _NS_THREAD_MANAGER_H
+#define _NS_THREAD_MANAGER_H
 
 #include "mbed.h"
 
