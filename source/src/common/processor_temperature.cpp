@@ -8,7 +8,29 @@
 #define VDD_CALIB ((uint16_t)(330))
 #define VDD_APPLI ((uint16_t)(300))
 
-void processor_temperature_init(void) {
+static uint8_t procTempInterval = 3;
+
+static void processor_temperature_init(void);
+static void processor_temperature_measure(void);
+
+void procTempFunc(void) {
+    processor_temperature_init();
+
+    while(1) {
+        processor_temperature_measure();
+        printf("new temp!! %d\r\n", datastore.sBoard.sTemperature.ucProcessor);
+        wait(procTempInterval);
+    }
+}
+
+void procTempIntervalSet(uint8_t) {
+}
+
+void procTempIntervalGet(uint8_t interval) {
+
+}
+
+static void processor_temperature_init(void) {
     RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
     RCC->CR2 |= RCC_CR2_HSI14ON;
     while ((RCC->CR2 & RCC_CR2_HSI14RDY) == 0) {
@@ -19,11 +41,10 @@ void processor_temperature_init(void) {
     ADC1->SMPR |= ADC_SMPR_SMP_0 | ADC_SMPR_SMP_1 | ADC_SMPR_SMP_2;
     ADC1->CR |= ADC_CR_ADEN;
     ADC->CCR |= ADC_CCR_TSEN;
-    processor_temperature_measure();
-    printf("[init] processor temp: %d\r\n", datastore.sBoard.sTemperature.ucProcessor);
+    printf("[init] processor temp\r\n");
 }
 
-void processor_temperature_measure(void) {
+static void processor_temperature_measure(void) {
     ADC1->CR |= ADC_CR_ADSTART;
     wait_us(50);
     int32_t temperature; /* will contain the temperature in degrees Celsius */

@@ -12,7 +12,7 @@
 #include "watchdog_timer.h"
 #include "DeviceMode.h"
 #include "datastore.h"
-#include "processor_temperature.h"
+#include "threadControl.h"
 
 // extern "C" {
 #include "error_handler.h"
@@ -25,15 +25,6 @@ DigitalOut lights(MENU_BUTTON_BACKLIGHT_PIN, BTN_LIGHT_OFF);
 
 bool inErrorScreen = false;
 Timer comms_timeout;
-Thread temperatureThread;
-
-static void temperatureUpdate() {
-    while (1) {
-        processor_temperature_measure();
-        printf("[TEMP] processor: %d\r\n", datastore.sMainBoard.sTemperature.ucProcessor);
-        wait(4);
-    }
-}
 
 void print_device_info(void) {
     printf("[INFO] product:     %s\r\n", PRODUCT_NAME);
@@ -46,7 +37,6 @@ void print_device_info(void) {
 void hw_init(void) {
     error_init();
     storage_init();
-    processor_temperature_init();
     // watchdog_timer_init();
     // temperature_controller_init();
     // temperatureController_init();
@@ -57,9 +47,9 @@ void hw_init(void) {
 #define BLINKING_RATE 1
 
 void run(void) {
-    wait(5);
-    temperatureThread.start(temperatureUpdate);
+    threadStart(threadProcTemp);
 
+    Thread::wait(1000);
     while (true) {
         lights = !lights;
         printf("[BTN] lights: %s\r\n", lights ? "ON" : "OFF");

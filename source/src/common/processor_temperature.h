@@ -3,7 +3,8 @@
 
 #include <stdint.h>
 
-void processor_temperature_init(void);
-void processor_temperature_measure(void);
+void procTempFunc(void);
+void procTempIntervalSet(uint8_t);
+void procTempIntervalGet(uint8_t);
 
 #endif

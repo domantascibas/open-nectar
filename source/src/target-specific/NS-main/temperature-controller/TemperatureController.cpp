@@ -16,7 +16,7 @@ uint8_t boilerTemperature;
 void temperatureController_init(void) {
     boilerTemperature = 0;
 
-    processor_temperature_init();
+    // processor_temperature_init();
     // temperatureSensor_init();
 
     if (!temperatureSensor_isFound()) {
