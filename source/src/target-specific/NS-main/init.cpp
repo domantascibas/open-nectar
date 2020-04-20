@@ -36,6 +36,8 @@ void print_device_info(void) {
 }
 
 void hw_init(void) {
+    threadStart(threadProcTemp);
+
     error_init();
     storage_init();
     // watchdog_timer_init();
@@ -48,8 +50,6 @@ void hw_init(void) {
 #define BLINKING_RATE 1
 
 void run(void) {
-    threadStart(threadProcTemp);
-
     Thread::wait(1000);
     while (true) {
         lights = !lights;
