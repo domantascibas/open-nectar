@@ -16,7 +16,7 @@ static void processor_temperature_measure(void);
 void procTempFunc(void) {
     processor_temperature_init();
 
-    while(1) {
+    while (1) {
         processor_temperature_measure();
         printf("new temp!! %d\r\n", datastore.sBoard.sTemperature.ucProcessor);
         wait(procTempInterval);
