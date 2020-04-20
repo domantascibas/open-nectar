@@ -20,5 +20,5 @@ void threadStop(threadEnum_t threadId) {
 
 void threadStatus(threadEnum_t threadId) {
     threadInfo_t currThread = threadInfo[(uint8_t)threadId];
-    printf("[thread] %d status:%d, currently running: %d\r\n", ThisThread::get_id(), (uint8_t)currThread.ptr->get_state(), currThread.ptr->gettid());
+    printf("[thread] %ld status:%d\r\n", (int32_t)ThisThread::get_id(), (int8_t)currThread.ptr->get_state());
 }

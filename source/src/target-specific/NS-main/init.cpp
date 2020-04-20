@@ -32,6 +32,7 @@ void print_device_info(void) {
     printf("[INFO] version:     %s\r\n", version);
     printf("[INFO] old ver:     %d\r\n", NECTAR_MAIN_BOARD_VERSION);
     printf("[INFO] hw sign:     %s\r\n", HW_sign);
+    printf("[INFO] MCU id:      %ld\r\n", DBGMCU->IDCODE);
 }
 
 void hw_init(void) {
