@@ -1,13 +1,8 @@
-/** @file   ds18b20.c
-    @author M. P. Hayes, UCECE
-    @date   08 June 2002
-    @brief  Driver for ds18b20 one wire temperature sensor
-*/
 #include <stdio.h>
 #include "ds18b20.h"
 #include "u1wire.h"
-#include "delay.h"
-#include "dscrc8.h"
+// #include "delay.h"
+// #include "dscrc8.h"
 
 /** Family codes supported by this driver.  */
 enum {
@@ -60,7 +55,7 @@ int8_t ds18b20_temp_conversion_start(u1wire_t dev) {
 /** Return true when a temperature conversion finished.
     @param dev pointer to one wire device
     @return 1 if conversion finished otherwise 0  */
-bool ds18b20_temp_ready_p(u1wire_t dev __attribute__((unused))) {
+uint8_t ds18b20_temp_ready_p(u1wire_t dev __attribute__((unused))) {
     return u1wire_ready_p();
 }
 
@@ -123,7 +118,7 @@ int8_t ds18b20_temp_read(u1wire_t dev, ds18b20_temp_t *ptemp) {
 /** Return true if the one wire device is a ds18b20 temperature sensor.
     @param dev pointer to one wire device
     @return 1 if device is a dsb18b20 otherwise 0  */
-bool ds18b20_device_p(u1wire_obj_t *dev) {
+uint8_t ds18b20_device_p(u1wire_obj_t *dev) {
     return dev->rom_code.fields.family == DS18B20_FAMILY_CODE || dev->rom_code.fields.family == DS1820_FAMILY_CODE;
 }
 
