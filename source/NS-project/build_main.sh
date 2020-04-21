@@ -31,7 +31,9 @@ source/src/target-specific/NS-main/device_menu/src/Screens/02/*
 source/src/target-specific/NS-main/device_menu/src/Screens/engineering_menu/*
 source/src/target-specific/NS-main/device_menu/src/Screens/error/*
 
-source/src/modules/*
+source/src/modules/flash-storage/*
+source/src/modules/generator-controller/*
+source/src/modules/temperature-controller/*
 source/src/target-specific/NS-power/*
 " >> ./.mbedignore
 
