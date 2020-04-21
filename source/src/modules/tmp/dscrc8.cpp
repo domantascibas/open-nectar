@@ -1,8 +1,3 @@
-/** @file   dscrc8.c
-    @author M. P. Hayes, UCECE
-    @date   15 May 2007
-    @brief  8-bit CRC routines for Dallas Semiconductor one wire bus.
-*/
 #include "dscrc8.h"
 
 /* The CRC uses x^8 + x^5 + x^4 + x^0.  Ignoring x^8
