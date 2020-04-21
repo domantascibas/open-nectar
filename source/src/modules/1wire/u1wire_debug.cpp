@@ -6,8 +6,7 @@
 #define U1WIRE_DEBUG 1
 #endif
 
-void u1wire_debug(u1wire_t dev)
-{
+void u1wire_debug(u1wire_t dev) {
 #if U1WIRE_DEBUG
     uint8_t i;
 
