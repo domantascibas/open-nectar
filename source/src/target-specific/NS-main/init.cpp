@@ -16,6 +16,8 @@
 
 // extern "C" {
 #include "error_handler.h"
+#include "u1wire_enumerate.h"
+#include "ds18b20.h"
 // }
 
 #define BTN_LIGHT_ON 1
@@ -49,7 +51,15 @@ void hw_init(void) {
 
 #define BLINKING_RATE 1
 
+u1wire_enumerate_t info;
+u1wire_obj_t *device;
+
 void run(void) {
+    for (device = u1wire_enumerate(&info); device; device = u1wire_enumerate_next(&info)) {
+
+    }
+
+    // ds18b20_init();
     Thread::wait(1000);
     while (true) {
         lights = !lights;
