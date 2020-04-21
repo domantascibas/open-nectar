@@ -1,6 +1,7 @@
 #include "dscrc8.h"
 #include "u1wire.h"
 #include "u1wire_enumerate.h"
+#include "mbed.h"
 
 enum {
     U1WIRE_SEARCH = 0xf0
@@ -29,8 +30,9 @@ static bool u1wire_search(u1wire_state_t *state, u1wire_rom_code_t *rom_code) {
     uint8_t rom_byte;
     crc8_t crc;
 
-    if (state->last_device)
+    if (state->last_device) {
         return 0;
+    }
 
     id_bit_number = 1;
     last_zero = 0;
@@ -41,6 +43,7 @@ static bool u1wire_search(u1wire_state_t *state, u1wire_rom_code_t *rom_code) {
 
     /* 1-Wire reset.  */
     if (u1wire_reset() <= 0) {
+        printf("[1w] no device on bus\r\n");
         return 0;
     }
 
@@ -109,15 +112,17 @@ static bool u1wire_search(u1wire_state_t *state, u1wire_rom_code_t *rom_code) {
     state->last_discrepancy = last_zero;
 
     /* Check for last device.  */
-    if (state->last_discrepancy == 0)
+    if (state->last_discrepancy == 0) {
         state->last_device = 1;
+    }
 
     return 1;
 }
 
 u1wire_obj_t *u1wire_enumerate_next(u1wire_enumerate_t *info) {
-    if (!u1wire_search(&info->state, &info->device.rom_code))
+    if (!u1wire_search(&info->state, &info->device.rom_code)) {
         return 0;
+    }
 
     return &info->device;
 }

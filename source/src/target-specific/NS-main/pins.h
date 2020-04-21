@@ -25,4 +25,6 @@
 #define SCREEN_SDA_PIN PB_7
 #define SCREEN_SCL_PIN PB_6
 
+#define U1WIRE_PIN BOILER_TEMP_PIN
+
 #endif

@@ -55,10 +55,12 @@ u1wire_enumerate_t info;
 u1wire_obj_t *device;
 
 void run(void) {
+    printf("[1wire] enum\r\n");
     for (device = u1wire_enumerate(&info); device; device = u1wire_enumerate_next(&info)) {
-
+        u1wire_debug(device);
     }
 
+    printf("[1wire] enum end\r\n");
     // ds18b20_init();
     Thread::wait(1000);
     while (true) {

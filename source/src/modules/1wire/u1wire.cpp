@@ -17,7 +17,7 @@ enum {
 #define U1WIRE_DEBUG 1
 
 // move the pin definition to an external file, so this module can be called independently
-DigitalInOut u1WireIO(BOILER_TEMP_PIN);
+DigitalInOut u1WireIO(U1WIRE_PIN);
 
 #define U1WIRE_RELEASE() u1WireIO.input()
 #define U1WIRE_DRIVE() u1WireIO.output()
