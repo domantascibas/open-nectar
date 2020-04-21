@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "ds18b20.h"
 #include "u1wire.h"
-// #include "delay.h"
 // #include "dscrc8.h"
 
 /** Family codes supported by this driver.  */
@@ -24,7 +23,7 @@ enum {
 };
 
 #ifndef DS18B20_DEBUG
-#define DS18B20_DEBUG 0
+#define DS18B20_DEBUG 1
 #endif
 
 #ifndef DS18B20_CRC_CHECK

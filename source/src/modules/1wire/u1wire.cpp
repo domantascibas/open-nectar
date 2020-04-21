@@ -14,7 +14,7 @@ enum {
     U1WIRE_ADDR_BYTES = 6
 };
 
-// #define U1WIRE_DEBUG 1
+#define U1WIRE_DEBUG 1
 
 // move the pin definition to an external file, so this module can be called independently
 DigitalInOut u1WireIO(BOILER_TEMP_PIN);
