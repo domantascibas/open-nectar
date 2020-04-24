@@ -8,7 +8,7 @@
 #define VDD_CALIB ((uint16_t)(330))
 #define VDD_APPLI ((uint16_t)(300))
 
-static uint8_t procTempInterval = 3;
+static uint16_t procTempInterval = 3000;
 
 static void processor_temperature_init(void);
 static void processor_temperature_measure(void);
@@ -19,7 +19,7 @@ void procTempFunc(void) {
     while (1) {
         processor_temperature_measure();
         printf("new temp!! %d\r\n", datastore.sBoard.sTemperature.ucProcessor);
-        wait(procTempInterval);
+        ThisThread::sleep_for(procTempInterval);
     }
 }
 

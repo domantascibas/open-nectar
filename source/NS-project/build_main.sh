@@ -17,6 +17,7 @@ mkdir -p ./source/NS-project/bin/NS-main
 echo "
 mbed-os/components/*
 mbed-os/features/*
+mbed-os/drivers/source/usb/*
 
 submodules/nectar_serial/mbed/*
 submodules/nectar_serial/.vscode/*
