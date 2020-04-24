@@ -100,19 +100,18 @@ int8_t u1wire_reset(void) {
     @param value bit to write  */
 void u1wire_bit_write(uint8_t value) {
     __disable_irq();
-
+    U1WIRE_DRIVE();
     /* 1 wire devices sample the bus somewhere between 15--60
        microseconds after the bus being pulled low.
        I've measured a 1 bit being low for 10 microseconds
        and a 0 bit being low for 70 microseconds.  */
-
-    U1WIRE_DRIVE();
     wait_us(10 - U1WIRE_DELAY_OFFSET);
 
     /* When writing a 1 bit, the bus must be released within 15
        microseconds of pulling the bus low.  */
-    if (value)
+    if (value) {
         U1WIRE_RELEASE();
+    }
 
     /* Write slots must be a minimum of 60 microseconds in length.  */
     wait_us(60 - U1WIRE_DELAY_OFFSET);
@@ -132,6 +131,7 @@ void u1wire_byte_write(uint8_t value) {
     for (i = 0; i < 8; i++) {
         u1wire_bit_write(value & 0x01);
         value >>= 1;
+        wait_us(1);
     }
 }
 
