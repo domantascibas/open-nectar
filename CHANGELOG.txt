@@ -15,22 +15,12 @@ NectarSun-S product change log file
 
 Date        Firmware        Description
 ============================================================================================================================
-2020 04 XX - 00.01.11.XX
+2020 04 XX - 00.02.01.00
                 - Feature: added Thread Manager to control running threads;
                 - Feature: added processor temperature measurement;
                 - Feature: MBED-OS RTOS added;
                 - Other: refactored project structure; #4
                 - Other: adds cpputest for unit testing; #5
-                - Other: includes changelogs; #14
-============================================================================================================================
-2019 10 07 - 00.01.10.01
-                - Bug fix: ESP configuration after reset issue fix;
-                - Feature: MAIN board improves device operation when lost temperature sensor;
-                - Feature: MAIN board error handler update;
-                - Feature: POWER board shut down on power shortage;
-                - Feature: POWER board error handler update;
-                - Feature: PWM frequency change 12kHz;
-                # Recommended Update Package 00.01.23.00
 ============================================================================================================================
 
 >> Please specify the category of your change:
