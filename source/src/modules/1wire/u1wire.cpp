@@ -31,10 +31,11 @@ int8_t u1wire_reset(void) {
        found that without the pullup resistor we can detect a device
        but not on the first attempt.  */
     U1WIRE_RELEASE();
-    wait_us(5);
+    wait_us(10);
 
     if (!U1WIRE_TEST()) {
         /* Bus won't go high.  */
+        printf("[1w] bus won't go high\r\n");
         return -U1WIRE_ERR_BUS_LOW;
     }
 
@@ -44,54 +45,60 @@ int8_t u1wire_reset(void) {
        it for 250 microseconds, check that it is low, then wait
        another 250 microseconds.  This is called the reset pulse.  */
     U1WIRE_DRIVE();
-    wait_us(250);
+    wait_us(250 - U1WIRE_DELAY_OFFSET);
 
     if (U1WIRE_TEST()) {
         U1WIRE_RELEASE();
         __enable_irq();
         /* Bus won't go low.  */
+        printf("[1w] bus won't go low\r\n");
         return -U1WIRE_ERR_BUS_HIGH;
     }
+    U1WIRE_DRIVE();
 
-    wait_us(250);
+    wait_us(250 - U1WIRE_DELAY_OFFSET);
 
     /* Let bus float high by tristating driver.  */
     U1WIRE_RELEASE();
 
-    wait_us(10);
+    wait_us(10 - U1WIRE_DELAY_OFFSET);
     if (!U1WIRE_TEST()) {
         __enable_irq();
         /* Bus stuck low.  */
+        printf("[1w] bus stuck low\r\n");
         return -U1WIRE_ERR_BUS_STUCK;
     }
 
     /* The rising edge should cause the slave to respond between
        15--60 microseconds later.  It should then drive the bus low
        for 60--240 microseconds.  */
-    wait_us(60);
+    wait_us(60 - U1WIRE_DELAY_OFFSET);
 
     if (U1WIRE_TEST()) {
         __enable_irq();
         /* No device responding.  */
+        printf("[1w] no device resp\r\n");
         return 0;
     }
 
-    wait_us(10);
+    wait_us(10 - U1WIRE_DELAY_OFFSET);
     if (U1WIRE_TEST()) {
         __enable_irq();
         /* Slave does not drive bus long enough.  */
+        printf("[1w] slave drives bus too short\r\n");
         return -U1WIRE_ERR_PRESENCE_SHORT;
     }
 
-    wait_us(240);
+    wait_us(240 - U1WIRE_DELAY_OFFSET);
     if (!U1WIRE_TEST()) {
         __enable_irq();
         /* Slave still driving bus longer than it should.  */
+        printf("[1w] slave drives bus too long\r\n");
         return -U1WIRE_ERR_PRESENCE_LONG;
     }
 
     /* The read slot must be a minimum of 480 microseconds.  */
-    wait_us(480 - 240);
+    wait_us(480 - 240 - U1WIRE_DELAY_OFFSET);
     __enable_irq();
     return 1;
 }
