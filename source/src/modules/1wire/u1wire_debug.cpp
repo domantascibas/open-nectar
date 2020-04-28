@@ -1,6 +1,5 @@
-#include "mbed.h"
-#include "u1wire.h"
 #include <stdio.h>
+#include "u1wire.h"
 
 #ifndef U1WIRE_DEBUG
 #define U1WIRE_DEBUG 1

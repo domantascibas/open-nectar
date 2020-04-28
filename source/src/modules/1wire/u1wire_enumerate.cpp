@@ -1,7 +1,7 @@
+#include <stdio.h>
 #include "dscrc8.h"
 #include "u1wire.h"
 #include "u1wire_enumerate.h"
-#include "mbed.h"
 
 enum {
     U1WIRE_SEARCH = 0xf0
