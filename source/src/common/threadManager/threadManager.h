@@ -8,6 +8,7 @@
 
 typedef enum {
     threadProcTemp,
+    threadBoilerTemp,
 } threadEnum_t;
 
 typedef struct {

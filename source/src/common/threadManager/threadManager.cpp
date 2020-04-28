@@ -1,11 +1,14 @@
 #include "threadManager.h"
 #include "processor_temperature.h"
+#include "boiler_temperature.h"
 
 Thread _threadProcTemp;
+Thread _threadBoilerTemp;
 
 threadInfo_t threadInfo[] = {
     // must be same sequence as the threadEnum_t, or implement a search func
     {threadProcTemp,            &_threadProcTemp,           procTempFunc},
+    {threadBoilerTemp,          &_threadBoilerTemp,         boilerTempFunc},
 };
 
 void threadStart(threadEnum_t threadId) {
