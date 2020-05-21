@@ -15,7 +15,7 @@ NectarSun-S product change log file
 
 Date        Firmware        Description
 ============================================================================================================================
-2020 04 XX - 00.02.01.00
+2020 05 21 - NS.02.00.01
                 - Feature: added Thread Manager to control running threads;
                 - Feature: added processor temperature measurement;
                 - Feature: MBED-OS RTOS added;
